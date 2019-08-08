@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/garageScript/myproxy/issues"
   },
-  "homepage": "https://github.com/garageScript/myproxy#readme"
+  "homepage": "https://github.com/garageScript/myproxy#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
