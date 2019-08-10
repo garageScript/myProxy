@@ -4,7 +4,13 @@
   "description": "Application that proxies requests to other servers",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run build:live",
+    "build": "tsc -p .",
+    "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts",
+    "prettier:base": "prettier --parser typescript --single-quote --no-semi",
+    "prettier:check": "npm run prettier:base -- --list-different \"src/**/*.{ts,tsx}\"",
+    "prettier:write": "npm run prettier:base -- --write \"src/**/*.{ts,tsx}\""
   },
   "repository": {
     "type": "git",
@@ -17,6 +23,12 @@
   },
   "homepage": "https://github.com/garageScript/myproxy#readme",
   "dependencies": {
+    "@types/express": "^4.17.0",
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.1",
+    "prettier": "^1.18.2",
+    "typescript": "^3.5.3"
   }
 }
