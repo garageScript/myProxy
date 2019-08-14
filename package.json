@@ -4,12 +4,13 @@
   "description": "Application that proxies requests to other servers",
   "main": "app.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "start": "npm run build:live",
     "build": "tsc -p .",
     "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts",
     "prettier:base": "prettier --parser typescript --single-quote --no-semi",
-    "prettier:write": "npm run prettier:base -- --write \"src/**/*.{ts,tsx}\""
+    "prettier:write": "npm run prettier:base -- --write \"src/**/*.{ts,tsx}\"",
+    "coverage": "nyc npm run test"
   },
   "repository": {
     "type": "git",
@@ -31,7 +32,9 @@
     "@types/jest": "^24.0.17",
     "@types/node": "^12.7.1",
     "jest": "^24.8.0",
+    "nyc": "^14.1.1",
     "prettier": "^1.18.2",
+    "source-map-support": "^0.5.13",
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.3"
   },
