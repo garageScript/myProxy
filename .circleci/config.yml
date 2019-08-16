@@ -24,10 +24,10 @@ jobs:
     steps:
       - checkout_and_restore_cache
       - run: npm run setup
-      # - persist_to_workspace:
-      #     root: .
-      #     paths:
-      #       - ./myProxy
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
       - save_cache:
           key: source-v1-{{ checksum "package.json" }}
           paths:
