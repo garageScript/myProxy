@@ -8,7 +8,17 @@ const app = express()
 app.use(bodyParser.json());
 const port = 3000
 
-app.get('/', (req, res) => res.send('Hello World!'))
+import path from 'path'
+const app = express()
+const port = process.env.PORT || 3000
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, '../../src/views'))
+
+app.get('/', (req, res) => res.render('index', { message: 'Hello World' }))
+
+app.get('/admin/serviceHostKeys', (req, res) => {
+  res.render('admin')
+})
 
 let store = []
 const createCert = async (key: String, service: String, value: String)=>{
