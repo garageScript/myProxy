@@ -16,7 +16,7 @@ executors:
   node:
     docker:
       - image: circleci/node:12.8.0
-    working_directory: /tmp
+    working_directory: ~/repo
 
 jobs:
   install:
@@ -38,7 +38,7 @@ jobs:
     steps:
       - checkout_and_restore_cache
       - attach_workspace:
-          at: /tmp/workspace
+          at: ~/repo/workspace
       - run: npm install
       - run: npm run prettier:write
   test:
@@ -54,7 +54,7 @@ jobs:
     steps:
       - checkout_and_restore_cache
       - attach_workspace:
-          at: /tmp/workspace
+          at: ~/repo/workspace
       - run: npm install
       - run: npm run build
       # working_directory: ~/repo
@@ -66,7 +66,7 @@ jobs:
         #     - "SHA256:vNQhUA1Pu0/mCPSWwZ623uUtmljAksV9B0zUg/DWMC0 ledavid64@gmail.com"
         - checkout_and_restore_cache
         - attach_workspace:
-            at: /tmp/workspace
+            at: ~/repo/workspace
         - run: npm install
         - run: npm run build
         # - attach_workspace:
