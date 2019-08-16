@@ -30,7 +30,7 @@ jobs:
             - ./node_modules
             - ./acme.sh
       - persist_to_workspace:
-          root: workspace
+          root: repo
           paths:
             - echo-output
   lint:
