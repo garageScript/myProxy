@@ -16,7 +16,7 @@ executors:
       - image: circleci/node:12.8.0
 
 jobs:
-  install:
+  install 📦:
     executor: node
     steps:
       - checkout_and_restore_cache
@@ -26,19 +26,20 @@ jobs:
           paths:
             - ./node_modules
             - ./acme.sh
-  lint:
+      - run: echo "✅ Succesful"
+  lint 👮‍♂️:
     executor: node
     steps:
       - checkout_and_restore_cache
       - run: npm install
       - run: npm run prettier:write
-  test:
+  test 🧪:
     executor: node
     steps:
       - checkout_and_restore_cache
       - run: npm install
       - run: npm run test
-  build:
+  build 🏗:
     executor: node
     steps:
       - checkout_and_restore_cache
