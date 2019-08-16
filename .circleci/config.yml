@@ -20,22 +20,12 @@ jobs:
     executor: node
     steps:
       - checkout_and_restore_cache
-      - run: npm install
+      - run: npm run setup
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
             - ./node_modules
             - ./acme.sh
-  build:
-    executor: node
-    steps:
-      - checkout_and_restore_cache
-      - run: npm run build
-      # working_directory: ~/repo
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - buld/*
   lint:
     executor: node
     steps:
@@ -46,6 +36,16 @@ jobs:
     steps:
       - checkout_and_restore_cache
       - run: npm run test
+  build:
+    executor: node
+    steps:
+      - checkout_and_restore_cache
+      - run: npm run build
+      # working_directory: ~/repo
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - buld/*
   deploy:
       executor: node
       steps:
