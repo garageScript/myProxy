@@ -8,7 +8,9 @@ commands:
     steps:
       - checkout
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
 
 executors:
   node:
@@ -22,11 +24,10 @@ jobs:
       - checkout_and_restore_cache
       - run: npm run setup
       - save_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: source-v1-{{ checksum "package.json" }}
           paths:
             - ./node_modules
             - ./acme.sh
-      - run: echo "✅ Succesful"
   lint:
     executor: node
     steps:
