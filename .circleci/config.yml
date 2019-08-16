@@ -16,7 +16,7 @@ executors:
   node:
     docker:
       - image: circleci/node:12.8.0
-    working_directory: ~/tmp
+    working_directory: /tmp
 
 jobs:
   install:
