@@ -36,11 +36,13 @@ jobs:
     executor: node
     steps:
       - checkout_and_restore_cache
+      - run: npm install
       - run: npm run test
   build:
     executor: node
     steps:
       - checkout_and_restore_cache
+      - run: npm install
       - run: npm run build
       # working_directory: ~/repo
       - persist_to_workspace:
