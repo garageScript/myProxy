@@ -59,11 +59,14 @@ jobs:
   deploy:
       executor: node
       steps:
-        # - add_ssh_keys:
-        #     fingerprints:
-        #     - "SHA256:vNQhUA1Pu0/mCPSWwZ623uUtmljAksV9B0zUg/DWMC0 ledavid64@gmail.com"
+        - add_ssh_keys:
+            fingerprints:
+            - "SHA256:vNQhUA1Pu0/mCPSWwZ623uUtmljAksV9B0zUg/DWMC0 ledavid64@gmail.com"
         - workspace
         - checkout_and_restore_cache
+        - run:
+            name: Deploy Over SSH
+            command: ssh dev@167.71.153.58 "touch test"
         - run: echo ✅ YEEES! 🎉
 
 workflows:
@@ -71,20 +74,21 @@ workflows:
   integration:
     jobs:
       - install
-      - lint:
-          requires:
-            - install
-      - test:
-          requires:
-            - install
-      - build:
-          requires:
-            - install
-      - deploy:
-          requires:
-            - build
-            - lint
-            - test
+      # - lint:
+      #     requires:
+      #       - install
+      # - test:
+      #     requires:
+      #       - install
+      # - build:
+          # requires:
+          #   - install
+      - deploy
+      # - deploy:
+          # requires:
+          #   - build
+          #   - lint
+          #   - test
           # filters:
           #   branches:
           #     only: master
