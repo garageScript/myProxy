@@ -16,7 +16,7 @@ executors:
       - image: circleci/node:12.8.0
 
 jobs:
-  install 📦:
+  install:
     executor: node
     steps:
       - checkout_and_restore_cache
@@ -27,19 +27,19 @@ jobs:
             - ./node_modules
             - ./acme.sh
       - run: echo "✅ Succesful"
-  lint 👮‍♂️:
+  lint:
     executor: node
     steps:
       - checkout_and_restore_cache
       - run: npm install
       - run: npm run prettier:write
-  test 🧪:
+  test:
     executor: node
     steps:
       - checkout_and_restore_cache
       - run: npm install
       - run: npm run test
-  build 🏗:
+  build:
     executor: node
     steps:
       - checkout_and_restore_cache
@@ -49,12 +49,14 @@ jobs:
   deploy:
       executor: node
       steps:
-        - add_ssh_keys:
-            fingerprints:
-            - "SHA256:vNQhUA1Pu0/mCPSWwZ623uUtmljAksV9B0zUg/DWMC0 ledavid64@gmail.com"
+        # - add_ssh_keys:
+        #     fingerprints:
+        #     - "SHA256:vNQhUA1Pu0/mCPSWwZ623uUtmljAksV9B0zUg/DWMC0 ledavid64@gmail.com"
         - checkout_and_restore_cache
-        - attach_workspace:
-            at: ~/project
+        - run: npm install
+        - run: npm run build
+        # - attach_workspace:
+        #     at: ~/project
         - run:
             name: Deploy Over SSH 🚀
             command: ssh dev@167.71.153.58 "git pull master"
