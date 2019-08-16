@@ -31,6 +31,10 @@ jobs:
     steps:
       - checkout_and_restore_cache
       - run: npm run prettier:write
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - build/*
   test:
     executor: node
     steps:
@@ -45,7 +49,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - buld/*
+            - build/*
   deploy:
       executor: node
       steps:
