@@ -49,17 +49,19 @@ jobs:
   test:
     executor: node
     steps:
+      - workspace
       - checkout_and_restore_cache
-      - attach_workspace:
-          at: ~/circleci
+      # - attach_workspace:
+      #     at: ~/circleci
       - run: npm install
       - run: npm run test
   build:
     executor: node
     steps:
+      - workspace
       - checkout_and_restore_cache
-      - attach_workspace:
-          at: ~/circleci
+      # - attach_workspace:
+      #     at: ~/circleci
       - run: npm install
       - run: npm run build
       # working_directory: ~/repo
@@ -69,6 +71,7 @@ jobs:
   #       # - add_ssh_keys:
   #       #     fingerprints:
   #       #     - "SHA256:vNQhUA1Pu0/mCPSWwZ623uUtmljAksV9B0zUg/DWMC0 ledavid64@gmail.com"
+  #       - workspace
   #       - checkout_and_restore_cache
   #       - attach_workspace:
   #           at: ~/circleci
