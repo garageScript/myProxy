@@ -20,7 +20,7 @@ jobs:
     executor: node
     steps:
       - checkout_and_restore_cache
-      - run: npm setup
+      - run: npm run setup
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
@@ -30,7 +30,7 @@ jobs:
     executor: node
     steps:
       - checkout_and_restore_cache
-      - run: npm setup
+      - run: npm run setup
       # working_directory: ~/repo
       - persist_to_workspace:
           root: ~/project
