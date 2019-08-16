@@ -11,6 +11,10 @@ commands:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
+  workspace:
+    steps:
+    - attach_workspace:
+        at: ~/circleci
 
 executors:
   node:
@@ -34,11 +38,13 @@ jobs:
             - ./node_modules
             - ./acme.sh
   lint:
-    executor: node
+    executor:
+      node
+      workspace
     steps:
       - checkout_and_restore_cache
-      - attach_workspace:
-          at: ~/circleci
+      # - attach_workspace:
+      #     at: ~/circleci
       - run: npm install
       - run: npm run prettier:write
   test:
