@@ -45,10 +45,6 @@ jobs:
       - run: npm install
       - run: npm run build
       # working_directory: ~/repo
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - build/*
   deploy:
       executor: node
       steps:
