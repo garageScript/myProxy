@@ -30,12 +30,12 @@ jobs:
     executor: node
     steps:
       - checkout_and_restore_cache
-      - run: npm run setup
+      - run: npm run build
       # working_directory: ~/repo
       - persist_to_workspace:
-          root: ~/project
+          root: ~/
           paths:
-            - dist/*
+            - buld/*
   lint:
     executor: node
     steps:
