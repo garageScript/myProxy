@@ -16,7 +16,7 @@ executors:
   node:
     docker:
       - image: circleci/node:12.8.0
-    working_directory: ~/repo
+    working_directory: ~/myProxy
 
 jobs:
   install:
@@ -24,57 +24,57 @@ jobs:
     steps:
       - checkout_and_restore_cache
       - run: npm run setup
+      - persist_to_workspace:
+          root: ~/myProxy
+          paths:
+            - ./dist
       - save_cache:
           key: source-v1-{{ checksum "package.json" }}
           paths:
             - ./node_modules
             - ./acme.sh
-      - persist_to_workspace:
-          root: repo
-          paths:
-            - echo-output
   lint:
     executor: node
     steps:
       - checkout_and_restore_cache
-      - attach_workspace:
-          at: ~/repo/workspace
+      # - attach_workspace:
+      #     at: ~/repo/workspace
       - run: npm install
       - run: npm run prettier:write
   test:
     executor: node
     steps:
       - checkout_and_restore_cache
-      - attach_workspace:
-          at: /tmp/workspace
+      # - attach_workspace:
+      #     at: /tmp/workspace
       - run: npm install
       - run: npm run test
   build:
     executor: node
     steps:
       - checkout_and_restore_cache
-      - attach_workspace:
-          at: ~/repo/workspace
+      # - attach_workspace:
+      #     at: ~/repo/workspace
       - run: npm install
       - run: npm run build
       # working_directory: ~/repo
-  deploy:
-      executor: node
-      steps:
-        # - add_ssh_keys:
-        #     fingerprints:
-        #     - "SHA256:vNQhUA1Pu0/mCPSWwZ623uUtmljAksV9B0zUg/DWMC0 ledavid64@gmail.com"
-        - checkout_and_restore_cache
-        - attach_workspace:
-            at: ~/repo/workspace
-        - run: npm install
-        - run: npm run build
-        # - attach_workspace:
-        #     at: ~/project
-        - run:
-            name: Deploy Over SSH 🚀
-            command: ssh dev@167.71.153.58 "git pull master"
-        - run: echo myProxy has been succesfully deployed 🎉
+  # deploy:
+  #     executor: node
+  #     steps:
+  #       # - add_ssh_keys:
+  #       #     fingerprints:
+  #       #     - "SHA256:vNQhUA1Pu0/mCPSWwZ623uUtmljAksV9B0zUg/DWMC0 ledavid64@gmail.com"
+  #       - checkout_and_restore_cache
+  #       - attach_workspace:
+  #           at: ~/repo/workspace
+  #       - run: npm install
+  #       - run: npm run build
+  #       # - attach_workspace:
+  #       #     at: ~/project
+  #       - run:
+  #           name: Deploy Over SSH 🚀
+  #           command: ssh dev@167.71.153.58 "git pull master"
+  #       - run: echo myProxy has been succesfully deployed 🎉
 
 workflows:
   version: 2
@@ -90,11 +90,11 @@ workflows:
       - build:
           requires:
             - install
-      - deploy:
-          requires:
-            - build
-            - lint
-            - test
-          filters:
-            branches:
-              only: master
+      # - deploy:
+      #     requires:
+      #       - build
+      #       - lint
+      #       - test
+      #     filters:
+      #       branches:
+      #         only: master
