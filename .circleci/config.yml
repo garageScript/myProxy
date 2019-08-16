@@ -19,7 +19,7 @@ jobs:
   install:
     executor: node
     steps:
-      - checkout_and_restore_cache:
+      - checkout_and_restore_cache
       - run: npm setup
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
