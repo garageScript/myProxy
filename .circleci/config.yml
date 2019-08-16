@@ -38,10 +38,9 @@ jobs:
             - ./node_modules
             - ./acme.sh
   lint:
-    executor:
-      node
-      workspace
+    executor: node
     steps:
+      - workspace
       - checkout_and_restore_cache
       # - attach_workspace:
       #     at: ~/circleci
