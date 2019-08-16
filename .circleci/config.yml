@@ -16,7 +16,7 @@ executors:
   node:
     docker:
       - image: circleci/node:12.8.0
-    working_directory: ~/myProxy
+    working_directory: ~/circleci
 
 jobs:
   install:
@@ -25,9 +25,9 @@ jobs:
       - checkout_and_restore_cache
       - run: npm run setup
       - persist_to_workspace:
-          root: ~/myProxy
+          root: .
           paths:
-            - ./dist
+            - ./myProxy
       - save_cache:
           key: source-v1-{{ checksum "package.json" }}
           paths:
