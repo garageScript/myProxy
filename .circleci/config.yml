@@ -82,9 +82,10 @@ workflows:
             - install
       - deploy:
           requires:
-            - build
+            - install
+            # - build
             # - lint
-            - test
-          filters:
-            branches:
-              only: master
+            # - test
+          # filters:
+          #   branches:
+          #     only: master
