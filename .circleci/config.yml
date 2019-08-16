@@ -20,7 +20,7 @@ jobs:
     executor: node
     steps:
       - checkout_and_restore_cache
-      - run: npm run install
+      - run: npm install
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
