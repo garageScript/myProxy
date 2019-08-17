@@ -2,6 +2,9 @@
 # Created by https://www.gitignore.io/api/node,code,macos,windows
 # Edit at https://www.gitignore.io/?templates=node,code,macos,windows
 
+### Acme ###
+acme.sh/
+
 ### Code ###
 .vscode/*
 !.vscode/settings.json
