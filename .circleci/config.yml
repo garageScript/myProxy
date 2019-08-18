@@ -74,17 +74,20 @@ workflows:
   version: 2
   integration:
     jobs:
-      # - install
+      - install
       # - lint:
       #     requires:
       #       - install
       # - test:
       #     requires:
       #       - install
-      # - build:
-          # requires:
-          #   - install
-      - deploy
+      - build:
+          requires:
+            - install
+      - deploy:
+          requires:
+            - install
+            - build
       # - deploy:
           # requires:
           #   - build
