@@ -84,10 +84,10 @@ workflows:
       - build:
           requires:
             - install
-      # - deploy:
-      #     requires:
-      #       - install
-      #       - build
+      - deploy:
+          requires:
+            - install
+            - build
       # - deploy:
           # requires:
           #   - build
