@@ -75,19 +75,19 @@ workflows:
   integration:
     jobs:
       - install
-      # - lint:
-      #     requires:
-      #       - install
-      # - test:
-      #     requires:
-      #       - install
+      - lint:
+          requires:
+            - install
+      - test:
+          requires:
+            - install
       - build:
           requires:
             - install
-      - deploy:
-          requires:
-            - install
-            - build
+      # - deploy:
+      #     requires:
+      #       - install
+      #       - build
       # - deploy:
           # requires:
           #   - build
