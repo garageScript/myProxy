@@ -68,7 +68,7 @@ jobs:
             name: Deploy Over SSH
             command: scp -r ~/circleci/build $SSH_USER@$SSH_HOST:$PATH
             # command: ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "touch test"
-        - run: echo ✅ YEEES! 🎉
+        - run: echo ✅ YEEEES! 🎉
 
 workflows:
   version: 2
