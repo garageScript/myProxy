@@ -61,7 +61,7 @@ jobs:
       steps:
         - add_ssh_keys:
             fingerprints:
-            - "vNQhUA1Pu0/mCPSWwZ623uUtmljAksV9B0zUg/DWMC0"
+            - "97:8e:18:f0:45:b1:7b:d0:00:2b:47:e1:c9:58:25:41"
         - workspace
         - checkout_and_restore_cache
         - run:
