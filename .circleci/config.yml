@@ -66,7 +66,7 @@ jobs:
         - checkout_and_restore_cache
         - run:
             name: Deploy Over SSH
-            command: scp -r ~/circleci/build $SSH_USER@$SSH_HOST:$PATH
+            command: scp -r ~/circleci/build $SSH_USER@$SSH_HOST:home/dev/myProxy
             # command: ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "touch test"
         - run: echo ✅ YEEEES! 🎉
 
