@@ -67,7 +67,7 @@ jobs:
         - run:
             name: Deploy Over SSH
             command: ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "touch test"
-        - run: scp -r ~/build $SSH_USER@$SSH_HOST/myProxy
+        - run: scp -r ~/circleci/build $SSH_USER@$SSH_HOST/myProxy
         - run: echo ✅ YEEES! 🎉
 
 workflows:
