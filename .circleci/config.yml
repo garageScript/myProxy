@@ -37,6 +37,7 @@ jobs:
           paths:
             - ./node_modules
             - ./acme.sh
+            - build
   lint:
     executor: node
     steps:
