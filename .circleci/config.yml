@@ -68,7 +68,7 @@ jobs:
         - run: ls -a
         - run:
             name: Deploy Over SSH
-            command: scp -r -o StrictHostKeyChecking=no ~/build $SSH_USER@$SSH_HOST:home/dev/myProxy
+            command: scp -r -o StrictHostKeyChecking=no ./build $SSH_USER@$SSH_HOST:home/dev/myProxy
             # command: ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "touch test"
         - run: echo ✅ YEEEES! 🎉
 
