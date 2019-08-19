@@ -56,6 +56,10 @@ jobs:
       - workspace
       - checkout_and_restore_cache
       - run: npm run build
+      - save_cache:
+          key: source-v1-{{ checksum "package.json" }}
+          paths:
+            - build
   deploy:
       executor: node
       steps:
