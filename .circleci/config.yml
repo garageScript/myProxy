@@ -87,8 +87,8 @@ workflows:
       #     requires:
       #       - install
       - deploy:
-          requires:
-            - install
+          # requires:
+          #   - install
       # - deploy:
           # requires:
           #   - build
