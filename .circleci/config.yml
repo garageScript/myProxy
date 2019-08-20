@@ -79,4 +79,4 @@ workflows:
             - test
           filters:
             branches:
-              only: testing_branch
+              only: master

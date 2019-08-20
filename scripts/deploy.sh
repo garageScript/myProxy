@@ -6,7 +6,7 @@ pwd
 ls
 
 echo '⬇️ Pulling from master...'
-git pull origin testing_branch
+git pull origin master
 
 echo '📦 Installing packages...'
 npm run setup
