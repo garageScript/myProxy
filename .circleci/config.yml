@@ -61,6 +61,7 @@ jobs:
         - run: npm install
         - run:
             name: Deploy Over SSH
+            # command: ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "./prodProxy/scripts/deploy.sh"
             command: ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "./prodProxy/scripts/deploy.sh"
         - run: echo "?? Code deployed ??"
 
