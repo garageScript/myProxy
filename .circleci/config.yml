@@ -77,6 +77,6 @@ workflows:
           requires:
             - lint
             - test
-          # filters:
-          #   branches:
-          #     only: master
+          filters:
+            branches:
+              only: testing_branch
