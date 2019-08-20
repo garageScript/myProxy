@@ -5,7 +5,7 @@ const port = process.env.PORT || 3000
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, '../../src/views'))
 
-app.get('/', (req, res) => res.render('index', { message: 'Hello myProxy' }))
+app.get('/', (req, res) => res.render('index', { message: 'Hello myProxy 3' }))
 
 app.get('/admin/serviceHostKeys', (req, res) => {
   res.render('admin')
