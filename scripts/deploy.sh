@@ -2,6 +2,8 @@
 
 echo '🤖 Running deploy.sh...'
 cd prodProxy
+pwd
+ls
 
 echo '⬇️ Pulling from master...'
 git pull origin testing_branch
