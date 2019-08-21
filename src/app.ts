@@ -3,7 +3,7 @@ import path from 'path'
 import fs from 'fs'
 
 const app = express()
-const port: String | number= process.env.PORT || 3000
+const port: String | number = process.env.PORT || 3000
 const apiRouter = require('./api')
 
 app.use(express.json());
