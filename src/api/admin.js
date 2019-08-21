@@ -66,6 +66,7 @@ app.put('/api/admin/serviceHostsKeys/:id', (req, res)=>{
       replacedKey = data.serviceKeys[i]
     }
   })
+  writeFile()
   res.json(replacedKey)
 })
 
@@ -87,5 +88,6 @@ app.patch('/api/admin/serviceHostsKeys/:id', (req, res)=>{
       editedKey = data.serviceKeys[i]
     }
   })
+  writeFile()
   res.json(editedKey)
 })
