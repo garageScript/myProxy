@@ -4,8 +4,10 @@
 npm install
 
 # Git clone & install acme.sh
-git clone https://github.com/Neilpang/acme.sh.git
+if [! -d './acme.sh']; then
+  git clone https://github.com/Neilpang/acme.sh.git
+fi
 cd ./acme.sh
 ./acme.sh --install
 
-echo "✅  MyProxy has been set up successfully"
+echo "? MyProxy has been set up successfully"
