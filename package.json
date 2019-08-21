@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest --coverage",
     "start": "npm run build:live",
+    "setup": "./scripts/setup.sh",
     "build": "tsc -p .",
     "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts",
     "prettier:base": "prettier --parser typescript --single-quote --no-semi",
