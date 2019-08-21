@@ -10,14 +10,15 @@ app.set('views', path.join(__dirname, '../../src/views'))
 
 app.get('/login', (req, res) => res.render('login', { error: '' }))
 app.post('/login', (req, res) => {
-  if(process.env.ADMIN !== req.body.adminPass) return res.render('login', { error: 'Wrong Admin Password' })
+  if (process.env.ADMIN !== req.body.adminPass)
+    return res.render('login', { error: 'Wrong Admin Password' })
   res.cookie('adminPass', req.body.adminPass)
   res.redirect('/admin/serviceHostKeys')
 })
 app.get('/', (req, res) => res.render('index', { message: 'Hello myProxy' }))
 
 app.get('/admin/serviceHostKeys', (req, res) => {
-  if(!req.cookies.adminPass) return res.redirect('/login')
+  if (!req.cookies.adminPass) return res.redirect('/login')
   res.render('admin')
 })
 
