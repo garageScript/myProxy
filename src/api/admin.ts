@@ -41,41 +41,35 @@ app.get('/serviceHostsKeys', (req, res)=>{
 
 app.get('/serviceHostsKeys/:id', (req, res)=>{
   // grab one servicekey
-  const id: string = req.params.id
-  const selectedKey = data.serviceKeys[Number(id)]
+  const id: number = Number(req.params.id)
+  const selectedKey: ServiceKey = data.serviceKeys[id]
   res.json(selectedKey)
 })
 
 app.delete('/serviceHostsKeys/:id', (req, res)=>{
   // delete a servicekey
-  const id: string = req.params.id
-  data.serviceKeys.splice(Number(id), 1) 
+  const id: number = Number(req.params.id)
+  data.serviceKeys.splice(id, 1) 
   writeFile()
   res.json(data.serviceKeys)
 })
 
 app.put('/serviceHostsKeys/:id', (req, res)=>{
   // replace servicekey info
-  const id: string = req.params.id
-  const idNum: number = Number(id)
-  data.serviceKeys[idNum] = {...req.body}
-  const replacedKey: ServiceKey = data.serviceKeys[idNum]
+  const id: number = Number(req.params.id)
+  data.serviceKeys[id] = {...req.body}
+  const replacedKey: ServiceKey = data.serviceKeys[id]
   writeFile()
   res.json(replacedKey)
 })
 
 app.patch('/serviceHostsKeys/:id', (req, res)=>{
   // edit servicekey info
-  const id: string = req.params.id
-  let editedKey;
-  data.serviceKeys.forEach((key,i)=>{
-    if(key.id===id){
-      if(req.body.key) data.serviceKeys[i]['key']=req.body.key
-      if(req.body.service)data.serviceKeys[i]['service']=req.body.service
-      if(req.body.value) data.serviceKeys[i]['value']=req.body.value
-      editedKey = data.serviceKeys[i]
-    }
-  })
+  const id: number = Number(req.params.id)
+      if(req.body.key) data.serviceKeys[id]['key']=req.body.key
+      if(req.body.service)data.serviceKeys[id]['service']=req.body.service
+      if(req.body.value) data.serviceKeys[id]['value']=req.body.value
+      const editedKey: ServiceKey = data.serviceKeys[id]
   writeFile()
   res.json(editedKey)
 })
