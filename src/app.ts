@@ -1,11 +1,8 @@
 import express from 'express'
 import path from 'path'
-//const express = require('express')
-//const path = require('path')
 
 const app = express()
 const port: String | number = process.env.PORT || 3000
-//const apiRouter = require(path.join(__dirname, '../../src/api/admin.js'))
 const apiRouter = require('./api/index')
 console.log('api', apiRouter)
 
