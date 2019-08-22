@@ -1,12 +1,15 @@
 import express from 'express'
 import path from 'path'
-import fs from 'fs'
+//const express = require('express')
+//const path = require('path')
 
 const app = express()
 const port: String | number = process.env.PORT || 3000
-const apiRouter = require('./api')
+//const apiRouter = require(path.join(__dirname, '../../src/api/admin.js'))
+const apiRouter = require('./api/index')
+console.log('api', apiRouter)
 
-app.use(express.json());
+app.use(express.json())
 app.use('/api', apiRouter)
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, '../../src/views'))

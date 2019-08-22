@@ -1,3 +1,5 @@
+import express from 'express'
+//const express = require('express')
 const app = express.Router()
 const data = {}
 const writeFile = ()=>{
@@ -92,3 +94,5 @@ app.patch('/api/admin/serviceHostsKeys/:id', (req, res)=>{
   writeFile()
   res.json(editedKey)
 })
+
+module.exports = app
