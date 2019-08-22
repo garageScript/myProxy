@@ -3,8 +3,10 @@ import path from 'path'
 import cookieParser from 'cookie-parser'
 const app = express()
 const port = process.env.PORT || 3000
+const adminRouter = express.Router()
 app.use(express.urlencoded())
 app.use(cookieParser())
+app.use('/admin', adminRouter)
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, '../../src/views'))
 
@@ -17,8 +19,12 @@ app.post('/login', (req, res) => {
 })
 app.get('/', (req, res) => res.render('index', { message: 'Hello myProxy' }))
 
-app.get('/admin/serviceHostKeys', (req, res) => {
+adminRouter.use('/*', (req, res, next) =>  {
   if (!req.cookies.adminPass) return res.redirect('/login')
+  next()
+})
+
+adminRouter.get('/serviceHostKeys', (req, res) => {
   res.render('admin')
 })
 
