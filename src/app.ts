@@ -4,7 +4,6 @@ import path from 'path'
 const app = express()
 const port: String | number = process.env.PORT || 3000
 const apiRouter = require('./api/index')
-console.log('api', apiRouter)
 
 app.use(express.json())
 app.use('/api', apiRouter)
