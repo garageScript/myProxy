@@ -1,5 +1,5 @@
 import { DB, ServiceKey } from './types/admin'
-import { setData, getData, data} from './lib/data'
+import { setData, getData, data } from './lib/data'
 import express from 'express'
 import fs from 'fs'
 

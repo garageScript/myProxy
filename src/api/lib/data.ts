@@ -5,8 +5,8 @@ const data: DB = {
   serviceKeys: []
 }
 
-const getData = (serviceKeys: string)=>{
-  if(serviceKeys){
+const getData = (serviceKeys: string) => {
+  if (serviceKeys) {
     fs.readFile('./data.db', (err, file) => {
       if (err) {
         return console.log('error', err)
@@ -18,8 +18,8 @@ const getData = (serviceKeys: string)=>{
   }
 }
 
-const setData = (serviceKeys: string, data: DB)=>{
-  if(serviceKeys && data){
+const setData = (serviceKeys: string, data: DB) => {
+  if (serviceKeys && data) {
     const fileData: string = JSON.stringify(data)
     fs.writeFile('./data.db', fileData, err => {
       if (err) {
@@ -30,6 +30,4 @@ const setData = (serviceKeys: string, data: DB)=>{
   }
 }
 
-export {
-  getData, setData, data
-}
+export { getData, setData, data }
