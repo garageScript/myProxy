@@ -7,7 +7,7 @@ adminRouter.use('/*', (req, res, next) =>  {
 })
 
 adminRouter.get('/serviceHostKeys', (req, res) => {
-  res.render('admin')
+  res.render('admin/serviceHostKeys')
 })
 
 export { adminRouter }
