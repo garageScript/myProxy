@@ -9,7 +9,10 @@ submit.onclick = () => {
       key: serviceKey.value,
       value: serviceValue.value,
       service: service.value
-    })
+    }),
+    headers: {
+      'Content-Type' : 'application/json'
+    }
   })
   return false
 }
