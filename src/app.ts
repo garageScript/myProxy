@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000
 
 app.use(express.urlencoded())
 app.use(cookieParser())
-// app.use('/admin', adminRouter)
+app.use('/admin', adminRouter)
 app.use('/services', services)
 
 app.set('view engine', 'ejs')
