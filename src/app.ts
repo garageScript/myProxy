@@ -1,6 +1,8 @@
 import express from 'express'
 import path from 'path'
 import https from 'https'
+import cookieParser from 'cookie-parser'
+import { adminRouter } from './admin/index'
 const app = express()
 const port = process.env.PORT || 3000
 
@@ -15,6 +17,12 @@ const options = {
   headers: { Authorization: `sso-key ${key}:${secret}` }
 }
 
+app.use(express.urlencoded())
+app.use(cookieParser())
+app.use('/admin', adminRouter)
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, '../../src/views'))
+
 app.get('/admin/domains', (_, res) => {
   // List of domains will be sent to the frontend (JSON)
   https
@@ -25,13 +33,13 @@ app.get('/admin/domains', (_, res) => {
     .end()
 })
 
-app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname, '../../src/views'))
-
 app.get('/', (req, res) => res.render('client'))
 
-app.get('/admin/serviceHostKeys', (req, res) => {
-  res.render('admin')
+app.post('/login', (req, res) => {
+  if (process.env.ADMIN !== req.body.adminPass)
+    return res.render('login', { error: 'Wrong Admin Password' })
+  res.cookie('adminPass', req.body.adminPass)
+  res.redirect('/admin/serviceHostKeys')
 })
 
 app.listen(port, () => console.log(`app listening on port ${port}!`))
