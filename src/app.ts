@@ -8,7 +8,7 @@ const apiRouter = require('./api/index')
 app.use(express.json())
 app.use('/api', apiRouter)
 app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname, '../../src/views'))
+app.set('views', path.join(__dirname, '../src/views'))
 
 app.get('/login', (req, res) => res.render('login', { error: '' }))
 app.get('/', (req, res) => res.render('client'))
