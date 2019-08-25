@@ -5,29 +5,28 @@ const data: DB = {
   serviceKeys: []
 }
 
-const getData = (serviceKeys: string) => {
-  if (serviceKeys) {
-    fs.readFile('./data.db', (err, file) => {
-      if (err) {
-        return console.log('error', err)
-      }
-      console.log('file read success')
-      const fileData: DB = JSON.parse(file.toString() || '{}')
-      data.serviceKeys = fileData.serviceKeys || []
-    })
+fs.readFile('./data.db', (err, file) => {
+  if (err) {
+    return console.log('error reading db file', err)
   }
+  console.log('loading db file successful')
+  const fileData: DB = JSON.parse(file.toString() || '{}')
+  data.serviceKeys = fileData.serviceKeys || []
+})
+
+const getData = (table: string) => {
+  return data[table]
 }
 
-const setData = (serviceKeys: string, data: DB) => {
-  if (serviceKeys && data) {
-    const fileData: string = JSON.stringify(data)
-    fs.writeFile('./data.db', fileData, err => {
-      if (err) {
-        return console.log('error', err)
-      }
-      console.log('file write success')
-    })
-  }
+const setData = (table: string, records: any) => {
+  data[table] = records
+  const fileData: string = JSON.stringify(data)
+  fs.writeFile('./data.db', fileData, err => {
+    if (err) {
+      return console.log('writing to DB failed', err)
+    }
+    console.log('successfully wrote to DB')
+  })
 }
 
 export { getData, setData, data }

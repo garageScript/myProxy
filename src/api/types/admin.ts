@@ -6,7 +6,7 @@ type ServiceKey = {
 }
 
 type DB = {
-  serviceKeys: Array<ServiceKey>
+  [serviceKeys : string] : Array<ServiceKey>
 }
 
 export { ServiceKey, DB }

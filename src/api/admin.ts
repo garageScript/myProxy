@@ -5,7 +5,7 @@ import fs from 'fs'
 
 const app = express.Router()
 
-getData('servicekeys')
+const serviceKeys = getData('serviceKeys')
 
 app.post('/serviceHostsKey', (req, res) => {
   // create service keys
