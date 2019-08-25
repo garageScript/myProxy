@@ -21,10 +21,9 @@
         "sourceType": "module"
     },
     "rules": {
-        "@typescript-eslint/rule-name": "error",
         "indent": [
             "error",
-            4
+            2
         ],
         "linebreak-style": [
             "error",
