@@ -5,7 +5,6 @@ import uuid4 from 'uuid/v4'
 
 const app = express.Router()
 
-
 app.post('/serviceHostsKey', (req, res) => {
   // create service keys
   const serviceKeys = getData('serviceKeys')
@@ -27,17 +26,19 @@ app.get('/serviceHostsKey', (req, res) => {
 app.get('/serviceHostsKey/:id', (req, res) => {
   // grab one servicekey
   const serviceKeys = getData('serviceKeys')
-  const selectedKey = serviceKeys.filter((element) => element.id === Number(req.params.id))
+  const selectedKey = serviceKeys.filter(
+    element => element.id === Number(req.params.id)
+  )
   res.json(selectedKey)
 })
 
 app.delete('/serviceHostsKey/:id', (req, res) => {
   // delete a servicekey
-  let deletedKey;
+  let deletedKey
   const serviceKeys = getData('serviceKeys')
-  const updatedKeys = serviceKeys.filter((element) => {
-    if(element.id !== Number(req.params.id)) return true
-    if(element.id === Number(req.params.id)) deletedKey = element
+  const updatedKeys = serviceKeys.filter(element => {
+    if (element.id !== Number(req.params.id)) return true
+    if (element.id === Number(req.params.id)) deletedKey = element
     return false
   })
   setData('serviceKeys', updatedKeys)
@@ -46,11 +47,11 @@ app.delete('/serviceHostsKey/:id', (req, res) => {
 
 app.put('/serviceHostsKey/:id', (req, res) => {
   // replace servicekey info
-  let replacedKey;
+  let replacedKey
   const serviceKeys = getData('serviceKeys')
   const id: number = Number(req.params.id)
-  const updatedKeys = serviceKeys.map((element) => {
-    if(element.id === id) {
+  const updatedKeys = serviceKeys.map(element => {
+    if (element.id === id) {
       element = { id, ...req.body }
       replacedKey = element
     }
@@ -61,11 +62,11 @@ app.put('/serviceHostsKey/:id', (req, res) => {
 
 app.patch('/serviceHostsKey/:id', (req, res) => {
   // edit servicekey info
-  let editedKey;
+  let editedKey
   const serviceKeys = getData('serviceKeys')
   const id: number = Number(req.params.id)
-  const updatedKeys = serviceKeys.map((element) => {
-    if(element.id === id) {
+  const updatedKeys = serviceKeys.map(element => {
+    if (element.id === id) {
       if (req.body.key) element.key = req.body.key
       if (req.body.service) element.service = req.body.service
       if (req.body.value) element.value = req.body.value

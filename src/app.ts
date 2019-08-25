@@ -1,19 +1,31 @@
 import express from 'express'
 import path from 'path'
-
+import cookieParser from 'cookie-parser'
+import { adminRouter } from './admin/index'
 const app = express()
 const port: String | number = process.env.PORT || 3000
 const apiRouter = require('./api/index')
-
 app.use(express.json())
 app.use('/api', apiRouter)
+app.use(express.urlencoded())
+app.use(cookieParser())
+app.use('/admin', adminRouter)
+
 app.set('view engine', 'ejs')
+
 app.set('views', path.join(__dirname, '../../src/views'))
+
+app.get('/login', (req, res) => res.render('login', { error: '' }))
 
 app.get('/', (req, res) => res.render('client'))
 
-app.get('/admin/serviceHostKeys', (req, res) => {
-  res.render('admin')
+app.post('/login', (req, res) => {
+  if (process.env.ADMIN !== req.body.adminPass)
+    return res.render('login', { error: 'Wrong Admin Password' })
+  res.cookie('adminPass', req.body.adminPass)
+  res.redirect('/admin/serviceHostKeys')
 })
+
+app.get('/', (req, res) => res.render('index', { message: 'Hello myProxy' }))
 
 app.listen(port, () => console.log(`app listening on port ${port}!`))
