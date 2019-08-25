@@ -1,12 +1,12 @@
 type ServiceKey = {
-  id?: string
+  id?: number
   key: string
   value: string
   service: string
 }
 
 type DB = {
-  [serviceKeys : string] : Array<ServiceKey>
+  [serviceKeys: string]: Array<ServiceKey>
 }
 
 export { ServiceKey, DB }

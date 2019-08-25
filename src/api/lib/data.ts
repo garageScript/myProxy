@@ -29,4 +29,4 @@ const setData = (table: string, records: any) => {
   })
 }
 
-export { getData, setData, data }
+export { getData, setData }
