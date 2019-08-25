@@ -2,14 +2,13 @@ import express from 'express'
 import path from 'path'
 import cookieParser from 'cookie-parser'
 import { adminRouter } from './admin/index'
+import { apiRouter } from './api/index'
 const app = express()
 const port: String | number = process.env.PORT || 3000
-const apiRouter = require('./api/index')
-app.use(express.json())
-app.use('/api', apiRouter)
 app.use(express.urlencoded())
 app.use(cookieParser())
 app.use('/admin', adminRouter)
+app.use('/api', apiRouter)
 
 app.set('view engine', 'ejs')
 

@@ -77,4 +77,4 @@ app.patch('/serviceHostsKey/:id', (req, res) => {
   res.json(editedKey)
 })
 
-module.exports = app
+export default { app }

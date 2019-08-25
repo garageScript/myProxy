@@ -1,7 +1,7 @@
 import express from 'express'
+import adminRouter from './admin'
 
-const router = express.Router()
-const adminRouter = require('./admin')
-router.use('/admin', adminRouter)
+const apiRouter = express.Router()
+apiRouter.use('/admin', adminRouter.app)
 
-module.exports = router
+export { apiRouter }
