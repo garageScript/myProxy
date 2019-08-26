@@ -26,9 +26,7 @@ app.get('/serviceHostsKey', (req, res) => {
 app.get('/serviceHostsKey/:id', (req, res) => {
   // grab one servicekey
   const serviceKeys = getData('serviceKeys')
-  const selectedKey = serviceKeys.filter(
-    element => element.id === req.params.id
-  )
+  const selectedKey = serviceKeys.find(element => element.id === req.params.id)
   res.json(selectedKey)
 })
 
@@ -37,7 +35,8 @@ app.delete('/serviceHostsKey/:id', (req, res) => {
   const serviceKeys = getData('serviceKeys')
   const updatedKeys = serviceKeys.filter(element => element.id !== req.params.id)
   setData('serviceKeys', updatedKeys)
-  res.json(updatedKeys)
+  const updatedKey = serviceKeys.find(element => element.id === req.params.id)
+  res.json(updatedKey)
 })
 
 app.put('/serviceHostsKey/:id', (req, res) => {
@@ -49,7 +48,8 @@ app.put('/serviceHostsKey/:id', (req, res) => {
     return element
   })
   setData('serviceKeys', updatedKeys)
-  res.json(updatedKeys)
+  const updatedKey = serviceKeys.find(element => element.id === id)
+  res.json(updatedKey)
 })
 
 app.patch('/serviceHostsKey/:id', (req, res) => {
@@ -65,7 +65,8 @@ app.patch('/serviceHostsKey/:id', (req, res) => {
     return element
   })
   setData('serviceKeys', updatedKeys)
-  res.json(updatedKeys)
+  const updatedKey = serviceKeys.find(element => element.id === id)
+  res.json(updatedKey)
 })
 
 export default { app }
