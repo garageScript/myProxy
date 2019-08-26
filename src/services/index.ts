@@ -4,8 +4,10 @@ const services = express.Router()
 
 const getDomainsByProvider = (provider: string) => {
   switch (provider) {
-    case 'GODADDY': return goDaddy.getDomains()
-    default: return 'Provider not supported yet'
+  case 'GODADDY':
+    return goDaddy.getDomains()
+  default:
+    return 'Provider not supported yet'
   }
 }
 

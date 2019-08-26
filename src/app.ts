@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser'
 import { adminRouter } from './admin/index'
 import { apiRouter } from './api/index'
 const app = express()
-const port: String | number = process.env.PORT || 3000
+const port: string | number = process.env.PORT || 3000
 app.use(express.json())
 app.use(cookieParser())
 app.use('/admin', adminRouter)

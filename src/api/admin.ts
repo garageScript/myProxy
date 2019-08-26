@@ -33,7 +33,9 @@ app.get('/serviceHostsKey/:id', (req, res) => {
 app.delete('/serviceHostsKey/:id', (req, res) => {
   // delete a servicekey
   const serviceKeys = getData('serviceKeys')
-  const updatedKeys = serviceKeys.filter(element => element.id !== req.params.id)
+  const updatedKeys = serviceKeys.filter(
+    element => element.id !== req.params.id
+  )
   setData('serviceKeys', updatedKeys)
   const updatedKey = serviceKeys.find(element => element.id === req.params.id)
   res.json(updatedKey)
