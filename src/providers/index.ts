@@ -1,6 +1,6 @@
 import express from 'express'
 import * as goDaddy from './goDaddy'
-const services = express.Router()
+const providers = express.Router()
 
 const getDomainsByProvider = (provider: string) => {
   switch (provider) {
@@ -11,14 +11,14 @@ const getDomainsByProvider = (provider: string) => {
   }
 }
 
-services.get('/domains', async (_, res) => {
+providers.get('/domains', async (_, res) => {
   const data = await Promise.all([goDaddy.getDomains()])
   return res.json(data) // Data send to view providers ?
 })
-services.get('/domains/:provider', async (req, res) => {
+providers.get('/domains/:provider', async (req, res) => {
   const { provider } = req.params
   const data = await getDomainsByProvider(provider.toUpperCase())
   res.json(data) // Data send to view provider ?
 })
 
-export { services }
+export { providers }

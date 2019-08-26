@@ -1,9 +1,9 @@
 import express from 'express'
 import adminRouter from './admin'
-import { services } from '../services'
+import { providers } from '../providers'
 
 const apiRouter = express.Router()
 apiRouter.use('/admin', adminRouter.app)
-apiRouter.use('/services', services)
+apiRouter.use('/providers', providers)
 
 export { apiRouter }
