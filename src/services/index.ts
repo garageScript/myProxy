@@ -1,22 +1,21 @@
 import express from 'express'
-import goDaddy from './goDaddy'
+import * as goDaddy from './goDaddy'
 const services = express.Router()
-import fetch from '../helpers/httpRequest'
 
-const getDomains = async (provider: string) => {
+const getDomainsByProvider = (provider: string) => {
   switch (provider) {
-    case 'GODADDY':
-      const { service, getDomains, options } = goDaddy
-      return fetch(`${service + getDomains}`, options)
-    default:
-      return 'Provider not supported yet'
+    case 'GODADDY': return goDaddy.getDomains()
+    default: return 'Provider not supported yet'
   }
 }
 
-services.get('/domains', (_, res) => res.send('List of providers or whatever'))
+services.get('/domains', async (_, res) => {
+  const data = await Promise.all([goDaddy.getDomains()])
+  return res.json(data) // Data send to view providers ?
+})
 services.get('/domains/:provider', async (req, res) => {
   const { provider } = req.params
-  const data = await getDomains(provider.toUpperCase())
+  const data = await getDomainsByProvider(provider.toUpperCase())
   res.json(data) // Data send to view provider ?
 })
 
