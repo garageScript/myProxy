@@ -5,10 +5,11 @@ import { adminRouter } from './admin/index'
 import { apiRouter } from './api/index'
 const app = express()
 const port: String | number = process.env.PORT || 3000
-app.use(express.urlencoded())
+app.use(express.json())
 app.use(cookieParser())
 app.use('/admin', adminRouter)
 app.use('/api', apiRouter)
+app.use(express.static(`${__dirname}`))
 
 app.set('view engine', 'ejs')
 

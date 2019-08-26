@@ -1,5 +1,5 @@
 type ServiceKey = {
-  id?: number
+  id?: string
   key: string
   value: string
   service: string

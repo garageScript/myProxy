@@ -7,7 +7,7 @@ const app = express.Router()
 
 app.post('/serviceHostsKey', (req, res) => {
   // create service keys
-  const serviceKeys = getData('serviceKeys')
+  const serviceKeys = getData('serviceKeys') || []
   const serviceHostKey: ServiceKey = {
     id: uuid4(),
     ...req.body
@@ -27,54 +27,45 @@ app.get('/serviceHostsKey/:id', (req, res) => {
   // grab one servicekey
   const serviceKeys = getData('serviceKeys')
   const selectedKey = serviceKeys.filter(
-    element => element.id === Number(req.params.id)
+    element => element.id === req.params.id
   )
   res.json(selectedKey)
 })
 
 app.delete('/serviceHostsKey/:id', (req, res) => {
   // delete a servicekey
-  let deletedKey
   const serviceKeys = getData('serviceKeys')
-  const updatedKeys = serviceKeys.filter(element => {
-    if (element.id !== Number(req.params.id)) return true
-    if (element.id === Number(req.params.id)) deletedKey = element
-    return false
-  })
+  const updatedKeys = serviceKeys.filter(element => element.id !== req.params.id)
   setData('serviceKeys', updatedKeys)
-  res.json(deletedKey)
+  res.json(updatedKeys)
 })
 
 app.put('/serviceHostsKey/:id', (req, res) => {
   // replace servicekey info
-  let replacedKey
   const serviceKeys = getData('serviceKeys')
-  const id: number = Number(req.params.id)
+  const id: string = req.params.id
   const updatedKeys = serviceKeys.map(element => {
-    if (element.id === id) {
-      element = { id, ...req.body }
-      replacedKey = element
-    }
+    if (element.id === id) element = { id, ...req.body }
+    return element
   })
   setData('serviceKeys', updatedKeys)
-  res.json(replacedKey)
+  res.json(updatedKeys)
 })
 
 app.patch('/serviceHostsKey/:id', (req, res) => {
   // edit servicekey info
-  let editedKey
   const serviceKeys = getData('serviceKeys')
-  const id: number = Number(req.params.id)
+  const id: string = req.params.id
   const updatedKeys = serviceKeys.map(element => {
     if (element.id === id) {
       if (req.body.key) element.key = req.body.key
       if (req.body.service) element.service = req.body.service
       if (req.body.value) element.value = req.body.value
-      editedKey = element
     }
+    return element
   })
   setData('serviceKeys', updatedKeys)
-  res.json(editedKey)
+  res.json(updatedKeys)
 })
 
 export default { app }
