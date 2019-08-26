@@ -13,7 +13,7 @@
     "prettier:write": "npm run prettier:base -- --write \"src/**/*.{ts,tsx}\"",
     "coverage": "nyc npm run test",
     "eslint:fix": "./node_modules/.bin/eslint src/ --ext .ts --fix",
-    "check-code": "npm run prettier:write; npm run eslint:fix"
+    "autofix": "npm run prettier:write; npm run eslint:fix"
   },
   "repository": {
     "type": "git",
@@ -51,7 +51,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run check-code",
+      "pre-commit": "npm run autofix",
       "pre-push": "npm test"
     }
   }
