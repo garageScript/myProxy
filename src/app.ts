@@ -8,12 +8,13 @@ const app = express()
 const port: String | number = process.env.PORT || 3000
 app.use(express.json())
 app.use(cookieParser())
+app.use(express.static('../public'))
 app.use('/admin', adminRouter)
 app.use('/api', apiRouter)
 
 app.set('view engine', 'ejs')
 
-app.set('views', path.join(__dirname, '../../src/views'))
+app.set('views', path.join(__dirname, '../views'))
 
 app.get('/login', (req, res) => res.render('login', { error: '' }))
 
