@@ -7,7 +7,7 @@ const data: DB = {
 
 fs.readFile('./data.db', (err, file) => {
   if (err) {
-    return console.log('error reading db file', err)
+    return console.log('File does not exist, but do not worry. File will be created on first save', err)
   }
   console.log('loading db file successful')
   const fileData: DB = JSON.parse(file.toString() || '{}')
