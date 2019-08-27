@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { DB, ServiceKey } from '../types/admin'
+import { DB } from '../types/admin'
 
 const data: DB = {
   serviceKeys: []
