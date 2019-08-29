@@ -1,11 +1,11 @@
-import { DB, ServiceKey } from './types/admin'
+import { ServiceKey } from './types/admin'
 import { setData, getData } from './lib/data'
 import express from 'express'
 import uuid4 from 'uuid/v4'
 
 const app = express.Router()
 
-app.post('/serviceHostsKey', (req, res) => {
+app.post('/serviceHostKeys', (req, res) => {
   // create service keys
   const serviceKeys = getData('serviceKeys') || []
   const serviceHostKey: ServiceKey = {
@@ -17,20 +17,20 @@ app.post('/serviceHostsKey', (req, res) => {
   res.json(serviceHostKey)
 })
 
-app.get('/serviceHostsKey', (req, res) => {
+app.get('/serviceHostKeys', (req, res) => {
   // get all servicekeys
   const serviceKeys = getData('serviceKeys')
   res.json(serviceKeys)
 })
 
-app.get('/serviceHostsKey/:id', (req, res) => {
+app.get('/serviceHostKeys/:id', (req, res) => {
   // grab one servicekey
   const serviceKeys = getData('serviceKeys')
   const selectedKey = serviceKeys.find(element => element.id === req.params.id)
   res.json(selectedKey)
 })
 
-app.delete('/serviceHostsKey/:id', (req, res) => {
+app.delete('/serviceHostKeys/:id', (req, res) => {
   // delete a servicekey
   const serviceKeys = getData('serviceKeys')
   const updatedKeys = serviceKeys.filter(
@@ -41,7 +41,7 @@ app.delete('/serviceHostsKey/:id', (req, res) => {
   res.json(updatedKey)
 })
 
-app.put('/serviceHostsKey/:id', (req, res) => {
+app.put('/serviceHostKeys/:id', (req, res) => {
   // replace servicekey info
   const serviceKeys = getData('serviceKeys')
   const id: string = req.params.id
@@ -54,7 +54,7 @@ app.put('/serviceHostsKey/:id', (req, res) => {
   res.json(updatedKey)
 })
 
-app.patch('/serviceHostsKey/:id', (req, res) => {
+app.patch('/serviceHostKeys/:id', (req, res) => {
   // edit servicekey info
   const serviceKeys = getData('serviceKeys')
   const id: string = req.params.id
