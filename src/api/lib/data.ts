@@ -17,11 +17,11 @@ fs.readFile('./data.db', (err, file) => {
   data.serviceKeys = fileData.serviceKeys || []
 })
 
-const getData = (table: string) : Array<ServiceKey> => {
+const getData = (table: string): any => {
   return data[table]
 }
 
-const setData = (table: string, records: Array<ServiceKey>) : void => {
+const setData = (table: string, records: any): void => {
   data[table] = records
   const fileData: string = JSON.stringify(data)
   fs.writeFile('./data.db', fileData, err => {
@@ -32,4 +32,8 @@ const setData = (table: string, records: Array<ServiceKey>) : void => {
   })
 }
 
-export { getData, setData }
+const getProviderKeys = () : Array<ServiceKey> => {
+  return getData('serviceKeys')
+}
+
+export { getData, setData, getProviderKeys }

@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "jest --coverage",
-    "start": "  tsc -p . --watch & nodemon build/app.js",
+    "start": "tsc -p . --watch & nodemon build/app.js",
     "setup": "./scripts/setup.sh",
     "build": "tsc -p .",
     "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts",
