@@ -1,4 +1,4 @@
-import { DB, ServiceKey } from './types/admin'
+import { ServiceKey } from './types/admin'
 import { setData, getData } from './lib/data'
 import express from 'express'
 import uuid4 from 'uuid/v4'
