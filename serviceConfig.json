@@ -1,4 +1,0 @@
-{
-  "dns_gd": ["GD_Key", "GD_Secret"],
-  "dns_pdns": ["PDNS_Url", "PDNS_ServerId", "PDNS_Token", "PDNS_Ttl"]
-}

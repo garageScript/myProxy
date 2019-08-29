@@ -4,17 +4,28 @@ import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
 import cp from 'child_process'
+import serviceConfig from './serviceConfig'
+console.log('service', serviceConfig)
 
 const app = express.Router()
 const exec = util.promisify(cp.exec)
 
-const envVars = 'GD_Key=123 GD_Secret=345'
-const selectedDomain = 'dummydomain.com'
+const selectedDomain = 'woohoo'
 
 app.post('/sslCerts', async (req, res) => {
   try {
+    const serviceKeys = (getData('serviceKeys') || []).filter(
+      d => d.service === req.body.service
+    )
+    const envVars = serviceConfig[req.body.service].keys.reduce(
+      (acc: string, key: string) => {
+        console.log('key', key)
+        return acc + `${key}=${serviceKeys.find(d => d.key === key)} `
+      },
+      ''
+    )
     const { stdout, stderr } = await exec(
-      `${envVars} sh /path/acme.sh --issue --dns ${req.body.service} -d ${selectedDomain} -d www.${selectedDomain}`
+      `${envVars} ./scripts/acme.sh/acme.sh --issue --dns ${req.body.service} -d ${selectedDomain} -d www.${selectedDomain}`
     )
     if (stderr) {
       console.log('stderr', stderr)
