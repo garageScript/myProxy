@@ -2,8 +2,30 @@ import { ServiceKey } from './types/admin'
 import { setData, getData } from './lib/data'
 import express from 'express'
 import uuid4 from 'uuid/v4'
+import util from 'util'
+import cp from 'child_process'
 
 const app = express.Router()
+const exec = util.promisify(cp.exec)
+
+const envVars = 'GD_Key=123 GD_Secret=345'
+const selectedDomain = 'dummydomain.com' 
+
+app.post('/sslCerts', async (req, res) => {
+  try {
+    const { stdout, stderr } = await exec(
+      `${envVars} sh /path/acme.sh --issue --dns ${req.body.service} -d ${selectedDomain} -d www.${selectedDomain}`
+    )
+    if (stderr) {
+      console.log('stderr', stderr)
+    }
+    console.log('stdout', stdout)
+    res.json('cert successfully created')
+  } catch (err) {
+    console.log('failed to create cert', err)
+    res.json({'failed to create cert': err})
+  }
+})
 
 app.post('/serviceHostKeys', (req, res) => {
   // create service keys
