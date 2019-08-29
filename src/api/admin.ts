@@ -26,7 +26,9 @@ app.get('/serviceHostKeys', (req, res) => {
 app.get('/serviceHostKeys/:id', (req, res) => {
   // grab one servicekey
   const serviceKeys = getData('serviceKeys')
-  const selectedKey = serviceKeys.find(element => element.id === req.params.id)
+  const selectedKey = serviceKeys.find(
+    (element: ServiceKey)  => element.id === req.params.id
+  )
   res.json(selectedKey)
 })
 
@@ -34,10 +36,12 @@ app.delete('/serviceHostKeys/:id', (req, res) => {
   // delete a servicekey
   const serviceKeys = getData('serviceKeys')
   const updatedKeys = serviceKeys.filter(
-    element => element.id !== req.params.id
+    (element: ServiceKey) => element.id !== req.params.id
   )
   setData('serviceKeys', updatedKeys)
-  const updatedKey = serviceKeys.find(element => element.id === req.params.id)
+  const updatedKey = serviceKeys.find(
+    (element: ServiceKey) => element.id === req.params.id
+  )
   res.json(updatedKey)
 })
 
@@ -45,12 +49,16 @@ app.put('/serviceHostKeys/:id', (req, res) => {
   // replace servicekey info
   const serviceKeys = getData('serviceKeys')
   const id: string = req.params.id
-  const updatedKeys = serviceKeys.map(element => {
-    if (element.id === id) element = { id, ...req.body }
-    return element
-  })
+  const updatedKeys = serviceKeys.map(
+    (element: ServiceKey) => {
+      if (element.id === id) element = { id, ...req.body }
+      return element
+    }
+  )
   setData('serviceKeys', updatedKeys)
-  const updatedKey = serviceKeys.find(element => element.id === id)
+  const updatedKey = serviceKeys.find(
+    (element: ServiceKey) => element.id === id
+  )
   res.json(updatedKey)
 })
 
@@ -58,16 +66,20 @@ app.patch('/serviceHostKeys/:id', (req, res) => {
   // edit servicekey info
   const serviceKeys = getData('serviceKeys')
   const id: string = req.params.id
-  const updatedKeys = serviceKeys.map(element => {
-    if (element.id === id) {
-      if (req.body.key) element.key = req.body.key
-      if (req.body.service) element.service = req.body.service
-      if (req.body.value) element.value = req.body.value
+  const updatedKeys = serviceKeys.map(
+    (element: ServiceKey) => {
+      if (element.id === id) {
+        if (req.body.key) element.key = req.body.key
+        if (req.body.service) element.service = req.body.service
+        if (req.body.value) element.value = req.body.value
+      }
+      return element
     }
-    return element
-  })
+  )
   setData('serviceKeys', updatedKeys)
-  const updatedKey = serviceKeys.find(element => element.id === id)
+  const updatedKey = serviceKeys.find(
+    (element: ServiceKey) => element.id === id
+  )
   res.json(updatedKey)
 })
 
