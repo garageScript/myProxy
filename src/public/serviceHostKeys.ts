@@ -2,7 +2,7 @@ const serviceKey = document.querySelector('#serviceKey') as HTMLInputElement
 const serviceValue = document.querySelector('#value') as HTMLInputElement
 const service = document.querySelector('#service') as HTMLInputElement
 const submit = document.querySelector('#newService') as HTMLElement
-submit.onclick = () => {
+submit.onclick = () : boolean => {
   fetch('/api/admin/serviceHostKeys', {
     method: 'POST',
     body: JSON.stringify({
