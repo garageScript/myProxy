@@ -1,10 +1,16 @@
 import fetch from '../helpers/httpRequest'
 import { getData } from '../api/lib/data'
 
-const KEY = getData('serviceKeys').key
-const SECRET = getData('serviceKeys').secret
-const SERVICE = 'https://api.godaddy.com'
-const ACTIVE_DOMAINS = `${SERVICE}/v1/domains?statuses=ACTIVE`
-const OPTIONS = { headers: { Authorization: `sso-key ${KEY}:${SECRET}` } }
+export const getDomains = () => {
+  const serviceKeys: any = getData('serviceKeys')
+  const { service, value: key } = serviceKeys.find(
+    (el: { key: string }) => el.key === 'GD_Key'
+  )
+  const { value: secret } = serviceKeys.find(
+    (el: { key: string }) => el.key === 'GD_Secret'
+  )
+  const url = `${service}/v1/domains?statuses=ACTIVE`
+  const options = { headers: { Authorization: `sso-key ${key}:${secret}` } }
 
-export const getDomains = () => fetch(ACTIVE_DOMAINS, OPTIONS)
+  return fetch(url, options)
+}
