@@ -9,7 +9,7 @@ const app = express.Router()
 const exec = util.promisify(cp.exec)
 
 const envVars = 'GD_Key=123 GD_Secret=345'
-const selectedDomain = 'dummydomain.com' 
+const selectedDomain = 'dummydomain.com'
 
 app.post('/sslCerts', async (req, res) => {
   try {
@@ -23,7 +23,7 @@ app.post('/sslCerts', async (req, res) => {
     res.json('cert successfully created')
   } catch (err) {
     console.log('failed to create cert', err)
-    res.json({'failed to create cert': err})
+    res.json({ 'failed to create cert': err })
   }
 })
 
