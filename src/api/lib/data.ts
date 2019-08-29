@@ -32,7 +32,7 @@ const setData = (table: string, records: any): void => {
   })
 }
 
-const getProviderKeys = () : Array<ServiceKey> => {
+const getProviderKeys = (): Array<ServiceKey> => {
   return getData('serviceKeys')
 }
 
