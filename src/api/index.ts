@@ -1,6 +1,6 @@
 import express from 'express'
 import adminRouter from './admin'
-import { providers } from '../providers'
+import providers from './providers'
 
 const apiRouter = express.Router()
 apiRouter.use('/admin', adminRouter.app)
