@@ -5,7 +5,6 @@ import uuid4 from 'uuid/v4'
 import util from 'util'
 import cp from 'child_process'
 import serviceConfig from './serviceConfig'
-console.log('service', serviceConfig)
 
 const app = express.Router()
 const exec = util.promisify(cp.exec)
@@ -19,7 +18,6 @@ app.post('/sslCerts', async (req, res) => {
     )
     const envVars = serviceConfig[req.body.service].keys.reduce(
       (acc: string, key: string) => {
-        console.log('key', key)
         return acc + `${key}=${serviceKeys.find(d => d.key === key)} `
       },
       ''
