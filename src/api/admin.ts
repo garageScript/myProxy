@@ -9,8 +9,6 @@ import serviceConfig from './serviceConfig'
 const app = express.Router()
 const exec = util.promisify(cp.exec)
 
-const selectedDomain = 'woohoo'
-
 app.post('/sslCerts', async (req, res) => {
   try {
     const serviceKeys = (getData('serviceKeys') || []).filter(
@@ -23,7 +21,7 @@ app.post('/sslCerts', async (req, res) => {
       ''
     )
     const { stdout, stderr } = await exec(
-      `${envVars} ./scripts/acme.sh/acme.sh --issue --dns ${req.body.service} -d ${selectedDomain} -d www.${selectedDomain}`
+      `${envVars} ./scripts/acme.sh/acme.sh --issue --dns ${req.body.service} -d ${req.body.selectedDomain} -d www.${req.body.selectedDomain}`
     )
     if (stderr) {
       console.log('stderr', stderr)
