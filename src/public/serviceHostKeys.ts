@@ -2,20 +2,22 @@ const serviceKey = document.querySelector('#serviceKey') as HTMLInputElement
 const serviceValue = document.querySelector('#value') as HTMLInputElement
 const service = document.querySelector('#service') as HTMLInputElement
 const submit = document.querySelector('#newService') as HTMLElement
-const serviceKeysList = document.querySelector('#serviceHostKeys') as HTMLElement
+const serviceKeysList = document.querySelector(
+  '#serviceHostKeys'
+) as HTMLElement
 
 /* HardCoded dns object to display mock UI */
 const temp = {
   dnsGd: {
-    name: "GoDaddy",
-    keys: ["GD_Key", "GD_Secret"]
+    name: 'GoDaddy',
+    keys: ['GD_Key', 'GD_Secret']
   },
   dnsPdns: {
-    name: "PowerDNS",
-    keys: ["PDNS_Url", "PDNS_ServerId", "PDNS_Token", "PDNS_Ttl"]
+    name: 'PowerDNS',
+    keys: ['PDNS_Url', 'PDNS_ServerId', 'PDNS_Token', 'PDNS_Ttl']
   }
-} 
-  /*submit.onclick = (): boolean => {
+}
+/*submit.onclick = (): boolean => {
   if(!serviceKey.value || !serviceValue.value || !service.value) return false
   fetch('/api/admin/serviceHostKeys', {
     method: 'POST',
@@ -33,20 +35,29 @@ const temp = {
   service.value = ''
   return false
 }*/
-serviceKeysList.innerHTML = Object.entries(temp).reduce((acc, [service, info]) => {
-  const keyInputs = info.keys.reduce((acc, key) => {
-    return acc + `
+serviceKeysList.innerHTML = Object.entries(temp).reduce(
+  (acc, [service, info]) => {
+    const keyInputs = info.keys.reduce((acc, key) => {
+      return (
+        acc +
+        `
       <div class="enteredKey">
         ${key}
         <input type="text" value=""></input>
       </div>     
     `
-  }, '')
-  return acc + `
+      )
+    }, '')
+    return (
+      acc +
+      `
     <h4>${info.name}</h4>
     <li class="list-group-item">
       ${keyInputs}
       <button type="button" class="btn btn-primary">Create</button>
     </li>
   `
-}, '')
+    )
+  },
+  ''
+)
