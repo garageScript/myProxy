@@ -35,9 +35,9 @@ const temp = {
   service.value = ''
   return false
 }*/
-serviceKeysList.innerHTML = Object.entries(temp).reduce(
-  (acc, [service, info]) => {
-    const keyInputs = info.keys.reduce((acc, key) => {
+serviceKeysList.innerHTML = Object.values(temp).reduce(
+  (acc, service) => {
+    const keyInputs = service.keys.reduce((acc, key) => {
       return (
         acc +
         `
@@ -51,7 +51,7 @@ serviceKeysList.innerHTML = Object.entries(temp).reduce(
     return (
       acc +
       `
-    <h4>${info.name}</h4>
+    <h4>${service.name}</h4>
     <li class="list-group-item">
       ${keyInputs}
       <button type="button" class="btn btn-primary">Create</button>
