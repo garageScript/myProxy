@@ -12,11 +12,11 @@ const exec = util.promisify(cp.exec)
 app.post('/sslCerts', async (req, res) => {
   try {
     const serviceKeys = (getData('serviceKeys') || []).filter(
-      d => d.service === req.body.service
+      (d: any) => d.service === req.body.service
     )
     const envVars = serviceConfig[req.body.service].keys.reduce(
       (acc: string, key: string) => {
-        return acc + `${key}=${serviceKeys.find(d => d.key === key)} `
+        return acc + `${key}=${serviceKeys.find((d: any) => d.key === key)} `
       },
       ''
     )
