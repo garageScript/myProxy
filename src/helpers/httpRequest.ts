@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 
-export default async <T>(url: string, options: object): Promise<T> => {
+const sendRequest = async <T>(url: string, options: object): Promise<T> => {
   try {
     const request = await fetch(url, options)
     return await request.json()
@@ -8,3 +8,5 @@ export default async <T>(url: string, options: object): Promise<T> => {
     throw new Error(error)
   }
 }
+
+export { sendRequest }
