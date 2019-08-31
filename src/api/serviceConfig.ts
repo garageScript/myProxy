@@ -2,6 +2,7 @@
 const serviceConfig: any = {
   dns_gd: {
     name: 'Godaddy',
+    service: 'https://api.godaddy.com',
     keys: ['GD_Key', 'GD_Secret']
   }
 }
