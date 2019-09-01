@@ -2,7 +2,8 @@ import fs from 'fs'
 import { DB, ServiceKey } from '../types/admin'
 
 const data: DB = {
-  serviceKeys: []
+  serviceKeys: [],
+  domains: []
 }
 
 fs.readFile('./data.db', (err, file) => {

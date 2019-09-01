@@ -6,6 +6,6 @@ import mappingRouter from './mapping'
 const apiRouter = express.Router()
 apiRouter.use('/admin', adminRouter.app)
 apiRouter.use('/providers', providers)
-apiRouter.use(mappingRouter)
+apiRouter.use('/mappings', mappingRouter)
 
 export { apiRouter }
