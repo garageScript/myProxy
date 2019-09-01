@@ -37,8 +37,6 @@ class ServiceElement {
   service: any
   constructor(service: any) {
     this.service = service
-  }
-  createService(): void {
     const serviceContainer = document.createElement('div')
     const serviceKeys = this.service.keys.reduce((acc: string, key: string) => {
       return (
@@ -63,7 +61,5 @@ class ServiceElement {
 }
 
 Object.values(temp).map(service => {
-  const element = new ServiceElement(service)
-  element.createService()
-  return element
+  return new ServiceElement(service)
 })
