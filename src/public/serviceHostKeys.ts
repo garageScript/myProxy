@@ -1,7 +1,3 @@
-const serviceKey = document.querySelector('#serviceKey') as HTMLInputElement
-const serviceValue = document.querySelector('#value') as HTMLInputElement
-const service = document.querySelector('#service') as HTMLInputElement
-const submit = document.querySelector('#newService') as HTMLElement
 const serviceKeysList = document.querySelector(
   '#serviceHostKeys'
 ) as HTMLElement
@@ -17,6 +13,7 @@ const temp = {
     keys: ['PDNS_Url', 'PDNS_ServerId', 'PDNS_Token', 'PDNS_Ttl']
   }
 }
+
 /*submit.onclick = (): boolean => {
   if(!serviceKey.value || !serviceValue.value || !service.value) return false
   fetch('/api/admin/serviceHostKeys', {
@@ -35,29 +32,38 @@ const temp = {
   service.value = ''
   return false
 }*/
-serviceKeysList.innerHTML = Object.values(temp).reduce(
-  (acc, service) => {
-    const keyInputs = service.keys.reduce((acc, key) => {
+
+class ServiceElement {
+  service: any
+  constructor(service: any) {
+    this.service = service
+  }
+  createService(): void {
+    const serviceContainer = document.createElement('div')
+    const serviceKeys = this.service.keys.reduce((acc: string, key: string) => {
       return (
         acc +
         `
-      <div class="enteredKey">
-        ${key}
-        <input type="text" value=""></input>
-      </div>     
-    `
+          <div class="enteredKey">
+            ${key}
+            <input type="text" value=""></input>
+          </div>     
+        `
       )
     }, '')
-    return (
-      acc +
+    serviceContainer.innerHTML = `
+        <h4>${this.service.name}</h4>
+        <li class="list-group-item">
+          ${serviceKeys}
+          <button type="button" class="btn btn-primary">Create</button>
+        </li>
       `
-    <h4>${service.name}</h4>
-    <li class="list-group-item">
-      ${keyInputs}
-      <button type="button" class="btn btn-primary">Create</button>
-    </li>
-  `
-    )
-  },
-  ''
-)
+    serviceKeysList.appendChild(serviceContainer)
+  }
+}
+
+Object.values(temp).map(service => {
+  const element = new ServiceElement(service)
+  element.createService()
+  return element
+})
