@@ -3,7 +3,7 @@ import { DB, ServiceKey } from '../types/admin'
 
 const data: DB = {
   serviceKeys: [],
-  domains: []
+  mappings: []
 }
 
 fs.readFile('./data.db', (err, file) => {
@@ -35,6 +35,10 @@ const setData = (table: string, records: any): void => {
 
 const getProviderKeys = (): Array<ServiceKey> => {
   return getData('serviceKeys')
+}
+
+const getMappings = (): Array<Mappings> => {
+  return getData('mappings')
 }
 
 export { getData, setData, getProviderKeys }
