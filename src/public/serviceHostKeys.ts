@@ -2,7 +2,7 @@ const serviceKeysList = document.querySelector(
   '#serviceHostKeys'
 ) as HTMLElement
 
-type ServiceHost = {
+type Provider = {
   id?: string
   name: string
   api: string
@@ -43,9 +43,9 @@ const temp = {
 }*/
 
 class ServiceElement {
-  service: ServiceHost
+  service: Provider
   serviceId: string
-  constructor(serviceId: string, service: ServiceHost) {
+  constructor(serviceId: string, service: Provider) {
     this.service = service
     this.serviceId = serviceId
     const serviceContainer = document.createElement('div')
