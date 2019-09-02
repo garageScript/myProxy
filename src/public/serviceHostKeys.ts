@@ -1,6 +1,4 @@
-const serviceKeysList = document.querySelector<HTMLElement>(
-  '#serviceHostKeys'
-)
+const serviceKeysList = document.querySelector<HTMLElement>('#serviceHostKeys')
 
 type Provider = {
   id?: string
@@ -48,10 +46,16 @@ class ServiceElement {
           <button type="button" class="btn btn-primary" id="submitKeys">Create</button>
         </li>
       `
-    const submitKeys = serviceContainer.querySelector<HTMLElement>('#submitKeys')
+    const submitKeys = serviceContainer.querySelector<HTMLElement>(
+      '#submitKeys'
+    )
     submitKeys.onclick = (): void => {
-      const keyNames = serviceContainer.querySelectorAll<HTMLElement>('#serviceKeyName')
-      const keyInputs = serviceContainer.querySelectorAll<HTMLInputElement>('#keyInputs')
+      const keyNames = serviceContainer.querySelectorAll<HTMLElement>(
+        '#serviceKeyName'
+      )
+      const keyInputs = serviceContainer.querySelectorAll<HTMLInputElement>(
+        '#keyInputs'
+      )
       keyInputs.forEach((serviceKey, index) => {
         const keyName = keyNames[index].innerText
         fetch('/api/admin/serviceHostKeys', {
@@ -62,7 +66,7 @@ class ServiceElement {
             service: service.name
           }),
           headers: {
-            'Content-Type' : 'application/json'
+            'Content-Type': 'application/json'
           }
         })
       })
