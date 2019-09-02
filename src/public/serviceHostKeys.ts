@@ -2,14 +2,23 @@ const serviceKeysList = document.querySelector(
   '#serviceHostKeys'
 ) as HTMLElement
 
+type ServiceHost = {
+  id?: string
+  name: string
+  api: string
+  keys: string[]
+}
+
 /* HardCoded dns object to display mock UI */
 const temp = {
   dnsGd: {
     name: 'GoDaddy',
+    api: 'https://api.godaddy.com',
     keys: ['GD_Key', 'GD_Secret']
   },
   dnsPdns: {
     name: 'PowerDNS',
+    api: 'https://api.powerdns.com',
     keys: ['PDNS_Url', 'PDNS_ServerId', 'PDNS_Token', 'PDNS_Ttl']
   }
 }
@@ -34,9 +43,11 @@ const temp = {
 }*/
 
 class ServiceElement {
-  service: any
-  constructor(service: any) {
+  service: ServiceHost
+  serviceId: string
+  constructor(serviceId: string, service: ServiceHost) {
     this.service = service
+    this.serviceId = serviceId
     const serviceContainer = document.createElement('div')
     const serviceKeys = this.service.keys.reduce((acc: string, key: string) => {
       return (
@@ -60,6 +71,6 @@ class ServiceElement {
   }
 }
 
-Object.values(temp).map(service => {
-  return new ServiceElement(service)
+const serviceElements = Object.entries(temp).map(([serviceId, serviceInfo]) => {
+  return new ServiceElement(serviceId, serviceInfo)
 })
