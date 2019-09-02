@@ -1,4 +1,4 @@
-import fetch from '../helpers/httpRequest'
+import { sendRequest } from '../helpers/httpRequest'
 import { getData } from '../api/lib/data'
 import { ServiceKey } from '../api/types/admin'
 
@@ -13,5 +13,5 @@ export const getDomains = () => {
   const url = `${service}/v1/domains?statuses=ACTIVE`
   const options = { headers: { Authorization: `sso-key ${key}:${secret}` } }
 
-  return fetch(url, options)
+  return sendRequest(url, options)
 }
