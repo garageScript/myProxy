@@ -32,9 +32,9 @@ class ServiceElement {
       return (
         acc +
         `
-          <div class="enteredKeys">
+          <div class="providerContainer">
             <span class="serviceKeyName">${key}</span>
-            <input type="text" value="" class="keyInputs"></input>
+            <input type="text" value="" class="keyInput"></input>
           </div>     
         `
       )
@@ -43,18 +43,18 @@ class ServiceElement {
         <h4>${this.service.name}</h4>
         <li class="list-group-item">
           ${serviceKeys}
-          <button type="button" class="btn btn-primary submitKeys">Create</button>
+          <button type="button" class="btn btn-primary createOrEditKeysButton">Create</button>
         </li>
       `
     const submitKeys = serviceContainer.querySelector<HTMLElement>(
-      '.submitKeys'
+      '.createOrEditKeysButton'
     )
     submitKeys.onclick = (): void => {
       const keyNames = serviceContainer.querySelectorAll<HTMLElement>(
         '.serviceKeyName'
       )
       const keyInputs = serviceContainer.querySelectorAll<HTMLInputElement>(
-        '.keyInputs'
+        '.keyInput'
       )
       keyInputs.forEach((serviceKey, index) => {
         const keyName = keyNames[index].innerText
