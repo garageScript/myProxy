@@ -20,4 +20,4 @@ You need to install node and typescript
 The following will show you how to contribute
 
 ## Before sending a Pull Request:
-1. Run `npm run eslint:fix`: make sure there are no errors / warnings
+1. Run `npm run autofix`: make sure there are no errors / warnings
