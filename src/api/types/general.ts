@@ -2,7 +2,7 @@ type Mappings = {
   domain: string
   port: string
   ip: string
-  id: string 
+  id: string
 }
 
 type DB = {
