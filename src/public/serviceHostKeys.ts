@@ -1,6 +1,6 @@
-const serviceKeysList = document.querySelector(
+const serviceKeysList = document.querySelector<HTMLElement>(
   '#serviceHostKeys'
-) as HTMLElement
+)
 
 type Provider = {
   id?: string
@@ -23,25 +23,6 @@ const temp = {
   }
 }
 
-/*submit.onclick = (): boolean => {
-  if(!serviceKey.value || !serviceValue.value || !service.value) return false
-  fetch('/api/admin/serviceHostKeys', {
-    method: 'POST',
-    body: JSON.stringify({
-      key: serviceKey.value,
-      value: serviceValue.value,
-      service: service.value
-    }),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  serviceKey.value = ''
-  serviceValue.value = ''
-  service.value = ''
-  return false
-}*/
-
 class ServiceElement {
   service: Provider
   serviceId: string
@@ -53,9 +34,9 @@ class ServiceElement {
       return (
         acc +
         `
-          <div class="enteredKey">
-            ${key}
-            <input type="text" value=""></input>
+          <div class="enteredKeys">
+            <span id="serviceKeyName">${key}</span>
+            <input type="text" value="" id="keyInputs"></input>
           </div>     
         `
       )
@@ -64,9 +45,28 @@ class ServiceElement {
         <h4>${this.service.name}</h4>
         <li class="list-group-item">
           ${serviceKeys}
-          <button type="button" class="btn btn-primary">Create</button>
+          <button type="button" class="btn btn-primary" id="submitKeys">Create</button>
         </li>
       `
+    const submitKeys = serviceContainer.querySelector<HTMLElement>('#submitKeys')
+    submitKeys.onclick = (): void => {
+      const keyNames = serviceContainer.querySelectorAll<HTMLElement>('#serviceKeyName')
+      const keyInputs = serviceContainer.querySelectorAll<HTMLInputElement>('#keyInputs')
+      keyInputs.forEach((serviceKey, index) => {
+        const keyName = keyNames[index].innerText
+        fetch('/api/admin/serviceHostKeys', {
+          method: 'POST',
+          body: JSON.stringify({
+            key: keyName,
+            value: serviceKey.value,
+            service: service.name
+          }),
+          headers: {
+            'Content-Type' : 'application/json'
+          }
+        })
+      })
+    }
     serviceKeysList.appendChild(serviceContainer)
   }
 }
