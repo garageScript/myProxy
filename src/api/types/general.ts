@@ -5,5 +5,4 @@ type Mapping = {
   id: string
 }
 
-
-export { Mapping } 
+export { Mapping }
