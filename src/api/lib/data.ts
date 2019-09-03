@@ -36,7 +36,7 @@ const setData = (table: string, records: any): void => {
 }
 
 const getProviderKeys = (): Array<ServiceKey> => {
-  return getData('serviceKeys')
+  return getData('serviceKeys') || []
 }
 
 const getMappings = (): Array<Mapping> => {

@@ -8,14 +8,11 @@ import { Provider } from '../api/types/general'
 export const getDomains = async (): Promise<Provider> => {
   const service = 'https://api.godaddy.com'
   const serviceKeys = getProviderKeys()
-  const { name, keys } = serviceConfig['dns_gd']
-  const { GD_Key, GD_Secret } = keys.reduce((acc: object, key: string) => {
-    const keyValue: string = serviceKeys.find(
-      (el: ServiceKey) => el.key === key
-    ).value
-    acc[key] = keyValue || ''
-    return acc
-  }, {})
+
+  const defaultKey = { value: '' }
+  const GD_Key = (serviceKeys.find(el => el.key === 'GD_Key') || defaultKey).value
+  const GD_Secret = (serviceKeys.find(el => el.key === 'GD_Secret') || defaultKey).value
+
   let domains = []
   const url = `${service}/v1/domains?statuses=ACTIVE`
 
@@ -26,7 +23,7 @@ export const getDomains = async (): Promise<Provider> => {
       }
     }
 
-    domains = await sendRequest(url, options)
+    domains = await sendRequest<Array<any>>(url, options)
   }
 
   return {
