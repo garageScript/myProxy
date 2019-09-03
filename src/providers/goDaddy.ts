@@ -1,8 +1,6 @@
 /*eslint @typescript-eslint/camelcase: 0*/
 import { sendRequest } from '../helpers/httpRequest'
 import { getProviderKeys } from '../api/lib/data'
-import { ServiceKey } from '../api/types/admin'
-import serviceConfig from '../api/serviceConfig'
 import { Provider } from '../api/types/general'
 
 export const getDomains = async (): Promise<Provider> => {
@@ -10,8 +8,11 @@ export const getDomains = async (): Promise<Provider> => {
   const serviceKeys = getProviderKeys()
 
   const defaultKey = { value: '' }
-  const GD_Key = (serviceKeys.find(el => el.key === 'GD_Key') || defaultKey).value
-  const GD_Secret = (serviceKeys.find(el => el.key === 'GD_Secret') || defaultKey).value
+  const GD_Key = (serviceKeys.find(el => el.key === 'GD_Key') || defaultKey)
+    .value
+  const GD_Secret = (
+    serviceKeys.find(el => el.key === 'GD_Secret') || defaultKey
+  ).value
 
   let domains = []
   const url = `${service}/v1/domains?statuses=ACTIVE`
@@ -23,6 +24,7 @@ export const getDomains = async (): Promise<Provider> => {
       }
     }
 
+    // eslint-disable-next-line
     domains = await sendRequest<Array<any>>(url, options)
   }
 
