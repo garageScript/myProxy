@@ -1,8 +1,10 @@
 import fs from 'fs'
 import { DB, ServiceKey } from '../types/admin'
+import { Mapping } from '../types/general'
 
 const data: DB = {
-  serviceKeys: []
+  serviceKeys: [],
+  mappings: []
 }
 
 fs.readFile('./data.db', (err, file) => {
@@ -15,6 +17,7 @@ fs.readFile('./data.db', (err, file) => {
   console.log('loading db file successful')
   const fileData: DB = JSON.parse(file.toString() || '{}')
   data.serviceKeys = fileData.serviceKeys || []
+  data.mappings = fileData.mappings || []
 })
 
 const getData = (table: string): any => {
@@ -36,4 +39,8 @@ const getProviderKeys = (): Array<ServiceKey> => {
   return getData('serviceKeys')
 }
 
-export { getData, setData, getProviderKeys }
+const getMappings = (): Array<Mapping> => {
+  return getData('mappings')
+}
+
+export { getData, setData, getProviderKeys, getMappings }
