@@ -1,5 +1,5 @@
 import { ServiceKey } from './types/admin'
-import { setData, getData } from './lib/data'
+import { setData, getProviderKeys } from './lib/data'
 import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
@@ -11,7 +11,7 @@ const exec = util.promisify(cp.exec)
 
 app.post('/sslCerts', async (req, res) => {
   try {
-    const serviceKeys = (getData('serviceKeys') || []).filter(
+    const serviceKeys = getProviderKeys().filter(
       d => d.service === req.body.service
     )
     const envVars = serviceConfig[req.body.service].keys.reduce(
@@ -34,36 +34,36 @@ app.post('/sslCerts', async (req, res) => {
   }
 })
 
-app.post('/serviceHostKeys', (req, res) => {
+app.post('/providerKeys', (req, res) => {
   // create service keys
-  const serviceKeys = getData('serviceKeys') || []
-  const serviceHostKey: ServiceKey = {
+  const serviceKeys = getProviderKeys()
+  const providerKey: ServiceKey = {
     id: uuid4(),
     ...req.body
   }
-  serviceKeys.push(serviceHostKey)
+  serviceKeys.push(providerKey)
   setData('serviceKeys', serviceKeys)
-  res.json(serviceHostKey)
+  res.json(providerKey)
 })
 
-app.get('/serviceHostKeys', (req, res) => {
+app.get('/providerKeys', (req, res) => {
   // get all servicekeys
-  const serviceKeys = getData('serviceKeys')
+  const serviceKeys = getProviderKeys()
   res.json(serviceKeys)
 })
 
-app.get('/serviceHostKeys/:id', (req, res) => {
+app.get('/providerKeys/:id', (req, res) => {
   // grab one servicekey
-  const serviceKeys = getData('serviceKeys')
+  const serviceKeys = getProviderKeys()
   const selectedKey = serviceKeys.find(
     (element: ServiceKey) => element.id === req.params.id
   )
   res.json(selectedKey)
 })
 
-app.delete('/serviceHostKeys/:id', (req, res) => {
+app.delete('/providerKeys/:id', (req, res) => {
   // delete a servicekey
-  const serviceKeys = getData('serviceKeys')
+  const serviceKeys = getProviderKeys()
   const updatedKeys = serviceKeys.filter(
     (element: ServiceKey) => element.id !== req.params.id
   )
@@ -74,9 +74,9 @@ app.delete('/serviceHostKeys/:id', (req, res) => {
   res.json(updatedKey)
 })
 
-app.put('/serviceHostKeys/:id', (req, res) => {
+app.put('/providerKeys/:id', (req, res) => {
   // replace servicekey info
-  const serviceKeys = getData('serviceKeys')
+  const serviceKeys = getProviderKeys()
   const id: string = req.params.id
   const updatedKeys = serviceKeys.map((element: ServiceKey) => {
     if (element.id === id) element = { id, ...req.body }
@@ -89,9 +89,9 @@ app.put('/serviceHostKeys/:id', (req, res) => {
   res.json(updatedKey)
 })
 
-app.patch('/serviceHostKeys/:id', (req, res) => {
+app.patch('/providerKeys/:id', (req, res) => {
   // edit servicekey info
-  const serviceKeys = getData('serviceKeys')
+  const serviceKeys = getProviderKeys()
   const id: string = req.params.id
   const updatedKeys = serviceKeys.map((element: ServiceKey) => {
     if (element.id === id) {
