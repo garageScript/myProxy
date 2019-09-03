@@ -1,10 +1,9 @@
-type Mappings = {
+type Mapping = {
   domain: string
   port: string
   ip: string
   id: string
 }
 
-type DB = {
-  [mappings: string]: Array<Mappings>
-}
+
+export { Mapping } 

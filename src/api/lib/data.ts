@@ -1,5 +1,6 @@
 import fs from 'fs'
 import { DB, ServiceKey } from '../types/admin'
+import { Mapping } from '../types/general'
 
 const data: DB = {
   serviceKeys: [],
@@ -37,8 +38,8 @@ const getProviderKeys = (): Array<ServiceKey> => {
   return getData('serviceKeys')
 }
 
-const getMappings = (): Array<Mappings> => {
+const getMappings = (): Array<Mapping> => {
   return getData('mappings')
 }
 
-export { getData, setData, getProviderKeys }
+export { getData, setData, getProviderKeys, getMappings }
