@@ -1,5 +1,6 @@
 import express from 'express'
 import * as goDaddy from '../providers/goDaddy'
+
 const providers = express.Router()
 
 providers.get('/', async (_, res) => {

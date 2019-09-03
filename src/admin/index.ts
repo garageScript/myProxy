@@ -1,4 +1,6 @@
 import express from 'express'
+import provider from './providers'
+
 const adminRouter = express.Router()
 
 adminRouter.use('/*', (req, res, next) => {
@@ -6,8 +8,6 @@ adminRouter.use('/*', (req, res, next) => {
   next()
 })
 
-adminRouter.get('/providers', (req, res) => {
-  res.render('admin/providers')
-})
+adminRouter.use('/providers', provider)
 
 export { adminRouter }
