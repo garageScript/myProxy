@@ -1,11 +1,16 @@
 /* global */
-const getElement= (query: string, root?: HTMLElement) : HTMLElement => {
+const getElement = (query: string, root?: HTMLElement): HTMLElement => {
   // TSHelp: Hack. Should really be using default variables
   if (!root) {
     console.log('getting data', query)
-    return document.querySelector<HTMLElement>(query) || document.createElement('div') as HTMLElement
+    return (
+      document.querySelector<HTMLElement>(query) ||
+      (document.createElement('div') as HTMLElement)
+    )
   }
-  return root.querySelector(query) || document.createElement('div') as HTMLElement
+  return (
+    root.querySelector(query) || (document.createElement('div') as HTMLElement)
+  )
 }
 
 const providerList: HTMLElement = getElement('.providerList')
@@ -39,17 +44,20 @@ class ProviderElement {
     this.provider = provider
     this.providerId = providerId
     const providerContainer = document.createElement('div')
-    const providerKeys = this.provider.keys.reduce((acc: string, key: string) => {
-      return (
-        acc +
-        `
+    const providerKeys = this.provider.keys.reduce(
+      (acc: string, key: string) => {
+        return (
+          acc +
+          `
           <div class="providerContainer">
             <span class="serviceKeyName">${key}</span>
             <input type="text" value="" class="keyInput"></input>
           </div>     
         `
-      )
-    }, '')
+        )
+      },
+      ''
+    )
     providerContainer.innerHTML = `
         <h4>${this.provider.name}</h4>
         <li class="list-group-item">
@@ -67,7 +75,7 @@ class ProviderElement {
       )
       keyInputs.forEach((providerKey, index) => {
         const keyName = keyNames[index].innerText
-        fetch('/api/admin/serviceHostKeys', {
+        fetch('/api/admin/providerKeys', {
           method: 'POST',
           body: JSON.stringify({
             key: keyName,
