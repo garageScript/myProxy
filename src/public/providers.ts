@@ -2,7 +2,6 @@
 const getElement = (query: string, root?: HTMLElement): HTMLElement => {
   // TSHelp: Hack. Should really be using default variables
   if (!root) {
-    console.log('getting data', query)
     return (
       document.querySelector<HTMLElement>(query) ||
       (document.createElement('div') as HTMLElement)
@@ -14,7 +13,6 @@ const getElement = (query: string, root?: HTMLElement): HTMLElement => {
 }
 
 const providerList: HTMLElement = getElement('.providerList')
-console.log('providerList', providerList)
 
 type Provider = {
   id?: string
@@ -65,7 +63,7 @@ class ProviderElement {
           <button type="button" class="btn btn-primary createOrEditKeysButton">Create</button>
         </li>
       `
-    const submitKeys = getElement('.createOrEditKeysButton')
+    const submitKeys = getElement('.createOrEditKeysButton', providerContainer)
     submitKeys.onclick = (): void => {
       const keyNames = providerContainer.querySelectorAll<HTMLElement>(
         '.serviceKeyName'
