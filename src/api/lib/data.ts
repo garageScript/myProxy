@@ -1,10 +1,11 @@
 import fs from 'fs'
 import { DB, ServiceKey } from '../types/admin'
-import { Mapping } from '../types/general'
+import { Mapping, Domain } from '../types/general'
 
 const data: DB = {
   serviceKeys: [],
-  mappings: []
+  mappings: [],
+  availableDomains: []
 }
 
 fs.readFile('./data.db', (err, file) => {
@@ -43,4 +44,8 @@ const getMappings = (): Array<Mapping> => {
   return getData('mappings')
 }
 
-export { getData, setData, getProviderKeys, getMappings }
+const getDomains = (): Array<Domain> =>{
+  return getData('availableDomains')
+}
+
+export { getData, setData, getProviderKeys, getMappings, getDomains }

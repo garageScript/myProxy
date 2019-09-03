@@ -13,4 +13,10 @@ type Provider = {
   domains: object[]
 }
 
-export { Mapping, Provider }
+type Domain = {
+  domain: string, 
+  expiration: string,
+  provider: string
+}
+
+export { Mapping, Provider, Domain }
