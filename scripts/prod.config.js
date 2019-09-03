@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'myProxy-prod',
-      script: './build/src/app.js',
+      script: './build/app.js',
       instances: 1,
       autorestart: true,
       watch: false,
