@@ -25,7 +25,7 @@ app.post('/login', (req, res) => {
   if (process.env.ADMIN !== req.body.adminPass)
     return res.render('login', { error: 'Wrong Admin Password' })
   res.cookie('adminPass', req.body.adminPass)
-  res.redirect('/admin/serviceHostKeys')
+  res.redirect('/admin/providers')
 })
 
 app.get('/', (req, res) => res.render('index', { message: 'Hello myProxy' }))
