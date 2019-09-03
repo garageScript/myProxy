@@ -1,13 +1,13 @@
 /*eslint @typescript-eslint/camelcase: 0*/
 import { sendRequest } from '../helpers/httpRequest'
-import { getData } from '../api/lib/data'
+import { getProviderKeys } from '../api/lib/data'
 import { ServiceKey } from '../api/types/admin'
 import serviceConfig from '../api/serviceConfig'
 import { Provider } from '../api/types/general'
 
 export const getDomains = async (): Promise<Provider> => {
   const service = 'https://api.godaddy.com'
-  const serviceKeys = getData('serviceKeys')
+  const serviceKeys = getProviderKeys()
   const { name, keys } = serviceConfig['dns_gd']
   const { GD_Key, GD_Secret } = keys.reduce((acc: object, key: string) => {
     const keyValue: string = serviceKeys.find(
