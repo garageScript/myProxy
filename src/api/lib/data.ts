@@ -19,6 +19,7 @@ fs.readFile('./data.db', (err, file) => {
   const fileData: DB = JSON.parse(file.toString() || '{}')
   data.serviceKeys = fileData.serviceKeys || []
   data.mappings = fileData.mappings || []
+  data.availableDomains = fileData.availableDomains || []
 })
 
 const getData = (table: string): any => {
@@ -44,8 +45,8 @@ const getMappings = (): Array<Mapping> => {
   return getData('mappings')
 }
 
-const getDomains = (): Array<Domain> =>{
+const getAvailableDomains = (): Array<Domain> => {
   return getData('availableDomains')
 }
 
-export { getData, setData, getProviderKeys, getMappings, getDomains }
+export { getData, setData, getProviderKeys, getMappings, getAvailableDomains }

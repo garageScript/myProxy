@@ -14,8 +14,8 @@ type Provider = {
 }
 
 type Domain = {
-  domain: string, 
-  expiration: string,
+  domain: string
+  expiration: string
   provider: string
 }
 

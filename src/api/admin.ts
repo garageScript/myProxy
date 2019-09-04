@@ -1,6 +1,6 @@
 import { ServiceKey } from './types/admin'
 import { Domain } from './types/general'
-import { getDomains, setData, getProviderKeys} from './lib/data'
+import { getAvailableDomains, setData, getProviderKeys } from './lib/data'
 import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
@@ -25,9 +25,9 @@ app.post('/sslCerts', async (req, res) => {
       `${envVars} ./scripts/acme.sh/acme.sh --issue --dns ${req.body.service} -d ${req.body.selectedDomain} -d www.${req.body.selectedDomain}`
     )
     if (stderr) {
-      console.log('stderr', stderr)
+      return console.log('stderr', stderr)
     }
-    const domains = getDomains()
+    const domains = getAvailableDomains()
     const domain: Domain = {
       domain: req.body.selectedDomain,
       expiration: '<ssl expiration date will go here>',
