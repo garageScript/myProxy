@@ -22,10 +22,14 @@ fs.readFile('./data.db', (err, file) => {
   data.availableDomains = fileData.availableDomains || []
 })
 
+// Typescript disable, because this is meant as a helper function to be used with N number of input types
+// eslint-disable-next-line
 const getData = (table: string): any => {
   return data[table]
 }
 
+// Typescript disable, because this is meant as a helper function to be used with N number of input types
+// eslint-disable-next-line
 const setData = (table: string, records: any): void => {
   data[table] = records
   const fileData: string = JSON.stringify(data)
@@ -38,7 +42,7 @@ const setData = (table: string, records: any): void => {
 }
 
 const getProviderKeys = (): Array<ServiceKey> => {
-  return getData('serviceKeys')
+  return getData('serviceKeys') || []
 }
 
 const getMappings = (): Array<Mapping> => {

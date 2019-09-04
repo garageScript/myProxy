@@ -1,4 +1,6 @@
 /*eslint @typescript-eslint/camelcase: ["error", {properties: "never"}]*/
+
+// eslint-disable-next-line
 const serviceConfig: any = {
   dns_gd: {
     name: 'Godaddy',
