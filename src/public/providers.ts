@@ -35,6 +35,38 @@ const temp = {
   }
 }
 
+class ProviderKey {
+  providerKey: string
+  providerKeysContainer: HTMLElement
+  constructor(providerKey: string, providerName: string, providerKeysContainer: HTMLElement) {
+    this.providerKey = providerKey
+    this.providerKeysContainer = providerKeysContainer
+    const providerKeyElement = document.createElement('div')
+    providerKeyElement.innerHTML = `
+      <span class="providerKeyName">${this.providerKey}</span>
+      <input type="text" value="" class="keyInput"></input>
+      <button type="button" class="btn btn-primary saveOrEditKeysButton">Save</button>      
+    `
+    const saveOrEdit = getElement('.saveOrEditKeysButton', providerKeyElement)
+    saveOrEdit.onclick = (): void => {
+      const keyName = getElement('.providerKeyName', providerKeyElement)
+      const keyInput = getElement('.keyInput', providerKeyElement) as HTMLInputElement
+      fetch('/api/admin/providerKeys', {
+        method: 'POST',
+        body: JSON.stringify({
+          key: keyName.innerText,
+          value: keyInput.value,
+          service: providerName
+        }),
+        headers: {
+          'Content-Type' : 'application/json'
+        }
+      })
+    }
+    providerKeysContainer.appendChild(providerKeyElement)
+  }
+}
+
 class ProviderElement {
   providerId: string
   provider: Provider
@@ -42,53 +74,18 @@ class ProviderElement {
     this.provider = provider
     this.providerId = providerId
     const providerContainer = document.createElement('div')
-    const providerKeys = this.provider.keys.reduce(
-      (acc: string, key: string) => {
-        return (
-          acc +
-          `
-          <div class="providerContainer">
-            <span class="serviceKeyName">${key}</span>
-            <input type="text" value="" class="keyInput"></input>
-          </div>     
-        `
-        )
-      },
-      ''
-    )
     providerContainer.innerHTML = `
         <h4>${this.provider.name}</h4>
-        <li class="list-group-item">
-          ${providerKeys}
-          <button type="button" class="btn btn-primary createOrEditKeysButton">Create</button>
-        </li>
+        <li class="list-group-item providerKeysContainer"></li>
       `
-    const submitKeys = getElement('.createOrEditKeysButton', providerContainer)
-    submitKeys.onclick = (): void => {
-      const keyNames = providerContainer.querySelectorAll<HTMLElement>(
-        '.serviceKeyName'
-      )
-      const keyInputs = providerContainer.querySelectorAll<HTMLInputElement>(
-        '.keyInput'
-      )
-      keyInputs.forEach((providerKey, index) => {
-        const keyName = keyNames[index].innerText
-        fetch('/api/admin/providerKeys', {
-          method: 'POST',
-          body: JSON.stringify({
-            key: keyName,
-            value: providerKey.value,
-            service: provider.name
-          }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-      })
-    }
+    const providerKeysContainer = getElement('.providerKeysContainer', providerContainer)
+    this.provider.keys.map((key: string) => {
+      return new ProviderKey(key, provider.name, providerKeysContainer)
+    })
     providerList.appendChild(providerContainer)
   }
 }
+
 
 Object.entries(temp).forEach(([providerId, providerInfo]) => {
   return new ProviderElement(providerId, providerInfo)
