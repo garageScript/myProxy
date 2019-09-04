@@ -36,7 +36,7 @@ app.post('/sslCerts', async (req, res) => {
     domains.push(domain)
     setData('availableDomains', domains)
     console.log('stdout', stdout)
-    res.json('cert successfully created')
+    res.json({ 'cert successfully created': stdout })
   } catch (err) {
     console.log('failed to create cert', err)
     res.json({ 'failed to create cert': err })
