@@ -5,6 +5,7 @@ import { Provider } from '../api/types/general'
 
 export const getDomains = async (): Promise<Provider> => {
   const service = 'https://api.godaddy.com'
+  const name = 'Godaddy'
   const serviceKeys = getProviderKeys()
 
   const defaultKey = { value: '' }
