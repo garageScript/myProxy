@@ -1,5 +1,5 @@
 import { ServiceKey } from './types/admin'
-import { setData, getProviderKeys } from './lib/data'
+import { setData, getProviderKeys, getAvailableDomains } from './lib/data'
 import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
@@ -32,6 +32,11 @@ app.post('/sslCerts', async (req, res) => {
     console.log('failed to create cert', err)
     res.json({ 'failed to create cert': err })
   }
+})
+
+app.get('/availableDomains', (res, req)=>{
+  const domains = getAvailableDomains()
+  res.json(domains)
 })
 
 app.post('/providerKeys', (req, res) => {
