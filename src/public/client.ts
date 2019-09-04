@@ -1,13 +1,13 @@
 /* global */
-const getElement = (query: string, root?: HTMLElement) : HTMLElement => {
-  if (! root) {
+const getElement = (query: string, root?: HTMLElement): HTMLElement => {
+  if (!root) {
     return (
-      document.querySelector<HTMLElement>(query)||
-      (document.createElement('div') as HTMLElement) 
+      document.querySelector<HTMLElement>(query) ||
+      (document.createElement('div') as HTMLElement)
     )
   }
   return (
-    root.querySelector(query)|| (document.createElement('div') as HTMLElement)
+    root.querySelector(query) || (document.createElement('div') as HTMLElement)
   )
 }
 
@@ -16,13 +16,12 @@ const hostSelector: HTMLElement = getElement('.hostSelector')
 
 let selectedHost = ''
 
-document.querySelectorAll<HTMLElement>('.domainHost').forEach((e)=>{
+document.querySelectorAll<HTMLElement>('.domainHost').forEach(e => {
   e.onclick = (): void => {
     selectedHost = e.innerText
     hostSelector.innerText = selectedHost
   }
 })
-
 
 create.onclick = (): void => {
   const subDomain = getElement('.subDomain') as HTMLInputElement
@@ -30,18 +29,18 @@ create.onclick = (): void => {
   const ipAddress = getElement('.ipAddress') as HTMLInputElement
 
   const portValue = port.value
-  const domain = subDomain.value + selectedHost 
+  const domain = subDomain.value + selectedHost
   const ipValue = ipAddress.value
 
   fetch('/api/mappings', {
     method: 'POST',
     body: JSON.stringify({
-      'domain': domain,
-      'port' : portValue,
-      'ip' : ipValue
+      domain: domain,
+      port: portValue,
+      ip: ipValue
     }),
-    headers : {
-      'Content-Type' : 'application/json'
+    headers: {
+      'Content-Type': 'application/json'
     }
   })
 }

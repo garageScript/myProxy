@@ -8,7 +8,7 @@ mappingRouter.post('/', (req, res) =>{
   const domainKeys = getMappings()
   const mappingObject: Mapping = {
     'domain': req.body.domain,
-    'port' : req.body.portValue,
+    'port' : req.body.port,
     'ip' : req.body.ip,
     'id' : uuid4()
   }
