@@ -25,7 +25,8 @@ app.post('/sslCerts', async (req, res) => {
       `${envVars} ./scripts/acme.sh/acme.sh --issue --dns ${req.body.service} -d ${req.body.selectedDomain} -d www.${req.body.selectedDomain}`
     )
     if (stderr) {
-      return console.log('stderr', stderr)
+      console.log('stderr', stderr)
+      return res.json({'stderr': stderr})
     }
     const domains = getAvailableDomains()
     const domain: Domain = {
