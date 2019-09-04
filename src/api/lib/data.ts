@@ -1,10 +1,11 @@
 import fs from 'fs'
 import { DB, ServiceKey } from '../types/admin'
-import { Mapping } from '../types/general'
+import { Mapping, Domain } from '../types/general'
 
 const data: DB = {
   serviceKeys: [],
-  mappings: []
+  mappings: [],
+  availableDomains: []
 }
 
 fs.readFile('./data.db', (err, file) => {
@@ -18,6 +19,7 @@ fs.readFile('./data.db', (err, file) => {
   const fileData: DB = JSON.parse(file.toString() || '{}')
   data.serviceKeys = fileData.serviceKeys || []
   data.mappings = fileData.mappings || []
+  data.availableDomains = fileData.availableDomains || []
 })
 
 // Typescript disable, because this is meant as a helper function to be used with N number of input types
@@ -47,4 +49,8 @@ const getMappings = (): Array<Mapping> => {
   return getData('mappings')
 }
 
-export { setData, getProviderKeys, getMappings }
+const getAvailableDomains = (): Array<Domain> => {
+  return getData('availableDomains')
+}
+
+export { getData, setData, getProviderKeys, getMappings, getAvailableDomains }
