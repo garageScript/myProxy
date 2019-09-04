@@ -1,5 +1,6 @@
 import { ServiceKey } from './types/admin'
-import { setData, getProviderKeys } from './lib/data'
+import { Domain } from './types/general'
+import { getAvailableDomains, setData, getProviderKeys } from './lib/data'
 import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
@@ -25,9 +26,18 @@ app.post('/sslCerts', async (req, res) => {
     )
     if (stderr) {
       console.log('stderr', stderr)
+      return res.json({'stderr': stderr})
     }
+    const domains = getAvailableDomains()
+    const domain: Domain = {
+      domain: req.body.selectedDomain,
+      expiration: '<ssl expiration date will go here>',
+      provider: req.body.service
+    }
+    domains.push(domain)
+    setData('availableDomains', domains)
     console.log('stdout', stdout)
-    res.json('cert successfully created')
+    res.json({ 'cert successfully created': stdout })
   } catch (err) {
     console.log('failed to create cert', err)
     res.json({ 'failed to create cert': err })
