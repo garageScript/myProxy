@@ -34,7 +34,7 @@ app.post('/sslCerts', async (req, res) => {
   }
 })
 
-app.get('/availableDomains', (res, req)=>{
+app.get('/availableDomains', (req, res) => {
   const domains = getAvailableDomains()
   res.json(domains)
 })
