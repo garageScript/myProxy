@@ -1,4 +1,5 @@
 /* global */
+//TODO: Move this function into separate helper function
 const getElement = (query: string, root?: HTMLElement): HTMLElement => {
   if (!root) {
     return (
