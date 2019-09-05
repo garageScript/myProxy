@@ -25,8 +25,8 @@ export const getDomains = async (): Promise<Provider> => {
       }
     }
 
-    // eslint-disable-next-line
     try {
+      // eslint-disable-next-line
       domains = await sendRequest<Array<any>>(url, options)
     } catch (e) {
       console.log('error', e)
