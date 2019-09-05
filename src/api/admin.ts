@@ -6,6 +6,7 @@ import uuid4 from 'uuid/v4'
 import util from 'util'
 import cp from 'child_process'
 import serviceConfig from './serviceConfig'
+import * as goDaddy from '../providers/goDaddy'
 
 const app = express.Router()
 const exec = util.promisify(cp.exec)
@@ -121,6 +122,11 @@ app.patch('/providerKeys/:id', (req, res) => {
     (element: ServiceKey) => element.id === id
   )
   res.json(updatedKey)
+})
+
+app.get('/providers', async (_, res) => {
+  const data = await Promise.all([goDaddy.getDomains()])
+  return res.json(data) // Data send to view providers ?
 })
 
 export default { app }
