@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 const helper = {
   getElement: (query: string, root?: HTMLElement): HTMLElement => {
     if (!root) {
@@ -7,8 +8,8 @@ const helper = {
       )
     }
     return (
-      root.querySelector(query) || (document.createElement('div') as HTMLElement)
+      root.querySelector(query) ||
+      (document.createElement('div') as HTMLElement)
     )
   }
 }
-

@@ -50,7 +50,10 @@ class ProviderElement {
           <button type="button" class="btn btn-primary createOrEditKeysButton">Create</button>
         </li>
       `
-    const submitKeys = helper.getElement('.createOrEditKeysButton', providerContainer)
+    const submitKeys = helper.getElement(
+      '.createOrEditKeysButton',
+      providerContainer
+    )
     submitKeys.onclick = (): void => {
       const keyNames = providerContainer.querySelectorAll<HTMLElement>(
         '.serviceKeyName'
