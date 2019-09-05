@@ -5,26 +5,22 @@ type Provider = {
   id?: string
   name: string
   service: string
-  keys: string[]
+  keys: Array<ProviderKey>
 }
 
-class ProviderKey {
-  providerKey: string
-  providerKeyValue: string
-  providerKeysContainer: HTMLElement
-  constructor(
-    providerKey: string,
-    providerKeyValue: string,
-    providerName: string,
-    providerKeysContainer: HTMLElement
-  ) {
-    this.providerKey = providerKey
-    this.providerKeysContainer = providerKeysContainer
-    this.providerKeyValue = providerKeyValue
+type ProviderKey = {
+  id?: string
+  key: string
+  service: string
+  value: string
+}
+
+class ProviderKeyElement {
+  constructor(providerKey: ProviderKey, providerKeysContainer: HTMLElement) {
     const providerKeyElement = document.createElement('div')
     providerKeyElement.innerHTML = `
-      <span class="providerKeyName">${this.providerKey}</span>
-      <input type="text" value="${this.providerKeyValue}" class="keyInput"></input>
+      <span class="providerKeyName">${providerKey.key}</span>
+      <input type="text" value="${providerKey.value}" class="keyInput"></input>
       <button type="button" class="btn btn-primary saveOrEditKeysButton">Save</button>      
     `
     const saveOrEdit = helper.getElement(
@@ -32,17 +28,16 @@ class ProviderKey {
       providerKeyElement
     )
     saveOrEdit.onclick = (): void => {
-      const keyName = helper.getElement('.providerKeyName', providerKeyElement)
       const keyInput = helper.getElement(
         '.keyInput',
         providerKeyElement
       ) as HTMLInputElement
-      fetch('/api/admin/providerKeys', {
+      fetch(`/api/admin/providerKeys/${providerKey.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
-          key: keyName.innerText,
+          key: providerKey.key,
           value: keyInput.value,
-          service: providerName
+          service: providerKey.service
         }),
         headers: {
           'Content-Type': 'application/json'
@@ -54,32 +49,27 @@ class ProviderKey {
 }
 
 class ProviderElement {
-  providerId: string
-  provider: Provider
   constructor(providerId: string, provider: Provider) {
-    this.provider = provider
-    this.providerId = providerId
     const providerContainer = document.createElement('div')
-    const providerKeys = this.provider.keys
     providerContainer.innerHTML = `
-        <h4>${this.provider.name}</h4>
+        <h4>${provider.name}</h4>
         <li class="list-group-item providerKeysContainer"></li>
       `
     const providerKeysContainer = helper.getElement(
       '.providerKeysContainer',
       providerContainer
     )
-    Object.entries(providerKeys).map(([key, value]) => {
-      return new ProviderKey(key, value, provider.name, providerKeysContainer)
+    provider.keys.map((providerKey: ProviderKey) => {
+      return new ProviderKeyElement(providerKey, providerKeysContainer)
     })
     providerList.appendChild(providerContainer)
   }
 }
 
-fetch('/api/providers')
+fetch('/api/admin/providers')
   .then(res => res.json())
   .then(providerList => {
-    providerList.forEach((provider: Provider) => {
+    providerList.map((provider: Provider) => {
       const providerId = provider.id || ''
       return new ProviderElement(providerId, provider)
     })
