@@ -1,7 +1,7 @@
 import express from 'express'
 import uuid4 from 'uuid/v4'
-import { setData, getData, getMappings } from './lib/data'
-import { Mapping } from './types/general' 
+import { setData, getMappings } from './lib/data'
+import { Mapping } from './types/general'
 const mappingRouter = express.Router()
 
 mappingRouter.post('/', (req, res) =>{
