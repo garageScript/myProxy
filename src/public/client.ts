@@ -1,37 +1,47 @@
-/* global */
-//TODO: Move this function into separate helper function
+/* global helper */
 type Mapping = {
   domain: string
   ip: string
   port: string
 }
 
-const getElement = (query: string, root?: HTMLElement): HTMLElement => {
-  if (!root) {
-    return (
-      document.querySelector<HTMLElement>(query) ||
-      (document.createElement('div') as HTMLElement)
-    )
+const create: HTMLElement = helper.getElement('.create')
+const hostSelector: HTMLElement = helper.getElement('.hostSelector')
+const domainList: HTMLElement = helper.getElement('.domainList')
+const dropDownDomains = helper.getElement('.dropdown-menu')
+
+class DomainMap {
+  constructor(data: Mapping) {
+    const mappingElement = document.createElement('div')
+    dropDownDomains.appendChild(mappingElement)
+    mappingElement.innerHTML = `
+    <li class="list-group-item" style="display: flex;">
+    <a href="">${data.domain}</a>
+    <small class="form-text text-muted" style="display: inline-block;">PORT: ${data.port}</small>
+    <hr />
+    <hr/>
+    <div class="deleteButton" href="">Delete</div>
+    </li>
+`
   }
-  return (
-    root.querySelector(query) || (document.createElement('div') as HTMLElement)
-  )
 }
 
-const create: HTMLElement = getElement('.create')
-const hostSelector: HTMLElement = getElement('.hostSelector')
-const domainList: HTMLElement = getElement('.domainList')
-const dropDownSubDomains: HTMLElement = getElement('.dropdown-menu')
+fetch('/api/mappings')
+  .then(r => r.json())
+  .then((data: Array<Mapping>) => {
+    domainList.innerHTML = ''
+    data.forEach(e => new DomainMap(e))
+  })
 
 let selectedHost = ''
 
 fetch('/api/mappings')
   .then(r => r.json())
-  .then((data:Array<Mapping>) => {
-    data.forEach((e) => {
+  .then((data: Array<Mapping>) => {
+    data.forEach(e => {
       if (e.domain && e.port) {
         const eachSubDomain = document.createElement('div')
-        dropDownSubDomains.appendChild(eachSubDomain)
+        dropDownDomains.appendChild(eachSubDomain)
         eachSubDomain.innerHTML = `
       <button class="dropdown-item domainHost">${e.domain}</button>
     `
@@ -46,9 +56,9 @@ fetch('/api/mappings')
   })
 
 create.onclick = (): void => {
-  const subDomain = getElement('.subDomain') as HTMLInputElement
-  const port = getElement('.port') as HTMLInputElement
-  const ipAddress = getElement('.ipAddress') as HTMLInputElement
+  const subDomain = helper.getElement('.subDomain') as HTMLInputElement
+  const port = helper.getElement('.port') as HTMLInputElement
+  const ipAddress = helper.getElement('.ipAddress') as HTMLInputElement
 
   const portValue = port.value
   const domain = 'https://' + subDomain.value + '/' + selectedHost + '.com'
@@ -80,10 +90,15 @@ create.onclick = (): void => {
         <small class="form-text text-muted" style="display: inline-block;">PORT: ${e.port}</small>
         <hr />
         <hr/>
-        <div class="deleteButton" href="">Delete</div>
+        <div class="deleteButton" href="/">Delete</div>
         </li>
       `
         }
+        document.querySelectorAll<HTMLElement>('.deleteButton').forEach(e => {
+          e.onclick = (): void => {
+            console.log('delete works')
+          }
+        })
       })
     })
 }
