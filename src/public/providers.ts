@@ -21,25 +21,16 @@ type Provider = {
   keys: string[]
 }
 
-/* HardCoded dns object to display mock UI */
-const temp = {
-  dnsGd: {
-    name: 'GoDaddy',
-    api: 'https://api.godaddy.com',
-    keys: ['GD_Key', 'GD_Secret']
-  },
-  dnsPdns: {
-    name: 'PowerDNS',
-    api: 'https://api.powerdns.com',
-    keys: ['PDNS_Url', 'PDNS_ServerId', 'PDNS_Token', 'PDNS_Ttl']
-  }
-}
-
 class ProviderKey {
   providerKey: string
   providerKeyValue: string
   providerKeysContainer: HTMLElement
-  constructor(providerKey: string, providerKeyValue: string, providerName: string, providerKeysContainer: HTMLElement) {
+  constructor(
+    providerKey: string,
+    providerKeyValue: string,
+    providerName: string,
+    providerKeysContainer: HTMLElement
+  ) {
     this.providerKey = providerKey
     this.providerKeysContainer = providerKeysContainer
     this.providerKeyValue = providerKeyValue
@@ -52,7 +43,10 @@ class ProviderKey {
     const saveOrEdit = getElement('.saveOrEditKeysButton', providerKeyElement)
     saveOrEdit.onclick = (): void => {
       const keyName = getElement('.providerKeyName', providerKeyElement)
-      const keyInput = getElement('.keyInput', providerKeyElement) as HTMLInputElement
+      const keyInput = getElement(
+        '.keyInput',
+        providerKeyElement
+      ) as HTMLInputElement
       fetch('/api/admin/providerKeys', {
         method: 'PATCH',
         body: JSON.stringify({
@@ -61,7 +55,7 @@ class ProviderKey {
           service: providerName
         }),
         headers: {
-          'Content-Type' : 'application/json'
+          'Content-Type': 'application/json'
         }
       })
     }
@@ -81,7 +75,10 @@ class ProviderElement {
         <h4>${this.provider.name}</h4>
         <li class="list-group-item providerKeysContainer"></li>
       `
-    const providerKeysContainer = getElement('.providerKeysContainer', providerContainer)
+    const providerKeysContainer = getElement(
+      '.providerKeysContainer',
+      providerContainer
+    )
     Object.entries(providerKeys).map(([key, value]) => {
       return new ProviderKey(key, value, provider.name, providerKeysContainer)
     })
@@ -90,12 +87,10 @@ class ProviderElement {
 }
 
 fetch('/api/providers')
-  .then((res) => res.json())
-  .then((providerList) => {
-
+  .then(res => res.json())
+  .then(providerList => {
     providerList.forEach((provider: Provider) => {
       const providerId = provider.id || ''
       return new ProviderElement(providerId, provider)
     })
-
-})
+  })

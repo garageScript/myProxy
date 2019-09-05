@@ -26,7 +26,7 @@ app.post('/sslCerts', async (req, res) => {
     )
     if (stderr) {
       console.log('stderr', stderr)
-      return res.json({'stderr': stderr})
+      return res.json({ stderr: stderr })
     }
     const domains = getAvailableDomains()
     const domain: Domain = {
