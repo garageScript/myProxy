@@ -27,7 +27,10 @@ class ProviderKey {
       <input type="text" value="${this.providerKeyValue}" class="keyInput"></input>
       <button type="button" class="btn btn-primary saveOrEditKeysButton">Save</button>      
     `
-    const saveOrEdit = helper.getElement('.saveOrEditKeysButton', providerKeyElement)
+    const saveOrEdit = helper.getElement(
+      '.saveOrEditKeysButton',
+      providerKeyElement
+    )
     saveOrEdit.onclick = (): void => {
       const keyName = helper.getElement('.providerKeyName', providerKeyElement)
       const keyInput = helper.getElement(
