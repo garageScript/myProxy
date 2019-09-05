@@ -17,7 +17,7 @@ mappingRouter.post('/', (req, res) => {
   res.json(mappingObject)
 })
 
-mappingRouter.get('/', (req, res) =>{
+mappingRouter.get('/', (req, res) => {
   const domains = getMappings()
   res.json(domains)
 })
