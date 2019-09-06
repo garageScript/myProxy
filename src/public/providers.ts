@@ -6,6 +6,8 @@ type Provider = {
   name: string
   service: string
   keys: Array<ProviderKey>
+  // eslint-disable-next-line
+  domains: Array<any>
 }
 
 type ProviderKey = {
@@ -13,6 +15,18 @@ type ProviderKey = {
   service?: string
   value?: string
   key: string
+}
+
+class DomainElement {
+  // eslint-disable-next-line
+  constructor(domainObj: any, container: HTMLElement) {
+    const domainElement = document.createElement('div')
+    domainElement.innerHTML = `
+      <span class="domainElement">${domainObj.domain}</span>
+      <button type="button" class="btn btn-primary setupButton">Setup</button>
+    `
+    container.appendChild(domainElement)
+  }
 }
 
 class ProviderKeyElement {
@@ -55,15 +69,27 @@ class ProviderElement {
   constructor(providerId: string, provider: Provider) {
     const providerContainer = document.createElement('div')
     providerContainer.innerHTML = `
-        <h4>${provider.name}</h4>
-        <li class="list-group-item providerKeysContainer"></li>
+        <h3>${provider.name}</h4>
+        <li class="list-group-item">
+          <div class="providerKeysContainer"></div>
+          <hr />
+          <h4>Domains</h4>
+          <div class="domainList"></div>
+        </li>
       `
     const providerKeysContainer = helper.getElement(
       '.providerKeysContainer',
       providerContainer
     )
+    const domainListContainer = helper.getElement(
+      '.domainList',
+      providerContainer
+    )
     provider.keys.map((providerKey: ProviderKey) => {
       return new ProviderKeyElement(providerKey, providerKeysContainer)
+    })
+    provider.domains.map(domain => {
+      return new DomainElement(domain, domainListContainer)
     })
     providerList.appendChild(providerContainer)
   }
