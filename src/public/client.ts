@@ -97,20 +97,6 @@ create.onclick = (): void => {
         </li>
       `
         }
-        document
-          .querySelectorAll<HTMLElement>('.deleteButton')
-          .forEach(delButton => {
-            delButton.onclick = (): void => {
-              console.log('delete works')
-              fetch(`/delete/${e.id}`, {
-                method: 'DELETE',
-                body: JSON.stringify({ e }),
-                headers: {
-                  'Content-Type': 'application/json'
-                }
-              })
-            }
-          })
       })
     })
 }
