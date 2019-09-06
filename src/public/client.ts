@@ -3,57 +3,59 @@ type Mapping = {
   domain: string
   ip: string
   port: string
+  id: string
 }
 
 const create: HTMLElement = helper.getElement('.create')
 const hostSelector: HTMLElement = helper.getElement('.hostSelector')
 const domainList: HTMLElement = helper.getElement('.domainList')
 const dropDownDomains = helper.getElement('.dropdown-menu')
+let selectedHost = ''
 
 class DomainMap {
   constructor(data: Mapping) {
-    const mappingElement = document.createElement('div')
-    dropDownDomains.appendChild(mappingElement)
-    mappingElement.innerHTML = `
+    if(data.domain){
+      const dropdownElement = document.createElement('div')
+      dropDownDomains.appendChild(dropdownElement)
+      dropdownElement.innerHTML = `
     <li class="list-group-item" style="display: flex;">
-    <a href="">${data.domain}</a>
-    <small class="form-text text-muted" style="display: inline-block;">PORT: ${data.port}</small>
-    <hr />
-    <hr/>
-    <div class="deleteButton" href="">Delete</div>
+    ${data.domain}
     </li>
-`
+    `
+      dropdownElement.onclick = (): void => {
+        hostSelector.innerText = data.domain
+        selectedHost = data.domain
+      }
+    }
   }
 }
 
-fetch('/api/mappings')
-  .then(r => r.json())
-  .then((data: Array<Mapping>) => {
-    domainList.innerHTML = ''
-    data.forEach(e => new DomainMap(e))
-  })
+class DisplayMap {
+  constructor(data: Mapping) {
+    if(data.domain && data.port) {
+      const mappingElement = document.createElement('div')
+      domainList.appendChild(mappingElement)
+      mappingElement.innerHTML = `
+    <li class="list-group-item" style="display: flex;">
+    <a href="">${data.domain}</a>
+        <small class="form-text text-muted" style="display: inline-block;">PORT: ${data.port}</small>
+        <hr />
+        <div class="deleteButton" href="/">Delete</div>
+    </li>
+`
+    }
+  }
+}
 
-let selectedHost = ''
-
-fetch('/api/mappings')
-  .then(r => r.json())
-  .then((data: Array<Mapping>) => {
-    data.forEach(e => {
-      if (e.domain && e.port) {
-        const eachSubDomain = document.createElement('div')
-        dropDownDomains.appendChild(eachSubDomain)
-        eachSubDomain.innerHTML = `
-      <button class="dropdown-item domainHost">${e.domain}</button>
-    `
-      }
-      document.querySelectorAll<HTMLElement>('.domainHost').forEach(e => {
-        e.onclick = (): void => {
-          selectedHost = e.innerText
-          hostSelector.innerText = selectedHost
-        }
-      })
-    })
+fetch('/api/mappings').then(r => r.json()).then((data: Array<Mapping>) => {
+  domainList.innerHTML = ''
+  data.forEach(e => {
+    new DomainMap(e)
+    new DisplayMap(e)
   })
+  console.log('display new domains:')
+})
+
 
 create.onclick = (): void => {
   const subDomain = helper.getElement('.subDomain') as HTMLInputElement
@@ -74,31 +76,7 @@ create.onclick = (): void => {
     headers: {
       'Content-Type': 'application/json'
     }
+  }).then( () => {
+    window.location.reload()
   })
-
-  fetch('/api/mappings')
-    .then(r => r.json())
-    .then((data: Array<Mapping>) => {
-      domainList.innerHTML = ''
-      data.forEach(e => {
-        if (e.domain && e.port) {
-          const eachDomain = document.createElement('div')
-          domainList.appendChild(eachDomain)
-          eachDomain.innerHTML = `
-        <li class="list-group-item" style="display: flex;">
-        <a href="">${e.domain}</a>
-        <small class="form-text text-muted" style="display: inline-block;">PORT: ${e.port}</small>
-        <hr />
-        <hr/>
-        <div class="deleteButton" href="/">Delete</div>
-        </li>
-      `
-        }
-        document.querySelectorAll<HTMLElement>('.deleteButton').forEach(e => {
-          e.onclick = (): void => {
-            console.log('delete works')
-          }
-        })
-      })
-    })
 }
