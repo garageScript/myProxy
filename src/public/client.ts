@@ -43,54 +43,31 @@ class DisplayMap {
         <div class="deleteButton" href="/">Delete</div>
     </li>
 `
+
+      const delButton = helper.getElement('.deleteButton', mappingElement)
+      console.log('deleteButton exists')
+      delButton.onclick = (): void => {
+        fetch(`/api/mappings/delete/${data.id}`, {
+          method: 'DELETE',
+          body: JSON.stringify({ data }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(()=>{
+          window.location.reload()
+        })
+      }
     }
   }
 }
 
-fetch('/api/mappings')
-  .then(r => r.json())
+fetch('/api/mappings').then(r => r.json())
   .then((data: Array<Mapping>) => {
     domainList.innerHTML = ''
     data.forEach(e => {
       new DisplayMap(e)
     })
   })
-const render = () => {
-  fetch('/api/mappings')
-    .then(r => r.json())
-    .then((data: Array<Mapping>) => {
-      data.reverse()
-      domainList.innerHTML = ''
-      data.forEach(e => {
-        if (e.domain && e.port) {
-          const eachDomain = document.createElement('div')
-          domainList.appendChild(eachDomain)
-          eachDomain.innerHTML = `
-        <li class="list-group-item" style="display: flex;">
-        <a href="">${e.domain}</a>
-        <small class="form-text text-muted" style="display: inline-block;">PORT: ${e.port}</small>
-        <hr />
-        <hr/>
-        <div class="deleteButton" href="/">Delete</div>
-        </li>
-      `
-          const delButton = helper.getElement('.deleteButton', eachDomain)
-          console.log('deleteButton exists')
-          delButton.onclick = (): void => {
-            fetch(`/api/mappings/delete/${e.id}`, {
-              method: 'DELETE',
-              body: JSON.stringify({ e }),
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            }).then(() => {
-              render()
-            })
-          }
-        }
-      })
-    })
-}
 
 create.onclick = (): void => {
   const subDomain = helper.getElement('.subDomain') as HTMLInputElement
@@ -112,11 +89,10 @@ create.onclick = (): void => {
       'Content-Type': 'application/json'
     }
   }).then(() => {
-    render()
+    window.location.reload()
   })
   port.value = ''
   ipAddress.value = ''
   subDomain.value = ''
 }
 
-render()
