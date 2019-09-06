@@ -11,28 +11,25 @@ const app = express.Router()
 const exec = util.promisify(cp.exec)
 
 app.post('/sslCerts', async (req, res) => {
+  const { service, selectedDomain } = req.body
   try {
-    const serviceKeys = getProviderKeys().filter(
-      d => d.service === req.body.service
-    )
-    const envVars = serviceConfig[req.body.service].keys.reduce(
-      (acc: string, key: string) => {
-        return acc + `${key}=${serviceKeys.find(d => d.key === key)} `
-      },
-      ''
-    )
+    const serviceKeys = getProviderKeys().filter(d => d.service === service)
+    const { keys } = serviceConfig[service]
+    const envVars = keys.reduce((acc: string, key: string) => {
+      const { value } = serviceKeys.find(d => d.key === key) || {}
+      return acc + `${key}=${value} `
+    }, '')
     const { stdout, stderr } = await exec(
-      `${envVars} ./scripts/acme.sh/acme.sh --issue --dns ${req.body.service} -d ${req.body.selectedDomain} -d www.${req.body.selectedDomain}`
+      `${envVars} ./acme.sh/acme.sh --issue --dns ${service} -d "*.${selectedDomain}" -d ${selectedDomain} --force`
     )
-    if (stderr) {
-      console.log('stderr', stderr)
-      return res.json({ stderr: stderr })
-    }
+
+    if (stderr) return res.json({ stderr })
+
     const domains = getAvailableDomains()
     const domain: Domain = {
-      domain: req.body.selectedDomain,
+      domain: selectedDomain,
       expiration: '<ssl expiration date will go here>',
-      provider: req.body.service
+      provider: service
     }
     domains.push(domain)
     setData('availableDomains', domains)
