@@ -9,7 +9,7 @@ type Mapping = {
 const create: HTMLElement = helper.getElement('.create')
 const hostSelector: HTMLElement = helper.getElement('.hostSelector')
 const domainList: HTMLElement = helper.getElement('.domainList')
-const dropDownDomains = helper.getElement('.dropdown-menu')
+const dropDownDomains: HTMLElement = helper.getElement('.dropdown-menu')
 let selectedHost = ''
 
 class DomainMap {
@@ -52,10 +52,8 @@ fetch('/api/mappings')
   .then((data: Array<Mapping>) => {
     domainList.innerHTML = ''
     data.forEach(e => {
-      new DomainMap(e)
       new DisplayMap(e)
     })
-    console.log('display new domains:')
   })
 
 create.onclick = (): void => {
@@ -64,7 +62,7 @@ create.onclick = (): void => {
   const ipAddress = helper.getElement('.ipAddress') as HTMLInputElement
 
   const portValue = port.value
-  const domain = 'https://' + subDomain.value + '/' + selectedHost + '.com'
+  const domain =  subDomain.value + selectedHost 
   const ipValue = ipAddress.value
 
   fetch('/api/mappings', {
