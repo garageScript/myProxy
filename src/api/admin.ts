@@ -6,17 +6,20 @@ import uuid4 from 'uuid/v4'
 import util from 'util'
 import cp from 'child_process'
 import serviceConfig from './serviceConfig'
+import providers from '../providers'
 
 const app = express.Router()
 const exec = util.promisify(cp.exec)
 
 app.post('/sslCerts', async (req, res) => {
   const { service, selectedDomain } = req.body
+  const { stdout: ipaddress } = await exec('curl ifconfig.me')
+
   try {
     const serviceKeys = getProviderKeys().filter(d => d.service === service)
     const { keys } = serviceConfig[service]
     const envVars = keys.reduce((acc: string, key: string) => {
-      const { value } = serviceKeys.find(d => d.key === key) || {}
+      const { value = '' } = serviceKeys.find(d => d.key === key) || {}
       return acc + `${key}=${value} `
     }, '')
     const { stdout, stderr } = await exec(
@@ -24,6 +27,12 @@ app.post('/sslCerts', async (req, res) => {
     )
 
     if (stderr) return res.json({ stderr })
+
+    const setRecords = await providers[service].setRecord(
+      selectedDomain,
+      ipaddress
+    )
+    // return res.json({ setRecords })
 
     const domains = getAvailableDomains()
     const domain: Domain = {

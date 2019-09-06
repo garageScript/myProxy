@@ -37,3 +37,43 @@ export const getDomains = async (): Promise<Provider> => {
     domains
   }
 }
+
+export const setRecord = async (domain: string, ipaddress: string) => {
+  const service = 'https://api.godaddy.com'
+  const serviceKeys = getProviderKeys()
+  const defaultKey = { value: '' }
+  const GD_Key = (serviceKeys.find(el => el.key === 'GD_Key') || defaultKey)
+    .value
+  const GD_Secret = (
+    serviceKeys.find(el => el.key === 'GD_Secret') || defaultKey
+  ).value
+
+  let setRecord = []
+  const url = `${service}/v1/domains/${domain}/records`
+  const data = [
+    {
+      data: '167.71.153.58',
+      name: 'TEST_A',
+      type: 'A'
+    },
+    {
+      data: 'innout.life',
+      name: 'TEST_CNAME',
+      type: 'CNAME'
+    }
+  ]
+
+  if (GD_Key && GD_Secret) {
+    const options = {
+      method: 'PATCH',
+      headers: {
+        Authorization: `sso-key ${GD_Key}:${GD_Secret}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }
+
+    setRecord = await sendRequest<Array<any>>(url, options)
+    return setRecord
+  }
+}
