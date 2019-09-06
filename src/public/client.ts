@@ -14,7 +14,7 @@ let selectedHost = ''
 
 class DomainMap {
   constructor(data: Mapping) {
-    if(data.domain){
+    if (data.domain) {
       const dropdownElement = document.createElement('div')
       dropDownDomains.appendChild(dropdownElement)
       dropdownElement.innerHTML = `
@@ -32,7 +32,7 @@ class DomainMap {
 
 class DisplayMap {
   constructor(data: Mapping) {
-    if(data.domain && data.port) {
+    if (data.domain && data.port) {
       const mappingElement = document.createElement('div')
       domainList.appendChild(mappingElement)
       mappingElement.innerHTML = `
@@ -47,15 +47,16 @@ class DisplayMap {
   }
 }
 
-fetch('/api/mappings').then(r => r.json()).then((data: Array<Mapping>) => {
-  domainList.innerHTML = ''
-  data.forEach(e => {
-    new DomainMap(e)
-    new DisplayMap(e)
+fetch('/api/mappings')
+  .then(r => r.json())
+  .then((data: Array<Mapping>) => {
+    domainList.innerHTML = ''
+    data.forEach(e => {
+      new DomainMap(e)
+      new DisplayMap(e)
+    })
+    console.log('display new domains:')
   })
-  console.log('display new domains:')
-})
-
 
 create.onclick = (): void => {
   const subDomain = helper.getElement('.subDomain') as HTMLInputElement
@@ -76,7 +77,7 @@ create.onclick = (): void => {
     headers: {
       'Content-Type': 'application/json'
     }
-  }).then( () => {
+  }).then(() => {
     window.location.reload()
   })
 }

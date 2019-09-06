@@ -26,10 +26,10 @@ mappingRouter.delete('/delete/:id', (req, res) => {
   console.log('PARAMS ID:', req.params.id)
   const domains = getMappings()
   domains.forEach((e, i) => {
-   if( domains[`${req.params.id}`] === e.id ){
-    res.json(e)
-    domains.splice(1, i)
-   }
+    if (domains[`${req.params.id}`] === e.id) {
+      res.json(e)
+      domains.splice(1, i)
+    }
   })
 })
 
