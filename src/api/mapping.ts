@@ -22,8 +22,14 @@ mappingRouter.get('/', (req, res) => {
   res.json(domains)
 })
 
-mappingRouter.get('/delete/:id', (req, res) => {
-  console.log('IDDD:', req.params.id)
+mappingRouter.delete('/delete/:id', (req, res) => {
+  const domains = getMappings()
+  const deletedDomain = domains.find((e) => e.id === req.params.id)
+  const updatedDomains = domains.filter((e)=>{
+    return e.id !== req.params.id
+  })
+  setData('mappings', updatedDomains)
+  res.json(deletedDomain)
 })
 
 export default mappingRouter

@@ -55,33 +55,11 @@ fetch('/api/mappings')
       new DisplayMap(e)
     })
   })
-
-create.onclick = (): void => {
-  const subDomain = helper.getElement('.subDomain') as HTMLInputElement
-  const port = helper.getElement('.port') as HTMLInputElement
-  const ipAddress = helper.getElement('.ipAddress') as HTMLInputElement
-
-  const portValue = port.value
-  const domain = subDomain.value + selectedHost
-  const ipValue = ipAddress.value
-
-  fetch('/', {
-    method: 'POST',
-    body: JSON.stringify({
-      domain: domain,
-      port: portValue,
-      ip: ipValue
-    }),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }).then(() => {
-    window.location.reload()
-  })
-
-  fetch('/')
+const render = () => {
+  fetch('/api/mappings')
     .then(r => r.json())
     .then((data: Array<Mapping>) => {
+      data.reverse()
       domainList.innerHTML = ''
       data.forEach(e => {
         if (e.domain && e.port) {
@@ -96,21 +74,49 @@ create.onclick = (): void => {
         <div class="deleteButton" href="/">Delete</div>
         </li>
       `
+          const delButton = helper.getElement('.deleteButton', eachDomain)
+          console.log('deleteButton exists')
+          delButton.onclick = (): void => {
+            fetch(`/api/mappings/delete/${e.id}`, {
+              method: 'DELETE',
+              body: JSON.stringify({ e }),
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }).then(()=>{
+              render()
+            })
+          }
         }
-        document
-          .querySelectorAll<HTMLElement>('.deleteButton')
-          .forEach(delButton => {
-            delButton.onclick = (): void => {
-              console.log('delete works')
-              fetch(`/delete/${e.id}`, {
-                method: 'DELETE',
-                body: JSON.stringify({ e }),
-                headers: {
-                  'Content-Type': 'application/json'
-                }
-              })
-            }
-          })
       })
     })
 }
+
+create.onclick = (): void => {
+  const subDomain = helper.getElement('.subDomain') as HTMLInputElement
+  const port = helper.getElement('.port') as HTMLInputElement
+  const ipAddress = helper.getElement('.ipAddress') as HTMLInputElement
+
+  const portValue = port.value
+  const domain = subDomain.value + selectedHost
+  const ipValue = ipAddress.value
+
+  fetch('/api/mappings', {
+    method: 'POST',
+    body: JSON.stringify({
+      domain: domain,
+      port: portValue,
+      ip: ipValue
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(() => {
+    render()
+  })
+  port.value = ''
+  ipAddress.value = ''
+  subDomain.value = ''
+}
+
+render()
