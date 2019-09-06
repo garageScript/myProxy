@@ -3,6 +3,7 @@ type Mapping = {
   domain: string
   ip: string
   port: string
+  id: string
 }
 
 const create: HTMLElement = helper.getElement('.create')
@@ -64,7 +65,7 @@ create.onclick = (): void => {
   const domain = 'https://' + subDomain.value + '/' + selectedHost + '.com'
   const ipValue = ipAddress.value
 
-  fetch('/api/mappings', {
+  fetch('/', {
     method: 'POST',
     body: JSON.stringify({
       domain: domain,
@@ -76,7 +77,7 @@ create.onclick = (): void => {
     }
   })
 
-  fetch('/api/mappings')
+  fetch('/')
     .then(r => r.json())
     .then((data: Array<Mapping>) => {
       domainList.innerHTML = ''
@@ -94,9 +95,16 @@ create.onclick = (): void => {
         </li>
       `
         }
-        document.querySelectorAll<HTMLElement>('.deleteButton').forEach(e => {
-          e.onclick = (): void => {
+        document.querySelectorAll<HTMLElement>('.deleteButton').forEach(delButton => {
+          delButton.onclick = (): void => {
             console.log('delete works')
+            fetch(`/delete/${e.id}`, {
+              method: 'DELETE',
+              body: JSON.stringify({ e }),
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
           }
         })
       })

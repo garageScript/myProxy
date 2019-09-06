@@ -22,4 +22,8 @@ mappingRouter.get('/', (req, res) => {
   res.json(domains)
 })
 
+mappingRouter.get('/delete/:id', (req, res) => {
+  console.log('IDDD:', req.params.id)
+})
+
 export default mappingRouter
