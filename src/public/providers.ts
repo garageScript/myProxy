@@ -20,7 +20,6 @@ class ProviderKeyElement {
     const providerKeyElement = document.createElement('div')
     const isNew = !providerKey.id
     const buttonText = isNew ? 'Create' : 'Update'
-    const method = isNew ? 'POST' : 'PATCH'
     providerKeyElement.innerHTML = `
       <span class="providerKeyName">${providerKey.key}</span>
       <input type="text" value="${providerKey.value || ''}" class="keyInput"></input>
@@ -35,6 +34,7 @@ class ProviderKeyElement {
         '.keyInput',
         providerKeyElement
       ) as HTMLInputElement
+      const method = isNew ? 'POST' : 'PATCH'
       fetch(`/api/admin/providerKeys/${providerKey.id || ''}`, {
         method,
         body: JSON.stringify({
