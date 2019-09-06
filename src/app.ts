@@ -25,7 +25,7 @@ app.post('/login', (req, res) => {
   if (process.env.ADMIN !== req.body.adminPass)
     return res.render('login', { error: 'Wrong Admin Password' })
   res.cookie('adminPass', req.body.adminPass)
-  res.redirect('/admin/providers')
+  res.redirect('/admin')
 })
 
 app.listen(port, () => console.log(`app listening on port ${port}!`))

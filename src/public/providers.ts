@@ -30,13 +30,18 @@ class DomainElement {
 }
 
 class ProviderKeyElement {
-  constructor(providerKey: ProviderKey, providerKeysContainer: HTMLElement) {
+  constructor(
+    providerKey: ProviderKey,
+    providerId: string,
+    providerKeysContainer: HTMLElement
+  ) {
     const providerKeyElement = document.createElement('div')
     const isNew = !providerKey.id
     const buttonText = isNew ? 'Create' : 'Update'
     providerKeyElement.innerHTML = `
       <span class="providerKeyName">${providerKey.key}</span>
-      <input type="text" value="${providerKey.value || ''}" class="keyInput"></input>
+      <input type="text" value="${providerKey.value ||
+        ''}" class="keyInput"></input>
       <button type="button" class="btn btn-primary createOrUpdateButton">${buttonText}</button>      
     `
     const createOrUpdate = helper.getElement(
@@ -54,7 +59,7 @@ class ProviderKeyElement {
         body: JSON.stringify({
           key: providerKey.key,
           value: keyInput.value,
-          service: providerKey.service
+          service: providerId
         }),
         headers: {
           'Content-Type': 'application/json'
@@ -86,7 +91,11 @@ class ProviderElement {
       providerContainer
     )
     provider.keys.map((providerKey: ProviderKey) => {
-      return new ProviderKeyElement(providerKey, providerKeysContainer)
+      return new ProviderKeyElement(
+        providerKey,
+        providerId,
+        providerKeysContainer
+      )
     })
     provider.domains.map(domain => {
       return new DomainElement(domain, domainListContainer)
