@@ -10,30 +10,33 @@ type Provider = {
 
 type ProviderKey = {
   id?: string
+  service?: string
+  value?: string
   key: string
-  service: string
-  value: string
 }
 
 class ProviderKeyElement {
   constructor(providerKey: ProviderKey, providerKeysContainer: HTMLElement) {
     const providerKeyElement = document.createElement('div')
+    const isNew = !providerKey.id
+    const buttonText = isNew ? 'Create' : 'Update'
+    const method = isNew ? 'POST' : 'PATCH'
     providerKeyElement.innerHTML = `
       <span class="providerKeyName">${providerKey.key}</span>
-      <input type="text" value="${providerKey.value}" class="keyInput"></input>
-      <button type="button" class="btn btn-primary saveOrEditKeysButton">Save</button>      
+      <input type="text" value="${providerKey.value || ''}" class="keyInput"></input>
+      <button type="button" class="btn btn-primary createOrUpdateButton">${buttonText}</button>      
     `
-    const saveOrEdit = helper.getElement(
-      '.saveOrEditKeysButton',
+    const createOrUpdate = helper.getElement(
+      '.createOrUpdateButton',
       providerKeyElement
     )
-    saveOrEdit.onclick = (): void => {
+    createOrUpdate.onclick = (): void => {
       const keyInput = helper.getElement(
         '.keyInput',
         providerKeyElement
       ) as HTMLInputElement
-      fetch(`/api/admin/providerKeys/${providerKey.id}`, {
-        method: 'PATCH',
+      fetch(`/api/admin/providerKeys/${providerKey.id || ''}`, {
+        method,
         body: JSON.stringify({
           key: providerKey.key,
           value: keyInput.value,
