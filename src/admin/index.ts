@@ -6,7 +6,7 @@ adminRouter.use('/*', (req, res, next) => {
   next()
 })
 
-adminRouter.get('/providers', (req, res) => {
+adminRouter.get('/', (req, res) => {
   res.render('admin/providers')
 })
 
