@@ -25,15 +25,38 @@ export const getDomains = async (): Promise<Provider> => {
       }
     }
 
-    // eslint-disable-next-line
-    domains = await sendRequest<Array<any>>(url, options)
+    try {
+      // eslint-disable-next-line
+      domains = await sendRequest<Array<any>>(url, options)
+    } catch (e) {
+      console.log('error', e)
+    }
   }
+
+  const keysDefault = [
+    {
+      key: 'GD_Key'
+    },
+    {
+      key: 'GD_Secret'
+    }
+  ]
+
+  const keys = keysDefault.map(keyInfo => {
+    const storedKey = serviceKeys.find(
+      k => k.service === 'dns_gd' && k.key === keyInfo.key
+    )
+    if (storedKey) {
+      return storedKey
+    }
+    return keyInfo
+  })
 
   return {
     id: 'dns_gd',
     service,
     name,
-    keys: { GD_Key, GD_Secret },
+    keys,
     domains
   }
 }
