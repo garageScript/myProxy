@@ -17,13 +17,4 @@ mappingRouter.post('/', (req, res) => {
   res.json(mappingObject)
 })
 
-mappingRouter.get('/', (req, res) => {
-  const domains = getMappings()
-  res.json(domains)
-})
-
-mappingRouter.get('/delete/:id', (req, res) => {
-  console.log('IDDD:', req.params.id)
-})
-
 export default mappingRouter
