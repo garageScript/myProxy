@@ -24,8 +24,8 @@ mappingRouter.get('/', (req, res) => {
 
 mappingRouter.delete('/delete/:id', (req, res) => {
   const domains = getMappings()
-  const deletedDomain = domains.find((e) => e.id === req.params.id)
-  const updatedDomains = domains.filter((e)=>{
+  const deletedDomain = domains.find(e => e.id === req.params.id)
+  const updatedDomains = domains.filter(e => {
     return e.id !== req.params.id
   })
   setData('mappings', updatedDomains)

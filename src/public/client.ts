@@ -83,7 +83,7 @@ const render = () => {
               headers: {
                 'Content-Type': 'application/json'
               }
-            }).then(()=>{
+            }).then(() => {
               render()
             })
           }
