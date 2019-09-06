@@ -33,11 +33,30 @@ export const getDomains = async (): Promise<Provider> => {
     }
   }
 
+  const keysDefault = [
+    {
+      key: 'GD_Key'
+    },
+    {
+      key: 'GD_Secret'
+    }
+  ]
+
+  const keys = keysDefault.map(keyInfo => {
+    const storedKey = serviceKeys.find(
+      k => k.service === 'dns_gd' && k.key === keyInfo.key
+    )
+    if (storedKey) {
+      return storedKey
+    }
+    return keyInfo
+  })
+
   return {
     id: 'dns_gd',
     service,
     name,
-    keys: serviceKeys.filter(k => k.service === 'dns_gd'),
+    keys,
     domains
   }
 }
