@@ -7,7 +7,7 @@ type Provider = {
   service: string
   keys: Array<ProviderKey>
   // eslint-disable-next-line
-  domains: any
+  domains: Array<any>
 }
 
 type ProviderKey = {
@@ -102,9 +102,7 @@ class ProviderElement {
         providerKeysContainer
       )
     })
-    const isAuthorized = !provider.domains.code ? true : false
-    const providerDomains = isAuthorized ? provider.domains : []
-    providerDomains.map((domain: DomainObject) => {
+    provider.domains.map((domain: DomainObject) => {
       return new DomainElement(domain, domainListContainer)
     })
     providerList.appendChild(providerContainer)

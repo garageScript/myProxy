@@ -10,7 +10,7 @@ type Provider = {
   service: string
   name: string
   keys: object
-  domains: object[]
+  domains: any
 }
 
 type Domain = {
