@@ -75,7 +75,7 @@ class DisplayMap {
 
         const save = helper.getElement('.save', mappingElement)
         save.onclick = (): void => {
-          const domain = helper.getElement(
+          const subDomain = helper.getElement(
             '.domain',
             mappingElement
           ) as HTMLInputElement
@@ -88,14 +88,14 @@ class DisplayMap {
             mappingElement
           ) as HTMLInputElement
 
-          const domainValue = domain.value
+          const subDomainValue = subDomain.value
           const portValue = port.value
           const ipValue = ip.value
           const id = data.id
           fetch(`/api/mappings/edit/${data.id}`, {
             method: 'PATCH',
             body: JSON.stringify({
-              domain: domainValue,
+              domain: subDomainValue,
               port: portValue,
               ip: ipValue,
               id: id
