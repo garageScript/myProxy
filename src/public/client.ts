@@ -47,7 +47,7 @@ class DisplayMap {
 
       const delButton = helper.getElement('.deleteButton', mappingElement)
       delButton.onclick = (): void => {
-        if(confirm('Are you sure want to delete this domain?')){
+        if (confirm('Are you sure want to delete this domain?')) {
           fetch(`/api/mappings/delete/${data.id}`, {
             method: 'DELETE',
             body: JSON.stringify({ data }),
@@ -66,27 +66,36 @@ class DisplayMap {
          Domain: <input class='domain'type="" value='${data.domain}'>
          Port:  <input class='port'type="" value=${data.port}>
          IP:  <input class='ip' type="" value=${data.ip}>
-         <button class='save'>SAVE</button>
+         <button class='btn btn-primary mb-2 save'>SAVE</button>
         `
 
         const save = helper.getElement('.save', mappingElement)
-        save.onclick = () :void => {
-          const domain = helper.getElement('.domain', mappingElement) as HTMLInputElement
-          const port = helper.getElement('.port', mappingElement) as HTMLInputElement
-          const ip = helper.getElement('.ip', mappingElement) as HTMLInputElement
+        save.onclick = (): void => {
+          const domain = helper.getElement(
+            '.domain',
+            mappingElement
+          ) as HTMLInputElement
+          const port = helper.getElement(
+            '.port',
+            mappingElement
+          ) as HTMLInputElement
+          const ip = helper.getElement(
+            '.ip',
+            mappingElement
+          ) as HTMLInputElement
 
           const domainValue = domain.value
           const portValue = port.value
-          const ipValue = ip.value 
-          const id = data.id 
-          console.log(domainValue, portValue, ipValue )
+          const ipValue = ip.value
+          const id = data.id
+          console.log(domainValue, portValue, ipValue)
           fetch(`/api/mappings/edit/${data.id}`, {
             method: 'PATCH',
-            body: JSON.stringify({ 
-              'domain': domainValue,
-              'port' : portValue,
-              'ip' : ipValue,
-              'id' : id
+            body: JSON.stringify({
+              domain: domainValue,
+              port: portValue,
+              ip: ipValue,
+              id: id
             }),
             headers: {
               'Content-Type': 'application/json'
