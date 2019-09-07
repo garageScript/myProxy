@@ -41,6 +41,7 @@ class DisplayMap {
         <small class="form-text text-muted" style="display: inline-block;">PORT: ${data.port}</small>
         <hr />
         <div class="deleteButton" href="/">Delete</div>
+        <div class="deleteButton edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
     </li>
 `
 
@@ -52,17 +53,30 @@ class DisplayMap {
           headers: {
             'Content-Type': 'application/json'
           }
-        }).then(()=>{
+        }).then(() => {
           window.location.reload()
+        })
+      }
+      const editButton = helper.getElement('.edit', mappingElement)
+      //TODO: turn into input boxes for ability to edit.
+      editButton.onclick = (): void => {
+        fetch(`/api/mappings/edit/${data.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ data }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
         })
       }
     }
   }
 }
 
-fetch('/api/mappings').then(r => r.json())
+fetch('/api/mappings')
+  .then(r => r.json())
   .then((data: Array<Mapping>) => {
     domainList.innerHTML = ''
+    data.reverse()
     data.forEach(e => {
       new DisplayMap(e)
     })
@@ -94,4 +108,3 @@ create.onclick = (): void => {
   ipAddress.value = ''
   subDomain.value = ''
 }
-
