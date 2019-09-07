@@ -10,7 +10,8 @@ type Provider = {
   service: string
   name: string
   keys: object
-  domains: object[]
+  // eslint-disable-next-line
+  domains: any
 }
 
 type Domain = {
