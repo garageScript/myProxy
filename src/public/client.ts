@@ -62,11 +62,16 @@ class DisplayMap {
       const editButton = helper.getElement('.edit', mappingElement)
       //TODO: turn into input boxes for ability to edit.
       editButton.onclick = (): void => {
-        domainList.innerHTML = `
+        mappingElement.innerHTML = `
+        <li class='list-group-item'>
          Domain: <input class='domain'type="" value='${data.domain}'>
          Port:  <input class='port'type="" value=${data.port}>
          IP:  <input class='ip' type="" value=${data.ip}>
-         <button class='btn btn-primary mb-2 save'>SAVE</button>
+         <div class ='saveButtonContainer' style="display: flex;">
+         <hr />
+         <button  class='btn btn-primary mb-2 save'>SAVE</button>
+         </div>
+         </li>
         `
 
         const save = helper.getElement('.save', mappingElement)
@@ -100,17 +105,9 @@ class DisplayMap {
             headers: {
               'Content-Type': 'application/json'
             }
+          }).then(()=>{
+            window.location.reload()
           })
-          mappingElement.innerHTML = `
-    <li class="list-group-item" style="display: flex;">
-    <a href="">${domainValue}</a>
-        <small class="form-text text-muted" style="display: inline-block;">PORT: ${port}</small>
-        <hr />
-        <div class="deleteButton" href="/">Delete</div>
-        <div class="edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
-    </li>
-
-        `
         }
       }
     }
