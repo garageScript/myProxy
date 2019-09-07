@@ -83,7 +83,7 @@ export const setRecord = async (
   try {
     await sendRequest<Array<any>>(url, options)
   } catch (e) {
-    console.log('Error setting API')
+    console.log('Error setting API', e)
     response.success = false
     response.message = 'Error setting API'
   }
