@@ -33,7 +33,18 @@ mappingRouter.delete('/delete/:id', (req, res) => {
 })
 
 mappingRouter.patch('/edit/:id', (req, res) =>{
-  console.log('object selected to EDIT:' , req.params.id)
+  const domains = getMappings()
+  const editDomain = domains.map((element: Mapping) => {
+    if(element.id === req.params.id) {
+      if (req.body.domain) element.domain = req.body.domain
+      if (req.body.port) element.port = req.body.port
+      if (req.body.ip) element.ip = req.body.ip
+    }
+    return element
+  })
+  setData('mappings', editDomain)
+  const updatedDomain = domains.find((element: Mapping) =>element.id === req.params.id )
+  res.json(updatedDomain)
 })
 
 export default mappingRouter
