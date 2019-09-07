@@ -17,7 +17,7 @@ app.post('/sslCerts', async (req, res) => {
     const serviceKeys = getProviderKeys().filter(d => d.service === service)
     const { keys } = serviceConfig[service]
     const envVars = keys.reduce((acc: string, key: string) => {
-      const { value } = serviceKeys.find(d => d.key === key) || { value : "" }
+      const { value } = serviceKeys.find(d => d.key === key) || { value: '' }
       return acc + `${key}=${value} `
     }, '')
     const { stdout, stderr } = await exec(
