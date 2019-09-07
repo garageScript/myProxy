@@ -124,8 +124,8 @@ app.patch('/providerKeys/:id', (req, res) => {
 app.get('/providers', async (_, res) => {
   const data = await Promise.all([goDaddy.getDomains()])
   console.log(data)
-  const filteredData = data.map((domainElement) => {
-    if(domainElement.domains.code) domainElement.domains = []
+  const filteredData = data.map(domainElement => {
+    if (domainElement.domains.code) domainElement.domains = []
     return domainElement
   })
   return res.json(filteredData) // Data send to view providers ?
