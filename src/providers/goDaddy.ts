@@ -3,11 +3,9 @@ import { sendRequest } from '../helpers/httpRequest'
 import { getProviderKeys } from '../api/lib/data'
 import { Provider } from '../api/types/general'
 
-export const getDomains = async (): Promise<Provider> => {
-  const service = 'https://api.godaddy.com'
-  const name = 'Godaddy'
+const service = 'https://api.godaddy.com'
+const getKeys = (): { GD_Key: string; GD_Secret: string } => {
   const serviceKeys = getProviderKeys()
-
   const defaultKey = { value: '' }
   const GD_Key = (serviceKeys.find(el => el.key === 'GD_Key') || defaultKey)
     .value
@@ -15,13 +13,21 @@ export const getDomains = async (): Promise<Provider> => {
     serviceKeys.find(el => el.key === 'GD_Secret') || defaultKey
   ).value
 
+  return { GD_Key, GD_Secret }
+}
+
+export const getDomains = async (): Promise<Provider> => {
+  const name = 'Godaddy'
+  const { GD_Key, GD_Secret } = getKeys()
+
   let domains = []
   const url = `${service}/v1/domains?statuses=ACTIVE`
 
   if (GD_Key && GD_Secret) {
     const options = {
       headers: {
-        Authorization: `sso-key ${GD_Key}:${GD_Secret}`
+        Authorization: `sso-key ${GD_Key}:${GD_Secret}`,
+        'Content-Type': 'application/json'
       }
     }
 
@@ -43,6 +49,7 @@ export const getDomains = async (): Promise<Provider> => {
   ]
 
   const keys = keysDefault.map(keyInfo => {
+    const serviceKeys = getProviderKeys()
     const storedKey = serviceKeys.find(
       k => k.service === 'dns_gd' && k.key === keyInfo.key
     )
@@ -62,7 +69,6 @@ export const getDomains = async (): Promise<Provider> => {
 }
 
 export const setRecord = async (domain: string, ipaddress: string) => {
-  const service = 'https://api.godaddy.com'
   const serviceKeys = getProviderKeys()
   const defaultKey = { value: '' }
   const GD_Key = (serviceKeys.find(el => el.key === 'GD_Key') || defaultKey)
