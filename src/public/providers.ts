@@ -38,8 +38,8 @@ class DomainElement {
         }
       })
         .then(res => res.json())
-        .then((data) => {
-          console.log('data', data)
+        .then(() => {
+          window.location.reload()
         })
     }
     container.appendChild(domainElement)
@@ -115,10 +115,8 @@ class ProviderElement {
       )
     })
     provider.domains.map(domain => {
-      console.log('domain', domain)
       return new DomainElement(domain, provider.service, domainListContainer)
     })
-    console.log('provider', provider)
     providerList.appendChild(providerContainer)
   }
 }
