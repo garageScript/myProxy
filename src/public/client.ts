@@ -53,16 +53,17 @@ class DisplayMap {
           headers: {
             'Content-Type': 'application/json'
           }
-        }).then(()=>{
+        }).then(() => {
           window.location.reload()
         })
       }
       const editButton = helper.getElement('.edit', mappingElement)
-      editButton.onclick = () :void =>{
-        fetch(`/api/mappings/edit/${data.id }`, {
+      //TODO: turn into input boxes for ability to edit.
+      editButton.onclick = (): void => {
+        fetch(`/api/mappings/edit/${data.id}`, {
           method: 'PATCH',
           body: JSON.stringify({ data }),
-          headers:{
+          headers: {
             'Content-Type': 'application/json'
           }
         })
@@ -71,7 +72,8 @@ class DisplayMap {
   }
 }
 
-fetch('/api/mappings').then(r => r.json())
+fetch('/api/mappings')
+  .then(r => r.json())
   .then((data: Array<Mapping>) => {
     domainList.innerHTML = ''
     data.reverse()
@@ -106,4 +108,3 @@ create.onclick = (): void => {
   ipAddress.value = ''
   subDomain.value = ''
 }
-

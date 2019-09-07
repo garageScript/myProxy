@@ -24,26 +24,28 @@ mappingRouter.get('/', (req, res) => {
 
 mappingRouter.delete('/delete/:id', (req, res) => {
   const domains = getMappings()
-  const deletedDomain = domains.find((e) => e.id === req.params.id)
-  const updatedDomains = domains.filter((e)=>{
+  const deletedDomain = domains.find(e => e.id === req.params.id)
+  const updatedDomains = domains.filter(e => {
     return e.id !== req.params.id
   })
   setData('mappings', updatedDomains)
   res.json(deletedDomain)
 })
 
-mappingRouter.patch('/edit/:id', (req, res) =>{
+mappingRouter.patch('/edit/:id', (req, res) => {
   const domains = getMappings()
-  const editDomain = domains.map((element: Mapping) => {
-    if(element.id === req.params.id) {
+  const domainList = domains.map((element: Mapping) => {
+    if (element.id === req.params.id) {
       if (req.body.domain) element.domain = req.body.domain
       if (req.body.port) element.port = req.body.port
       if (req.body.ip) element.ip = req.body.ip
     }
     return element
   })
-  setData('mappings', editDomain)
-  const updatedDomain = domains.find((element: Mapping) =>element.id === req.params.id )
+  setData('mappings', domainList)
+  const updatedDomain = domains.find(
+    (element: Mapping) => element.id === req.params.id
+  )
   res.json(updatedDomain)
 })
 
