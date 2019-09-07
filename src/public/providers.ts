@@ -115,7 +115,7 @@ class ProviderElement {
       )
     })
     provider.domains.map(domain => {
-      return new DomainElement(domain, provider.service, domainListContainer)
+      return new DomainElement(domain, providerId, domainListContainer)
     })
     providerList.appendChild(providerContainer)
   }
