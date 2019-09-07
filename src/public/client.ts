@@ -43,12 +43,24 @@ class DisplayMap {
         <div class="deleteButton" href="/">Delete</div>
     </li>
 `
+
+      const delButton = helper.getElement('.deleteButton', mappingElement)
+      delButton.onclick = (): void => {
+        fetch(`/api/mappings/delete/${data.id}`, {
+          method: 'DELETE',
+          body: JSON.stringify({ data }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(()=>{
+          window.location.reload()
+        })
+      }
     }
   }
 }
 
-fetch('/api/mappings')
-  .then(r => r.json())
+fetch('/api/mappings').then(r => r.json())
   .then((data: Array<Mapping>) => {
     domainList.innerHTML = ''
     data.forEach(e => {
@@ -78,4 +90,8 @@ create.onclick = (): void => {
   }).then(() => {
     window.location.reload()
   })
+  port.value = ''
+  ipAddress.value = ''
+  subDomain.value = ''
 }
+
