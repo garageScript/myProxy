@@ -6,8 +6,8 @@ import { getProviderKeys } from '../api/lib/data'
 import { Provider, ServiceResponse } from '../api/types/general'
 import { ServiceKey } from '../api/types/admin'
 
-const name = 'Godaddy'
-const service = 'https://api.godaddy.com'
+const NAME = 'Godaddy'
+const SERVICE = 'https://api.godaddy.com'
 
 const getKeys = (): ServiceKey[] => {
   const keysDefault: { key: string }[] = [
@@ -30,7 +30,7 @@ const findKey = (key: string): string => {
 export const getDomains = async (): Promise<Provider> => {
   const keys = getKeys()
   let domains = []
-  const url = `${service}/v1/domains?statuses=ACTIVE`
+  const url = `${SERVICE}/v1/domains?statuses=ACTIVE`
   const options = {
     headers: {
       Authorization: `sso-key ${findKey('GD_Key')}:${findKey('GD_Secret')}`,
@@ -42,8 +42,8 @@ export const getDomains = async (): Promise<Provider> => {
 
   return {
     id: 'dns_gd',
-    service,
-    name,
+    service: SERVICE,
+    name: NAME,
     keys,
     domains
   }
@@ -53,7 +53,7 @@ export const setRecord = async (
   domain: string,
   ipaddress: string
 ): Promise<ServiceResponse> => {
-  const url = `${service}/v1/domains/${domain}/records`
+  const url = `${SERVICE}/v1/domains/${domain}/records`
   const data = [
     {
       data: ipaddress,
@@ -83,7 +83,7 @@ export const setRecord = async (
   try {
     await sendRequest<Array<any>>(url, options)
   } catch (e) {
-    console.log('Error setting API', e)
+    console.error('Error setting API', e)
     response.success = false
     response.message = 'Error setting API'
   }
