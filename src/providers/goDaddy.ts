@@ -3,7 +3,7 @@
 
 import { sendRequest } from '../helpers/httpRequest'
 import { getProviderKeys } from '../api/lib/data'
-import { Provider } from '../api/types/general'
+import { Provider, ServiceResponse } from '../api/types/general'
 import { ServiceKey } from '../api/types/admin'
 
 const name = 'Godaddy'
@@ -24,7 +24,7 @@ const getKeys = (): ServiceKey[] => {
   return keys as ServiceKey[]
 }
 const findKey = (key: string): string => {
-  return getKeys().find(k => k.key === key).value
+  return (getKeys().find(k => k.key === key) || { value: '' }).value
 }
 
 export const getDomains = async (): Promise<Provider> => {
@@ -52,8 +52,7 @@ export const getDomains = async (): Promise<Provider> => {
 export const setRecord = async (
   domain: string,
   ipaddress: string
-): Promise<any> => {
-  let setRecord = []
+): Promise<ServiceResponse> => {
   const url = `${service}/v1/domains/${domain}/records`
   const data = [
     {
@@ -77,6 +76,16 @@ export const setRecord = async (
     body: JSON.stringify(data)
   }
 
-  setRecord = await sendRequest<Array<any>>(url, options)
-  return { setRecord }
+  const response: ServiceResponse = {
+    success: true,
+    message: 'Successfully set CNAME records for wildcard domain'
+  }
+  try {
+    await sendRequest<Array<any>>(url, options)
+  } catch (e) {
+    console.log('Error setting API')
+    response.success = false
+    response.message = 'Error setting API'
+  }
+  return response
 }

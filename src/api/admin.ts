@@ -1,5 +1,5 @@
 import { ServiceKey } from './types/admin'
-import { Domain } from './types/general'
+import { Domain, ProviderService, ServiceResponse } from './types/general'
 import { getAvailableDomains, setData, getProviderKeys } from './lib/data'
 import express from 'express'
 import uuid4 from 'uuid/v4'
@@ -14,6 +14,10 @@ const exec = util.promisify(cp.exec)
 app.post('/sslCerts', async (req, res) => {
   const { service, selectedDomain } = req.body
 
+  const serviceResponse: ServiceResponse = {
+    success: true,
+    message: 'SSL Certs and domain name records successfully created'
+  }
   try {
     const serviceKeys = getProviderKeys().filter(d => d.service === service)
     const { keys } = serviceConfig[service]
@@ -21,17 +25,32 @@ app.post('/sslCerts', async (req, res) => {
       const { value } = serviceKeys.find(d => d.key === key) || { value: '' }
       return acc + `${key}=${value} `
     }, '')
-    const { stdout, stderr } = await exec(
+    const { stderr } = await exec(
       `${envVars} ./acme.sh/acme.sh --issue --dns ${service} -d "*.${selectedDomain}" -d ${selectedDomain} --force`
     )
 
-    if (stderr) return res.json({ stderr })
+    if (stderr) {
+      serviceResponse.success = false
+      serviceResponse.message = `Could not create SSL Certs. Error: ${JSON.stringify(
+        stderr
+      )}`
+      return res.json(serviceResponse)
+    }
 
     const { stdout: ipaddress } = await exec('curl ifconfig.me')
-    const setRecords: Function = await providers[service].setRecord(
+    const providerService = providers[service] as ProviderService
+    if (!providerService) {
+      serviceResponse.success = false
+      serviceResponse.message = 'Provider not found'
+      return res.json(serviceResponse)
+    }
+    const setRecords: ServiceResponse = await providerService.setRecord(
       selectedDomain,
       ipaddress
     )
+    if (!setRecords.success) {
+      return res.json(setRecords)
+    }
 
     const domains = getAvailableDomains()
     const domain: Domain = {
@@ -41,9 +60,11 @@ app.post('/sslCerts', async (req, res) => {
     }
     domains.push(domain)
     setData('availableDomains', domains)
-    res.json({ 'cert successfully created': stdout, setRecords })
+    return res.json(serviceResponse)
   } catch (err) {
-    res.json({ 'failed to create cert': err })
+    serviceResponse.success = false
+    serviceResponse.message = `Error: ${JSON.stringify(err)}`
+    return res.json(serviceResponse)
   }
 })
 
