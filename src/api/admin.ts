@@ -130,7 +130,7 @@ app.patch('/providerKeys/:id', (req, res) => {
 })
 
 app.get('/providers', async (_, res) => {
-  const data = await Promise.all([goDaddy.getDomains()])
+  const data = await Promise.all([providers.dns_gd.getDomains()])
   return res.json(data) // Data send to view providers ?
 })
 
