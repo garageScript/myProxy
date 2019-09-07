@@ -42,32 +42,72 @@ class DisplayMap {
         <small class="form-text text-muted" style="display: inline-block;">PORT: ${data.port}</small>
         <hr />
         <div class="deleteButton" href="/">Delete</div>
-        <div class="deleteButton edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
+        <div class="edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
     </li>
 `
 
       const delButton = helper.getElement('.deleteButton', mappingElement)
       delButton.onclick = (): void => {
-        fetch(`/api/mappings/delete/${data.id}`, {
-          method: 'DELETE',
-          body: JSON.stringify({ data }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then(() => {
-          window.location.reload()
-        })
+        if (confirm('Are you sure want to delete this domain?')) {
+          fetch(`/api/mappings/delete/${data.id}`, {
+            method: 'DELETE',
+            body: JSON.stringify({ data }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).then(() => {
+            window.location.reload()
+          })
+        }
       }
       const editButton = helper.getElement('.edit', mappingElement)
-      //TODO: turn into input boxes for ability to edit.
       editButton.onclick = (): void => {
-        fetch(`/api/mappings/edit/${data.id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({ data }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
+        mappingElement.innerHTML = `
+        <li class='list-group-item' style="display: flex;">
+         Domain: <input class=' form-control domain'type="" value='${data.domain}'>
+         Port:  <input class='form-control port'type="" value=${data.port}>
+         IP:  <input class='form-control ip' type="" value=${data.ip}>
+         <hr/>
+         <div class ='saveButtonContainer'>
+         <button  class='btn save' style="padding: 0px 0px 0px 15px">SAVE</button>
+         </div>
+         </li>
+        `
+
+        const save = helper.getElement('.save', mappingElement)
+        save.onclick = (): void => {
+          const domain = helper.getElement(
+            '.domain',
+            mappingElement
+          ) as HTMLInputElement
+          const port = helper.getElement(
+            '.port',
+            mappingElement
+          ) as HTMLInputElement
+          const ip = helper.getElement(
+            '.ip',
+            mappingElement
+          ) as HTMLInputElement
+
+          const domainValue = domain.value
+          const portValue = port.value
+          const ipValue = ip.value
+          const id = data.id
+          fetch(`/api/mappings/edit/${data.id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+              domain: domainValue,
+              port: portValue,
+              ip: ipValue,
+              id: id
+            }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).then(() => {
+            window.location.reload()
+          })
+        }
       }
     }
   }

@@ -28,4 +28,11 @@ app.post('/login', (req, res) => {
   res.redirect('/admin')
 })
 
-app.listen(port, () => console.log(`app listening on port ${port}!`))
+const listener = (): void => {
+  if (!process.env.ADMIN) {
+    return console.log('Admin UI/API is turned off')
+  }
+  app.listen(port, () => console.log(`app listening on port ${port}!`))
+}
+
+listener()
