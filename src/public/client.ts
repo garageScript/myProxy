@@ -41,32 +41,68 @@ class DisplayMap {
         <small class="form-text text-muted" style="display: inline-block;">PORT: ${data.port}</small>
         <hr />
         <div class="deleteButton" href="/">Delete</div>
-        <div class="deleteButton edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
+        <div class="edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
     </li>
 `
 
       const delButton = helper.getElement('.deleteButton', mappingElement)
       delButton.onclick = (): void => {
-        fetch(`/api/mappings/delete/${data.id}`, {
-          method: 'DELETE',
-          body: JSON.stringify({ data }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then(() => {
-          window.location.reload()
-        })
+        if(confirm('Are you sure want to delete this domain?')){
+          fetch(`/api/mappings/delete/${data.id}`, {
+            method: 'DELETE',
+            body: JSON.stringify({ data }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).then(() => {
+            window.location.reload()
+          })
+        }
       }
       const editButton = helper.getElement('.edit', mappingElement)
       //TODO: turn into input boxes for ability to edit.
       editButton.onclick = (): void => {
-        fetch(`/api/mappings/edit/${data.id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({ data }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
+        domainList.innerHTML = `
+         Domain: <input class='domain'type="" value='${data.domain}'>
+         Port:  <input class='port'type="" value=${data.port}>
+         IP:  <input class='ip' type="" value=${data.ip}>
+         <button class='save'>SAVE</button>
+        `
+
+        const save = helper.getElement('.save', mappingElement)
+        save.onclick = () :void => {
+          const domain = helper.getElement('.domain', mappingElement) as HTMLInputElement
+          const port = helper.getElement('.port', mappingElement) as HTMLInputElement
+          const ip = helper.getElement('.ip', mappingElement) as HTMLInputElement
+
+          const domainValue = domain.value
+          const portValue = port.value
+          const ipValue = ip.value 
+          const id = data.id 
+          console.log(domainValue, portValue, ipValue )
+          fetch(`/api/mappings/edit/${data.id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ 
+              'domain': domainValue,
+              'port' : portValue,
+              'ip' : ipValue,
+              'id' : id
+            }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          mappingElement.innerHTML = `
+    <li class="list-group-item" style="display: flex;">
+    <a href="">${domainValue}</a>
+        <small class="form-text text-muted" style="display: inline-block;">PORT: ${port}</small>
+        <hr />
+        <div class="deleteButton" href="/">Delete</div>
+        <div class="edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
+    </li>
+
+        `
+        }
       }
     }
   }
