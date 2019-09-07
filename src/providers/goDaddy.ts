@@ -52,7 +52,7 @@ export const getDomains = async (): Promise<Provider> => {
 export const setRecord = async (
   domain: string,
   ipaddress: string
-): Promise<Provider> => {
+): Promise<any> => {
   let setRecord = []
   const url = `${service}/v1/domains/${domain}/records`
   const data = [
@@ -78,5 +78,5 @@ export const setRecord = async (
   }
 
   setRecord = await sendRequest<Array<any>>(url, options)
-  return setRecord
+  return { setRecord }
 }
