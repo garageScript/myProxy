@@ -45,7 +45,6 @@ class DisplayMap {
 `
 
       const delButton = helper.getElement('.deleteButton', mappingElement)
-      console.log('deleteButton exists')
       delButton.onclick = (): void => {
         fetch(`/api/mappings/delete/${data.id}`, {
           method: 'DELETE',
