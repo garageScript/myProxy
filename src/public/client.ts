@@ -52,7 +52,7 @@ class DisplayMap {
           headers: {
             'Content-Type': 'application/json'
           }
-        }).then(()=>{
+        }).then(() => {
           window.location.reload()
         })
       }
@@ -60,7 +60,8 @@ class DisplayMap {
   }
 }
 
-fetch('/api/mappings').then(r => r.json())
+fetch('/api/mappings')
+  .then(r => r.json())
   .then((data: Array<Mapping>) => {
     domainList.innerHTML = ''
     data.forEach(e => {
@@ -94,4 +95,3 @@ create.onclick = (): void => {
   ipAddress.value = ''
   subDomain.value = ''
 }
-
