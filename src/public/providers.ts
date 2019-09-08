@@ -17,9 +17,14 @@ type ProviderKey = {
   key: string
 }
 
+type DomainObject = {
+  domain: string
+  domainId: string
+}
+
 class DomainElement {
   // eslint-disable-next-line
-  constructor(domainObj: any, container: HTMLElement) {
+  constructor(domainObj: DomainObject, container: HTMLElement) {
     const domainElement = document.createElement('div')
     domainElement.innerHTML = `
       <span class="domainElement">${domainObj.domain}</span>
@@ -64,7 +69,7 @@ class ProviderKeyElement {
         headers: {
           'Content-Type': 'application/json'
         }
-      })
+      }).then(() => window.location.reload())
     }
     providerKeysContainer.appendChild(providerKeyElement)
   }
@@ -97,7 +102,7 @@ class ProviderElement {
         providerKeysContainer
       )
     })
-    provider.domains.map(domain => {
+    provider.domains.map((domain: DomainObject) => {
       return new DomainElement(domain, domainListContainer)
     })
     providerList.appendChild(providerContainer)
