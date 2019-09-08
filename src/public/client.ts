@@ -65,16 +65,31 @@ class DisplayMap {
         <li class='list-group-item'>
           <div class="form-row">
             <div class="col">
-             Domain:<input type="text" class="form-control" placeholder=${data.domain}>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                 <span class="input-group-text" >Domain</span>
+ 							  </div>
+  					  	<input type="text" class="form-control domain" placeholder="${data.domain}">
+						  </div>
             </div>
             <div class="col">
-             Port: <input type="text" class="form-control" placeholder=${data.port}>
+							<div class="input-group mb-3">
+							  <div class="input-group-prepend">
+								 <span class="input-group-text">Port</span>
+                </div>
+                <input type="text" class="form-control port" placeholder=${data.port}>
+              </div>
             </div>
             <div class="col">
-            IP: <input type="text" class="form-control" placeholder=${data.ip}>
+							<div class="input-group mb-3">
+                <div class="input-group-prepend">
+                 <span class="input-group-text">IP</span>
+								</div>
+                 <input type="text" class="form-control ip" placeholder=${data.ip}>
+              </div>
             </div>
             <div class="col">
-              <button class="btn btn-primary mb-2 save" style="margin-left: 105px; margin-top: 22px">Save</button>
+              <button class="btn btn-primary mb-2 save" style="margin-left: 180px;">Save</button>
             </div>
           </div>
         </li>
