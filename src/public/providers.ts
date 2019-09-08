@@ -17,19 +17,31 @@ type ProviderKey = {
   key: string
 }
 
-type DomainObject = {
-  domain: string
-  domainId: string
-}
-
 class DomainElement {
   // eslint-disable-next-line
-  constructor(domainObj: DomainObject, container: HTMLElement) {
+  constructor(domainObj: any, domainService: string, container: HTMLElement) {
     const domainElement = document.createElement('div')
     domainElement.innerHTML = `
       <span class="domainElement">${domainObj.domain}</span>
-      <button type="button" class="btn btn-primary setupButton">Setup</button>
+      <button type="button" class="btn btn-primary setUpButton">Setup</button>
     `
+    const setUpButton = helper.getElement('.setUpButton', domainElement)
+    setUpButton.onclick = (): void => {
+      fetch('api/admin/sslCerts', {
+        method: 'POST',
+        body: JSON.stringify({
+          service: domainService,
+          selectedDomain: domainObj.domain
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => res.json())
+        .then(() => {
+          window.location.reload()
+        })
+    }
     container.appendChild(domainElement)
   }
 }
@@ -102,8 +114,8 @@ class ProviderElement {
         providerKeysContainer
       )
     })
-    provider.domains.map((domain: DomainObject) => {
-      return new DomainElement(domain, domainListContainer)
+    provider.domains.map(domain => {
+      return new DomainElement(domain, providerId, domainListContainer)
     })
     providerList.appendChild(providerContainer)
   }
