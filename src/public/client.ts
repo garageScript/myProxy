@@ -12,7 +12,6 @@ const domainList: HTMLElement = helper.getElement('.domainList')
 const dropDownDomains: HTMLElement = helper.getElement('.dropdown-menu')
 let selectedHost = ''
 
-// eslint-disable-next-line
 class DomainMap {
   constructor(data: Mapping) {
     if (data.domain) {
@@ -63,6 +62,7 @@ class DisplayMap {
       const editButton = helper.getElement('.edit', mappingElement)
       editButton.onclick = (): void => {
         mappingElement.innerHTML = `
+        <li class='list-group-item'>
         <form>
           <div class="form-row">
             <div class="col">
@@ -79,6 +79,7 @@ class DisplayMap {
             </div>
           </div>
         </form>
+        </li>
         `
 
         const save = helper.getElement('.save', mappingElement)
