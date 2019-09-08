@@ -81,7 +81,7 @@ class ProviderKeyElement {
         headers: {
           'Content-Type': 'application/json'
         }
-      })
+      }).then(() => window.location.reload())
     }
     providerKeysContainer.appendChild(providerKeyElement)
   }

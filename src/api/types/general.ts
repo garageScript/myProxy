@@ -10,7 +10,8 @@ type Provider = {
   service: string
   name: string
   keys: object
-  domains: object[]
+  // eslint-disable-next-line
+  domains: any
 }
 
 type Domain = {
@@ -19,4 +20,14 @@ type Domain = {
   provider: string
 }
 
-export { Mapping, Provider, Domain }
+type ServiceResponse = {
+  success: boolean
+  message: string
+}
+
+type ProviderService = {
+  getDomains: Function
+  setRecord: Function
+}
+
+export { Mapping, Provider, Domain, ServiceResponse, ProviderService }
