@@ -63,7 +63,6 @@ class DisplayMap {
       editButton.onclick = (): void => {
         mappingElement.innerHTML = `
         <li class='list-group-item'>
-        <form>
           <div class="form-row">
             <div class="col">
              Domain:<input type="text" class="form-control" placeholder=${data.domain}>
@@ -78,7 +77,6 @@ class DisplayMap {
               <button class="btn btn-primary mb-2 save" style="margin-left: 105px; margin-top: 22px">Save</button>
             </div>
           </div>
-        </form>
         </li>
         `
 
