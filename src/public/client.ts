@@ -62,15 +62,22 @@ class DisplayMap {
       const editButton = helper.getElement('.edit', mappingElement)
       editButton.onclick = (): void => {
         mappingElement.innerHTML = `
-        <li class='list-group-item' style="display: flex;">
-         Domain: <input class=' form-control domain'type="" value='${data.domain}'>
-         Port:  <input class='form-control port'type="" value=${data.port}>
-         IP:  <input class='form-control ip' type="" value=${data.ip}>
-         <hr/>
-         <div class ='saveButtonContainer'>
-         <button  class='btn save' style="padding: 0px 0px 0px 15px">SAVE</button>
-         </div>
-         </li>
+        <form>
+          <div class="form-row">
+            <div class="col">
+             Domain:<input type="text" class="form-control" placeholder=${data.domain}>
+            </div>
+            <div class="col">
+             Port: <input type="text" class="form-control" placeholder=${data.port}>
+            </div>
+            <div class="col">
+            IP: <input type="text" class="form-control" placeholder=${data.ip}>
+            </div>
+            <div class="col">
+              <button class="btn btn-primary mb-2 save" style="margin-left: 105px; margin-top: 22px">Save</button>
+            </div>
+          </div>
+        </form>
         `
 
         const save = helper.getElement('.save', mappingElement)
