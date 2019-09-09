@@ -26,7 +26,7 @@ app.post('/sslCerts', async (req, res) => {
       return acc + `${key}=${value} `
     }, '')
     const { stderr } = await exec(
-      `${envVars} ./acme.sh/acme.sh --issue --dns ${service} -d "*.${selectedDomain}" -d ${selectedDomain} --force`
+      `${envVars} ./acme.sh/acme.sh --issue --dns ${service} -d ${selectedDomain} -d "*.${selectedDomain}" --force`
     )
 
     if (stderr) {
