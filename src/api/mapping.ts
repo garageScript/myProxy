@@ -1,8 +1,13 @@
 import express from 'express'
 import uuid4 from 'uuid/v4'
+import util from 'util'
+import cp from 'child_process'
+import path from 'path'
+import fs from 'fs'
 import { setData, getMappings } from './lib/data'
 import { Mapping } from './types/general'
 const mappingRouter = express.Router()
+const exec = util.promisify(cp.execSync)
 
 mappingRouter.post('/', (req, res) => {
   const domainKeys = getMappings()
@@ -14,6 +19,21 @@ mappingRouter.post('/', (req, res) => {
   }
   domainKeys.push(mappingObject)
   setData('mappings', domainKeys)
+  
+  // WIP: Move to a script folder
+  const projectFolder = `${path.join(__dirname, '../../projects')}/${req.body.domain}`
+  exec(`mkdir ${projectFolder}`)
+  exec(`git init ${projectFolder}`)
+  const data = `
+    #!/bin/sh
+    cd ..
+    GIT_DIR='.git'
+    unmask 002 && git reset --hard
+  `
+  fs.writeFile(`${projectFolder}/.git/hooks/post-recieve`, data, (err) => {
+    if(err) return console.log(err)
+    exec(`chmod +x ${projectFolder}/.git/hooks/post-recieve`)
+  })
   res.json(mappingObject)
 })
 
