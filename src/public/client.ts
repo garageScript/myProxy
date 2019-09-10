@@ -1,7 +1,7 @@
 /* global helper */
 type Mapping = {
   domain: string
-  subDomain: string 
+  subDomain: string
   ip: string
   port: string
   id: string
@@ -68,33 +68,33 @@ class DisplayMap {
             <div class="col">
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                 <span class="input-group-text" >Domain</span>
- 							  </div>
-  					  	<input type="text" class="form-control domainName" placeholder="${data.domain}">
-						  </div>
-            </div>
-            <div class="col">
-							<div class="input-group mb-3">
-							  <div class="input-group-prepend">
-								 <span class="input-group-text">Port</span>
+                 <span class="input-group-text">Domain</span>
                 </div>
-                <input type="text" class="form-control subDomain" placeholder=${data.subDomain}>
+                <input type="text" class="form-control domainName" placeholder=${data.domain}>
               </div>
             </div>
             <div class="col">
-							<div class="input-group mb-3">
-							  <div class="input-group-prepend">
-								 <span class="input-group-text">Port</span>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                 <span class="input-group-text">Subdomain</span>
+                </div>
+                <input type="text" class="form-control subDomainName" placeholder=${data.subDomain}>
+              </div>
+            </div>
+            <div class="col">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                 <span class="input-group-text">Port</span>
                 </div>
                 <input type="text" class="form-control port" placeholder=${data.port}>
               </div>
             </div>
             <div class="col">
-							<div class="input-group mb-3">
+              <div class="input-group mb-3">
                 <div class="input-group-prepend">
                  <span class="input-group-text">IP</span>
-								</div>
-                 <input type="text" class="form-control ip" placeholder=${data.ip}>
+                </div>
+                <input type="text" class="form-control ip" placeholder=${data.ip}>
               </div>
             </div>
             <div class="col">
@@ -123,7 +123,7 @@ class DisplayMap {
             mappingElement
           ) as HTMLInputElement
 
-          const domainNameValue = domainName.value 
+          const domainNameValue = domainName.value
           const subDomainNameValue = subDomainName.value
           const portValue = port.value
           const ipValue = ip.value
