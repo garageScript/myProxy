@@ -25,10 +25,10 @@ app.post('/sslCerts', async (req, res) => {
       const { value } = serviceKeys.find(d => d.key === key) || { value: '' }
       return acc + `${key}=${value} `
     }, '')
-    const { stderr } = await exec(
-      `${envVars} ./acme.sh/acme.sh --issue --dns ${service} -d ${selectedDomain} -d "*.${selectedDomain}" --force`
-    )
-
+    const acme = `./acme.sh/acme.sh --issue --dns ${service}`
+    const cert1 = `${acme} -d ${selectedDomain} --force`
+    const cert2 = `${acme} -d "*.${selectedDomain}" --force`
+    const { stderr } = await exec(`${envVars} & ${cert1} & ${cert2}`)
     if (stderr) {
       serviceResponse.success = false
       serviceResponse.message = `Could not create SSL Certs. Error: ${JSON.stringify(
