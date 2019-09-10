@@ -1,6 +1,7 @@
 /* global helper */
 type Mapping = {
   domain: string
+  subDomain: string 
   ip: string
   port: string
   id: string
@@ -69,8 +70,16 @@ class DisplayMap {
                 <div class="input-group-prepend">
                  <span class="input-group-text" >Domain</span>
  							  </div>
-  					  	<input type="text" class="form-control domain" placeholder="${data.domain}">
+  					  	<input type="text" class="form-control domainName" placeholder="${data.domain}">
 						  </div>
+            </div>
+            <div class="col">
+							<div class="input-group mb-3">
+							  <div class="input-group-prepend">
+								 <span class="input-group-text">Port</span>
+                </div>
+                <input type="text" class="form-control subDomain" placeholder=${data.subDomain}>
+              </div>
             </div>
             <div class="col">
 							<div class="input-group mb-3">
@@ -97,8 +106,12 @@ class DisplayMap {
 
         const save = helper.getElement('.save', mappingElement)
         save.onclick = (): void => {
-          const subDomain = helper.getElement(
+          const domainName = helper.getElement(
             '.domain',
+            mappingElement
+          ) as HTMLInputElement
+          const subDomainName = helper.getElement(
+            '.subDomainName',
             mappingElement
           ) as HTMLInputElement
           const port = helper.getElement(
@@ -110,14 +123,16 @@ class DisplayMap {
             mappingElement
           ) as HTMLInputElement
 
-          const subDomainValue = subDomain.value
+          const domainNameValue = domainName.value 
+          const subDomainNameValue = subDomainName.value
           const portValue = port.value
           const ipValue = ip.value
           const id = data.id
           fetch(`/api/mappings/edit/${data.id}`, {
             method: 'PATCH',
             body: JSON.stringify({
-              domain: subDomainValue,
+              domain: domainNameValue,
+              subDomain: subDomainNameValue,
               port: portValue,
               ip: ipValue,
               id: id

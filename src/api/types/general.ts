@@ -1,5 +1,6 @@
 type Mapping = {
   domain: string
+  subDomain: string
   port: string
   ip: string
   id: string
