@@ -5,6 +5,9 @@ import crypto from 'crypto'
 import cookieParser from 'cookie-parser'
 import { adminRouter } from './admin/index'
 import { apiRouter } from './api/index'
+import https from 'https'
+import fs from 'fs'
+import {execSync} from 'child_process'
 
 const app = express()
 const port: string | number = process.env.PORT || 3000
@@ -50,5 +53,16 @@ const listener = (): void => {
     console.log(cyan, `myProxy is running on port ${port}!`)
   )
 }
+
+const server = https.createServer({
+  SNICallback: (domain, cb) => {
+    const adminUser = execSync('logname').toString()
+    fs.readdir(`/home/albertoe/\.acme\.sh`, (err, files)=>{
+      console.log('files', files)
+    })
+  }}, (req, res) => {
+    res.end('hello world')
+  });
+server.listen(443)
 
 listener()
