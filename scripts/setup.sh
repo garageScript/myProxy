@@ -6,3 +6,5 @@ if [ ! -d "./acme.sh" ] ; then
 fi
 cd ./acme.sh
 ./acme.sh --install
+cd ../
+npm run build
