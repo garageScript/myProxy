@@ -7,7 +7,8 @@ import { adminRouter } from './admin/index'
 import { apiRouter } from './api/index'
 import https from 'https'
 import fs from 'fs'
-import {execSync} from 'child_process'
+import { execSync } from 'child_process'
+import tls from 'tls'
 
 const app = express()
 const port: string | number = process.env.PORT || 3000
@@ -54,15 +55,30 @@ const listener = (): void => {
   )
 }
 
-const server = https.createServer({
-  SNICallback: (domain, cb) => {
-    const adminUser = execSync('logname').toString()
-    fs.readdir(`/home/albertoe/\.acme\.sh`, (err, files)=>{
-      console.log('files', files)
-    })
-  }}, (req, res) => {
+const server = https.createServer(
+  {
+    SNICallback: (domain, cb) => {
+      const adminUser = execSync('logname')
+        .toString()
+        .trim()
+      const secureContext = tls.createSecureContext({
+        /* eslint-disable */
+        key: fs.readFileSync(
+          `/home/${adminUser}/\.acme\.sh/*\.${domain}/*\.${domain}\.key`
+        ),
+        cert: fs.readFileSync(
+          `/home/${adminUser}/\.acme\.sh/*\.${domain}/*\.${domain}\.cer`
+        )
+        /* eslint-enable */
+      })
+      if (cb) return cb(null, secureContext)
+      return secureContext
+    }
+  },
+  (req, res) => {
     res.end('hello world')
-  });
+  }
+)
 server.listen(443)
 
 listener()
