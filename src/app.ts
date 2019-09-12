@@ -32,9 +32,11 @@ const listener = (): void => {
   const cyan = '\x1b[36m\u001b[1m%s\x1b[0m'
   const red = '\x1b[31m\u001b[1m%s\x1b[0m'
   if (!process.env.ADMIN) {
-    return console.log(red,'Admin UI/API is turned off')
+    return console.log(red, 'Admin UI/API is turned off')
   }
-  app.listen(port, () => console.log(cyan,`myProxy is running on port ${port}!`))
+  app.listen(port, () =>
+    console.log(cyan, `myProxy is running on port ${port}!`)
+  )
 }
 
 listener()
