@@ -7,7 +7,7 @@ import fs from 'fs'
 import { setData, getMappings } from './lib/data'
 import { Mapping } from './types/general'
 const mappingRouter = express.Router()
-const exec = util.promisify(cp.execSync)
+const exec = util.promisify(cp.exec)
 
 mappingRouter.post('/', (req, res) => {
   const domainKeys = getMappings()
@@ -22,18 +22,17 @@ mappingRouter.post('/', (req, res) => {
   
   // WIP: Move to a script folder
   const projectFolder = `${path.join(__dirname, '../../projects')}/${req.body.domain}`
-  exec(`mkdir ${projectFolder}`)
-  exec(`git init ${projectFolder}`)
-  const data = `
-    #!/bin/sh
-    cd ..
-    GIT_DIR='.git'
-    unmask 002 && git reset --hard
-  `
-  fs.writeFile(`${projectFolder}/.git/hooks/post-recieve`, data, (err) => {
-    if(err) return console.log(err)
-    exec(`chmod +x ${projectFolder}/.git/hooks/post-recieve`)
-  })
+  exec(`
+    mkdir ${projectFolder}
+    git init ${projectFolder}
+    cd ${projectFolder} 
+    cp ../../scripts/post-receive .git/hooks/
+    chmod 755 .git/hooks/post-receive
+    touch README.md
+    git add .
+    git commit -m "Initial Commit"
+    git checkout -b prod`
+  )
   res.json(mappingObject)
 })
 
