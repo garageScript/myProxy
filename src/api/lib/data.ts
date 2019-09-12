@@ -15,7 +15,6 @@ fs.readFile('./data.db', (err, file) => {
       err
     )
   }
-  console.log('loading db file successful')
   const fileData: DB = JSON.parse(file.toString() || '{}')
   data.serviceKeys = fileData.serviceKeys || []
   data.mappings = fileData.mappings || []
