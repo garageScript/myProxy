@@ -19,21 +19,20 @@ mappingRouter.post('/', (req, res) => {
   }
   domainKeys.push(mappingObject)
   setData('mappings', domainKeys)
-
-  // WIP: Move to a script folder
   const projectFolder = `${path.join(__dirname, '../../projects')}/${
-    req.body.domain
+    req.body.domain + req.body.subDomain
   }`
   exec(`
+    mkdir -p ../../projects
     mkdir ${projectFolder}
     git init ${projectFolder}
     cd ${projectFolder} 
     cp ../../scripts/post-receive .git/hooks/
-    chmod 755 .git/hooks/post-receive
     touch README.md
     git add .
     git commit -m "Initial Commit"
-    git checkout -b prod`)
+    git checkout -b prod`
+  )
   res.json(mappingObject)
 })
 
