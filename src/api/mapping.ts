@@ -19,9 +19,8 @@ mappingRouter.post('/', (req, res) => {
   }
   domainKeys.push(mappingObject)
   setData('mappings', domainKeys)
-  const projectFolder = `${path.join(__dirname, '../../projects')}/${
-    req.body.domain + req.body.subDomain
-  }`
+  const projectFolder = `${path.join(__dirname, '../../projects')}/${req.body
+    .domain + req.body.subDomain}`
   exec(`
     mkdir -p ../../projects
     mkdir ${projectFolder}
@@ -31,8 +30,7 @@ mappingRouter.post('/', (req, res) => {
     touch README.md
     git add .
     git commit -m "Initial Commit"
-    git checkout -b prod`
-  )
+    git checkout -b prod`)
   res.json(mappingObject)
 })
 
