@@ -8,3 +8,4 @@ cd ./acme.sh
 ./acme.sh --install
 cd ../
 npm run build
+touch data.db
