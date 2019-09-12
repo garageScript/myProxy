@@ -3,7 +3,7 @@ MyProxy is an application that proxies requests to other servers
 
 # Prerequisites
 
-- [x] To run **myProxy** first of all you'll need a server with **Node,js** and **Git** installed
+- [x] To run **myProxy** first of all you'll need a server with **Node.js** and **Git** installed
 
 - [x] A valid Domain name `Eg: mydomain.com`
 
