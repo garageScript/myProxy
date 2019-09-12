@@ -3,7 +3,6 @@ import uuid4 from 'uuid/v4'
 import util from 'util'
 import cp from 'child_process'
 import path from 'path'
-import fs from 'fs'
 import { setData, getMappings } from './lib/data'
 import { Mapping } from './types/general'
 const mappingRouter = express.Router()
@@ -19,9 +18,11 @@ mappingRouter.post('/', (req, res) => {
   }
   domainKeys.push(mappingObject)
   setData('mappings', domainKeys)
-  
+
   // WIP: Move to a script folder
-  const projectFolder = `${path.join(__dirname, '../../projects')}/${req.body.domain}`
+  const projectFolder = `${path.join(__dirname, '../../projects')}/${
+    req.body.domain
+  }`
   exec(`
     mkdir ${projectFolder}
     git init ${projectFolder}
@@ -31,8 +32,7 @@ mappingRouter.post('/', (req, res) => {
     touch README.md
     git add .
     git commit -m "Initial Commit"
-    git checkout -b prod`
-  )
+    git checkout -b prod`)
   res.json(mappingObject)
 })
 
