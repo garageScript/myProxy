@@ -12,6 +12,7 @@ mappingRouter.post('/', (req, res) => {
   const domainKeys = getMappings()
   const mappingObject: Mapping = {
     domain: req.body.domain,
+    subDomain: req.body.subDomain,
     port: req.body.port,
     ip: req.body.ip,
     id: uuid4()
@@ -56,6 +57,7 @@ mappingRouter.patch('/edit/:id', (req, res) => {
   const domainList = domains.map((element: Mapping) => {
     if (element.id === req.params.id) {
       if (req.body.domain) element.domain = req.body.domain
+      if (req.body.subDomain) element.subDomain = req.body.subDomain
       if (req.body.port) element.port = req.body.port
       if (req.body.ip) element.ip = req.body.ip
     }
