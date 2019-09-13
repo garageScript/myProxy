@@ -8,28 +8,28 @@ type Mapping = {
 }
 
 const create: HTMLElement = helper.getElement('.create')
-const hostSelector: HTMLElement = helper.getElement('.hostSelector')
+// const hostSelector: HTMLElement = helper.getElement('.hostSelector')
 const domainList: HTMLElement = helper.getElement('.domainList')
-const dropDownDomains: HTMLElement = helper.getElement('.dropdown-menu')
-let selectedHost = ''
+// const dropDownDomains: HTMLElement = helper.getElement('.dropdown-menu')
+const selectedHost = ''
 
-class DomainMap {
-  constructor(data: Mapping) {
-    if (data.domain) {
-      const dropdownElement = document.createElement('div')
-      dropDownDomains.appendChild(dropdownElement)
-      dropdownElement.innerHTML = `
-    <li class="list-group-item" style="display: flex;">
-    ${data.domain}
-    </li>
-    `
-      dropdownElement.onclick = (): void => {
-        hostSelector.innerText = data.domain
-        selectedHost = data.domain
-      }
-    }
-  }
-}
+// class DomainMap {
+//   constructor(data: Mapping) {
+//     if (data.domain) {
+//       const dropdownElement = document.createElement('div')
+//       dropDownDomains.appendChild(dropdownElement)
+//       dropdownElement.innerHTML = `
+//     <li class="list-group-item" style="display: flex;">
+//     ${data.domain}
+//     </li>
+//     `
+//       dropdownElement.onclick = (): void => {
+//         hostSelector.innerText = data.domain
+//         selectedHost = data.domain
+//       }
+//     }
+//   }
+// }
 
 class DisplayMap {
   constructor(data: Mapping) {
