@@ -1,15 +1,11 @@
 import express from 'express'
 import adminRouter from './admin'
 import mappingRouter from './mapping'
+import { auth } from '../auth'
 
 const apiRouter = express.Router()
 
-apiRouter.use('/*', (req, res, next) => {
-  if (!req.cookies.adminPass) return res.status(401)
-  next()
-})
-
-apiRouter.use('/admin', adminRouter.app)
-apiRouter.use('/mappings', mappingRouter)
+apiRouter.use('/admin', auth, adminRouter.app)
+apiRouter.use('/mappings', auth, mappingRouter)
 
 export { apiRouter }
