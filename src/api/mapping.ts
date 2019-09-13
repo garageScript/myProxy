@@ -47,7 +47,7 @@ mappingRouter.post('/', (req, res) => {
     '../../scripts'
   )}/post-receive ${projectPath}/${projectFolder}/.git/hooks/
     cd ${projectPath}/${projectFolder}
-    echo 'module.exports = ${JSON.stringify(prodConfig)}' >> deploy.config.js
+    echo 'module.exports = ${JSON.stringify(prodConfig)}' > deploy.config.js
     git add .
     git commit -m "Initial Commit"
     git checkout -b prod`).then(() => {
