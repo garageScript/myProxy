@@ -6,7 +6,7 @@ import { adminRouter } from './admin/index'
 import { apiRouter } from './api/index'
 import https from 'https'
 import fs from 'fs'
-import { execSync } from 'child_process'
+import {execSync} from 'child_process'
 import tls from 'tls'
 
 const app = express()
@@ -33,41 +33,28 @@ app.post('/login', (req, res) => {
 })
 
 const listener = (): void => {
-  const cyan = '\x1b[36m\u001b[1m%s\x1b[0m'
-  const red = '\x1b[31m\u001b[1m%s\x1b[0m'
   if (!process.env.ADMIN) {
-    return console.log(red, 'Admin UI/API is turned off')
+    return console.log('Admin UI/API is turned off')
   }
-  app.listen(port, () =>
-    console.log(cyan, `myProxy is running on port ${port}!`)
-  )
+  app.listen(port, () => console.log(`app listening on port ${port}!`))
 }
 
-const server = https.createServer(
-  {
-    SNICallback: (domain, cb) => {
-      // using whoami will return root because app is run with sudo
-      const adminUser = execSync('logname')
-        .toString()
-        .trim()
-      const secureContext = tls.createSecureContext({
-        /* eslint-disable */
-        key: fs.readFileSync(
-          `/home/${adminUser}/\.acme\.sh/*\.${domain}/*\.${domain}\.key`
-        ),
-        cert: fs.readFileSync(
-          `/home/${adminUser}/\.acme\.sh/*\.${domain}/*\.${domain}\.cer`
-        )
-        /* eslint-enable */
-      })
-      if (cb) return cb(null, secureContext)
-      return secureContext
-    }
-  },
-  (req, res) => {
+const server = https.createServer({
+  SNICallback: (domain, cb) => {
+    // using whoami will return root because app is run with sudo
+    const adminUser = execSync('logname').toString().trim()
+    // unecessary escape error appears for eslint-disable-next-line
+    const secureContext =  tls.createSecureContext({
+      /* eslint-disable */
+      key: fs.readFileSync(`/home/${adminUser}/\.acme\.sh/*\.${domain}/*\.${domain}\.key`),
+      cert: fs.readFileSync(`/home/${adminUser}/\.acme\.sh/*\.${domain}/*\.${domain}\.cer`),
+      /* eslint-enable */
+    })
+    if(cb) return cb(null, secureContext)
+    return secureContext
+  }}, (req, res) => {
     res.end('hello world')
-  }
-)
+  });
 server.listen(443)
 
 listener()
