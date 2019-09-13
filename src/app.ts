@@ -6,7 +6,7 @@ import { adminRouter } from './admin/index'
 import { apiRouter } from './api/index'
 import https from 'https'
 import fs from 'fs'
-import {execSync} from 'child_process'
+import { execSync } from 'child_process'
 import tls from 'tls'
 
 const app = express()
@@ -39,22 +39,32 @@ const listener = (): void => {
   app.listen(port, () => console.log(`app listening on port ${port}!`))
 }
 
-const server = https.createServer({
-  SNICallback: (domain, cb) => {
-    // using whoami will return root because app is run with sudo
-    const adminUser = execSync('logname').toString().trim()
-    // unecessary escape error appears for eslint-disable-next-line
-    const secureContext =  tls.createSecureContext({
-      /* eslint-disable */
-      key: fs.readFileSync(`/home/${adminUser}/\.acme\.sh/*\.${domain}/*\.${domain}\.key`),
-      cert: fs.readFileSync(`/home/${adminUser}/\.acme\.sh/*\.${domain}/*\.${domain}\.cer`),
-      /* eslint-enable */
-    })
-    if(cb) return cb(null, secureContext)
-    return secureContext
-  }}, (req, res) => {
+const server = https.createServer(
+  {
+    SNICallback: (domain, cb) => {
+      // using whoami will return root because app is run with sudo
+      const adminUser = execSync('logname')
+        .toString()
+        .trim()
+      // escape characters required or readFileSync will not find file
+      const secureContext = tls.createSecureContext({
+        /* eslint-disable */
+        key: fs.readFileSync(
+          `/home/${adminUser}/\.acme\.sh/*\.${domain}/*\.${domain}\.key`
+        ),
+        cert: fs.readFileSync(
+          `/home/${adminUser}/\.acme\.sh/*\.${domain}/*\.${domain}\.cer`
+        )
+        /* eslint-enable */
+      })
+      if (cb) return cb(null, secureContext)
+      return secureContext
+    }
+  },
+  (req, res) => {
     res.end('hello world')
-  });
+  }
+)
 server.listen(443)
 
 listener()
