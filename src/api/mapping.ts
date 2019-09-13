@@ -43,16 +43,16 @@ mappingRouter.post('/', (req, res) => {
     mkdir ${projectPath}/${projectFolder}
     git init ${projectPath}/${projectFolder}
     cp ${path.join(
-      __dirname,
-      '../../scripts'
-    )}/post-receive ${projectPath}/${projectFolder}/.git/hooks/
+    __dirname,
+    '../../scripts'
+  )}/post-receive ${projectPath}/${projectFolder}/.git/hooks/
     cd ${projectPath}/${projectFolder}
     echo 'module.exports = ${JSON.stringify(prodConfig)}' >> deploy.config.js
     git add .
     git commit -m "Initial Commit"
     git checkout -b prod`).then(() => {
-      res.json(mappingObject)
-    })
+    res.json(mappingObject)
+  })
 })
 
 mappingRouter.get('/', (req, res) => {
