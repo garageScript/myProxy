@@ -20,11 +20,11 @@ mappingRouter.post('/', (req, res) => {
   }
   domainKeys.push(mappingObject)
   setData('mappings', domainKeys)
-  const projectFolder = `${req.body.domain}`
+  const projectFolder = `${req.body.domain + req.body.subDomain}`
   const prodConfig = {
     apps: [
       {
-        name: 'myProxy-prod',
+        name: `${projectFolder}`,
         script: './build/app.js',
         instances: 1,
         autorestart: true,
@@ -32,28 +32,27 @@ mappingRouter.post('/', (req, res) => {
         max_memory_restart: '1G',
         env_production: {
           NODE_ENV: 'production',
-          PORT: parseInt(req.body.port, 10),
-          ADMIN: '123'
+          PORT: parseInt(req.body.port, 10)
         }
       }
     ]
   }
+  const projectPath = '~/projects'
   exec(`
-    mkdir -p ~/projects
-    mkdir ~/projects/${projectFolder}
-    git init ~/projects/${projectFolder}
+    mkdir -p ${projectPath}
+    mkdir ${projectPath}/${projectFolder}
+    git init ${projectPath}/${projectFolder}
     cp ${path.join(
-    __dirname,
-    '../../scripts'
-  )}/post-receive ~/projects/${projectFolder}/.git/hooks/
-    cd ~/projects/${projectFolder}
-    echo "module.exports =" > deploy.config.js
-    echo '${JSON.stringify(prodConfig)}' >> deploy.config.js
+      __dirname,
+      '../../scripts'
+    )}/post-receive ${projectPath}/${projectFolder}/.git/hooks/
+    cd ${projectPath}/${projectFolder}
+    echo 'module.exports = ${JSON.stringify(prodConfig)}' >> deploy.config.js
     git add .
     git commit -m "Initial Commit"
     git checkout -b prod`).then(() => {
-    res.json(mappingObject)
-  })
+      res.json(mappingObject)
+    })
 })
 
 mappingRouter.get('/', (req, res) => {
