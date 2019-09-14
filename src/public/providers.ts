@@ -6,8 +6,7 @@ type Provider = {
   name: string
   service: string
   keys: Array<ProviderKey>
-  // eslint-disable-next-line
-  domains: Array<any>
+  domains: Array<unknown>
 }
 
 type ProviderKey = {
@@ -18,8 +17,11 @@ type ProviderKey = {
 }
 
 class DomainElement {
-  // eslint-disable-next-line
-  constructor(domainObj: any, domainService: string, container: HTMLElement) {
+  constructor(
+    domainObj: unknown,
+    domainService: string,
+    container: HTMLElement
+  ) {
     const domainElement = document.createElement('div')
     domainElement.innerHTML = `
       <span class="domainElement">${domainObj.domain}</span>
@@ -59,7 +61,7 @@ class ProviderKeyElement {
       <span class="providerKeyName">${providerKey.key}</span>
       <input type="text" value="${providerKey.value ||
         ''}" class="keyInput"></input>
-      <button type="button" class="btn btn-primary createOrUpdateButton">${buttonText}</button>      
+      <button type="button" class="btn btn-primary createOrUpdateButton">${buttonText}</button>
     `
     const createOrUpdate = helper.getElement(
       '.createOrUpdateButton',
