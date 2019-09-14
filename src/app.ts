@@ -1,10 +1,11 @@
 import 'dotenv/config'
 import express from 'express'
 import path from 'path'
-import crypto from 'crypto'
 import cookieParser from 'cookie-parser'
 import { adminRouter } from './admin/index'
 import { apiRouter } from './api/index'
+import { getAvailableDomains } from './api/lib/data'
+import { isCorrectCredentials } from './auth'
 
 const app = express()
 const port: string | number = process.env.PORT || 3000
@@ -19,20 +20,16 @@ app.use('/api', apiRouter)
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, '../views'))
 
-app.get('/', (req, res) => res.render('client'))
+app.get('/', (_, res) =>
+  getAvailableDomains().length > 0
+    ? res.render('client')
+    : res.render('admin/providers')
+)
 app.get('/login', (req, res) => res.render('login', { error: '' }))
 
 app.post('/login', (req, res) => {
-  const hashPass = (password: string): string => {
-    return crypto
-      .createHash('sha256')
-      .update(password)
-      .digest('hex')
-  }
-  const password = hashPass(process.env.ADMIN as string)
-  const adminPass = hashPass(req.body.adminPass as string)
-
-  if (password === adminPass) {
+  const { adminPass } = req.body
+  if (isCorrectCredentials(adminPass)) {
     res.cookie('adminPass', adminPass, { httpOnly: true })
     return res.redirect('/admin')
   }

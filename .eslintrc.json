@@ -36,6 +36,14 @@
         "semi": [
             "error",
             "never"
-        ]
+        ],
+        "camelcase": "off",
+        "@typescript-eslint/camelcase": [
+            "error", { "properties": "never" }
+        ],
+        "@typescript-eslint/no-explicit-any": [ "warn", {
+            "fixToUnknown": true,
+            "ignoreRestArgs": true
+          } ]
     }
 }

@@ -13,6 +13,7 @@ const domainList: HTMLElement = helper.getElement('.domainList')
 const dropDownDomains: HTMLElement = helper.getElement('.dropdown-menu')
 let selectedHost = ''
 
+// eslint-disable-next-line
 class DomainMap {
   constructor(data: Mapping) {
     if (data.domain) {

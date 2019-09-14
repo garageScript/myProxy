@@ -1,7 +1,4 @@
-/*eslint @typescript-eslint/camelcase: ["error", {properties: "never"}]*/
-
-// eslint-disable-next-line
-const serviceConfig: any = {
+const serviceConfig: unknown = {
   dns_gd: {
     name: 'Godaddy',
     keys: ['GD_Key', 'GD_Secret']
