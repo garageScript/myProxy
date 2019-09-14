@@ -4,9 +4,9 @@
         "es6": true
     },
     "extends": [
-        // "eslint:recommended",
-        // "plugin:@typescript-eslint/eslint-recommended",
-        // "plugin:@typescript-eslint/recommended",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
         "prettier",
         "prettier/@typescript-eslint"
     ],
@@ -40,6 +40,10 @@
         "camelcase": "off",
         "@typescript-eslint/camelcase": [
             "error", { "properties": "never" }
-        ]
+        ],
+        "@typescript-eslint/no-explicit-any": [ "warn", {
+            "fixToUnknown": true,
+            "ignoreRestArgs": true
+          } ]
     }
 }
