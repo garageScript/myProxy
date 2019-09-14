@@ -165,7 +165,7 @@ create.onclick = (): void => {
   const ipAddress = helper.getElement('.ipAddress') as HTMLInputElement
 
   const portValue = port.value
-  const domain = subDomain.value + selectedHost
+  const domain =  selectedHost
   const ipValue = ipAddress.value
   const subDomainValue = subDomain.value
 
