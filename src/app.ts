@@ -7,7 +7,6 @@ import { adminRouter } from './admin/index'
 import { apiRouter } from './api/index'
 import https from 'https'
 import fs from 'fs'
-import { execSync } from 'child_process'
 import tls from 'tls'
 
 const app = express()
