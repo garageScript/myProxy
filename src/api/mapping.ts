@@ -20,11 +20,11 @@ mappingRouter.post('/', (req, res) => {
   }
   domainKeys.push(mappingObject)
   setData('mappings', domainKeys)
-  const projectFolder = `${req.body.domain + req.body.subDomain}`
+  const fullDomain = `${req.body.subDomain}.${req.body.domain}`
   const prodConfig = {
     apps: [
       {
-        name: `${projectFolder}`,
+        name: `${fullDomain}`,
         script: './build/app.js',
         instances: 1,
         autorestart: true,
@@ -38,15 +38,13 @@ mappingRouter.post('/', (req, res) => {
     ]
   }
   const projectPath = '~/projects'
+  const postReceiveScriptPath = `${path.join(__dirname, '../../scripts')}`
   exec(`
     mkdir -p ${projectPath}
-    mkdir ${projectPath}/${projectFolder}
-    git init ${projectPath}/${projectFolder}
-    cp ${path.join(
-    __dirname,
-    '../../scripts'
-  )}/post-receive ${projectPath}/${projectFolder}/.git/hooks/
-    cd ${projectPath}/${projectFolder}
+    mkdir ${projectPath}/${fullDomain}
+    git init ${projectPath}/${fullDomain}
+    cp ${postReceiveScriptPath}/post-receive ${projectPath}/${fullDomain}/.git/hooks/
+    cd ${projectPath}/${fullDomain}
     echo 'module.exports = ${JSON.stringify(prodConfig)}' > deploy.config.js
     git add .
     git commit -m "Initial Commit"
