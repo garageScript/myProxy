@@ -1,11 +1,11 @@
 import 'dotenv/config'
 import express from 'express'
 import path from 'path'
-import crypto from 'crypto'
 import cookieParser from 'cookie-parser'
 import { adminRouter } from './admin/index'
 import { apiRouter } from './api/index'
 import { getAvailableDomains } from './api/lib/data'
+import { isCorrectCredentials } from './auth'
 
 const app = express()
 const port: string | number = process.env.PORT || 3000
@@ -28,16 +28,8 @@ app.get('/', (_, res) =>
 app.get('/login', (req, res) => res.render('login', { error: '' }))
 
 app.post('/login', (req, res) => {
-  const hashPass = (password: string): string => {
-    return crypto
-      .createHash('sha256')
-      .update(password)
-      .digest('hex')
-  }
-  const password = hashPass(process.env.ADMIN as string)
-  const adminPass = hashPass(req.body.adminPass as string)
-
-  if (password === adminPass) {
+  const { adminPass } = req.body
+  if (isCorrectCredentials(adminPass)) {
     res.cookie('adminPass', adminPass, { httpOnly: true })
     return res.redirect('/admin')
   }

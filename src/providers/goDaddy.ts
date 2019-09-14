@@ -1,6 +1,3 @@
-/* eslint @typescript-eslint/camelcase: 0 */
-/* eslint @typescript-eslint/no-explicit-any: 0 */
-
 import { sendRequest } from '../helpers/httpRequest'
 import { getProviderKeys } from '../api/lib/data'
 import { Provider, ServiceResponse } from '../api/types/general'
@@ -38,7 +35,7 @@ export const getDomains = async (): Promise<Provider> => {
     }
   }
 
-  domains = await sendRequest<Array<any>>(url, options)
+  domains = await sendRequest<Array<unknown>>(url, options)
 
   return {
     id: 'dns_gd',
@@ -81,7 +78,7 @@ export const setRecord = async (
     message: 'Successfully set CNAME records for wildcard domain'
   }
   try {
-    await sendRequest<Array<any>>(url, options)
+    await sendRequest<Array<unknown>>(url, options)
   } catch (e) {
     console.error('Error setting API', e)
     response.success = false
