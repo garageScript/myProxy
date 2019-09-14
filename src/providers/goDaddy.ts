@@ -2,7 +2,7 @@
 /* eslint @typescript-eslint/no-explicit-any: 0 */
 
 import { sendRequest } from '../helpers/httpRequest'
-import { getProviderKeys } from '../api/lib/data'
+import { getProviderKeys } from '../lib/data'
 import { Provider, ServiceResponse } from '../api/types/general'
 import { ServiceKey } from '../api/types/admin'
 
