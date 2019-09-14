@@ -4,6 +4,7 @@ import path from 'path'
 import cookieParser from 'cookie-parser'
 import { adminRouter } from './admin/index'
 import { apiRouter } from './api/index'
+import { getAvailableDomains } from './api/lib/data'
 import { isCorrectCredentials } from './auth'
 
 const app = express()
@@ -19,7 +20,11 @@ app.use('/api', apiRouter)
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, '../views'))
 
-app.get('/', (req, res) => res.render('client'))
+app.get('/', (_, res) =>
+  getAvailableDomains().length > 0
+    ? res.render('client')
+    : res.render('admin/providers')
+)
 app.get('/login', (req, res) => res.render('login', { error: '' }))
 
 app.post('/login', (req, res) => {
