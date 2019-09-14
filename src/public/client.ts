@@ -166,13 +166,15 @@ create.onclick = (): void => {
   const ipAddress = helper.getElement('.ipAddress') as HTMLInputElement
 
   const portValue = port.value
-  const domain = subDomain.value + selectedHost
+  const domain = selectedHost
   const ipValue = ipAddress.value
+  const subDomainValue = subDomain.value
 
   fetch('/api/mappings', {
     method: 'POST',
     body: JSON.stringify({
       domain: domain,
+      subDomain: subDomainValue,
       port: portValue,
       ip: ipValue
     }),
