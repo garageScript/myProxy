@@ -58,13 +58,8 @@ const listener = (): void => {
 const server = https.createServer(
   {
     SNICallback: (domain, cb) => {
-      // using whoami will return root because app is run with sudo
-      domain = 'albertow.com'
-      const adminUser = execSync('logname')
-        .toString()
-        .trim()
-      const homePath = process.env.HOME 
       // escape characters required or readFileSync will not find file
+      const homePath = process.env.HOME
       const secureContext = tls.createSecureContext({
         /* eslint-disable */
         key: fs.readFileSync(
