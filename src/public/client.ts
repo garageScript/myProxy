@@ -167,11 +167,13 @@ create.onclick = (): void => {
   const portValue = port.value
   const domain = subDomain.value + selectedHost
   const ipValue = ipAddress.value
+  const subDomainValue = subDomain.value
 
   fetch('/api/mappings', {
     method: 'POST',
     body: JSON.stringify({
       domain: domain,
+      subDomain: subDomainValue,
       port: portValue,
       ip: ipValue
     }),
