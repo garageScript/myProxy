@@ -24,7 +24,7 @@ mappingRouter.post('/', (req, res) => {
   const prodConfig = {
     apps: [
       {
-        name: `${fullDomain}`,
+        name: fullDomain,
         script: './build/app.js',
         instances: 1,
         autorestart: true,
@@ -38,7 +38,7 @@ mappingRouter.post('/', (req, res) => {
     ]
   }
   const projectPath = '~/projects'
-  const postReceiveScriptPath = `${path.join(__dirname, '../../scripts')}`
+  const postReceiveScriptPath = path.join(__dirname, '../../scripts')
   exec(`
     mkdir -p ${projectPath}
     mkdir ${projectPath}/${fullDomain}
