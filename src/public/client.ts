@@ -1,11 +1,5 @@
 /* global helper */
-type Mapping = {
-  domain: string
-  subDomain: string
-  ip: string
-  port: string
-  id: string
-}
+import { Mapping } from '../types/client'
 
 const create: HTMLElement = helper.getElement('.create')
 const hostSelector: HTMLElement = helper.getElement('.hostSelector')
