@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   apps: [
     {
       name: 'myProxy-prod',
@@ -9,8 +9,8 @@ module.exports = {
       max_memory_restart: '1G',
       env_production: {
         NODE_ENV: 'production',
-        PORT: 3000,
-        ADMIN: '123'
+        PORT: process.env.PORT,
+        ADMIN: process.env.ADMIN
       },
     },
   ],
