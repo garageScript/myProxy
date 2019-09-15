@@ -34,4 +34,11 @@ type ServiceConfig = {
   dns_gd: ProviderService
 }
 
-export { Mapping, Provider, Domain, ServiceResponse, ServiceConfig, ProviderService }
+export {
+  Mapping,
+  Provider,
+  Domain,
+  ServiceResponse,
+  ServiceConfig,
+  ProviderService
+}
