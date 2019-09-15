@@ -51,6 +51,7 @@ const listener = (): void => {
   )
 }
 
+if(process.env.NODE_ENV === 'production'){
 const server = https.createServer(
   {
     SNICallback: (domain, cb) => {
@@ -75,7 +76,6 @@ const server = https.createServer(
   }
 )
 
-if(process.env.NODE_ENV === 'production'){
   server.listen(443)
 }
 
