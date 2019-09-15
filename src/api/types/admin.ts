@@ -8,9 +8,9 @@ type ServiceKey = {
 }
 
 type DB = {
-  serviceKeys: Array<ServiceKey>
-  mappings: Array<Mapping>
-  availableDomains: Array<Domain>
+  serviceKeys: ServiceKey[]
+  mappings: Mapping[]
+  availableDomains: Domain[]
 }
 
 export { ServiceKey, DB }

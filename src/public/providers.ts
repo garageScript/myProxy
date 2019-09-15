@@ -5,8 +5,8 @@ type Provider = {
   id?: string
   name: string
   service: string
-  keys: Array<ProviderKey>
-  domains: Array<Domain>
+  keys: ProviderKey[]
+  domains: Domain[]
 }
 
 type ProviderKey = {

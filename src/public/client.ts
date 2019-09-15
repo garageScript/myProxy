@@ -152,7 +152,7 @@ class DisplayMap {
 
 fetch('/api/mappings')
   .then(r => r.json())
-  .then((data: Array<Mapping>) => {
+  .then((data: Mapping[]) => {
     domainList.innerHTML = ''
     data.reverse()
     data.forEach(e => {
