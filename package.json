@@ -14,7 +14,7 @@
     "coverage": "nyc npm run test",
     "eslint:fix": "./node_modules/.bin/eslint src/ --ext .ts --fix",
     "autofix": "npm run prettier:write; npm run eslint:fix",
-    "server": "pm2 startOrRestart ./scripts/prod.config.js --env production --update-env",
+    "server": "npm run setup & pm2 startOrRestart ./scripts/prod.config.js --env production --update-env",
     "server:stop": "./node_modules/.bin/pm2 stop myProxy-prod"
   },
   "repository": {
@@ -38,7 +38,6 @@
     "express": "^4.17.1",
     "husky": "^3.0.3",
     "node-fetch": "^2.6.0",
-    "pm2": "^3.5.1",
     "pretty-quick": "^1.11.1",
     "uuid": "^3.3.3"
   },
