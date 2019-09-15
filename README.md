@@ -38,11 +38,11 @@ npm run setup
 Run the app:
 
 ```bash
-ADMIN=my_admin_password npm run start
+ADMIN=my_admin_password npm run server
 ```
 
-> You can also run the app under your own defined port by setting a `PORT` environment variable
-All environment variable can be setup into your `.env`
+> You can also run the app under your own defined port by setting a `PORT` environment variable  
+> All environment variable can be setup into your `.env`
 
 # Contribution
 
