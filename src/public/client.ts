@@ -13,6 +13,7 @@ const domainList: HTMLElement = helper.getElement('.domainList')
 const dropDownDomains: HTMLElement = helper.getElement('.dropdown-menu')
 let selectedHost = ''
 
+// eslint-disable-next-line
 class DomainMap {
   constructor(data: Mapping) {
     if (data.domain) {
@@ -165,13 +166,15 @@ create.onclick = (): void => {
   const ipAddress = helper.getElement('.ipAddress') as HTMLInputElement
 
   const portValue = port.value
-  const domain = subDomain.value + selectedHost
+  const domain = selectedHost
   const ipValue = ipAddress.value
+  const subDomainValue = subDomain.value
 
   fetch('/api/mappings', {
     method: 'POST',
     body: JSON.stringify({
       domain: domain,
+      subDomain: subDomainValue,
       port: portValue,
       ip: ipValue
     }),
