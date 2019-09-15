@@ -5,8 +5,8 @@ type Provider = {
   id?: string
   name: string
   service: string
-  keys: Array<ProviderKey>
-  domains: Array<unknown>
+  keys: ProviderKey[]
+  domains: Domain[]
 }
 
 type ProviderKey = {
@@ -16,9 +16,13 @@ type ProviderKey = {
   key: string
 }
 
+type Domain = {
+  domain: string
+}
+
 class DomainElement {
   constructor(
-    domainObj: unknown,
+    domainObj: Domain,
     domainService: string,
     container: HTMLElement
   ) {
