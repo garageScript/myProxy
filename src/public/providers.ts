@@ -33,7 +33,7 @@ class DomainElement {
     `
     const setUpButton = helper.getElement('.setUpButton', domainElement)
     setUpButton.onclick = (): void => {
-      fetch('api/admin/sslCerts', {
+      fetch('/api/admin/sslCerts', {
         method: 'POST',
         body: JSON.stringify({
           service: domainService,
