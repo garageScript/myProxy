@@ -74,6 +74,9 @@ const server = https.createServer(
     res.end('hello world')
   }
 )
-server.listen(443)
+
+if(process.env.NODE_ENV === 'production'){
+  server.listen(443)
+}
 
 listener()
