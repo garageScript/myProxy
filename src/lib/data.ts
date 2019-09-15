@@ -1,6 +1,6 @@
 import fs from 'fs'
-import { DB, ServiceKey } from '../api/types/admin'
-import { Mapping, Domain } from '../api/types/general'
+import { DB, ServiceKey } from '../types/admin'
+import { Mapping, Domain } from '../types/general'
 
 const data: DB = {
   serviceKeys: [],

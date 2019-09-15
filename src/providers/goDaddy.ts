@@ -1,7 +1,7 @@
 import { sendRequest } from '../helpers/httpRequest'
 import { getProviderKeys } from '../lib/data'
-import { Provider, ServiceResponse } from '../api/types/general'
-import { ServiceKey } from '../api/types/admin'
+import { Provider, ServiceResponse } from '../types/general'
+import { ServiceKey } from '../types/admin'
 
 const NAME = 'Godaddy'
 const SERVICE = 'https://api.godaddy.com'

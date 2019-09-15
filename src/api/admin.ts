@@ -1,5 +1,5 @@
-import { ServiceKey } from './types/admin'
-import { Domain, ProviderService, ServiceResponse } from './types/general'
+import { ServiceKey } from '../types/admin'
+import { Domain, ProviderService, ServiceResponse } from '../types/general'
 import { getAvailableDomains, setData, getProviderKeys } from '../lib/data'
 import express from 'express'
 import uuid4 from 'uuid/v4'
