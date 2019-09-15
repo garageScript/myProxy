@@ -4,6 +4,9 @@ import path from 'path'
 import cookieParser from 'cookie-parser'
 import { adminRouter } from './admin/index'
 import { apiRouter } from './api/index'
+import https from 'https'
+import fs from 'fs'
+import tls from 'tls'
 import { getAvailableDomains } from './api/lib/data'
 import { isCorrectCredentials } from './auth'
 
@@ -47,5 +50,30 @@ const listener = (): void => {
     console.log(cyan, `myProxy is running on port ${port}!`)
   )
 }
+
+const server = https.createServer(
+  {
+    SNICallback: (domain, cb) => {
+      // escape characters required or readFileSync will not find file
+      const homePath = process.env.HOME
+      const secureContext = tls.createSecureContext({
+        /* eslint-disable */
+        key: fs.readFileSync(
+          `${homePath}/\.acme\.sh/*\.${domain}/*\.${domain}\.key`
+        ),
+        cert: fs.readFileSync(
+          `${homePath}/\.acme\.sh/*\.${domain}/*\.${domain}\.cer`
+        )
+        /* eslint-enable */
+      })
+      if (cb) return cb(null, secureContext)
+      return secureContext
+    }
+  },
+  (req, res) => {
+    res.end('hello world')
+  }
+)
+server.listen(443)
 
 listener()
