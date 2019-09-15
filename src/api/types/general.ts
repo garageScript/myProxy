@@ -30,4 +30,8 @@ type ProviderService = {
   setRecord: Function
 }
 
-export { Mapping, Provider, Domain, ServiceResponse, ProviderService }
+type ServiceConfig = {
+  dns_gd: ProviderService
+}
+
+export { Mapping, Provider, Domain, ServiceResponse, ServiceConfig, ProviderService }

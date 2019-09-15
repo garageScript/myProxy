@@ -38,16 +38,19 @@ const setData = (table: string, records: unknown): void => {
   })
 }
 
-const getProviderKeys = (): Array<ServiceKey> => {
-  return getData('serviceKeys') || []
+const getProviderKeys = (): ServiceKey[] => {
+  const initialData = getData('availableDomains') as ServiceKey[] | undefined
+  return initialData || []
 }
 
-const getMappings = (): Array<Mapping> => {
-  return getData('mappings')
+const getMappings = (): Mapping[] => {
+  const initialData = getData('availableDomains') as Mapping[] | undefined
+  return initialData || []
 }
 
-const getAvailableDomains = (): Array<Domain> => {
-  return getData('availableDomains')
+const getAvailableDomains = (): Domain[] => {
+  const initialData = getData('availableDomains') as Domain[] | undefined
+  return initialData || []
 }
 
 export { getData, setData, getProviderKeys, getMappings, getAvailableDomains }
