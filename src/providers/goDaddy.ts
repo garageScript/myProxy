@@ -15,7 +15,7 @@ const getKeys = (): ServiceKey[] => {
     const serviceKeys = getProviderKeys()
     return (
       serviceKeys.find(k => k.service === 'dns_gd' && k.key === keyInfo.key) ||
-      keysDefault
+      keyInfo
     )
   })
   return keys as ServiceKey[]
