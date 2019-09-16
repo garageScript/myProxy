@@ -27,7 +27,7 @@ app.post('/sslCerts', async (req, res) => {
     }, '')
     const acme = `./acme.sh/acme.sh --issue --dns ${service}`
     const cert1 = `${acme} -d ${selectedDomain} --force`
-    const cert2 = `${acme} -d "*.${selectedDomain}" --force`
+    const cert2 = `${acme} -d *.${selectedDomain} --force`
     const { stderr } = await exec(`${envVars} & ${cert1} & ${cert2}`)
     if (stderr) {
       serviceResponse.success = false
