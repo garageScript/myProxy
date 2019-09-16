@@ -34,13 +34,15 @@ class DomainMap {
 
 class DisplayMap {
   constructor(data: Mapping) {
-    if ((data.subDomain && data.port) && (data.domain && data.ip)) {
+    if (data.subDomain && data.port && (data.domain && data.ip)) {
       const mappingElement = document.createElement('div')
       domainList.appendChild(mappingElement)
       mappingElement.innerHTML = `
     <li class="list-group-item" style="display: flex;">
     <a href="">${data.subDomain + data.domain}</a>
-        <small class="form-text text-muted" style="display: inline-block;">PORT: ${data.port}</small>
+        <small class="form-text text-muted" style="display: inline-block;">PORT: ${
+  data.port
+}</small>
         <hr />
         <div class="deleteButton" href="/">Delete</div>
         <div class="edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
@@ -169,7 +171,6 @@ create.onclick = (): void => {
   const domain = selectedHost
   const ipValue = ipAddress.value
   const subDomainValue = subDomain.value
-
 
   fetch('/api/mappings', {
     method: 'POST',
