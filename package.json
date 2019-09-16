@@ -13,7 +13,9 @@
     "prettier:write": "npm run prettier:base -- --write \"src/**/*.{ts,tsx}\"",
     "coverage": "nyc npm run test",
     "eslint:fix": "./node_modules/.bin/eslint src/ --ext .ts --fix",
-    "autofix": "npm run prettier:write; npm run eslint:fix"
+    "autofix": "npm run prettier:write & npm run eslint:fix",
+    "server": "npm run setup & pm2 startOrRestart ./scripts/prod.config.js --env production --update-env",
+    "server:stop": "pm2 stop myProxy-prod"
   },
   "repository": {
     "type": "git",
@@ -56,7 +58,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm run autofix",
-      "pre-push": "npm test"
+      "pre-push": "npm run build & npm test"
     }
   }
 }
