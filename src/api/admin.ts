@@ -1,6 +1,6 @@
-import { ServiceKey } from './types/admin'
-import { Domain, ProviderService, ServiceResponse } from './types/general'
-import { getAvailableDomains, setData, getProviderKeys } from './lib/data'
+import { ServiceKey } from '../types/admin'
+import { Domain, ProviderService, ServiceResponse } from '../types/general'
+import { getAvailableDomains, setData, getProviderKeys } from '../lib/data'
 import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
@@ -66,11 +66,6 @@ app.post('/sslCerts', async (req, res) => {
     serviceResponse.message = `Error: ${JSON.stringify(err)}`
     return res.json(serviceResponse)
   }
-})
-
-app.get('/availableDomains', (req, res) => {
-  const domains = getAvailableDomains()
-  res.json(domains)
 })
 
 app.post('/providerKeys', (req, res) => {

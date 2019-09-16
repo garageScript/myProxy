@@ -1,5 +1,5 @@
 import express from 'express'
-import crypto from 'crypto'
+import { hashPass } from '../helpers/crypto'
 const auth = express.Router()
 
 auth.use('/*', (req, res, next) => {
@@ -9,12 +9,6 @@ auth.use('/*', (req, res, next) => {
 })
 
 const isCorrectCredentials = (password: string): boolean => {
-  const hashPass = (string: string): string => {
-    return crypto
-      .createHash('sha256')
-      .update(string)
-      .digest('hex')
-  }
   const adminPassword = hashPass(process.env.ADMIN as string)
   const userPassword = hashPass(password)
   return userPassword === adminPassword
