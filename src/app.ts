@@ -26,7 +26,7 @@ app.set('views', path.join(__dirname, '../views'))
 app.get('/', (_, res) =>
   getAvailableDomains().length > 0
     ? res.render('client')
-    : res.render('admin/providers')
+    : res.redirect('admin/providers')
 )
 app.get('/login', (req, res) => res.render('login', { error: '' }))
 
@@ -51,30 +51,30 @@ const listener = (): void => {
   )
 }
 
-if(process.env.NODE_ENV === 'production'){
-const server = https.createServer(
-  {
-    SNICallback: (domain, cb) => {
-      // escape characters required or readFileSync will not find file
-      const homePath = process.env.HOME
-      const secureContext = tls.createSecureContext({
-        /* eslint-disable */
-        key: fs.readFileSync(
-          `${homePath}/\.acme\.sh/*\.${domain}/*\.${domain}\.key`
-        ),
-        cert: fs.readFileSync(
-          `${homePath}/\.acme\.sh/*\.${domain}/*\.${domain}\.cer`
-        )
-        /* eslint-enable */
-      })
-      if (cb) return cb(null, secureContext)
-      return secureContext
+if (process.env.NODE_ENV === 'production') {
+  const server = https.createServer(
+    {
+      SNICallback: (domain, cb) => {
+        // escape characters required or readFileSync will not find file
+        const homePath = process.env.HOME
+        const secureContext = tls.createSecureContext({
+          /* eslint-disable */
+          key: fs.readFileSync(
+            `${homePath}/\.acme\.sh/*\.${domain}/*\.${domain}\.key`
+          ),
+          cert: fs.readFileSync(
+            `${homePath}/\.acme\.sh/*\.${domain}/*\.${domain}\.cer`
+          )
+          /* eslint-enable */
+        })
+        if (cb) return cb(null, secureContext)
+        return secureContext
+      }
+    },
+    (req, res) => {
+      res.end('hello world')
     }
-  },
-  (req, res) => {
-    res.end('hello world')
-  }
-)
+  )
 
   server.listen(443)
 }
