@@ -7,7 +7,7 @@ import { apiRouter } from './api/index'
 import https from 'https'
 import fs from 'fs'
 import tls from 'tls'
-import { getAvailableDomains } from './api/lib/data'
+import { getAvailableDomains } from './lib/data'
 import { isCorrectCredentials } from './auth'
 
 const app = express()
