@@ -39,12 +39,12 @@ const setData = (table: string, records: unknown): void => {
 }
 
 const getProviderKeys = (): ServiceKey[] => {
-  const initialData = getData('availableDomains') as ServiceKey[] | undefined
+  const initialData = getData('serviceKeys') as ServiceKey[] | undefined
   return initialData || []
 }
 
 const getMappings = (): Mapping[] => {
-  const initialData = getData('availableDomains') as Mapping[] | undefined
+  const initialData = getData('mappings') as Mapping[] | undefined
   return initialData || []
 }
 

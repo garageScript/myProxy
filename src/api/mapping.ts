@@ -4,8 +4,8 @@ import uuid4 from 'uuid/v4'
 import util from 'util'
 import cp from 'child_process'
 import path from 'path'
-import { setData, getMappings } from './lib/data'
-import { Mapping } from './types/general'
+import { setData, getMappings } from '../lib/data'
+import { Mapping } from '../types/general'
 const mappingRouter = express.Router()
 const exec = util.promisify(cp.exec)
 
