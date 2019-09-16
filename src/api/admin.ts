@@ -68,11 +68,6 @@ app.post('/sslCerts', async (req, res) => {
   }
 })
 
-app.get('/availableDomains', (req, res) => {
-  const domains = getAvailableDomains()
-  res.json(domains)
-})
-
 app.post('/providerKeys', (req, res) => {
   // create service keys
   const serviceKeys = getProviderKeys()
