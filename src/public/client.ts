@@ -188,3 +188,13 @@ create.onclick = (): void => {
   ipAddress.value = ''
   subDomain.value = ''
 }
+
+fetch('/api/availableDomains')
+  .then(r => r.json())
+  .then((data: Mapping[]) => {
+    domainList.innerHTML = ''
+    data.reverse()
+    data.forEach(e => {
+      new DomainMap(e)
+    })
+  })
