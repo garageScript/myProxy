@@ -193,8 +193,5 @@ fetch('/api/availableDomains')
   .then(r => r.json())
   .then((data: Mapping[]) => {
     domainList.innerHTML = ''
-    data.reverse()
-    data.forEach(e => {
-      new DomainMap(e)
-    })
+    data.forEach(e => new DomainMap(e))
   })
