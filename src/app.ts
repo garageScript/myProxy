@@ -4,10 +4,11 @@ import path from 'path'
 import cookieParser from 'cookie-parser'
 import { adminRouter } from './admin/index'
 import { apiRouter } from './api/index'
+import { hashPass } from './helpers/crypto'
 import https from 'https'
 import fs from 'fs'
 import tls from 'tls'
-import { getAvailableDomains } from './api/lib/data'
+import { getAvailableDomains } from './lib/data'
 import { isCorrectCredentials } from './auth'
 
 const app = express()
@@ -33,7 +34,7 @@ app.get('/login', (req, res) => res.render('login', { error: '' }))
 app.post('/login', (req, res) => {
   const { adminPass } = req.body
   if (isCorrectCredentials(adminPass)) {
-    res.cookie('adminPass', adminPass, { httpOnly: true })
+    res.cookie('adminPass', hashPass(adminPass), { httpOnly: true })
     return res.redirect('/admin')
   }
 
