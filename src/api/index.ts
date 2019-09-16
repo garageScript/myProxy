@@ -1,7 +1,7 @@
 import express from 'express'
 import adminRouter from './admin'
 import mappingRouter from './mapping'
-import { getAvailableDomains } from './lib/data'
+import { getAvailableDomains } from '../lib/data'
 import { auth } from '../auth'
 
 const apiRouter = express.Router()
