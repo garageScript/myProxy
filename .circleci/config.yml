@@ -44,6 +44,7 @@ jobs:
       - checkout_and_restore_cache
       - run: npm install
       - run: npm run autofix
+      - run: npm run build
   test:
     executor: node
     steps:
