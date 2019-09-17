@@ -34,14 +34,12 @@ class DomainMap {
 
 class MappingItem {
   constructor(data: Mapping) {
-      const mappingElement = document.createElement('div')
-      domainList.appendChild(mappingElement)
-      mappingElement.innerHTML = `
+    const mappingElement = document.createElement('div')
+    domainList.appendChild(mappingElement)
+    mappingElement.innerHTML = `
     <li class="list-group-item" style="display: flex;">
     <a href="">${data.subDomain + data.domain}</a>
-        <small class="form-text text-muted" style="display: inline-block;">PORT: ${
-  data.port
-}</small>
+        <small class="form-text text-muted" style="display: inline-block;">PORT: ${data.port}</small>
         <hr />
         <div class="deleteButton" href="/">Delete</div>
         <div class="edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
@@ -120,10 +118,7 @@ class MappingItem {
           '.port',
           mappingElement
         ) as HTMLInputElement
-        const ip = helper.getElement(
-          '.ip',
-          mappingElement
-        ) as HTMLInputElement
+        const ip = helper.getElement('.ip', mappingElement) as HTMLInputElement
 
         const domainNameValue = domainName.value
         const subDomainNameValue = subDomainName.value
@@ -155,9 +150,11 @@ fetch('/api/mappings')
   .then((data: Mapping[]) => {
     domainList.innerHTML = ''
     data.reverse()
-    data.filter(e => e.domain && e.port && e.id && e.ip).forEach(e => {
-      new MappingItem(e)
-    })
+    data
+      .filter(e => e.domain && e.port && e.id && e.ip)
+      .forEach(e => {
+        new MappingItem(e)
+      })
   })
 
 create.onclick = (): void => {
