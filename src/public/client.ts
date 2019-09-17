@@ -16,18 +16,16 @@ let selectedHost = ''
 // eslint-disable-next-line
 class DomainMap {
   constructor(data: Mapping) {
-    if (data.domain) {
-      const dropdownElement = document.createElement('div')
-      dropDownDomains.appendChild(dropdownElement)
-      dropdownElement.innerHTML = `
+    const dropdownElement = document.createElement('div')
+    dropDownDomains.appendChild(dropdownElement)
+    dropdownElement.innerHTML = `
     <li class="list-group-item" style="display: flex;">
     ${data.domain}
     </li>
     `
-      dropdownElement.onclick = (): void => {
-        hostSelector.innerText = data.domain
-        selectedHost = data.domain
-      }
+    dropdownElement.onclick = (): void => {
+      hostSelector.innerText = data.domain
+      selectedHost = data.domain
     }
   }
 }
@@ -39,7 +37,7 @@ class MappingItem {
     mappingElement.innerHTML = `
     <li class="list-group-item" style="display: flex;">
     <a href="">${data.subDomain + data.domain}</a>
-        <small class="form-text text-muted" style="display: inline-block;">PORT: ${data.port}</small>
+        <small class="form-text text-muted" style="display: inline-block;">PORT:${data.port}</small>
         <hr />
         <div class="deleteButton" href="/">Delete</div>
         <div class="edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
