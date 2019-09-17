@@ -34,12 +34,12 @@ class DomainMap {
 
 class DisplayMap {
   constructor(data: Mapping) {
-    if (data.domain && data.port) {
+    if (data.subDomain && data.port) {
       const mappingElement = document.createElement('div')
       domainList.appendChild(mappingElement)
       mappingElement.innerHTML = `
     <li class="list-group-item" style="display: flex;">
-    <a href="">${data.domain}</a>
+    <a href="">${data.subDomain}</a>
         <small class="form-text text-muted" style="display: inline-block;">PORT: ${data.port}</small>
         <hr />
         <div class="deleteButton" href="/">Delete</div>
@@ -164,11 +164,20 @@ create.onclick = (): void => {
   const subDomain = helper.getElement('.subDomain') as HTMLInputElement
   const port = helper.getElement('.port') as HTMLInputElement
   const ipAddress = helper.getElement('.ipAddress') as HTMLInputElement
-
-  const portValue = port.value
   const domain = selectedHost
   const ipValue = ipAddress.value
   const subDomainValue = subDomain.value
+  const portValue = port.value
+
+  if(parseInt(portValue) < 3002) return alert('Please select a Port number greater than 3001')
+
+  fetch('/api/mappings').then(r => r.json()).then((mappings) => {
+    const checkPorts = mappings.find((e)=>{
+      return e.port === portValue
+    })
+    if(checkPorts) alert('This port exists. Please choose a different port!')
+    window.location.reload()
+  })
 
   fetch('/api/mappings', {
     method: 'POST',
