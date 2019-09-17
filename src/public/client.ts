@@ -16,30 +16,27 @@ let selectedHost = ''
 // eslint-disable-next-line
 class DomainMap {
   constructor(data: Mapping) {
-    if (data.domain) {
-      const dropdownElement = document.createElement('div')
-      dropDownDomains.appendChild(dropdownElement)
-      dropdownElement.innerHTML = `
+    const dropdownElement = document.createElement('div')
+    dropDownDomains.appendChild(dropdownElement)
+    dropdownElement.innerHTML = `
     <li class="list-group-item" style="display: flex;">
     ${data.domain}
     </li>
     `
-      dropdownElement.onclick = (): void => {
-        hostSelector.innerText = data.domain
-        selectedHost = data.domain
-      }
+    dropdownElement.onclick = (): void => {
+      hostSelector.innerText = data.domain
+      selectedHost = data.domain
     }
   }
 }
 
 class DisplayMap {
   constructor(data: Mapping) {
-    if (data.subDomain && data.port) {
-      const mappingElement = document.createElement('div')
-      domainList.appendChild(mappingElement)
-      mappingElement.innerHTML = `
+    const mappingElement = document.createElement('div')
+    domainList.appendChild(mappingElement)
+    mappingElement.innerHTML = `
     <li class="list-group-item" style="display: flex;">
-    <a href="">${data.subDomain}</a>
+    <a href="">${data.subDomain + data.domain}</a>
         <small class="form-text text-muted" style="display: inline-block;">PORT: ${data.port}</small>
         <hr />
         <div class="deleteButton" href="/">Delete</div>
@@ -47,23 +44,23 @@ class DisplayMap {
     </li>
 `
 
-      const delButton = helper.getElement('.deleteButton', mappingElement)
-      delButton.onclick = (): void => {
-        if (confirm('Are you sure want to delete this domain?')) {
-          fetch(`/api/mappings/delete/${data.id}`, {
-            method: 'DELETE',
-            body: JSON.stringify({ data }),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          }).then(() => {
-            window.location.reload()
-          })
-        }
+    const delButton = helper.getElement('.deleteButton', mappingElement)
+    delButton.onclick = (): void => {
+      if (confirm('Are you sure want to delete this domain?')) {
+        fetch(`/api/mappings/delete/${data.id}`, {
+          method: 'DELETE',
+          body: JSON.stringify({ data }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(() => {
+          window.location.reload()
+        })
       }
-      const editButton = helper.getElement('.edit', mappingElement)
-      editButton.onclick = (): void => {
-        mappingElement.innerHTML = `
+    }
+    const editButton = helper.getElement('.edit', mappingElement)
+    editButton.onclick = (): void => {
+      mappingElement.innerHTML = `
         <li class='list-group-item'>
           <div class="form-row">
             <div class="col">
@@ -105,46 +102,45 @@ class DisplayMap {
         </li>
         `
 
-        const save = helper.getElement('.save', mappingElement)
-        save.onclick = (): void => {
-          const domainName = helper.getElement(
-            '.domain',
-            mappingElement
-          ) as HTMLInputElement
-          const subDomainName = helper.getElement(
-            '.subDomainName',
-            mappingElement
-          ) as HTMLInputElement
-          const port = helper.getElement(
-            '.port',
-            mappingElement
-          ) as HTMLInputElement
-          const ip = helper.getElement(
-            '.ip',
-            mappingElement
-          ) as HTMLInputElement
+      const save = helper.getElement('.save', mappingElement)
+      save.onclick = (): void => {
+        const domainName = helper.getElement(
+          '.domain',
+          mappingElement
+        ) as HTMLInputElement
+        const subDomainName = helper.getElement(
+          '.subDomainName',
+          mappingElement
+        ) as HTMLInputElement
+        const port = helper.getElement(
+          '.port',
+          mappingElement
+        ) as HTMLInputElement
+        const ip = helper.getElement(
+          '.ip',
+          mappingElement
+        ) as HTMLInputElement
 
-          const domainNameValue = domainName.value
-          const subDomainNameValue = subDomainName.value
-          const portValue = port.value
-          const ipValue = ip.value
-          const id = data.id
-          fetch(`/api/mappings/edit/${data.id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({
-              domain: domainNameValue,
-              subDomain: subDomainNameValue,
-              port: portValue,
-              ip: ipValue,
-              id: id
-            }),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          }).then(() => {
-            window.location.reload()
-          })
-        }
+        const domainNameValue = domainName.value
+        const subDomainNameValue = subDomainName.value
+        const portValue = port.value
+        const ipValue = ip.value
+        const id = data.id
+        fetch(`/api/mappings/edit/${data.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            domain: domainNameValue,
+            subDomain: subDomainNameValue,
+            port: portValue,
+            ip: ipValue,
+            id: id
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(() => {
+          window.location.reload()
+        })
       }
     }
   }
@@ -154,8 +150,7 @@ fetch('/api/mappings')
   .then(r => r.json())
   .then((data: Mapping[]) => {
     domainList.innerHTML = ''
-    data.reverse()
-    data.forEach(e => {
+    data.filter(e => e.domain && e.subDomain && e.port && e.ip && e.id).forEach(e => {
       new DisplayMap(e)
     })
   })
@@ -169,8 +164,23 @@ create.onclick = (): void => {
   const subDomainValue = subDomain.value
   const portValue = port.value
 
-  if (parseInt(portValue) < 3002)
-    return alert('Please select a Port number greater than 3001')
+  if (subDomainValue === '') {
+    alert('Please fill in your Subdomain!')
+    return window.location.reload() 
+  }
+  if (portValue === '') {
+    alert('Please fill in your Port Number!')
+    return window.location.reload() 
+  }
+  if (ipValue === '') {
+    alert('Please fill in your IP Address!')
+    return window.location.reload() 
+  }
+
+  if (parseInt(portValue) < 3002) { 
+    alert('Please select a Port number greater than 3001')
+    return window.location.reload() 
+  }
 
   fetch('/api/mappings')
     .then(r => r.json())
@@ -179,7 +189,6 @@ create.onclick = (): void => {
         return e.port === portValue
       })
       if (checkPorts) alert('This port exists. Please choose a different port!')
-      window.location.reload()
     })
 
   fetch('/api/mappings', {
