@@ -1,6 +1,6 @@
-import { ServiceKey } from './types/admin'
-import { Domain, ProviderService, ServiceResponse } from './types/general'
-import { getAvailableDomains, setData, getProviderKeys } from './lib/data'
+import { ServiceKey } from '../types/admin'
+import { Domain, ProviderService, ServiceResponse } from '../types/general'
+import { getAvailableDomains, setData, getProviderKeys } from '../lib/data'
 import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
@@ -27,13 +27,16 @@ app.post('/sslCerts', async (req, res) => {
     }, '')
     const acme = `./acme.sh/acme.sh --issue --dns ${service}`
     const cert1 = `${acme} -d ${selectedDomain} --force`
-    const cert2 = `${acme} -d "*.${selectedDomain}" --force`
-    const { stderr } = await exec(`${envVars} & ${cert1} & ${cert2}`)
-    if (stderr) {
+    const cert2 = `${acme} -d *.${selectedDomain} --force`
+    const cert1Response = await exec(`${envVars} ${cert1}`)
+    const cert2Response = await exec(`${envVars} ${cert2}`)
+    if (cert1Response.stderr || cert2Response.stderr) {
       serviceResponse.success = false
-      serviceResponse.message = `Could not create SSL Certs. Error: ${JSON.stringify(
-        stderr
-      )}`
+      serviceResponse.message = `Could not create SSL Certs. Error: ${
+        cert2Response.stderr
+          ? JSON.stringify(cert2Response.stderr)
+          : JSON.stringify(cert1Response.stderr)
+      }`
       return res.json(serviceResponse)
     }
 
@@ -66,11 +69,6 @@ app.post('/sslCerts', async (req, res) => {
     serviceResponse.message = `Error: ${JSON.stringify(err)}`
     return res.json(serviceResponse)
   }
-})
-
-app.get('/availableDomains', (req, res) => {
-  const domains = getAvailableDomains()
-  res.json(domains)
 })
 
 app.post('/providerKeys', (req, res) => {
