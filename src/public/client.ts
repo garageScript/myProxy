@@ -32,9 +32,8 @@ class DomainMap {
   }
 }
 
-class DisplayMap {
+class MappingItem {
   constructor(data: Mapping) {
-    if (data.subDomain && data.port && (data.domain && data.ip)) {
       const mappingElement = document.createElement('div')
       domainList.appendChild(mappingElement)
       mappingElement.innerHTML = `
@@ -49,23 +48,23 @@ class DisplayMap {
     </li>
 `
 
-      const delButton = helper.getElement('.deleteButton', mappingElement)
-      delButton.onclick = (): void => {
-        if (confirm('Are you sure want to delete this domain?')) {
-          fetch(`/api/mappings/delete/${data.id}`, {
-            method: 'DELETE',
-            body: JSON.stringify({ data }),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          }).then(() => {
-            window.location.reload()
-          })
-        }
+    const delButton = helper.getElement('.deleteButton', mappingElement)
+    delButton.onclick = (): void => {
+      if (confirm('Are you sure want to delete this domain?')) {
+        fetch(`/api/mappings/delete/${data.id}`, {
+          method: 'DELETE',
+          body: JSON.stringify({ data }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(() => {
+          window.location.reload()
+        })
       }
-      const editButton = helper.getElement('.edit', mappingElement)
-      editButton.onclick = (): void => {
-        mappingElement.innerHTML = `
+    }
+    const editButton = helper.getElement('.edit', mappingElement)
+    editButton.onclick = (): void => {
+      mappingElement.innerHTML = `
         <li class='list-group-item'>
           <div class="form-row">
             <div class="col">
@@ -107,46 +106,45 @@ class DisplayMap {
         </li>
         `
 
-        const save = helper.getElement('.save', mappingElement)
-        save.onclick = (): void => {
-          const domainName = helper.getElement(
-            '.domain',
-            mappingElement
-          ) as HTMLInputElement
-          const subDomainName = helper.getElement(
-            '.subDomainName',
-            mappingElement
-          ) as HTMLInputElement
-          const port = helper.getElement(
-            '.port',
-            mappingElement
-          ) as HTMLInputElement
-          const ip = helper.getElement(
-            '.ip',
-            mappingElement
-          ) as HTMLInputElement
+      const save = helper.getElement('.save', mappingElement)
+      save.onclick = (): void => {
+        const domainName = helper.getElement(
+          '.domain',
+          mappingElement
+        ) as HTMLInputElement
+        const subDomainName = helper.getElement(
+          '.subDomainName',
+          mappingElement
+        ) as HTMLInputElement
+        const port = helper.getElement(
+          '.port',
+          mappingElement
+        ) as HTMLInputElement
+        const ip = helper.getElement(
+          '.ip',
+          mappingElement
+        ) as HTMLInputElement
 
-          const domainNameValue = domainName.value
-          const subDomainNameValue = subDomainName.value
-          const portValue = port.value
-          const ipValue = ip.value
-          const id = data.id
-          fetch(`/api/mappings/edit/${data.id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({
-              domain: domainNameValue,
-              subDomain: subDomainNameValue,
-              port: portValue,
-              ip: ipValue,
-              id: id
-            }),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          }).then(() => {
-            window.location.reload()
-          })
-        }
+        const domainNameValue = domainName.value
+        const subDomainNameValue = subDomainName.value
+        const portValue = port.value
+        const ipValue = ip.value
+        const id = data.id
+        fetch(`/api/mappings/edit/${data.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            domain: domainNameValue,
+            subDomain: subDomainNameValue,
+            port: portValue,
+            ip: ipValue,
+            id: id
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(() => {
+          window.location.reload()
+        })
       }
     }
   }
@@ -157,8 +155,8 @@ fetch('/api/mappings')
   .then((data: Mapping[]) => {
     domainList.innerHTML = ''
     data.reverse()
-    data.forEach(e => {
-      new DisplayMap(e)
+    data.filter(e => e.domain && e.port && e.id && e.ip).forEach(e => {
+      new MappingItem(e)
     })
   })
 
