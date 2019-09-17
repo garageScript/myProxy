@@ -58,14 +58,24 @@ export const setRecord = async (
       type: 'A'
     },
     {
-      data: domain,
-      name: domain,
+      data: '@',
+      name: '*',
       type: 'CNAME'
+    },
+    {
+      data: "ns01.domaincontrol.com",
+      name: "",
+      type: "NS"
+    },
+    {
+      daa: "ns02.domaincontrol.com",
+      name: "",
+      type: "NS"
     }
   ]
 
   const options = {
-    method: 'PATCH',
+    method: 'PUT',
     headers: {
       Authorization: `sso-key ${findKey('GD_Key')}:${findKey('GD_Secret')}`,
       'Content-Type': 'application/json'
