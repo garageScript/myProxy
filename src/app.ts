@@ -26,8 +26,8 @@ app.set('views', path.join(__dirname, '../views'))
 
 app.get('/', (_, res) =>
   getAvailableDomains().length > 0
-  ? res.render('client')
-  : res.redirect('/admin')
+    ? res.render('client')
+    : res.redirect('/admin')
 )
 app.get('/login', (req, res) => res.render('login', { error: '' }))
 

@@ -63,14 +63,14 @@ export const setRecord = async (
       type: 'CNAME'
     },
     {
-      data: "ns01.domaincontrol.com",
-      name: "",
-      type: "NS"
+      data: 'ns01.domaincontrol.com',
+      name: '',
+      type: 'NS'
     },
     {
-      daa: "ns02.domaincontrol.com",
-      name: "",
-      type: "NS"
+      data: 'ns02.domaincontrol.com',
+      name: '',
+      type: 'NS'
     }
   ]
 
