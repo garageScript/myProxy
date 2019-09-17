@@ -169,15 +169,18 @@ create.onclick = (): void => {
   const subDomainValue = subDomain.value
   const portValue = port.value
 
-  if(parseInt(portValue) < 3002) return alert('Please select a Port number greater than 3001')
+  if (parseInt(portValue) < 3002)
+    return alert('Please select a Port number greater than 3001')
 
-  fetch('/api/mappings').then(r => r.json()).then((mappings) => {
-    const checkPorts = mappings.find((e)=>{
-      return e.port === portValue
+  fetch('/api/mappings')
+    .then(r => r.json())
+    .then(mappings => {
+      const checkPorts = mappings.find(e => {
+        return e.port === portValue
+      })
+      if (checkPorts) alert('This port exists. Please choose a different port!')
+      window.location.reload()
     })
-    if(checkPorts) alert('This port exists. Please choose a different port!')
-    window.location.reload()
-  })
 
   fetch('/api/mappings', {
     method: 'POST',
