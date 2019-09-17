@@ -11,6 +11,7 @@ const exec = util.promisify(cp.exec)
 
 mappingRouter.post('/', (req, res) => {
   const domainKeys = getMappings()
+  if(!req.body.ip) req.body.ip = '127.0.0.1'
   const mappingObject: Mapping = {
     domain: req.body.domain,
     subDomain: req.body.subDomain,
