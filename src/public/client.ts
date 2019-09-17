@@ -189,6 +189,5 @@ create.onclick = (): void => {
 fetch('/api/availableDomains')
   .then(r => r.json())
   .then((data: Mapping[]) => {
-    domainList.innerHTML = ''
     data.forEach(e => new DomainMap(e))
   })
