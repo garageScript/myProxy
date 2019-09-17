@@ -37,7 +37,9 @@ class MappingItem {
     mappingElement.innerHTML = `
     <li class="list-group-item" style="display: flex;">
     <a href="">${data.subDomain + data.domain}</a>
-        <small class="form-text text-muted" style="display: inline-block;">PORT:${data.port}</small>
+        <small class="form-text text-muted" style="display: inline-block;">PORT:${
+  data.port
+}</small>
         <hr />
         <div class="deleteButton" href="/">Delete</div>
         <div class="edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
