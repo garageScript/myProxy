@@ -8,13 +8,20 @@ import { setData, getMappings } from '../lib/data'
 import { Mapping } from '../types/general'
 const mappingRouter = express.Router()
 const exec = util.promisify(cp.exec)
+let portCounter = 3001
 
 mappingRouter.post('/', (req, res) => {
-  const domainKeys = getMappings()
+  let domainKeys = getMappings()
+  domainKeys = domainKeys.sort((a, b)=> parseInt(a.port) - parseInt(b.port))
+  if(req.body.port === ''){
+    const checkPort = domainKeys.find(e => e.port === portCounter.toString())
+    if(checkPort) portCounter += 1
+  }
+
   const mappingObject: Mapping = {
     domain: req.body.domain,
     subDomain: req.body.subDomain,
-    port: req.body.port,
+    port: req.body.port ||`${portCounter}`,
     ip: req.body.ip,
     id: uuid4()
   }
