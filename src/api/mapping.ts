@@ -12,18 +12,11 @@ let portCounter = 3002
 
 mappingRouter.post('/', (req, res) => {
   const domainKeys = getMappings()
-  if (req.body.port === '') {
-    const findPort = domainKeys.find((e) => {
-      if(e.port === portCounter.toString()) return portCounter +=1
+  if(req.body.port === ''){
+    domainKeys.forEach((e) => {
+      if(e.port === portCounter.toString()) portCounter += 1
     })
-    const runFind = (i=0) =>{
-      if( i === domainKeys.length) return portCounter 
-      if(!findPort) return portCounter
-      return runFind(i+1)
-    }
-    portCounter = runFind()
   }
-
   const mappingObject: Mapping = {
     domain: req.body.domain,
     subDomain: req.body.subDomain,
@@ -62,8 +55,8 @@ mappingRouter.post('/', (req, res) => {
     git add .
     git commit -m "Initial Commit"
     git checkout -b prod`).then(() => {
-    res.json(mappingObject)
-  })
+      res.json(mappingObject)
+    })
 })
 
 mappingRouter.get('/', (req, res) => {
