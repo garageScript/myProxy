@@ -15,7 +15,7 @@ mappingRouter.post('/', (req, res) => {
     domain: req.body.domain,
     subDomain: req.body.subDomain,
     port: req.body.port,
-    ip: req.body.ip,
+    ip: req.body.ip || '127.0.0.1',
     id: uuid4()
   }
   domainKeys.push(mappingObject)
