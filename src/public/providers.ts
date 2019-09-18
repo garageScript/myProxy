@@ -73,7 +73,7 @@ class ProviderKeyElement {
         <div class="col-11">
           <span class="providerKeyName">${providerKey.key}</span>
           <input type="text" value="${providerKey.value ||
-              ''}" class="keyInput"></input>
+            ''}" class="keyInput"></input>
           </div>
         <div class="col-1">
           <button type="button" class="btn btn-primary createOrUpdateButton">${buttonText}</button>
