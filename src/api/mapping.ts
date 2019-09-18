@@ -12,9 +12,8 @@ let portCounter = 3001
 
 mappingRouter.post('/', (req, res) => {
   const domainKeys = getMappings()
-  if (req.body.port === '' || req.body.port === portCounter) {
-    const checkPort = domainKeys.find(e => e.port === portCounter.toString())
-    if (checkPort) portCounter += 1
+  if (req.body.port === '') {
+    portCounter += 1
   }
 
   const mappingObject: Mapping = {
