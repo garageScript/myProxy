@@ -31,7 +31,6 @@ mappingRouter.post('/', (req, res) => {
     ip: req.body.ip,
     id: uuid4()
   }
-  console.log('MAPPING OBJECT:', mappingObject)
   domainKeys.push(mappingObject)
   setData('mappings', domainKeys)
   const fullDomain = `${req.body.subDomain}.${req.body.domain}`
@@ -63,8 +62,8 @@ mappingRouter.post('/', (req, res) => {
     git add .
     git commit -m "Initial Commit"
     git checkout -b prod`).then(() => {
-      res.json(mappingObject)
-    })
+    res.json(mappingObject)
+  })
 })
 
 mappingRouter.get('/', (req, res) => {
