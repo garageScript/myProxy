@@ -28,9 +28,16 @@ class DomainElement {
   ) {
     const domainElement = document.createElement('div')
     domainElement.innerHTML = `
-      <span class="domainElement">${domainObj.domain}</span>
-      <button type="button" class="btn btn-primary setUpButton">Setup</button>
+      <div class="row">
+        <div class="col-11">
+          <span class="domainElement">${domainObj.domain}</span>
+        </div>
+        <div class="col-1">
+        <button type="button" class="btn btn-primary setUpButton">Setup</button>
+        </div>
+      </div>
     `
+    domainElement.classList.add('list-group-item')
     const setUpButton = helper.getElement('.setUpButton', domainElement)
     setUpButton.onclick = (): void => {
       fetch('/api/admin/sslCerts', {
@@ -62,11 +69,17 @@ class ProviderKeyElement {
     const isNew = !providerKey.id
     const buttonText = isNew ? 'Create' : 'Update'
     providerKeyElement.innerHTML = `
-      <span class="providerKeyName">${providerKey.key}</span>
-      <input type="text" value="${providerKey.value ||
-        ''}" class="keyInput"></input>
-      <button type="button" class="btn btn-primary createOrUpdateButton">${buttonText}</button>
+      <div class="row">
+        <div class="col-11">
+          <span class="providerKeyName">${providerKey.key}</span>
+          <input type="text" value="${providerKey.value ||
+              ''}" class="keyInput"></input>
+          </div>
+        <div class="col-1">
+          <button type="button" class="btn btn-primary createOrUpdateButton">${buttonText}</button>
+      </div>
     `
+    providerKeyElement.className = 'list-group-item'
     const createOrUpdate = helper.getElement(
       '.createOrUpdateButton',
       providerKeyElement
@@ -98,12 +111,12 @@ class ProviderElement {
     const providerContainer = document.createElement('div')
     providerContainer.innerHTML = `
         <h3>${provider.name}</h4>
-        <li class="list-group-item">
+        <ul class="list-group-item">
           <div class="providerKeysContainer"></div>
           <hr />
           <h4>Domains</h4>
-          <div class="domainList"></div>
-        </li>
+          <ul class="domainList list-group"></ul>
+        </ul>
       `
     const providerKeysContainer = helper.getElement(
       '.providerKeysContainer',
