@@ -14,7 +14,7 @@ const dropDownDomains: HTMLElement = helper.getElement('.dropdown-menu')
 let selectedHost = ''
 
 // eslint-disable-next-line
-class DomainMap {
+class DomainOption {
   constructor(data: Mapping) {
     const dropdownElement = document.createElement('div')
     dropDownDomains.appendChild(dropdownElement)
@@ -189,5 +189,5 @@ create.onclick = (): void => {
 fetch('/api/availableDomains')
   .then(r => r.json())
   .then((data: Mapping[]) => {
-    data.forEach(e => new DomainMap(e))
+    data.forEach(e => new DomainOption(e))
   })
