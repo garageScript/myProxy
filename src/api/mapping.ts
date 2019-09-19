@@ -8,12 +8,13 @@ import { setData, getMappings } from '../lib/data'
 import { Mapping } from '../types/general'
 const mappingRouter = express.Router()
 const exec = util.promisify(cp.exec)
-let portCounter = 3002
 
 mappingRouter.post('/', (req, res) => {
   const domainKeys = getMappings()
+  const sortedKeys = domainKeys.sort((a,b) =>parseInt(a.port) - parseInt(b.port))
+  let portCounter = 3002
   if(req.body.port === ''){
-    domainKeys.forEach((e) => {
+    sortedKeys.forEach((e) => {
       if(e.port === portCounter.toString()) portCounter += 1
     })
   }
@@ -55,8 +56,8 @@ mappingRouter.post('/', (req, res) => {
     git add .
     git commit -m "Initial Commit"
     git checkout -b prod`).then(() => {
-      res.json(mappingObject)
-    })
+    res.json(mappingObject)
+  })
 })
 
 mappingRouter.get('/', (req, res) => {
