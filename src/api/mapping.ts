@@ -11,11 +11,13 @@ const exec = util.promisify(cp.exec)
 
 mappingRouter.post('/', (req, res) => {
   const domainKeys = getMappings()
-  const sortedKeys = domainKeys.sort((a,b) =>parseInt(a.port) - parseInt(b.port))
+  const sortedKeys = domainKeys.sort(
+    (a, b) => parseInt(a.port) - parseInt(b.port)
+  )
   let portCounter = 3002
-  if(req.body.port === ''){
-    sortedKeys.forEach((e) => {
-      if(e.port === portCounter.toString()) portCounter += 1
+  if (req.body.port === '') {
+    sortedKeys.forEach(e => {
+      if (e.port === portCounter.toString()) portCounter += 1
     })
   }
   const mappingObject: Mapping = {
