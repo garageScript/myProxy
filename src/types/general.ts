@@ -34,11 +34,19 @@ type ServiceConfig = {
   dns_gd: ProviderService
 }
 
+type NameServer = {
+  data: string
+  name: string
+  ttl: number
+  type: string
+}
+
 export {
   Mapping,
   Provider,
   Domain,
   ServiceResponse,
   ServiceConfig,
-  ProviderService
+  ProviderService,
+  NameServer
 }

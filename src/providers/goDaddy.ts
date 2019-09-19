@@ -1,6 +1,6 @@
 import { sendRequest } from '../helpers/httpRequest'
 import { getProviderKeys } from '../lib/data'
-import { Provider, ServiceResponse } from '../types/general'
+import { Provider, ServiceResponse, NameServer } from '../types/general'
 import { ServiceKey } from '../types/admin'
 
 const NAME = 'Godaddy'
@@ -46,11 +46,23 @@ export const getDomains = async (): Promise<Provider> => {
   }
 }
 
+export const getNameServer = async (domain: string): Promise<NameServer[]> => {
+  const url = `${SERVICE}/v1/domains/${domain}/records/NS`
+  const options = {
+    headers: {
+      Authorization: `sso-key ${findKey('GD_Key')}:${findKey('GD_Secret')}`,
+      'Content-Type': 'application/json'
+    }
+  }
+  return (await sendRequest<Array<NameServer>>(url, options)) || []
+}
+
 export const setRecord = async (
   domain: string,
   ipaddress: string
 ): Promise<ServiceResponse> => {
   const url = `${SERVICE}/v1/domains/${domain}/records`
+  const nameServers = await getNameServer(domain)
   const data = [
     {
       data: ipaddress,
@@ -62,23 +74,13 @@ export const setRecord = async (
       name: '*',
       type: 'CNAME'
     },
-    {
-      data: 'ns01.domaincontrol.com',
-      name: '',
-      type: 'NS'
-    },
-    {
-      data: 'ns02.domaincontrol.com',
-      name: '',
-      type: 'NS'
-    }
+    ...nameServers
   ]
-
   const options = {
     method: 'PUT',
     headers: {
       Authorization: `sso-key ${findKey('GD_Key')}:${findKey('GD_Secret')}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/xml'
     },
     body: JSON.stringify(data)
   }
@@ -88,7 +90,7 @@ export const setRecord = async (
     message: 'Successfully set CNAME records for wildcard domain'
   }
   try {
-    await sendRequest<Array<unknown>>(url, options)
+    ;(await sendRequest<Array<unknown>>(url, options)) || []
   } catch (e) {
     console.error('Error setting API', e)
     response.success = false
