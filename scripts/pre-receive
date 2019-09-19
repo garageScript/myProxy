@@ -1,0 +1,3 @@
+#!/bin/sh
+SAFE_GITENV="env -u GIT_QUARANTINE_PATH"
+$SAFE_GITENV git checkout -b prod

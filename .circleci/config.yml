@@ -61,7 +61,7 @@ jobs:
         - checkout_and_restore_cache
         - run:
             name: Deploy Over SSH
-            command: ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "./prodProxy/scripts/deploy.sh"
+            command: ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "/home/dev/prodProxy/scripts/deploy.sh"
 
 workflows:
   version: 2
