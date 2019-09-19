@@ -4,5 +4,4 @@ GIT_DIR='.git'
 umask 002 && git reset --hard
 git checkout master
 git branch -D prod
-git checkout -b prod
 pm2 startOrRestart deploy.config.js

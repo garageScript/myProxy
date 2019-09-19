@@ -25,7 +25,7 @@ mappingRouter.post('/', (req, res) => {
     apps: [
       {
         name: fullDomain,
-        script: './build/app.js',
+        script: './app.js',
         instances: 1,
         autorestart: true,
         watch: false,
@@ -38,17 +38,19 @@ mappingRouter.post('/', (req, res) => {
     ]
   }
   const projectPath = '~/projects'
-  const postReceiveScriptPath = path.join(__dirname, '../../scripts')
+  const scriptPath = path.join(__dirname, '../../scripts')
   exec(`
     mkdir -p ${projectPath}
     mkdir ${projectPath}/${fullDomain}
     git init ${projectPath}/${fullDomain}
-    cp ${postReceiveScriptPath}/post-receive ${projectPath}/${fullDomain}/.git/hooks/
+    cp ${scriptPath}/post-receive ${projectPath}/${fullDomain}/.git/hooks/
+    cp ${scriptPath}/pre-receive ${projectPath}/${fullDomain}/.git/hooks/
     cd ${projectPath}/${fullDomain}
+    git config user.email "root@ipaddress"
+    git config user.name "user"
     echo 'module.exports = ${JSON.stringify(prodConfig)}' > deploy.config.js
     git add .
-    git commit -m "Initial Commit"
-    git checkout -b prod`).then(() => {
+    git commit -m "Initial Commit"`).then(() => {
     res.json(mappingObject)
   })
 })
