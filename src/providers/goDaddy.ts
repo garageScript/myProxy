@@ -90,7 +90,7 @@ export const setRecord = async (
     message: 'Successfully set CNAME records for wildcard domain'
   }
   try {
-    ;(await sendRequest<Array<unknown>>(url, options)) || []
+    await sendRequest<Array<unknown>>(url, options)
   } catch (e) {
     console.error('Error setting API', e)
     response.success = false
