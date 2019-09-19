@@ -10,11 +10,7 @@ const isCorrectCredentials = (password: string): boolean => {
 
 auth.use('/*', (req, res, next) => {
   const { adminPass } = req.cookies
-  if (
-    !adminPass &&
-    !isCorrectCredentials((req.headers.Authorization as string) || '')
-  )
-    return res.status(401).redirect('/login')
+  if (!adminPass && !isCorrectCredentials(req.headers.Authorization as string || '')) return res.status(401).redirect('/login')
   next()
 })
 
