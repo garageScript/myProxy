@@ -80,24 +80,9 @@ if (process.env.NODE_ENV === 'production') {
       }
     },
     (req, res) => {
-      const [totalDomain, mappings] = [
-        req.headers.host.split('.'),
-        getMappings()
-      ]
-      const [domain, subdomain] = [
-        totalDomain.slice(-2).join(''),
-        totalDomain[0]
-      ]
-      let mappedDomain
-      if (totalDomain.length === 3) {
-        mappedDomain = mappings.find(
-          e => e.subDomain === subdomain && e.domain === domain
-        )
-      }
-      if(totalDomain.length === 2){
-      	mappedDomain = mappings.find(e=>e.domain === domain && !e.subDomain)
-      }
-      const { ip, port } = mappedDomain
+    const {ip, port} = mappings.find(({subDomain, domain})=>{
+    	return `${subDomain}.${domain}` === req.headers.host
+    }) || {}
       res.end('hello world')
     }
   )
