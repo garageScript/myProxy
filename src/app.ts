@@ -8,7 +8,7 @@ import { hashPass } from './helpers/crypto'
 import https from 'https'
 import fs from 'fs'
 import tls from 'tls'
-import { getAvailableDomains } from './lib/data'
+import { getAvailableDomains, getMappings } from './lib/data'
 import { isCorrectCredentials } from './auth'
 
 const app = express()
@@ -77,8 +77,16 @@ if (process.env.NODE_ENV === 'production') {
       }
     },
     (req, res) => {
-      res.end('hello world')
+    const [totalDomain, mappings] = [(req.headers.host).split('.'), getMappings()]
+    const [domain, subdomain] = [totalDomain.slice(-2).join(''), totalDomain[0]]
+    let mappedDomain;
+    if(totalDomain.length === 3){
+    	mappedDomain = mappings.filter(e=>e.subDomain === subdomain && e.domain === domain)
     }
+	mappedDomain = domain
+	const {ip, port} = mappedDomain
+	console.log('ip', ip, 'port', port)
+	}
   )
 
   server.listen(443)
