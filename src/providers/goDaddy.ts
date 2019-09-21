@@ -58,7 +58,6 @@ export const setRecord = async (
       ttl: 6000
     }
   ]
-  console.log('data', data)
   const options = {
     method: 'PUT',
     headers: {
@@ -72,8 +71,8 @@ export const setRecord = async (
     message: 'Successfully set CNAME records for wildcard domain'
   }
   try {
+    // eslint-disable-next-line
     const aResponse = await fetch(url, options)
-    console.log('Aresponse', aResponse)
   } catch (e) {
     console.error('Error setting A records', e)
     response.success = false
@@ -93,11 +92,10 @@ export const setRecord = async (
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(cnameData)
-  
   }
   try {
-    const CNAMEresponse = await fetch(cnameURL, cnameOptions)
-    console.log('CNAME', CNAMEresponse)
+    // eslint-disable-next-line
+    const cnameResponse = await fetch(cnameURL, cnameOptions)
   } catch (e) {
     console.error('Error setting CNAME records', e)
     response.success = false
