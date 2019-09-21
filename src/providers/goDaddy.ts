@@ -55,7 +55,7 @@ export const setRecord = async (
   const data = [
     {
       data: ipaddress,
-      ttl: 6000
+      ttl: 600
     }
   ]
   const options = {
@@ -70,7 +70,7 @@ export const setRecord = async (
   const cnameData = [
     {
       data: '@',
-      ttl: 6000
+      ttl: 600
     }
   ]
   const cnameOptions = {
@@ -87,7 +87,10 @@ export const setRecord = async (
   }
   try {
     // eslint-disable-next-line
-    const results = await Promise.all([fetch(url, options), fetch(cnameUrl, cnameOptions)])
+    const results = await Promise.all([
+      fetch(url, options),
+      fetch(cnameUrl, cnameOptions)
+    ])
   } catch (e) {
     console.error('Error setting CNAME records', e)
     response.success = false
