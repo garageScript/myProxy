@@ -26,8 +26,8 @@ app.set('views', path.join(__dirname, '../views'))
 
 app.get('/', (_, res) =>
   getAvailableDomains().length > 0
-  ? res.render('client')
-  : res.redirect('/admin')
+    ? res.render('client')
+    : res.redirect('/admin')
 )
 app.get('/login', (req, res) => res.render('login', { error: '' }))
 
@@ -62,14 +62,19 @@ if (process.env.NODE_ENV === 'production') {
         const filteredHost = host.split('.')
         const [domain, topLevelDomain] = filteredHost.slice(filteredHost.length-2, filteredHost.length)
         const filteredDomain = `${domain}.${topLevelDomain}`
+
+        const certPath = filteredHost.length > 2 
+          ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/fullchain.cer`
+          : `${homePath}/\.acme\.sh/\.${filteredDomain}/fullchain.cer`
+
+        const keyPath = filteredHost.length > 2
+          ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/*\.${filteredDomain}\.key`
+          : `${homePath}/\.acme\.sh/\.${filteredDomain}/\.${filteredDomain}\.key`
+
         const secureContext = tls.createSecureContext({
           /* eslint-disable */
-          key: fs.readFileSync(
-            `${homePath}/\.acme\.sh/*\.${filteredDomain}/*\.${filteredDomain}\.key`
-          ),
-          cert: fs.readFileSync(
-            `${homePath}/\.acme\.sh/*\.${filteredDomain}/fullchain.cer`
-          )
+          key: fs.readFileSync(keyPath),
+          cert: fs.readFileSync(certPath)
           /* eslint-enable */
         })
         if (cb) return cb(null, secureContext)
