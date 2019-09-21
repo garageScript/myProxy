@@ -55,16 +55,20 @@ const listener = (): void => {
 if (process.env.NODE_ENV === 'production') {
   const server = https.createServer(
     {
-      SNICallback: (domain, cb) => {
+      SNICallback: (host, cb) => {
         // escape characters required or readFileSync will not find file
         const homePath = process.env.HOME
+        /* eslint-disable */
+        const filteredHost = host.split('.')
+        const [domain, topLevelDomain] = filteredHost.slice(filteredHost.length-2, filteredHost.length)
+        const filteredDomain = `${domain}.${topLevelDomain}`
         const secureContext = tls.createSecureContext({
           /* eslint-disable */
           key: fs.readFileSync(
-            `${homePath}/\.acme\.sh/*\.${domain}/*\.${domain}\.key`
+            `${homePath}/\.acme\.sh/*\.${filteredDomain}/*\.${filteredDomain}\.key`
           ),
           cert: fs.readFileSync(
-            `${homePath}/\.acme\.sh/*\.${domain}/*\.${domain}\.cer`
+            `${homePath}/\.acme\.sh/*\.${filteredDomain}/fullchain.cer`
           )
           /* eslint-enable */
         })
