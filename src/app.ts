@@ -26,8 +26,8 @@ app.set('views', path.join(__dirname, '../views'))
 
 app.get('/', (_, res) =>
   getAvailableDomains().length > 0
-  ? res.render('client')
-  : res.redirect('/admin')
+    ? res.render('client')
+    : res.redirect('/admin')
 )
 app.get('/login', (req, res) => res.render('login', { error: '' }))
 
@@ -60,7 +60,10 @@ if (process.env.NODE_ENV === 'production') {
         const homePath = process.env.HOME
         /* eslint-disable */
         const filteredHost = host.split('.')
-        const [domain, topLevelDomain] = filteredHost.slice(filteredHost.length-2, filteredHost.length)
+        const [domain, topLevelDomain] = filteredHost.slice(
+          filteredHost.length - 2,
+          filteredHost.length
+        )
         const filteredDomain = `${domain}.${topLevelDomain}`
         const secureContext = tls.createSecureContext({
           /* eslint-disable */
@@ -77,16 +80,26 @@ if (process.env.NODE_ENV === 'production') {
       }
     },
     (req, res) => {
-    const [totalDomain, mappings] = [(req.headers.host).split('.'), getMappings()]
-    const [domain, subdomain] = [totalDomain.slice(-2).join(''), totalDomain[0]]
-    let mappedDomain;
-    if(totalDomain.length === 3){
-    	mappedDomain = mappings.filter(e=>e.subDomain === subdomain && e.domain === domain)
+      const [totalDomain, mappings] = [
+        req.headers.host.split('.'),
+        getMappings()
+      ]
+      const [domain, subdomain] = [
+        totalDomain.slice(-2).join(''),
+        totalDomain[0]
+      ]
+      let mappedDomain
+      if (totalDomain.length === 3) {
+        mappedDomain = mappings.find(
+          e => e.subDomain === subdomain && e.domain === domain
+        )
+      }
+      if(totalDomain.length === 2){
+      	mappedDomain = mappings.find(e=>e.domain === domain && !e.subDomain)
+      }
+      const { ip, port } = mappedDomain
+      res.end('hello world')
     }
-	mappedDomain = domain
-	const {ip, port} = mappedDomain
-	console.log('ip', ip, 'port', port)
-	}
   )
 
   server.listen(443)
