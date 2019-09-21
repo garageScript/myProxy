@@ -80,9 +80,11 @@ if (process.env.NODE_ENV === 'production') {
       }
     },
     (req, res) => {
-    const {ip, port} = mappings.find(({subDomain, domain})=>{
-    	return `${subDomain}.${domain}` === req.headers.host
-    }) || {}
+    const mappings = getMappings()
+      const { ip, port } =
+        mappings.find(({ subDomain, domain }) => {
+          return `${subDomain}.${domain}` === req.headers.host
+        }) || {}
       res.end('hello world')
     }
   )
