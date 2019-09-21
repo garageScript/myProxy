@@ -60,16 +60,21 @@ if (process.env.NODE_ENV === 'production') {
         const homePath = process.env.HOME
         /* eslint-disable */
         const filteredHost = host.split('.')
-        const [domain, topLevelDomain] = filteredHost.slice(filteredHost.length-2, filteredHost.length)
+        const [domain, topLevelDomain] = filteredHost.slice(
+          filteredHost.length - 2,
+          filteredHost.length
+        )
         const filteredDomain = `${domain}.${topLevelDomain}`
 
-        const certPath = filteredHost.length > 2 
-          ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/fullchain.cer`
-          : `${homePath}/\.acme\.sh/\.${filteredDomain}/fullchain.cer`
+        const certPath =
+          filteredHost.length > 2
+            ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/fullchain.cer`
+            : `${homePath}/\.acme\.sh/\.${filteredDomain}/fullchain.cer`
 
-        const keyPath = filteredHost.length > 2
-          ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/*\.${filteredDomain}\.key`
-          : `${homePath}/\.acme\.sh/\.${filteredDomain}/\.${filteredDomain}\.key`
+        const keyPath =
+          filteredHost.length > 2
+            ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/*\.${filteredDomain}\.key`
+            : `${homePath}/\.acme\.sh/\.${filteredDomain}/\.${filteredDomain}\.key`
 
         const secureContext = tls.createSecureContext({
           /* eslint-disable */
