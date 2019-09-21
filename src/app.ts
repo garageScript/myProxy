@@ -59,7 +59,8 @@ if (process.env.NODE_ENV === 'production') {
         // escape characters required or readFileSync will not find file
         const homePath = process.env.HOME
         /* eslint-disable */
-        const [subDomain, domain, topLevelDomain] = host.split('.')
+        const filteredHost = host.split('.')
+        const [domain, topLevelDomain] = filteredHost.slice(filteredHost.length-2, filteredHost.length)
         const filteredDomain = `${domain}.${topLevelDomain}`
         const secureContext = tls.createSecureContext({
           /* eslint-disable */
@@ -67,7 +68,7 @@ if (process.env.NODE_ENV === 'production') {
             `${homePath}/\.acme\.sh/*\.${filteredDomain}/*\.${filteredDomain}\.key`
           ),
           cert: fs.readFileSync(
-            `${homePath}/\.acme\.sh/*\.${filteredDomain}/*\.${filteredDomain}\.cer`
+            `${homePath}/\.acme\.sh/*\.${filteredDomain}/fullchain.cer`
           )
           /* eslint-enable */
         })
