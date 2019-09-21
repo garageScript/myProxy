@@ -21,7 +21,6 @@ app.post('/sslCerts', async (req, res) => {
   try {
     const serviceKeys = getProviderKeys().filter(d => d.service === service)
     const { keys } = serviceConfig[service]
-      /*
     const envVars = keys.reduce((acc: string, key: string) => {
       const { value } = serviceKeys.find(d => d.key === key) || { value: '' }
       return acc + `${key}=${value} `
@@ -39,7 +38,7 @@ app.post('/sslCerts', async (req, res) => {
           : JSON.stringify(cert1Response.stderr)
       }`
       return res.json(serviceResponse)
-    }*/
+    }
 
     const { stdout: ipaddress } = await exec('curl ifconfig.me')
     const providerService = providers[service] as ProviderService
