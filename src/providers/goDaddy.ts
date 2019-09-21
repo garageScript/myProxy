@@ -66,19 +66,7 @@ export const setRecord = async (
     },
     body: JSON.stringify(data)
   }
-  const response: ServiceResponse = {
-    success: true,
-    message: 'Successfully set CNAME records for wildcard domain'
-  }
-  try {
-    // eslint-disable-next-line
-    const aResponse = await fetch(url, options)
-  } catch (e) {
-    console.error('Error setting A records', e)
-    response.success = false
-    response.message = 'Error setting A records'
-  }
-  const cnameURL = `${SERVICE}/v1/domains/${domain}/records/CNAME/*`
+  const cnameUrl = `${SERVICE}/v1/domains/${domain}/records/CNAME/*`
   const cnameData = [
     {
       data: '@',
@@ -93,9 +81,13 @@ export const setRecord = async (
     },
     body: JSON.stringify(cnameData)
   }
+  const response: ServiceResponse = {
+    success: true,
+    message: 'Successfully set CNAME records for wildcard domain'
+  }
   try {
     // eslint-disable-next-line
-    const cnameResponse = await fetch(cnameURL, cnameOptions)
+    const results = await Promise.all([fetch(url, options), fetch(cnameUrl, cnameOptions)])
   } catch (e) {
     console.error('Error setting CNAME records', e)
     response.success = false
