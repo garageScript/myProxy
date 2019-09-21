@@ -2,6 +2,7 @@ import { sendRequest } from '../helpers/httpRequest'
 import { getProviderKeys } from '../lib/data'
 import { Provider, ServiceResponse } from '../types/general'
 import { ServiceKey } from '../types/admin'
+import fetch from 'node-fetch'
 
 const NAME = 'Godaddy'
 const SERVICE = 'https://api.godaddy.com'
@@ -50,39 +51,57 @@ export const setRecord = async (
   domain: string,
   ipaddress: string
 ): Promise<ServiceResponse> => {
-  const url = `${SERVICE}/v1/domains/${domain}/records`
+  const url = `${SERVICE}/v1/domains/${domain}/records/A/@`
   const data = [
     {
       data: ipaddress,
-      name: domain,
-      type: 'A'
-    },
-    {
-      data: domain,
-      name: domain,
-      type: 'CNAME'
+      ttl: 6000
     }
   ]
-
+  console.log('data', data)
   const options = {
-    method: 'PATCH',
+    method: 'PUT',
     headers: {
       Authorization: `sso-key ${findKey('GD_Key')}:${findKey('GD_Secret')}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
   }
-
   const response: ServiceResponse = {
     success: true,
     message: 'Successfully set CNAME records for wildcard domain'
   }
   try {
-    await sendRequest<Array<unknown>>(url, options)
+    const aResponse = await fetch(url, options)
+    console.log('Aresponse', aResponse)
   } catch (e) {
-    console.error('Error setting API', e)
+    console.error('Error setting A records', e)
     response.success = false
-    response.message = 'Error setting API'
+    response.message = 'Error setting A records'
+  }
+  const cnameURL = `${SERVICE}/v1/domains/${domain}/records/CNAME/*`
+  const cnameData = [
+    {
+      data: '@',
+      ttl: 6000
+    }
+  ]
+  const cnameOptions = {
+    method: 'PUT',
+    headers: {
+      Authorization: `sso-key ${findKey('GD_Key')}:${findKey('GD_Secret')}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(cnameData)
+  
+  }
+  try {
+    const CNAMEresponse = await fetch(cnameURL, cnameOptions)
+    console.log('CNAME', CNAMEresponse)
+  } catch (e) {
+    console.error('Error setting CNAME records', e)
+    response.success = false
+    response.message = 'Error setting CNAME records'
   }
   return response
 }
