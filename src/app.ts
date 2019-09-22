@@ -10,6 +10,9 @@ import fs from 'fs'
 import tls from 'tls'
 import { getAvailableDomains, getMappings } from './lib/data'
 import { isCorrectCredentials } from './auth'
+import httpProxy from 'http-proxy'
+
+const proxy = httpProxy.createProxyServer({})
 
 const app = express()
 const port: string | number = process.env.PORT || 3000
@@ -87,12 +90,16 @@ if (process.env.NODE_ENV === 'production') {
       }
     },
     (req, res) => {
-    const mappings = getMappings()
+    try{
+      const mappings = getMappings()
       const { ip, port } =
         mappings.find(({ subDomain, domain }) => {
           return `${subDomain}.${domain}` === req.headers.host
         }) || {}
-      res.end('hello world')
+	if(port) return proxy.web(req, res, { target: `${ip}:${port}` })
+      }catch(e){
+      	return res.end(`Error: failed to create proxy ${req.headers.host}`)
+      }
     }
   )
 
