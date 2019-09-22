@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-</head>
-<body>
+<%- include('layout/head.ejs') %>
+
  <h1>Please Enter in the ADMIN Password to proceed</h1>
  <form action='/login' method='POST'>
    <input type='text' name='adminPass'></input>
     <button type='submit'>Login</button>
     <div><%= error %></div>
- </form> 
-</body>
-</html>
+ </form>
+
+ <%- include('layout/footer.ejs') %>
