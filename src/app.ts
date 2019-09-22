@@ -13,8 +13,8 @@ import { isCorrectCredentials } from './auth'
 import httpProxy from 'http-proxy'
 
 const proxy = httpProxy.createProxyServer({})
-proxy.on('error', (err)=>{
-	console.log('error', err)
+proxy.on('error', err => {
+  console.log('error', err)
 })
 
 const app = express()
@@ -86,17 +86,26 @@ if (process.env.NODE_ENV === 'production') {
       }
     },
     (req, res) => {
-    try{
-      const mappings = getMappings()
-      const { ip, port } =
-        mappings.find(({ subDomain, domain }) => {
-          return `${subDomain}.${domain}` === req.headers.host
-        }) || {}
-	if(port) return proxy.web(req, res, { target: `http://${ip}:${port}` }, (err)=>{
-		res.end(`Error communicating with server that runs ${req.headers.host}`)
-	})
-      }catch(e){
-      	return res.end(`Error: failed to create proxy ${req.headers.host}`)
+      try {
+        const mappings = getMappings()
+        const { ip, port } =
+          mappings.find(({ subDomain, domain }) => {
+            return `${subDomain}.${domain}` === req.headers.host
+          }) || {}
+        if (port)
+          return proxy.web(
+            req,
+            res,
+            { target: `http://${ip}:${port}` },
+            err => {
+	    	console.log('err', err)
+              res.end(
+                `Error communicating with server that runs ${req.headers.host}`
+              )
+            }
+          )
+      } catch (e) {
+        return res.end(`Error: failed to create proxy ${req.headers.host}`)
       }
     }
   )
