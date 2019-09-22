@@ -2,12 +2,15 @@
 
 npm install
 npm install pm2 -g
-if [ ! -d "./acme.sh" ] ; then
+if [ ! -d "./acme.sh"] ; then
   git clone https://github.com/Neilpang/acme.sh.git
   cd ./acme.sh
   ./acme.sh --install
   ./acme.sh --upgrade --auto-upgrade
   cd ../
+fi
+if [ ! -d "/home/git"] ; then
+  sudo useradd -m -c "git" git -s /bin/bash -p $(echo $ADMIN | openssl passwd -1 -stdin) -d /home/git
 fi
 npm run build
 if [ ! -f "./data.db" ] ; then
