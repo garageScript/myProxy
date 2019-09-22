@@ -93,9 +93,11 @@ if (process.env.NODE_ENV === 'production') {
         }) || {}
 	if(!port) return res.end('Cannot redirect')
 	if(port) return proxy.web(req, res, { target: `http://${ip}:${port}` }, (err)=>{
+		console.log('Error communicating with server', err)
 		res.end(`Error communicating with server that runs ${req.headers.host}`)
 	})
-      }catch(e){
+      }catch(err){
+        console.log('Error: proxy failed', err)
       	return res.end(`Error: failed to create proxy ${req.headers.host}`)
       }
     }
