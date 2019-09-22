@@ -67,19 +67,17 @@
   <div class="row">
     <div class="col-12">
       <h4>Sample Server Code</h4>
-      <pre style="background-color: #f3f3f3; padding: 0 30px">
-        <code>
-          const express = require('express');
-          const app = express();
-          app.use(express.static('public'));
+      <pre style="background-color: #f3f3f3; padding: 0 30px"><code>
+const express = require('express');
+const app = express();
+app.use(express.static('public'));
 
-          app.get('/', (req, res) => {
-            res.send('hello');
-          });
+app.get('/', (req, res) => {
+  res.send('hello');
+});
 
-          app.listen(process.env.PORT || 8123);
-        </code>
-      </pre>
+app.listen(process.env.PORT || 8123);
+        </code></pre>
     </div>
   </div>
 </div>
