@@ -11,12 +11,16 @@ const exec = util.promisify(cp.exec)
 
 mappingRouter.post('/', (req, res) => {
   const domainKeys = getMappings()
-  let portCounter = 3002
-  domainKeys.reduce((acc, e) =>{
+  const getNextPort = (map, start=3002):number =>{
+    if(!map[start]) return start
+    if(map[start]) start +=1 
+    return getNextPort(map, start)
+  }
+  const map = domainKeys.reduce((acc, e) => {
     acc[e.port] = true
-    if(acc[portCounter]) portCounter += 1
     return acc
-  }, {})
+  }, {}) 
+  const portCounter = getNextPort(map) 
   const mappingObject: Mapping = {
     domain: req.body.domain,
     subDomain: req.body.subDomain,
@@ -57,8 +61,8 @@ mappingRouter.post('/', (req, res) => {
     echo 'module.exports = ${JSON.stringify(prodConfig)}' > deploy.config.js
     git add .
     git commit -m "Initial Commit"`).then(() => {
-    res.json(mappingObject)
-  })
+      res.json(mappingObject)
+    })
 })
 
 mappingRouter.get('/', (req, res) => {
