@@ -90,15 +90,15 @@ if (process.env.NODE_ENV === 'production') {
       }
     },
     (req, res) => {
-    try{
-      const mappings = getMappings()
-      const { ip, port } =
-        mappings.find(({ subDomain, domain }) => {
-          return `${subDomain}.${domain}` === req.headers.host
-        }) || {}
-	if(port) return proxy.web(req, res, { target: `${ip}:${port}` })
-      }catch(e){
-      	return res.end(`Error: failed to create proxy ${req.headers.host}`)
+      try {
+        const mappings = getMappings()
+        const { ip, port } =
+          mappings.find(({ subDomain, domain }) => {
+            return `${subDomain}.${domain}` === req.headers.host
+          }) || {}
+        if (port) return proxy.web(req, res, { target: `${ip}:${port}` })
+      } catch (e) {
+        return res.end(`Error: failed to create proxy ${req.headers.host}`)
       }
     }
   )
