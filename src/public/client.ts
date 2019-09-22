@@ -161,7 +161,7 @@ create.onclick = (): void => {
   const subDomain = helper.getElement('.subDomain') as HTMLInputElement
   const port = helper.getElement('.port') as HTMLInputElement
   const ipAddress = helper.getElement('.ipAddress') as HTMLInputElement
-
+  if(parseInt(port.value) < 3001) return alert('Please enter value for port > 3001')
   const portValue = port.value
   const domain = selectedHost
   const ipValue = ipAddress.value
