@@ -8,9 +8,9 @@ import { setData, getMappings } from '../lib/data'
 import { Mapping } from '../types/general'
 const mappingRouter = express.Router()
 const exec = util.promisify(cp.exec)
-const getNextPort = (map, start=3002):number =>{
-  if(!map[start]) return start
-  if(map[start]) start +=1
+const getNextPort = (map, start = 3002): number => {
+  if (!map[start]) return start
+  if (map[start]) start += 1
   return getNextPort(map, start)
 }
 
