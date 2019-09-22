@@ -98,7 +98,7 @@ if (process.env.NODE_ENV === 'production') {
             res,
             { target: `http://${ip}:${port}` },
             err => {
-	    	console.log('err', err)
+              console.log('err', err)
               res.end(
                 `Error communicating with server that runs ${req.headers.host}`
               )
