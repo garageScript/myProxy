@@ -61,8 +61,8 @@ mappingRouter.post('/', (req, res) => {
     echo 'module.exports = ${JSON.stringify(prodConfig)}' > deploy.config.js
     git add .
     git commit -m "Initial Commit"`).then(() => {
-      res.json(mappingObject)
-    })
+    res.json(mappingObject)
+  })
 })
 
 mappingRouter.get('/', (req, res) => {
