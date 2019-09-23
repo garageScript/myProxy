@@ -5,6 +5,8 @@ type Mapping = {
   ip: string
   port: string
   id: string
+  gitLink: string
+  fullDomain: string
 }
 
 const create: HTMLElement = helper.getElement('.create')
@@ -36,11 +38,18 @@ class MappingItem {
     domainList.appendChild(mappingElement)
     mappingElement.innerHTML = `
     <li class="list-group-item" style="display: flex;">
-    <a href="">${data.subDomain + data.domain}</a>
-        <small class="form-text text-muted" style="display: inline-block;">PORT:${
-  data.port
-}</small>
-        <hr />
+    <div style='width: 100%'>
+      <div style='display: flex'>
+        <a href="">${data.subDomain}.${data.domain}</a>
+          <small class="form-text text-muted" style="display: inline-block;">
+            PORT:${data.port}
+            </small>
+      </div>
+          <small class="form-text text-muted" style="display: inline-block;">
+            ${data.gitLink}
+            </small>
+          <hr />
+   </div>
         <div class="deleteButton" href="/">Delete</div>
         <div class="edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
     </li>
@@ -151,7 +160,7 @@ fetch('/api/mappings')
     domainList.innerHTML = ''
     data.reverse()
     data
-      .filter(e => e.subDomain && e.domain && e.port && e.id && e.ip)
+      .filter(e => e.subDomain && e.domain && e.port && e.id && e.ip && e.gitLink && e.fullDomain)
       .forEach(e => {
         new MappingItem(e)
       })
@@ -161,7 +170,6 @@ create.onclick = (): void => {
   const subDomain = helper.getElement('.subDomain') as HTMLInputElement
   const port = helper.getElement('.port') as HTMLInputElement
   const ipAddress = helper.getElement('.ipAddress') as HTMLInputElement
-
   const portValue = port.value
   const domain = selectedHost
   const ipValue = ipAddress.value
@@ -178,7 +186,8 @@ create.onclick = (): void => {
     headers: {
       'Content-Type': 'application/json'
     }
-  }).then(() => {
+  }).then(res => {
+    if (res.status === 400) return alert('Port Value cannot be smaller than 3001')
     window.location.reload()
   })
   port.value = ''

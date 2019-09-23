@@ -15,20 +15,14 @@ const getNextPort = (map, start = 3002): number => {
 
 mappingRouter.post('/', (req, res) => {
   const domainKeys = getMappings()
+  if (parseInt(req.body.port) < 3001) {
+    return res.status(400).json({ message: 'Port cannot be smaller than 3001' })
+  }
   const map = domainKeys.reduce((acc, e) => {
     acc[e.port] = true
     return acc
   }, {})
   const portCounter = getNextPort(map)
-  const mappingObject: Mapping = {
-    domain: req.body.domain,
-    subDomain: req.body.subDomain,
-    port: req.body.port || `${portCounter}`,
-    ip: req.body.ip || '127.0.0.1',
-    id: uuid4()
-  }
-  domainKeys.push(mappingObject)
-  setData('mappings', domainKeys)
   const fullDomain = `${req.body.subDomain}.${req.body.domain}`
   const prodConfig = {
     apps: [
@@ -49,24 +43,34 @@ mappingRouter.post('/', (req, res) => {
   const projectPath = '/home/git'
   const scriptPath = '.scripts'
   exec('id -u git').then(result => {
-    exec(
-      `
-        cd ${projectPath}
-        mkdir ${fullDomain}
-        git init ${fullDomain}
-        cp ${scriptPath}/post-receive ${fullDomain}/.git/hooks/
-        cp ${scriptPath}/pre-receive ${fullDomain}/.git/hooks/
-        cd ${fullDomain}
-        git config user.email "root@ipaddress"
-        git config user.name "user"
-        echo 'module.exports = ${JSON.stringify(prodConfig)}' > deploy.config.js
-        git add .
-        git commit -m "Initial Commit"
-        `,
-      { uid: parseInt(result.stdout) }
-    ).then(() => {
-      res.json(mappingObject)
-    })
+    exec(`
+      cd ${projectPath}
+      mkdir ${fullDomain}
+      git init ${fullDomain}
+      cp ${scriptPath}/post-receive ${fullDomain}/.git/hooks/
+      cp ${scriptPath}/pre-receive ${fullDomain}/.git/hooks/
+      cd ${fullDomain}
+      git config user.email "root@ipaddress"
+      git config user.name "user"
+      echo 'module.exports = ${JSON.stringify(prodConfig)}' > deploy.config.js
+      git add .
+      git commit -m "Initial Commit"
+      `, { uid: parseInt(result.stdout) })
+      .then(() => {
+        const mappingObject: Mapping = {
+          domain: req.body.domain,
+          subDomain: req.body.subDomain,
+          port: req.body.port || `${portCounter}`,
+          ip: req.body.ip || '127.0.0.1',
+          id: uuid4(),
+          gitLink: `git@${req.body.domain}:${projectPath}/${fullDomain}`,
+          fullDomain,
+        }
+        domainKeys.push(mappingObject)
+        setData('mappings', domainKeys)
+        res.json(mappingObject)
+        res.json(mappingObject)
+      })
   })
 })
 
