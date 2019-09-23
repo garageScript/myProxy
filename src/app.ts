@@ -93,10 +93,14 @@ if (process.env.NODE_ENV === 'production') {
     (req, res) => {
       try {
         const mappings = getMappings()
-        let { ip, port } =
-          (mappings.find(({ subDomain, domain }) => {
+	interface Proxy {
+		ip?: string,
+		port?: string
+	}
+        const { ip, port }:Proxy =
+          mappings.find(({ subDomain, domain }) => {
             return `${subDomain}.${domain}` === req.headers.host
-          }) || {})
+          }) || {}
         if (!port) return res.end('Cannot redirect')
         if (port)
           return proxy.web(
