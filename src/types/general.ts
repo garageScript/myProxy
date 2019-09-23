@@ -4,6 +4,8 @@ type Mapping = {
   port: string
   ip: string
   id: string
+  gitLink: string
+  fullDomain: string
 }
 
 type Provider = {
