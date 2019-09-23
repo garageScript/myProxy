@@ -115,8 +115,8 @@ if (process.env.NODE_ENV === 'production') {
 
   const httpApp = express()
   httpApp.get('/*', (req, res) => {
-  const params = req.query ? `?${(req.headers.host).split('?')[1]}` : ''
-  res.redirect(`https://${req.headers.host}${req.path}/${params}`)
+    const params = req.query ? `?${(req.headers.host).split('?')[1]}` : ''
+    res.redirect(`https://${req.headers.host}${req.path}/${params}`)
   })
   httpApp.listen(80)
 }
