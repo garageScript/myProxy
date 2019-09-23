@@ -55,19 +55,19 @@ mappingRouter.post('/', (req, res) => {
     echo 'module.exports = ${JSON.stringify(prodConfig)}' > deploy.config.js
     git add .
     git commit -m "Initial Commit"`).then(() => {
-      const mappingObject: Mapping = {
-        domain: req.body.domain,
-        subDomain: req.body.subDomain,
-        port: req.body.port || `${portCounter}`,
-        ip: req.body.ip || '127.0.0.1',
-        id: uuid4(),
-        gitLink: `git@${req.body.domain}:${projectPath}/${fullDomain}`,
-        fullDomain,
-      }
-      domainKeys.push(mappingObject)
-      setData('mappings', domainKeys)
-      res.json(mappingObject)
-    })
+    const mappingObject: Mapping = {
+      domain: req.body.domain,
+      subDomain: req.body.subDomain,
+      port: req.body.port || `${portCounter}`,
+      ip: req.body.ip || '127.0.0.1',
+      id: uuid4(),
+      gitLink: `git@${req.body.domain}:${projectPath}/${fullDomain}`,
+      fullDomain,
+    }
+    domainKeys.push(mappingObject)
+    setData('mappings', domainKeys)
+    res.json(mappingObject)
+  })
 })
 
 mappingRouter.get('/', (req, res) => {
