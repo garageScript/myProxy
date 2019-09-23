@@ -98,9 +98,8 @@ if (process.env.NODE_ENV === 'production') {
           mappings.find(({ subDomain, domain }) => {
             return `${subDomain}.${domain}` === req.headers.host
           }) || {}
-        if (!port) return res.end('Cannot redirect')
-        if (port)
-          return proxy.web(
+        if (!port || !ip) return res.end('Not Found')
+          proxy.web(
             req,
             res,
             { target: `http://${ip}:${port}` },
