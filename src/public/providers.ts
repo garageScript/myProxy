@@ -18,19 +18,27 @@ type ProviderKey = {
 
 type Domain = {
   domain: string
+  expires?: string
+  provider?: string
+
 }
 
 class DomainElement {
   constructor(
     domainObj: Domain,
     domainService: string,
+    availableDomains: Domain[],
     container: HTMLElement
   ) {
     const domainElement = document.createElement('div')
+    const checkDomain = availableDomains.find((e) => e.domain === domainObj.domain)
+      ? '<i class="fa fa-check-circle" style="color:green"></i>'
+      : ''
     domainElement.innerHTML = `
       <div class="row">
         <div class="col-11">
           <span class="domainElement">${domainObj.domain}</span>
+          ${checkDomain}
         </div>
         <div class="col-1">
         <button type="button" class="btn btn-primary setUpButton">Setup</button>
@@ -73,7 +81,7 @@ class ProviderKeyElement {
         <div class="col-11">
           <span class="providerKeyName">${providerKey.key}</span>
           <input type="text" value="${providerKey.value ||
-            ''}" class="keyInput"></input>
+              ''}" class="keyInput"></input>
           </div>
         <div class="col-1">
           <button type="button" class="btn btn-primary createOrUpdateButton">${buttonText}</button>
@@ -133,9 +141,13 @@ class ProviderElement {
         providerKeysContainer
       )
     })
-    provider.domains.map(domain => {
-      return new DomainElement(domain, providerId, domainListContainer)
-    })
+    fetch('/api/availableDomains')
+      .then(res => res.json())
+      .then((availableDomains) => {
+        provider.domains.map(domain => {
+          return new DomainElement(domain, providerId, availableDomains, domainListContainer)
+        })
+      })
     providerList.appendChild(providerContainer)
   }
 }
