@@ -8,19 +8,22 @@ import { setData, getMappings } from '../lib/data'
 import { Mapping } from '../types/general'
 const mappingRouter = express.Router()
 const exec = util.promisify(cp.exec)
-const getNextPort = (map, start=3002):number =>{
-  if(!map[start]) return start
-  if(map[start]) start +=1 
+const getNextPort = (map, start = 3002): number => {
+  if (!map[start]) return start
+  if (map[start]) start += 1
   return getNextPort(map, start)
 }
 
 mappingRouter.post('/', (req, res) => {
   const domainKeys = getMappings()
+  if (parseInt(req.body.port) < 3001) {
+    return res.status(400).json({ message: 'Port cannot be smaller than 3001' })
+  }
   const map = domainKeys.reduce((acc, e) => {
     acc[e.port] = true
     return acc
-  }, {}) 
-  const portCounter = getNextPort(map) 
+  }, {})
+  const portCounter = getNextPort(map)
   const mappingObject: Mapping = {
     domain: req.body.domain,
     subDomain: req.body.subDomain,
@@ -61,8 +64,8 @@ mappingRouter.post('/', (req, res) => {
     echo 'module.exports = ${JSON.stringify(prodConfig)}' > deploy.config.js
     git add .
     git commit -m "Initial Commit"`).then(() => {
-      res.json(mappingObject)
-    })
+    res.json(mappingObject)
+  })
 })
 
 mappingRouter.get('/', (req, res) => {
