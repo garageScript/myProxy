@@ -11,7 +11,7 @@ import tls from 'tls'
 import { getAvailableDomains, getMappings } from './lib/data'
 import { isCorrectCredentials } from './auth'
 import httpProxy from 'http-proxy'
-import { Proxy } from './types/general'
+import { ProxyMapping } from './types/general'
 
 const proxy = httpProxy.createProxyServer({})
 proxy.on('error', err => {
@@ -94,7 +94,7 @@ if (process.env.NODE_ENV === 'production') {
     (req, res) => {
       try {
         const mappings = getMappings()
-        const { ip, port }: Proxy =
+        const { ip, port }: ProxyMapping =
           mappings.find(({ subDomain, domain }) => {
             return `${subDomain}.${domain}` === req.headers.host
           }) || {}
