@@ -94,7 +94,7 @@ if (process.env.NODE_ENV === 'production') {
     (req, res) => {
       try {
         const mappings = getMappings()
-        const { ip, port }:Proxy =
+        const { ip, port }: Proxy =
           mappings.find(({ subDomain, domain }) => {
             return `${subDomain}.${domain}` === req.headers.host
           }) || {}
