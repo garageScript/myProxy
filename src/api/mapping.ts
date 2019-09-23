@@ -47,7 +47,7 @@ mappingRouter.post('/', (req, res) => {
       }
     ]
   }
-  const projectPath = '~/projects'
+  const projectPath = '/home/git'
   const scriptPath = path.join(__dirname, '../../scripts')
   exec(`
     mkdir -p ${projectPath}
