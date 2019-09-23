@@ -1,3 +1,4 @@
 theme: jekyll-theme-cayman
 title: MyProxy
 description: MyProxy is an application that helps you connect to your Domain provider, setup A and CNAME records, create and serve SSL certificates, and run an unlimited number of applications on your subdomains.
+future: true

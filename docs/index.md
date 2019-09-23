@@ -7,7 +7,7 @@ MyProxy is an application that:
 
 ## Why?
 Setting up a server is hard, especially setting up DNS records, managing certificates, and deployment.  
-So we setup to build a simple and usable app that helps us build applications quickly.  
+So we setup to build a simple and usable app that helps us build applications quickly.   
 We are new to software engineering so if you find areas where this app could be improved, please let us know by [creating an issue](https://github.com/garageScript/myproxy/issues). We are excited to learn!  
 Also, we are currently looking for a job. If your team needs software engineers, please hire us:
 * [Alberto Lopez](https://github.com/albertoelopez) - Available immediately
