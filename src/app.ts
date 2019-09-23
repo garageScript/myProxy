@@ -15,7 +15,7 @@ import { ProxyMapping } from './types/general'
 
 const proxy = httpProxy.createProxyServer({})
 proxy.on('error', err => {
-  console.log('Proxy error', err)
+  console.error('Proxy error', err)
 })
 
 const app = express()
@@ -99,14 +99,19 @@ if (process.env.NODE_ENV === 'production') {
             return `${subDomain}.${domain}` === req.headers.host
           }) || {}
         if (!port || !ip) return res.end('Not Found')
-        proxy.web(req, res, { target: `http://${ip}:${port}` }, err => {
-          console.error('Error communicating with server', err)
-          res.end(
-            `Error communicating with server that runs ${req.headers.host}`
+          proxy.web(
+            req,
+            res,
+            { target: `http://${ip}:${port}` },
+            err => {
+	    console.error('Error communicating with server', err)
+              res.end(
+                `Error communicating with server that runs ${req.headers.host}`
+              )
+            }
           )
-        })
       } catch (err) {
-        console.log('Error: proxy failed', err)
+        console.error('Error: proxy failed', err)
         return res.end(`Error: failed to create proxy ${req.headers.host}`)
       }
     }
