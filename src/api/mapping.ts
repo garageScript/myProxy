@@ -3,7 +3,6 @@ import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
 import cp from 'child_process'
-import path from 'path'
 import { setData, getMappings } from '../lib/data'
 import { Mapping } from '../types/general'
 const mappingRouter = express.Router()
@@ -48,20 +47,25 @@ mappingRouter.post('/', (req, res) => {
     ]
   }
   const projectPath = '/home/git'
-  const scriptPath = path.join(__dirname, '../../scripts')
-  exec(`
-    mkdir -p ${projectPath}
-    mkdir ${projectPath}/${fullDomain}
-    git init ${projectPath}/${fullDomain}
-    cp ${scriptPath}/post-receive ${projectPath}/${fullDomain}/.git/hooks/
-    cp ${scriptPath}/pre-receive ${projectPath}/${fullDomain}/.git/hooks/
-    cd ${projectPath}/${fullDomain}
-    git config user.email "root@ipaddress"
-    git config user.name "user"
-    echo 'module.exports = ${JSON.stringify(prodConfig)}' > deploy.config.js
-    git add .
-    git commit -m "Initial Commit"`).then(() => {
-      res.json(mappingObject)
+  const scriptPath = '.scripts'
+  exec('id -u git')
+    .then((result) => {
+      exec(`
+        cd ${projectPath}
+        mkdir ${fullDomain}
+        git init ${fullDomain}
+        cp ${scriptPath}/post-receive ${fullDomain}/.git/hooks/
+        cp ${scriptPath}/pre-receive ${fullDomain}/.git/hooks/
+        cd ${fullDomain}
+        git config user.email "root@ipaddress"
+        git config user.name "user"
+        echo 'module.exports = ${JSON.stringify(prodConfig)}' > deploy.config.js
+        git add .
+        git commit -m "Initial Commit"
+        `, { uid: parseInt(result.stdout) })
+        .then(() => {
+          res.json(mappingObject)
+        })
     })
 })
 
