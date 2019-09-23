@@ -38,8 +38,8 @@ class MappingItem {
     <li class="list-group-item" style="display: flex;">
     <a href="">${data.subDomain + data.domain}</a>
         <small class="form-text text-muted" style="display: inline-block;">PORT:${
-  data.port
-}</small>
+          data.port
+        }</small>
         <hr />
         <div class="deleteButton" href="/">Delete</div>
         <div class="edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
@@ -177,8 +177,9 @@ create.onclick = (): void => {
     headers: {
       'Content-Type': 'application/json'
     }
-  }).then((res) => {
-    if(res.status === 400) return alert('Port Value cannot be smaller than 3001')
+  }).then(res => {
+    if (res.status === 400) return alert('Port Value cannot be smaller than 3001')
+    window.location.reload()
   })
   port.value = ''
   ipAddress.value = ''
