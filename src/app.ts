@@ -93,8 +93,8 @@ if (process.env.NODE_ENV === 'production') {
   server.listen(443)
 
   const httpApp = express()
-  httpApp.get('/*', (req, res)=>{
-  	res.redirect(`https://${req.headers.host}${req.path}`)
+  httpApp.get('/*', (req, res) => {
+    res.redirect(`https://${req.headers.host}${req.path}`)
   })
   httpApp.listen(80)
 }
