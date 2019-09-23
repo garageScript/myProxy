@@ -4,6 +4,8 @@ type Mapping = {
   port: string
   ip: string
   id: string
+  gitLink: string
+  fullDomain: string
 }
 
 type Provider = {
@@ -34,11 +36,17 @@ type ServiceConfig = {
   dns_gd: ProviderService
 }
 
+type ProxyMapping = {
+  ip?: string
+  port?: string
+}
+
 export {
   Mapping,
   Provider,
   Domain,
   ServiceResponse,
   ServiceConfig,
-  ProviderService
+  ProviderService,
+  ProxyMapping
 }
