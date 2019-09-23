@@ -8,8 +8,15 @@ import { hashPass } from './helpers/crypto'
 import https from 'https'
 import fs from 'fs'
 import tls from 'tls'
-import { getAvailableDomains } from './lib/data'
+import { getAvailableDomains, getMappings } from './lib/data'
 import { isCorrectCredentials } from './auth'
+import httpProxy from 'http-proxy'
+import { ProxyMapping } from './types/general'
+
+const proxy = httpProxy.createProxyServer({})
+proxy.on('error', err => {
+  console.error('Proxy error', err)
+})
 
 const app = express()
 const port: string | number = process.env.PORT || 3000
@@ -70,12 +77,10 @@ if (process.env.NODE_ENV === 'production') {
           filteredHost.length > 2
             ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/fullchain.cer`
             : `${homePath}/\.acme\.sh/\.${filteredDomain}/fullchain.cer`
-
         const keyPath =
           filteredHost.length > 2
             ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/*\.${filteredDomain}\.key`
             : `${homePath}/\.acme\.sh/\.${filteredDomain}/\.${filteredDomain}\.key`
-
         const secureContext = tls.createSecureContext({
           /* eslint-disable */
           key: fs.readFileSync(keyPath),
@@ -87,7 +92,23 @@ if (process.env.NODE_ENV === 'production') {
       }
     },
     (req, res) => {
-      res.end('hello world')
+      try {
+        const mappings = getMappings()
+        const { ip, port }: ProxyMapping =
+          mappings.find(({ subDomain, domain }) => {
+            return `${subDomain}.${domain}` === req.headers.host
+          }) || {}
+        if (!port || !ip) return res.end('Not Found')
+        proxy.web(req, res, { target: `http://${ip}:${port}` }, err => {
+          console.error('Error communicating with server', err)
+          res.end(
+            `Error communicating with server that runs ${req.headers.host}`
+          )
+        })
+      } catch (err) {
+        console.error('Error: proxy failed', err)
+        return res.end(`Error: failed to create proxy ${req.headers.host}`)
+      }
     }
   )
   server.listen(443)
