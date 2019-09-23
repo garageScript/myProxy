@@ -32,14 +32,17 @@ class DomainElement {
         <div class="col-11">
           <span class="domainElement">${domainObj.domain}</span>
         </div>
-        <div class="col-1">
-        <button type="button" class="btn btn-primary setUpButton">Setup</button>
+        <div class="col-1 actionContainer">
+        <button type="button" class="btn btn-primary setUpButton" type="button">Setup</button>
+        <button class='btn btn-primaryloading loading'>Loading...</button>
         </div>
       </div>
     `
     domainElement.classList.add('list-group-item')
+    const actionContainer: HTMLElement = helper.getElement('.actionContainer', domainElement)
     const setUpButton = helper.getElement('.setUpButton', domainElement)
     setUpButton.onclick = (): void => {
+      actionContainer.classList.add('addLoading')
       fetch('/api/admin/sslCerts', {
         method: 'POST',
         body: JSON.stringify({
@@ -50,8 +53,12 @@ class DomainElement {
           'Content-Type': 'application/json'
         }
       })
-        .then(res => res.json())
+        .then((res) => {
+          res.json()
+          actionContainer.classList.remove('addLoading')
+        })
         .then(() => {
+          actionContainer.classList.remove('addLoading')
           window.location.reload()
         })
     }
@@ -73,7 +80,7 @@ class ProviderKeyElement {
         <div class="col-11">
           <span class="providerKeyName">${providerKey.key}</span>
           <input type="text" value="${providerKey.value ||
-            ''}" class="keyInput"></input>
+              ''}" class="keyInput"></input>
           </div>
         <div class="col-1">
           <button type="button" class="btn btn-primary createOrUpdateButton">${buttonText}</button>
