@@ -90,8 +90,13 @@ if (process.env.NODE_ENV === 'production') {
       res.end('hello world')
     }
   )
-
   server.listen(443)
+
+  const httpApp = express()
+  httpApp.get('/*', (req, res)=>{
+  	res.redirect(`https://${req.headers.host}${req.path}`)
+  })
+  httpApp.listen(80)
 }
 
 listener()
