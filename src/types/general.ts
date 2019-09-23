@@ -36,11 +36,17 @@ type ServiceConfig = {
   dns_gd: ProviderService
 }
 
+type ProxyMapping = {
+  ip?: string
+  port?: string
+}
+
 export {
   Mapping,
   Provider,
   Domain,
   ServiceResponse,
   ServiceConfig,
-  ProviderService
+  ProviderService,
+  ProxyMapping
 }
