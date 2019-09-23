@@ -41,13 +41,13 @@ class MappingItem {
     <div style='width: 100%'>
       <div style='display: flex'>
         <a href="">${data.subDomain}.${data.domain}</a>
-          <small class="form-text text-muted" style="display: inline-block;">PORT:${
-            data.port
-          }</small>
+          <small class="form-text text-muted" style="display: inline-block;">
+            PORT:${data.port}
+            </small>
       </div>
-          <small class="form-text text-muted" style="display: inline-block;">Git Link:${
-            data.gitLink
-          }</small>
+          <small class="form-text text-muted" style="display: inline-block;">
+            ${data.gitLink}
+            </small>
           <hr />
    </div>
         <div class="deleteButton" href="/">Delete</div>
