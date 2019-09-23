@@ -54,8 +54,7 @@ class DomainElement {
         }
       })
         .then((res) => {
-          res.json()
-          actionContainer.classList.remove('addLoading')
+          return res.json()
         })
         .then(() => {
           actionContainer.classList.remove('addLoading')
