@@ -69,7 +69,6 @@ mappingRouter.post('/', (req, res) => {
         domainKeys.push(mappingObject)
         setData('mappings', domainKeys)
         res.json(mappingObject)
-        res.json(mappingObject)
       })
   })
 })
