@@ -36,7 +36,7 @@ class MappingItem {
     domainList.appendChild(mappingElement)
     mappingElement.innerHTML = `
     <li class="list-group-item" style="display: flex;">
-    <a href="">${data.subDomain + data.domain}</a>
+    <a href="">${data.subDomain}.${data.domain}</a>
         <small class="form-text text-muted" style="display: inline-block;">PORT:${
   data.port
 }</small>
