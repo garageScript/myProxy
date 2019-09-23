@@ -12,7 +12,7 @@ fi
 if [ ! -d "/home/git" ] ; then
   sudo useradd -m -c "git" git -s /bin/bash -p $(echo $ADMIN | openssl passwd -1 -stdin) -d /home/git
   sudo -u git bash <<EOF
-		cd /home/git
+    cd /home/git
 		git clone https://github.com/garageScript/myproxy/
     mkdir .scripts
     cp myproxy/scripts/post-receive .scripts/post-receive
