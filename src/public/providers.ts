@@ -20,7 +20,6 @@ type Domain = {
   domain: string
   expires?: string
   provider?: string
-
 }
 
 class DomainElement {
