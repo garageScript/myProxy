@@ -13,8 +13,8 @@ import { isCorrectCredentials } from './auth'
 import httpProxy from 'http-proxy'
 
 const proxy = httpProxy.createProxyServer({})
-proxy.on('error', (err)=>{
-	console.log('error', err)
+proxy.on('error', err => {
+  console.log('error', err)
 })
 
 const app = express()
@@ -72,8 +72,14 @@ if (process.env.NODE_ENV === 'production') {
         )
         const filteredDomain = `${domain}.${topLevelDomain}`
 
-	const certPath = filteredHost.length > 2 ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/fullchain.cer` : `${homePath}/\.acme\.sh/\.${filteredDomain}/fullchain.cer`
-	const keyPath = filteredHost.length > 2 ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/*\.${filteredDomain}\.key` : `${homePath}/\.acme\.sh/\.${filteredDomain}/\.${filteredDomain}\.key`
+        const certPath =
+          filteredHost.length > 2
+            ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/fullchain.cer`
+            : `${homePath}/\.acme\.sh/\.${filteredDomain}/fullchain.cer`
+        const keyPath =
+          filteredHost.length > 2
+            ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/*\.${filteredDomain}\.key`
+            : `${homePath}/\.acme\.sh/\.${filteredDomain}/\.${filteredDomain}\.key`
         const secureContext = tls.createSecureContext({
           /* eslint-disable */
           key: fs.readFileSync(keyPath),
@@ -85,20 +91,28 @@ if (process.env.NODE_ENV === 'production') {
       }
     },
     (req, res) => {
-    try{
-      const mappings = getMappings()
-      const { ip, port } =
-        mappings.find(({ subDomain, domain }) => {
-          return `${subDomain}.${domain}` === req.headers.host
-        }) || {}
-	if(!port) return res.end('Cannot redirect')
-	if(port) return proxy.web(req, res, { target: `http://${ip}:${port}` }, (err)=>{
-		console.log('Error communicating with server', err)
-		res.end(`Error communicating with server that runs ${req.headers.host}`)
-	})
-      }catch(err){
+      try {
+        const mappings = getMappings()
+        const { ip, port } =
+          mappings.find(({ subDomain, domain }) => {
+            return `${subDomain}.${domain}` === req.headers.host
+          }) || {}
+        if (!port) return res.end('Cannot redirect')
+        if (port)
+          return proxy.web(
+            req,
+            res,
+            { target: `http://${ip}:${port}` },
+            err => {
+              console.log('Error communicating with server', err)
+              res.end(
+                `Error communicating with server that runs ${req.headers.host}`
+              )
+            }
+          )
+      } catch (err) {
         console.log('Error: proxy failed', err)
-      	return res.end(`Error: failed to create proxy ${req.headers.host}`)
+        return res.end(`Error: failed to create proxy ${req.headers.host}`)
       }
     }
   )
