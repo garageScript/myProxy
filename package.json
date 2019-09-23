@@ -10,10 +10,13 @@
     "build": "tsc -p .",
     "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts",
     "prettier:base": "prettier --parser typescript --single-quote --no-semi",
+    "prettier:check": "npm run prettier:base -- \"src/**/*.{ts,tsx}\"",
     "prettier:write": "npm run prettier:base -- --write \"src/**/*.{ts,tsx}\"",
     "coverage": "nyc npm run test",
+    "eslint:check": "./node_modules/.bin/eslint src/ --ext .ts",
     "eslint:fix": "./node_modules/.bin/eslint src/ --ext .ts --fix",
-    "autofix": "npm run prettier:write & npm run eslint:fix",
+    "lint": "npm run prettier:check && npm run eslint:check",
+    "autofix": "npm run prettier:write && npm run eslint:fix",
     "server": "npm run setup; pm2 startOrRestart ./scripts/prod.config.js --env production --update-env",
     "server:stop": "pm2 stop myProxy-prod"
   },
@@ -57,8 +60,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run autofix",
-      "pre-push": "npm run build & npm test"
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run lint && npm run build && npm test"
     }
   }
 }

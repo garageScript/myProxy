@@ -6,9 +6,10 @@ MyProxy is an application that:
 * Run an unlimited number of applications on your subdomains.
 
 ## Why?
-Setting up a server is hard, especially setting up DNS records, managing certificates, and deployment.  
-So we setup to build a simple and usable app that helps us build applications quickly.   
+Setting up a server is hard, especially setting up DNS records, managing certificates, and deployment. So we setup to build a simple and usable app that helps us build applications quickly.   
+
 We are new to software engineering so if you find areas where this app could be improved, please let us know by [creating an issue](https://github.com/garageScript/myproxy/issues). We are excited to learn!  
+
 Also, we are currently looking for a job. If your team needs software engineers, please hire us:
 * [Alberto Lopez](https://github.com/albertoelopez) - Available immediately
 * [David De Wulf](https://github.com/Wolfy64) - Available immediately
@@ -36,7 +37,11 @@ Go to your server url: `http://your-server-ip-address:3000`. You will be prompte
 
 All your domain names in that provider will show up. Click the `setup` button next to the domain you wish to setup (could take up to 3 minutes)
 
-After your domain is setup, you will be able to generate as many subdomain repository as you want.
+After your domain is setup, you will be able to generate as many subdomain repository as you want! To do that:
+1. Go to your server url:  `http://your-server-ip-address:3000`
+2. Create a subdomain. Ip and port are optional. You should see a git link that was created for you.
+3. `git clone` the app, then build the app locally.
+4. When you are done, `git push origin master` and watch your app run in production!
 
 # Development
 The following steps will guide you through how to setup your development environment to send pull requests or build your own custom features.
