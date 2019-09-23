@@ -31,17 +31,20 @@ class DomainElement {
     container: HTMLElement
   ) {
     const domainElement = document.createElement('div')
-    const checkDomain = availableDomains.find((e) => e.domain === domainObj.domain)
+    const foundDomain = availableDomains.find((e) => e.domain === domainObj.domain)
+    const checkDomain = foundDomain
       ? '<i class="fa fa-check-circle" style="color:green"></i>'
       : ''
+    const isSetup = foundDomain ? 'Reconfigure' : 'Setup'
+    const setUpButtonClass = isSetup === 'Reconfigure' ? 'btn-danger' : 'btn-primary'
     domainElement.innerHTML = `
       <div class="row">
-        <div class="col-11">
+        <div class="col-10">
           <span class="domainElement">${domainObj.domain}</span>
           ${checkDomain}
         </div>
-        <div class="col-1">
-        <button type="button" class="btn btn-primary setUpButton">Setup</button>
+        <div class="col-2" style="display:flex; align-items:right; justify-content:right">
+          <button type="button" class="btn ${setUpButtonClass} setUpButton">${isSetup}</button>
         </div>
       </div>
     `
@@ -78,12 +81,12 @@ class ProviderKeyElement {
     const buttonText = isNew ? 'Create' : 'Update'
     providerKeyElement.innerHTML = `
       <div class="row">
-        <div class="col-11">
+        <div class="col-10">
           <span class="providerKeyName">${providerKey.key}</span>
           <input type="text" value="${providerKey.value ||
               ''}" class="keyInput"></input>
           </div>
-        <div class="col-1">
+        <div class="col-2" style="display:flex; align-items:right; justify-content:right">
           <button type="button" class="btn btn-primary createOrUpdateButton">${buttonText}</button>
       </div>
     `
