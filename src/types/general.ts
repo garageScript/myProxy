@@ -35,7 +35,7 @@ type ServiceConfig = {
 }
 
 type ProxyMapping = {
-  ip?: string,
+  ip?: string
   port?: string
 }
 
@@ -46,5 +46,5 @@ export {
   ServiceResponse,
   ServiceConfig,
   ProviderService,
-  ProxyMapping,
+  ProxyMapping
 }
