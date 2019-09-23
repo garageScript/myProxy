@@ -16,6 +16,9 @@ const getNextPort = (map, start = 3002): number => {
 
 mappingRouter.post('/', (req, res) => {
   const domainKeys = getMappings()
+  if (parseInt(req.body.port) < 3001) {
+    return res.status(400).json({ message: 'Port cannot be smaller than 3001' })
+  }
   const map = domainKeys.reduce((acc, e) => {
     acc[e.port] = true
     return acc
