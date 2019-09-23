@@ -76,11 +76,11 @@ if (process.env.NODE_ENV === 'production') {
         const certPath =
           filteredHost.length > 2
             ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/fullchain.cer`
-            : `${homePath}/\.acme\.sh/\.${filteredDomain}/fullchain.cer`
+            : `${homePath}/\.acme\.sh/${filteredDomain}/fullchain.cer`
         const keyPath =
           filteredHost.length > 2
             ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/*\.${filteredDomain}\.key`
-            : `${homePath}/\.acme\.sh/\.${filteredDomain}/\.${filteredDomain}\.key`
+            : `${homePath}/\.acme\.sh/${filteredDomain}/${filteredDomain}\.key`
         const secureContext = tls.createSecureContext({
           /* eslint-disable */
           key: fs.readFileSync(keyPath),
