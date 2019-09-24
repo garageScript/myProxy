@@ -43,7 +43,8 @@ mappingRouter.post('/', (req, res) => {
   const projectPath = '/home/git'
   const scriptPath = '.scripts'
   exec('id -u git').then(result => {
-    exec(`
+    exec(
+      `
       cd ${projectPath}
       mkdir ${fullDomain}
       git init ${fullDomain}
@@ -55,21 +56,22 @@ mappingRouter.post('/', (req, res) => {
       echo 'module.exports = ${JSON.stringify(prodConfig)}' > deploy.config.js
       git add .
       git commit -m "Initial Commit"
-      `, { uid: parseInt(result.stdout) })
-      .then(() => {
-        const mappingObject: Mapping = {
-          domain: req.body.domain,
-          subDomain: req.body.subDomain,
-          port: req.body.port || `${portCounter}`,
-          ip: req.body.ip || '127.0.0.1',
-          id: uuid4(),
-          gitLink: `git@${req.body.domain}:${projectPath}/${fullDomain}`,
-          fullDomain,
-        }
-        domainKeys.push(mappingObject)
-        setData('mappings', domainKeys)
-        res.json(mappingObject)
-      })
+      `,
+      { uid: parseInt(result.stdout) }
+    ).then(() => {
+      const mappingObject: Mapping = {
+        domain: req.body.domain,
+        subDomain: req.body.subDomain,
+        port: req.body.port || `${portCounter}`,
+        ip: req.body.ip || '127.0.0.1',
+        id: uuid4(),
+        gitLink: `git@${req.body.domain}:${projectPath}/${fullDomain}`,
+        fullDomain
+      }
+      domainKeys.push(mappingObject)
+      setData('mappings', domainKeys)
+      res.json(mappingObject)
+    })
   })
 })
 
