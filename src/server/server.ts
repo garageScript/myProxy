@@ -111,9 +111,7 @@ const startProxyServer = (homePath: string): void => {
 
   const httpApp = express()
   httpApp.get('/*', (req, res) => {
-    const params = Object.keys(req.query).length
-      ? `?${req.headers.host.split('?')[1]}`
-      : ''
+    const params = `?${req.headers.host.split('?')[1]}` || ''
     res.redirect(`https://${req.headers.host}${req.path}${params}`)
   })
   httpApp.listen(80)
