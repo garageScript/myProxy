@@ -34,7 +34,10 @@ class DomainElement {
         </div>
         <div class="col-1 actionContainer">
         <button type="button" class="btn btn-primary setUpButton" type="button">Setup</button>
-        <button class='btn btn-primaryloading loading'>Loading...</button>
+        <button class="btn btn-primary loading" type="button" disabled>
+        <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+            Loading...
+            </button>
         </div>
       </div>
     `
@@ -42,7 +45,7 @@ class DomainElement {
     const actionContainer: HTMLElement = helper.getElement('.actionContainer', domainElement)
     const setUpButton = helper.getElement('.setUpButton', domainElement)
     setUpButton.onclick = (): void => {
-      actionContainer.classList.add('addLoading')
+      actionContainer.classList.add('isLoading')
       fetch('/api/admin/sslCerts', {
         method: 'POST',
         body: JSON.stringify({
@@ -57,7 +60,6 @@ class DomainElement {
           return res.json()
         })
         .then(() => {
-          actionContainer.classList.remove('addLoading')
           window.location.reload()
         })
     }
