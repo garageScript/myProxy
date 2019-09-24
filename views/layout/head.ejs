@@ -21,6 +21,15 @@
         display: inline-block;
         cursor: pointer;
       }
+      .actionContainer .loading {
+        display: none;
+      }
+      .actionContainer.isLoading .loading {
+        display: inline-block;
+      }
+      .actionContainer.isLoading .setUpButton {
+        display: none;
+      }
     </style>
   </head>
   <body>

@@ -42,14 +42,24 @@ class DomainElement {
           <span class="domainElement">${domainObj.domain}</span>
           ${checkDomain}
         </div>
-        <div class="col-2" style="display:flex; align-items:right; justify-content:right">
-          <button type="button" class="btn ${setUpButtonClass} setUpButton">${isSetup}</button>
+        <div class="col-2" style="align-items:right; justify-content:right">
+          <div class="actionContainer">
+            <button type="button" class="btn ${setUpButtonClass} setUpButton">
+              ${isSetup}
+            </button>
+            <button class="btn btn-primary loading" type="button" disabled>
+              <i class="fa fa-spinner fa-spin"></i>
+              Loading...
+            </button>
+          </div>
         </div>
       </div>
     `
     domainElement.classList.add('list-group-item')
+    const actionContainer: HTMLElement = helper.getElement('.actionContainer', domainElement)
     const setUpButton = helper.getElement('.setUpButton', domainElement)
     setUpButton.onclick = (): void => {
+      actionContainer.classList.add('isLoading')
       fetch('/api/admin/sslCerts', {
         method: 'POST',
         body: JSON.stringify({
@@ -60,7 +70,9 @@ class DomainElement {
           'Content-Type': 'application/json'
         }
       })
-        .then(res => res.json())
+        .then((res) => {
+          return res.json()
+        })
         .then(() => {
           window.location.reload()
         })
