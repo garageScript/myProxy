@@ -46,7 +46,6 @@ class MappingItem {
           <small class="form-text text-muted" style="display: inline-block;">
             ${data.gitLink}
           </small>
-          <hr />
         </div>
         <div class="deleteButton" href="/">Delete</div>
         <div class="edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
