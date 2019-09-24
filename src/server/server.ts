@@ -12,8 +12,13 @@ import { getAvailableDomains, getMappings } from '../lib/data'
 import { isCorrectCredentials } from '../auth'
 import httpProxy from 'http-proxy'
 import { ProxyMapping } from '../types/general'
+const cyan = '\x1b[36m\u001b[1m%s\x1b[0m'
+const red = '\x1b[31m\u001b[1m%s\x1b[0m'
 
-const startAppServer = (port: string | number, adminPass: string): void =>{
+const startAppServer = (port: string | number, adminPass: string): void => {
+  if (!adminPass) {
+    return console.log(red, 'Admin UI/API is turned off')
+  }
   const app = express()
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
@@ -41,20 +46,12 @@ const startAppServer = (port: string | number, adminPass: string): void =>{
     return res.render('login', { error: 'Wrong Admin Password' })
   })
 
-  const listener = (): void => {
-    const cyan = '\x1b[36m\u001b[1m%s\x1b[0m'
-    const red = '\x1b[31m\u001b[1m%s\x1b[0m'
-    if (!process.env.ADMIN) {
-      return console.log(red, 'Admin UI/API is turned off')
-    }
-    app.listen(port, () =>
-      console.log(cyan, `myProxy is running on port ${port}!`)
-    )
-  }
-  listener()
+  app.listen(port, () =>
+    console.log(cyan, `myProxy is running on port ${port}!`)
+  )
 }
 
-const startProxyServer = (homePath: string): void =>{
+const startProxyServer = (homePath: string): void => {
   const proxy = httpProxy.createProxyServer({})
   proxy.on('error', err => {
     console.error('Proxy error', err)
@@ -74,12 +71,12 @@ const startProxyServer = (homePath: string): void =>{
 
         const certPath =
           filteredHost.length > 2
-          ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/fullchain.cer`
-          : `${homePath}/\.acme\.sh/${filteredDomain}/fullchain.cer`
+            ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/fullchain.cer`
+            : `${homePath}/\.acme\.sh/${filteredDomain}/fullchain.cer`
         const keyPath =
           filteredHost.length > 2
-          ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/*\.${filteredDomain}\.key`
-          : `${homePath}/\.acme\.sh/${filteredDomain}/${filteredDomain}\.key`
+            ? `${homePath}/\.acme\.sh/*\.${filteredDomain}/*\.${filteredDomain}\.key`
+            : `${homePath}/\.acme\.sh/${filteredDomain}/${filteredDomain}\.key`
         const secureContext = tls.createSecureContext({
           /* eslint-disable */
           key: fs.readFileSync(keyPath),
@@ -114,7 +111,9 @@ const startProxyServer = (homePath: string): void =>{
 
   const httpApp = express()
   httpApp.get('/*', (req, res) => {
-    const params = req.query ? `?${req.headers.host.split('?')[1]}` : ''
+    const params = Object.keys(req.query).length
+      ? `?${req.headers.host.split('?')[1]}`
+      : ''
     res.redirect(`https://${req.headers.host}${req.path}${params}`)
   })
   httpApp.listen(80)
