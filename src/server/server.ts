@@ -13,10 +13,8 @@ import { isCorrectCredentials } from '../auth'
 import httpProxy from 'http-proxy'
 import { ProxyMapping } from '../types/general'
 
-const startAppServer = (): void =>{
+const startAppServer = (port: string | number, adminPass: string): void =>{
   const app = express()
-  const port: string | number = process.env.PORT || 3000
-
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
   app.use(cookieParser())
@@ -35,7 +33,6 @@ const startAppServer = (): void =>{
   app.get('/login', (req, res) => res.render('login', { error: '' }))
 
   app.post('/login', (req, res) => {
-    const { adminPass } = req.body
     if (isCorrectCredentials(adminPass)) {
       res.cookie('adminPass', hashPass(adminPass), { httpOnly: true })
       return res.redirect('/admin')
@@ -57,7 +54,7 @@ const startAppServer = (): void =>{
   listener()
 }
 
-const startProxyServer = (): void =>{
+const startProxyServer = (homePath: string): void =>{
   const proxy = httpProxy.createProxyServer({})
   proxy.on('error', err => {
     console.error('Proxy error', err)
@@ -67,7 +64,6 @@ const startProxyServer = (): void =>{
     {
       SNICallback: (host, cb) => {
         // escape characters required or readFileSync will not find file
-        const homePath = process.env.HOME
         /* eslint-disable */
         const filteredHost = host.split('.')
         const [domain, topLevelDomain] = filteredHost.slice(
