@@ -18,26 +18,40 @@ type ProviderKey = {
 
 type Domain = {
   domain: string
+  expires?: string
+  provider?: string
 }
 
 class DomainElement {
   constructor(
     domainObj: Domain,
     domainService: string,
+    availableDomains: Domain[],
     container: HTMLElement
   ) {
     const domainElement = document.createElement('div')
+    const foundDomain = availableDomains.find((e) => e.domain === domainObj.domain)
+    const checkDomain = foundDomain
+      ? '<i class="fa fa-check-circle" style="color:green"></i>'
+      : ''
+    const isSetup = foundDomain ? 'Reconfigure' : 'Setup'
+    const setUpButtonClass = isSetup === 'Reconfigure' ? 'btn-danger' : 'btn-primary'
     domainElement.innerHTML = `
       <div class="row">
-        <div class="col-11">
+        <div class="col-10">
           <span class="domainElement">${domainObj.domain}</span>
+          ${checkDomain}
         </div>
-        <div class="col-1 actionContainer">
-        <button type="button" class="btn btn-primary setUpButton" type="button">Setup</button>
-        <button class="btn btn-primary loading" type="button" disabled>
-        <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
-            Loading...
+        <div class="col-2" style="align-items:right; justify-content:right">
+          <div class="actionContainer">
+            <button type="button" class="btn ${setUpButtonClass} setUpButton">
+              ${isSetup}
             </button>
+            <button class="btn btn-primary loading" type="button" disabled>
+              <i class="fa fa-spinner fa-spin"></i>
+              Loading...
+            </button>
+          </div>
         </div>
       </div>
     `
@@ -78,12 +92,12 @@ class ProviderKeyElement {
     const buttonText = isNew ? 'Create' : 'Update'
     providerKeyElement.innerHTML = `
       <div class="row">
-        <div class="col-11">
+        <div class="col-10">
           <span class="providerKeyName">${providerKey.key}</span>
           <input type="text" value="${providerKey.value ||
               ''}" class="keyInput"></input>
           </div>
-        <div class="col-1">
+        <div class="col-2" style="display:flex; align-items:right; justify-content:right">
           <button type="button" class="btn btn-primary createOrUpdateButton">${buttonText}</button>
       </div>
     `
@@ -141,9 +155,13 @@ class ProviderElement {
         providerKeysContainer
       )
     })
-    provider.domains.map(domain => {
-      return new DomainElement(domain, providerId, domainListContainer)
-    })
+    fetch('/api/availableDomains')
+      .then(res => res.json())
+      .then((availableDomains) => {
+        provider.domains.map(domain => {
+          return new DomainElement(domain, providerId, availableDomains, domainListContainer)
+        })
+      })
     providerList.appendChild(providerContainer)
   }
 }
