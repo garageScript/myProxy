@@ -42,7 +42,7 @@ class DomainElement {
           <span class="domainElement">${domainObj.domain}</span>
           ${checkDomain}
         </div>
-        <div class="col-2" style="align-items:right; justify-content:right">
+        <div class="col-2" style="display:flex; justify-content:right">
           <div class="actionContainer">
             <button type="button" class="btn ${setUpButtonClass} setUpButton">
               ${isSetup}
