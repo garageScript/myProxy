@@ -10,25 +10,23 @@ type Mapping = {
 }
 
 const create: HTMLElement = helper.getElement('.create')
-const hostSelector: HTMLElement = helper.getElement('.hostSelector')
+const hostSelector: HTMLElement = helper.getElement('#hostSelector')
 const domainList: HTMLElement = helper.getElement('.domainList')
 const dropDownDomains: HTMLElement = helper.getElement('.dropdown-menu')
 let selectedHost = ''
 
 // eslint-disable-next-line
 class DomainOption {
-  constructor(data: Mapping) {
-    const dropdownElement = document.createElement('div')
-    dropDownDomains.appendChild(dropdownElement)
-    dropdownElement.innerHTML = `
-    <li class="list-group-item" style="display: flex;">
-    ${data.domain}
-    </li>
-    `
+  constructor(domain: string) {
+    const dropdownElement = document.createElement('button')
+    dropdownElement.classList.add('dropdown-item')
+    dropdownElement.textContent = domain
     dropdownElement.onclick = (): void => {
-      hostSelector.innerText = data.domain
-      selectedHost = data.domain
+      hostSelector.innerText = domain
+      selectedHost = domain
     }
+
+    dropDownDomains.appendChild(dropdownElement)
   }
 }
 
@@ -37,22 +35,21 @@ class MappingItem {
     const mappingElement = document.createElement('div')
     domainList.appendChild(mappingElement)
     mappingElement.innerHTML = `
-    <li class="list-group-item" style="display: flex;">
-    <div style='width: 100%'>
-      <div style='display: flex'>
-        <a href="">${data.subDomain}.${data.domain}</a>
-          <small class="form-text text-muted" style="display: inline-block;">
-            PORT:${data.port}
+      <li class="list-group-item" style="display: flex;">
+        <div style='width: 100%'>
+          <div style='display: flex'>
+            <a href="">${data.subDomain}.${data.domain}</a>
+            <small class="form-text text-muted" style="display: inline-block;">
+              PORT:${data.port}
             </small>
-      </div>
+          </div>
           <small class="form-text text-muted" style="display: inline-block;">
             ${data.gitLink}
-            </small>
-          <hr />
-   </div>
+          </small>
+        </div>
         <div class="deleteButton" href="/">Delete</div>
         <div class="edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
-    </li>
+      </li>
 `
 
     const delButton = helper.getElement('.deleteButton', mappingElement)
@@ -160,7 +157,16 @@ fetch('/api/mappings')
     domainList.innerHTML = ''
     data.reverse()
     data
-      .filter(e => e.subDomain && e.domain && e.port && e.id && e.ip && e.gitLink && e.fullDomain)
+      .filter(
+        e =>
+          e.subDomain &&
+          e.domain &&
+          e.port &&
+          e.id &&
+          e.ip &&
+          e.gitLink &&
+          e.fullDomain
+      )
       .forEach(e => {
         new MappingItem(e)
       })
@@ -187,7 +193,8 @@ create.onclick = (): void => {
       'Content-Type': 'application/json'
     }
   }).then(res => {
-    if (res.status === 400) return alert('Port Value cannot be smaller than 3001')
+    if (res.status === 400)
+      return alert('Port Value cannot be smaller than 3001')
     window.location.reload()
   })
   port.value = ''
@@ -198,5 +205,8 @@ create.onclick = (): void => {
 fetch('/api/availableDomains')
   .then(r => r.json())
   .then((data: Mapping[]) => {
-    data.forEach(e => new DomainOption(e))
+    const domains = data.map(el => el.domain).sort()
+    domains.forEach(domain => new DomainOption(domain))
+    selectedHost = domains[0]
+    hostSelector.innerText = domains[0]
   })

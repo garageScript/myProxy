@@ -30,19 +30,22 @@ class DomainElement {
     container: HTMLElement
   ) {
     const domainElement = document.createElement('div')
-    const foundDomain = availableDomains.find((e) => e.domain === domainObj.domain)
+    const foundDomain = availableDomains.find(
+      e => e.domain === domainObj.domain
+    )
     const checkDomain = foundDomain
       ? '<i class="fa fa-check-circle" style="color:green"></i>'
       : ''
     const isSetup = foundDomain ? 'Reconfigure' : 'Setup'
-    const setUpButtonClass = isSetup === 'Reconfigure' ? 'btn-danger' : 'btn-primary'
+    const setUpButtonClass =
+      isSetup === 'Reconfigure' ? 'btn-danger' : 'btn-primary'
     domainElement.innerHTML = `
       <div class="row">
         <div class="col-10">
           <span class="domainElement">${domainObj.domain}</span>
           ${checkDomain}
         </div>
-        <div class="col-2" style="align-items:right; justify-content:right">
+        <div class="col-2" style="display:flex; justify-content:right">
           <div class="actionContainer">
             <button type="button" class="btn ${setUpButtonClass} setUpButton">
               ${isSetup}
@@ -56,7 +59,10 @@ class DomainElement {
       </div>
     `
     domainElement.classList.add('list-group-item')
-    const actionContainer: HTMLElement = helper.getElement('.actionContainer', domainElement)
+    const actionContainer: HTMLElement = helper.getElement(
+      '.actionContainer',
+      domainElement
+    )
     const setUpButton = helper.getElement('.setUpButton', domainElement)
     setUpButton.onclick = (): void => {
       actionContainer.classList.add('isLoading')
@@ -70,7 +76,7 @@ class DomainElement {
           'Content-Type': 'application/json'
         }
       })
-        .then((res) => {
+        .then(res => {
           return res.json()
         })
         .then(() => {
@@ -95,7 +101,7 @@ class ProviderKeyElement {
         <div class="col-10">
           <span class="providerKeyName">${providerKey.key}</span>
           <input type="text" value="${providerKey.value ||
-              ''}" class="keyInput"></input>
+            ''}" class="keyInput"></input>
           </div>
         <div class="col-2" style="display:flex; align-items:right; justify-content:right">
           <button type="button" class="btn btn-primary createOrUpdateButton">${buttonText}</button>
@@ -157,9 +163,14 @@ class ProviderElement {
     })
     fetch('/api/availableDomains')
       .then(res => res.json())
-      .then((availableDomains) => {
+      .then(availableDomains => {
         provider.domains.map(domain => {
-          return new DomainElement(domain, providerId, availableDomains, domainListContainer)
+          return new DomainElement(
+            domain,
+            providerId,
+            availableDomains,
+            domainListContainer
+          )
         })
       })
     providerList.appendChild(providerContainer)
