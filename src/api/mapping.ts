@@ -35,7 +35,7 @@ mappingRouter.post('/', (req, res) => {
         max_memory_restart: '1G',
         env_production: {
           NODE_ENV: 'production',
-          PORT: parseInt(req.body.port, 10)
+          PORT: parseInt(req.body.port || portCounter, 10)
         }
       }
     ]
