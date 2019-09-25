@@ -4,4 +4,5 @@ GIT_DIR='.git'
 umask 002 && git reset --hard
 git checkout master
 git branch -D prod
-pm2 startOrRestart deploy.config.js
+npm install
+pm2 startOrRestart deploy.config.js --env production --update-env
