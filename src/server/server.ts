@@ -23,12 +23,11 @@ const startAppServer = (port: string | number, adminPass: string): void => {
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
   app.use(cookieParser())
-  app.use(express.static(path.join(__dirname, 'public')))
+  app.use(express.static(path.join(__dirname, '../public')))
   app.use('/admin', adminRouter)
   app.use('/api', apiRouter)
-
   app.set('view engine', 'ejs')
-  app.set('views', path.join(__dirname, '../views'))
+  app.set('views', path.join(__dirname, '../../views'))
 
   app.get('/', (_, res) =>
     getAvailableDomains().length > 0
