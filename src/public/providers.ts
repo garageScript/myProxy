@@ -30,9 +30,7 @@ class DomainElement {
     container: HTMLElement
   ) {
     const domainElement = document.createElement('li')
-    domainElement.classList.add(
-      'd-flex', 'align-items-center', 'justify-content-between'
-    )
+    domainElement.classList.add('list-group-item')
     const foundDomain = availableDomains.find(
       e => e.domain === domainObj.domain
     )
@@ -43,8 +41,20 @@ class DomainElement {
     const setUpButtonClass =
       isSetup === 'Reconfigure' ? 'btn-danger' : 'btn-primary'
     domainElement.innerHTML = `
-      <div>${domainObj.domain} ${checkDomain}</div>
-      <div class="actionContainer">
+      <div class="
+        actionContainer d-flex
+        align-items-center
+        justify-content-between"
+      >
+        <div>${domainObj.domain} ${checkDomain}</div>
+        <div class="
+          actionContainer
+          alert alert-warning
+          m-0 p-1 loading"
+          role="alert"
+        >
+          Please wait this might take a little while...
+        </div>
         <button type="button" class="btn ${setUpButtonClass} setUpButton">
           ${isSetup}
         </button>
@@ -54,7 +64,6 @@ class DomainElement {
         </button>
       </div>
     `
-    domainElement.classList.add('list-group-item')
     const actionContainer: HTMLElement = helper.getElement(
       '.actionContainer',
       domainElement
