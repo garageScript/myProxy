@@ -97,7 +97,7 @@ class ProviderKeyElement {
     const isNew = !providerKey.id
     const buttonText = isNew ? 'Create' : 'Update'
     providerKeyElement.innerHTML = `
-      <div class="input-group mb-3">
+      <div class="input-group">
         <div class="input-group-prepend">
           <span
             class="input-group-text"
