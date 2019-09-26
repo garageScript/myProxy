@@ -97,14 +97,28 @@ class ProviderKeyElement {
     const isNew = !providerKey.id
     const buttonText = isNew ? 'Create' : 'Update'
     providerKeyElement.innerHTML = `
-      <div class="row">
-        <div class="col-10">
-          <span class="providerKeyName">${providerKey.key}</span>
-          <input type="text" value="${providerKey.value ||
-            ''}" class="keyInput"></input>
-          </div>
-        <div class="col-2" style="display:flex; align-items:right; justify-content:right">
-          <button type="button" class="btn btn-primary createOrUpdateButton">${buttonText}</button>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span
+            class="input-group-text"
+            id="inputGroup-sizing-default">
+              ${providerKey.key.replace('_', ' ')}
+          </span>
+        </div>
+        <input
+          type="text"
+          class="form-control"
+          aria-label="Default"
+          aria-describedby="inputGroup-sizing-default"
+          value="${providerKey.value || ''}"
+        >
+        <div class="input-group-append">
+          <button
+            class="btn btn-primary createOrUpdateButton"
+            type="button">
+              ${buttonText}
+          </button>
+        </div>
       </div>
     `
     providerKeyElement.className = 'list-group-item'
