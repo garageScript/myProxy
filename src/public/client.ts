@@ -100,13 +100,13 @@ class MappingItem {
           <div class="col">
             <div class="input-group m-1">
               <div class="input-group-prepend">
-                <span class="input-group-text">Port</span>
+                <span class="input-group-text">Port Number</span>
               </div>
               <input type="text" class="form-control port" placeholder=${data.port}>
             </div>
             <div class="input-group m-1">
               <div class="input-group-prepend">
-                <span class="input-group-text">IP</span>
+                <span class="input-group-text">IP Adress</span>
               </div>
               <input type="text" class="form-control ip" placeholder=${data.ip}>
             </div>
@@ -160,26 +160,6 @@ fetch('/api/mappings')
   .then(r => r.json())
   .then((data: Mapping[]) => {
     domainList.innerHTML = ''
-    data = [
-      {
-        subDomain: 'subDomain',
-        domain: 'domain',
-        port: '3002',
-        id: '12345',
-        ip: '128.0.0.1',
-        gitLink: 'git@hireme.fun:/home/git/david.hireme.fun',
-        fullDomain: 'fullDomain'
-      },
-      {
-        subDomain: 'subDomain',
-        domain: 'domain',
-        port: '3002',
-        id: '12345',
-        ip: '128.0.0.1',
-        gitLink: 'git@hireme.fun:/home/git/david.hireme.fun',
-        fullDomain: 'fullDomain'
-      }
-    ]
     data.reverse()
     data
       .filter(
