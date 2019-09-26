@@ -29,7 +29,10 @@ class DomainElement {
     availableDomains: Domain[],
     container: HTMLElement
   ) {
-    const domainElement = document.createElement('div')
+    const domainElement = document.createElement('li')
+    domainElement.classList.add(
+      'd-flex', 'align-items-center', 'justify-content-between'
+    )
     const foundDomain = availableDomains.find(
       e => e.domain === domainObj.domain
     )
@@ -40,22 +43,15 @@ class DomainElement {
     const setUpButtonClass =
       isSetup === 'Reconfigure' ? 'btn-danger' : 'btn-primary'
     domainElement.innerHTML = `
-      <div class="row">
-        <div class="col-10">
-          <span class="domainElement">${domainObj.domain}</span>
-          ${checkDomain}
-        </div>
-        <div class="col-2" style="display:flex; justify-content:right">
-          <div class="actionContainer">
-            <button type="button" class="btn ${setUpButtonClass} setUpButton">
-              ${isSetup}
-            </button>
-            <button class="btn btn-primary loading" type="button" disabled>
-              <i class="fa fa-spinner fa-spin"></i>
-              Loading...
-            </button>
-          </div>
-        </div>
+      <div>${domainObj.domain} ${checkDomain}</div>
+      <div class="actionContainer">
+        <button type="button" class="btn ${setUpButtonClass} setUpButton">
+          ${isSetup}
+        </button>
+        <button class="btn btn-primary loading" type="button" disabled>
+          <i class="fa fa-spinner fa-spin"></i>
+          Loading...
+        </button>
       </div>
     `
     domainElement.classList.add('list-group-item')
@@ -153,12 +149,12 @@ class ProviderElement {
     const providerContainer = document.createElement('div')
     providerContainer.innerHTML = `
         <h3>${provider.name}</h4>
-        <ul class="list-group-item">
+        <div class="list-group-item">
           <div class="providerKeysContainer"></div>
           <hr />
           <h4>Domains</h4>
           <ul class="domainList list-group"></ul>
-        </ul>
+        </div>
       `
     const providerKeysContainer = helper.getElement(
       '.providerKeysContainer',
