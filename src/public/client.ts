@@ -32,24 +32,35 @@ class DomainOption {
 
 class MappingItem {
   constructor(data: Mapping) {
-    const mappingElement = document.createElement('div')
+    const mappingElement = document.createElement('li')
+    mappingElement.classList.add(
+      'list-group-item',
+      'd-flex',
+      'align-items-center'
+    )
     domainList.appendChild(mappingElement)
     mappingElement.innerHTML = `
-      <li class="list-group-item" style="display: flex;">
-        <div style='width: 100%'>
-          <div style='display: flex'>
-            <a href="">${data.subDomain}.${data.domain}</a>
-            <small class="form-text text-muted" style="display: inline-block;">
-              PORT:${data.port}
-            </small>
-          </div>
-          <small class="form-text text-muted" style="display: inline-block;">
-            ${data.gitLink}
+      <div style='width: 100%'>
+        <div style='display: flex'>
+          <a href="">${data.subDomain}.${data.domain}</a>
+          <small
+            class="form-text text-muted ml-1" style="display: inline-block;"
+          >
+            PORT: ${data.port}
           </small>
         </div>
-        <div class="deleteButton" href="/">Delete</div>
-        <div class="edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
-      </li>
+        <small class="form-text text-muted" style="display: inline-block;">
+          ${data.gitLink}
+        </small>
+      </div>
+      <button
+        class="btn btn-sm btn-outline-danger mr-3 deleteButton"
+        type="button">
+          Delete
+      </button>
+      <button class="btn btn-sm btn-outline-primary edit" type="button">
+        Edit
+      </button>
 `
 
     const delButton = helper.getElement('.deleteButton', mappingElement)
@@ -155,6 +166,26 @@ fetch('/api/mappings')
   .then(r => r.json())
   .then((data: Mapping[]) => {
     domainList.innerHTML = ''
+    data = [
+      {
+        subDomain: 'subDomain',
+        domain: 'domain',
+        port: '3002',
+        id: '12345',
+        ip: '128.0.0.1',
+        gitLink: 'git@hireme.fun:/home/git/david.hireme.fun',
+        fullDomain: 'fullDomain'
+      },
+      {
+        subDomain: 'subDomain',
+        domain: 'domain',
+        port: '3002',
+        id: '12345',
+        ip: '128.0.0.1',
+        gitLink: 'git@hireme.fun:/home/git/david.hireme.fun',
+        fullDomain: 'fullDomain'
+      }
+    ]
     data.reverse()
     data
       .filter(
