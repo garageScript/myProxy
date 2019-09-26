@@ -62,7 +62,7 @@ class MappingItem {
       <button class="btn btn-sm btn-outline-primary edit" type="button">
         Edit
       </button>
-`
+    `
 
     const delButton = helper.getElement('.deleteButton', mappingElement)
     delButton.onclick = (): void => {

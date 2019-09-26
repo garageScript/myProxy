@@ -2,46 +2,53 @@
 
 <div class="container" style="margin-top: 50px;">
   <h1>My Proxy</h1>
-  <div class="form-inline">
-    <div class="form-group mb-2">
-      <label for="subdomain" class="sr-only">Subdomain</label>
+  <div class="form-inline d-flex justify-content-between">
+    <div class="input-group mr-3 mb-2">
       <input
         type="text"
         class="form-control subDomain"
         id="subdomain"
         placeholder="Subdomain"
       />
-    </div>
-    <div class="form-group mb-2">
-      <div class="dropdown">
-          <button
-            type="button"
-            class="btn btn-outline-info dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-            id="hostSelector"
-            data-value=""
-          ></button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"></div>
+      <div class="input-group-append">
+        <button
+          type="button"
+          class="btn btn-outline-info dropdown-toggle"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+          id="hostSelector"
+          data-value=""
+        ></button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"></div>
       </div>
     </div>
-    <div class="form-group mx-sm-3 mb-2">
-      <label for="port" class="sr-only">Port</label>
+    <div class="input-group mr-3 mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">
+          Port Number
+        </span>
+      </div>
       <input
-        type="text"
         class="form-control port"
+        type="text"
         id="port"
-        placeholder="Port Number"
+        placeholder="Optional"
+        aria-label="Port"
+        aria-describedby="inputGroup-sizing-default"
       />
     </div>
-    <div class="form-group mx-sm-3 mb-2">
-      <label for="ipAddress" class="sr-only">IP ADDRESS</label>
+    <div class="input-group mr-3 mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">
+          IP Address
+        </span>
+      </div>
       <input
         type="text"
         class="form-control ipAddress"
         id="ipAddress"
-        placeholder="IP Address"
+        placeholder="Optio"
       />
     </div>
     <button
