@@ -146,9 +146,10 @@ class ProviderKeyElement {
 
 class ProviderElement {
   constructor(providerId: string, provider: Provider) {
-    const providerContainer = document.createElement('div')
+    const providerContainer = document.createElement('li')
+    providerContainer.classList.add('list-group-item')
     providerContainer.innerHTML = `
-        <h3>${provider.name}</h4>
+        <h3>${provider.name}</h3>
         <div class="list-group-item">
           <div class="providerKeysContainer"></div>
           <hr />
