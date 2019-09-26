@@ -81,45 +81,38 @@ class MappingItem {
     const editButton = helper.getElement('.edit', mappingElement)
     editButton.onclick = (): void => {
       mappingElement.innerHTML = `
-        <li class='list-group-item'>
-          <div class="form-row">
-            <div class="col">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                 <span class="input-group-text">Domain</span>
-                </div>
-                <input type="text" class="form-control domainName" placeholder=${data.domain}>
+        <div class="col d-flex">
+          <div class="col">
+            <div class="input-group m-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Subdomain</span>
               </div>
+              <input type="text" class="form-control subDomainName" placeholder=${data.subDomain}>
             </div>
-            <div class="col">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                 <span class="input-group-text">Subdomain</span>
-                </div>
-                <input type="text" class="form-control subDomainName" placeholder=${data.subDomain}>
+            <div class="input-group m-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Domain</span>
               </div>
-            </div>
-            <div class="col">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                 <span class="input-group-text">Port</span>
-                </div>
-                <input type="text" class="form-control port" placeholder=${data.port}>
-              </div>
-            </div>
-            <div class="col">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                 <span class="input-group-text">IP</span>
-                </div>
-                <input type="text" class="form-control ip" placeholder=${data.ip}>
-              </div>
-            </div>
-            <div class="col">
-              <button class="btn btn-primary mb-2 save" style="margin-left: 180px;">Save</button>
+              <input type="text" class="form-control domainName" placeholder=${data.domain}>
             </div>
           </div>
-        </li>
+
+          <div class="col">
+            <div class="input-group m-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Port</span>
+              </div>
+              <input type="text" class="form-control port" placeholder=${data.port}>
+            </div>
+            <div class="input-group m-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text">IP</span>
+              </div>
+              <input type="text" class="form-control ip" placeholder=${data.ip}>
+            </div>
+          </div>
+          </div>
+          <button class="btn btn-primary save">Save</button>
         `
 
       const save = helper.getElement('.save', mappingElement)
