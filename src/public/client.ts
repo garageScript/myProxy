@@ -42,10 +42,11 @@ class MappingItem {
     mappingElement.innerHTML = `
       <div style='width: 100%'>
         <div style='display: flex'>
-          <a href="">${data.subDomain}.${data.domain}</a>
-          <small
-            class="form-text text-muted ml-1" style="display: inline-block;"
-          >
+          <a class="font-weight-bold"
+            href="https://${data.subDomain}.${data.domain}">
+            ${data.subDomain}.${data.domain}
+          </a>
+          <small class="form-text text-muted ml-1">
             PORT: ${data.port}
           </small>
         </div>
