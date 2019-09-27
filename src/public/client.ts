@@ -32,25 +32,37 @@ class DomainOption {
 
 class MappingItem {
   constructor(data: Mapping) {
-    const mappingElement = document.createElement('div')
+    const mappingElement = document.createElement('li')
+    mappingElement.classList.add(
+      'list-group-item',
+      'd-flex',
+      'align-items-center'
+    )
     domainList.appendChild(mappingElement)
     mappingElement.innerHTML = `
-      <li class="list-group-item" style="display: flex;">
-        <div style='width: 100%'>
-          <div style='display: flex'>
-            <a href="">${data.subDomain}.${data.domain}</a>
-            <small class="form-text text-muted" style="display: inline-block;">
-              PORT:${data.port}
-            </small>
-          </div>
-          <small class="form-text text-muted" style="display: inline-block;">
-            ${data.gitLink}
+      <div style='width: 100%'>
+        <div style='display: flex'>
+          <a class="font-weight-bold"
+            href="https://${data.subDomain}.${data.domain}">
+            ${data.subDomain}.${data.domain}
+          </a>
+          <small class="form-text text-muted ml-1">
+            PORT: ${data.port}
           </small>
         </div>
-        <div class="deleteButton" href="/">Delete</div>
-        <div class="edit" href="/" style="padding: 0px 0px 0px 20px;">Edit</div>
-      </li>
-`
+        <small class="form-text text-muted" style="display: inline-block;">
+          ${data.gitLink}
+        </small>
+      </div>
+      <button
+        class="btn btn-sm btn-outline-danger mr-3 deleteButton"
+        type="button">
+          Delete
+      </button>
+      <button class="btn btn-sm btn-outline-primary edit" type="button">
+        Edit
+      </button>
+    `
 
     const delButton = helper.getElement('.deleteButton', mappingElement)
     delButton.onclick = (): void => {
@@ -69,45 +81,38 @@ class MappingItem {
     const editButton = helper.getElement('.edit', mappingElement)
     editButton.onclick = (): void => {
       mappingElement.innerHTML = `
-        <li class='list-group-item'>
-          <div class="form-row">
-            <div class="col">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                 <span class="input-group-text">Domain</span>
-                </div>
-                <input type="text" class="form-control domainName" placeholder=${data.domain}>
+        <div class="col d-flex">
+          <div class="col">
+            <div class="input-group m-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Subdomain</span>
               </div>
+              <input type="text" class="form-control subDomainName" placeholder=${data.subDomain}>
             </div>
-            <div class="col">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                 <span class="input-group-text">Subdomain</span>
-                </div>
-                <input type="text" class="form-control subDomainName" placeholder=${data.subDomain}>
+            <div class="input-group m-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Domain</span>
               </div>
-            </div>
-            <div class="col">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                 <span class="input-group-text">Port</span>
-                </div>
-                <input type="text" class="form-control port" placeholder=${data.port}>
-              </div>
-            </div>
-            <div class="col">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                 <span class="input-group-text">IP</span>
-                </div>
-                <input type="text" class="form-control ip" placeholder=${data.ip}>
-              </div>
-            </div>
-            <div class="col">
-              <button class="btn btn-primary mb-2 save" style="margin-left: 180px;">Save</button>
+              <input type="text" class="form-control domainName" placeholder=${data.domain}>
             </div>
           </div>
-        </li>
+
+          <div class="col">
+            <div class="input-group m-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Port Number</span>
+              </div>
+              <input type="text" class="form-control port" placeholder=${data.port}>
+            </div>
+            <div class="input-group m-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text">IP Adress</span>
+              </div>
+              <input type="text" class="form-control ip" placeholder=${data.ip}>
+            </div>
+          </div>
+          </div>
+          <button class="btn btn-primary save">Save</button>
         `
 
       const save = helper.getElement('.save', mappingElement)
