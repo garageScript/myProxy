@@ -112,7 +112,7 @@ class ProviderKeyElement {
         </div>
         <input
           type="text"
-          class="form-control"
+          class="form-control keyInput"
           aria-label="Default"
           aria-describedby="inputGroup-sizing-default"
           value="${providerKey.value || ''}"
