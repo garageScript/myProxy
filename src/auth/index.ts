@@ -1,6 +1,4 @@
-import express from 'express'
 import { hashPass } from '../helpers/crypto'
-const auth = express.Router()
 
 const isCorrectCredentials = (password: string, correct: string): boolean => {
   const adminPassword = hashPass(password)
@@ -9,7 +7,7 @@ const isCorrectCredentials = (password: string, correct: string): boolean => {
 }
 
 const setupAuth = password => {
-  return (req, res, next) => {
+  return (req, res, next): undefined => {
     const { adminPass } = req.cookies
     if (
       !adminPass &&
