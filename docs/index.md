@@ -12,7 +12,7 @@ We are new to software engineering so if you find areas where this app could be 
 
 Also, we are currently looking for a job. If your team needs software engineers, please hire us:
 * [Alberto Lopez](https://github.com/albertoelopez) - Available immediately
-* [David De Wulf](https://github.com/Wolfy64) - Available immediately
+* [David De Wulf](https://dewulfdavid.com) - Open to new opportunities
 * [Rahul Kalra](https://github.com/rkalra247) - Available immediately
 * [Sahil Kalra](https://github.com/SahilKalra98) - UC San Diego senior, graduating June 2020
 
