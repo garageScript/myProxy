@@ -109,4 +109,13 @@ mappingRouter.patch('/edit/:id', (req, res) => {
   res.json(updatedDomain)
 })
 
+mappingRouter.get('/download', (req, res) => {
+  const filePath = `/home/git/${req.query.fullDomain}/deploy.config.js`
+  res.setHeader('Content-disposition', 'attachment; filename=deploy.config.js')
+  res.setHeader('Content-type', 'application/javascript')
+  res.download(filePath, err => {
+    console.log('Failed to download file', err)
+  })
+})
+
 export default mappingRouter
