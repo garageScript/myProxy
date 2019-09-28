@@ -9,45 +9,52 @@ import https from 'https'
 import fs from 'fs'
 import tls from 'tls'
 import { getAvailableDomains, getMappings } from '../lib/data'
-import { isCorrectCredentials } from '../auth'
+import { setupAuth, isCorrectCredentials } from '../auth'
 import httpProxy from 'http-proxy'
 import { ProxyMapping } from '../types/general'
+
 const cyan = '\x1b[36m\u001b[1m%s\x1b[0m'
 const red = '\x1b[31m\u001b[1m%s\x1b[0m'
 
-const startAppServer = (port: string | number, adminPass: string): void => {
-  if (!adminPass) {
-    return console.log(red, 'Admin UI/API is turned off')
-  }
-  const app = express()
-  app.use(express.json())
-  app.use(express.urlencoded({ extended: true }))
-  app.use(cookieParser())
-  app.use(express.static(path.join(__dirname, '../public')))
-  app.use('/admin', adminRouter)
-  app.use('/api', apiRouter)
-  app.set('view engine', 'ejs')
-  app.set('views', path.join(__dirname, '../../views'))
-
-  app.get('/', (_, res) =>
-    getAvailableDomains().length > 0
-      ? res.render('client')
-      : res.redirect('/admin')
-  )
-  app.get('/login', (req, res) => res.render('login', { error: '' }))
-
-  app.post('/login', (req, res) => {
-    if (isCorrectCredentials(adminPass)) {
-      res.cookie('adminPass', hashPass(adminPass), { httpOnly: true })
-      return res.redirect('/admin')
+const startAppServer = (
+  port: string | number,
+  adminPass: string
+): Promise<unknown> => {
+  return new Promise(resolve => {
+    if (!adminPass) {
+      return console.log(red, 'Admin UI/API is turned off')
     }
+    const app = express()
+    app.use(express.json())
+    app.use(express.urlencoded({ extended: true }))
+    app.use(cookieParser())
+    app.use(express.static(path.join(__dirname, '../public')))
+    app.use('/admin', adminRouter)
+    app.use('/api', setupAuth(adminPass), apiRouter)
+    app.set('view engine', 'ejs')
+    app.set('views', path.join(__dirname, '../../views'))
 
-    return res.render('login', { error: 'Wrong Admin Password' })
+    app.get('/', (_, res) =>
+      getAvailableDomains().length > 0
+        ? res.render('client')
+        : res.redirect('/admin')
+    )
+    app.get('/login', (req, res) => res.render('login', { error: '' }))
+
+    app.post('/login', (req, res) => {
+      if (isCorrectCredentials(req.body.adminPass, adminPass)) {
+        res.cookie('adminPass', hashPass(adminPass), { httpOnly: true })
+        return res.redirect('/admin')
+      }
+
+      return res.render('login', { error: 'Wrong Admin Password' })
+    })
+
+    const server = app.listen(port, () => {
+      console.log(cyan, `myProxy is running on port ${port}!`)
+      resolve(server)
+    })
   })
-
-  app.listen(port, () =>
-    console.log(cyan, `myProxy is running on port ${port}!`)
-  )
 }
 
 const startProxyServer = (homePath: string): void => {
