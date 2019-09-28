@@ -91,13 +91,13 @@ class MappingItem {
               <div class="input-group-prepend">
                 <span class="input-group-text">Subdomain</span>
               </div>
-              <input type="text" class="form-control subDomainName" placeholder=${data.subDomain}>
+              <input type="text" class="form-control subDomainName" placeholder=${data.subDomain} disabled>
             </div>
             <div class="input-group m-1">
               <div class="input-group-prepend">
                 <span class="input-group-text">Domain</span>
               </div>
-              <input type="text" class="form-control domainName" placeholder=${data.domain}>
+              <input type="text" class="form-control domainName" placeholder=${data.domain} disabled>
             </div>
           </div>
 
