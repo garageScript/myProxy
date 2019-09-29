@@ -14,7 +14,7 @@ Also, we are currently looking for a job. If your team needs software engineers,
 * [Alberto Lopez](https://www.linkedin.com/in/albertolopez-siliconvalley/) - Available immediately
 * [David De Wulf](https://dewulfdavid.com) - Open to new opportunities
 * [Rahul Kalra](https://www.linkedin.com/in/voterknow) - Available immediately
-* [Sahil Kalra](https://github.com/SahilKalra98) - UC San Diego senior, graduating June 2020
+* [Sahil Kalra](https://www.linkedin.com/in/s1kalra/) - UC San Diego senior, graduating June 2020
 
 ## Prerequisites
 To use `MyProxy`, you need 2 things:
