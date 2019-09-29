@@ -54,6 +54,10 @@ class MappingItem {
           ${data.gitLink}
         </small>
       </div>
+      <a href="/api/mappings/download/?fullDomain=${data.fullDomain}" 
+	      target="_blank" class="btn btn-sm btn-outline-success mr-3">
+	      Download<i class="fa fa-download"></i>
+      </a>
       <button
         class="btn btn-sm btn-outline-danger mr-3 deleteButton"
         type="button">
@@ -87,13 +91,13 @@ class MappingItem {
               <div class="input-group-prepend">
                 <span class="input-group-text">Subdomain</span>
               </div>
-              <input type="text" class="form-control subDomainName" placeholder=${data.subDomain}>
+              <input type="text" class="form-control subDomainName" placeholder=${data.subDomain} disabled>
             </div>
             <div class="input-group m-1">
               <div class="input-group-prepend">
                 <span class="input-group-text">Domain</span>
               </div>
-              <input type="text" class="form-control domainName" placeholder=${data.domain}>
+              <input type="text" class="form-control domainName" placeholder=${data.domain} disabled>
             </div>
           </div>
 
