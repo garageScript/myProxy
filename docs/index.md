@@ -11,20 +11,10 @@ Setting up a server is hard, especially setting up DNS records, managing certifi
 We are new to software engineering so if you find areas where this app could be improved, please let us know by [creating an issue](https://github.com/garageScript/myproxy/issues). We are excited to learn!  
 
 Also, we are currently looking for a job. If your team needs software engineers, please hire us:
-<<<<<<< HEAD
 * [Alberto Lopez](https://www.linkedin.com/in/albertolopez-siliconvalley/) - Available immediately
 * [David De Wulf](https://dewulfdavid.com) - Open to new opportunities
 * [Rahul Kalra](https://www.linkedin.com/in/voterknow) - Available immediately
-<<<<<<< HEAD
-=======
-* [Alberto Lopez](https://github.com/albertoelopez) - Available immediately
-* [David De Wulf](https://dewulfdavid.com) - Open to new opportunities
-* [Rahul Kalra](https://github.com/rkalra247) - Available immediately
->>>>>>> ad05b6c4304df951c4dde592306c472b2bd2753b
-* [Sahil Kalra](https://github.com/SahilKalra98) - UC San Diego senior, graduating June 2020
-=======
 * [Sahil Kalra](https://www.linkedin.com/in/s1kalra/) - UC San Diego senior, graduating June 2020
->>>>>>> 82933c38881c741edbf3ffc9e939aa3ce3a3c3a7
 
 ## Prerequisites
 To use `MyProxy`, you need 2 things:
