@@ -1,59 +1,27 @@
 import { ServiceKey } from '../types/admin'
-import { Domain, ProviderService, ServiceResponse } from '../types/general'
+import { Domain, ServiceResponse } from '../types/general'
 import { getAvailableDomains, setData, getProviderKeys } from '../lib/data'
+import { createSslCerts, setCnameRecords } from '../helpers/domainSetup'
 import express from 'express'
 import uuid4 from 'uuid/v4'
-import util from 'util'
-import cp from 'child_process'
-import serviceConfig from './serviceConfig'
 import providers from '../providers'
 
 const app = express.Router()
-const exec = util.promisify(cp.exec)
 
 app.post('/sslCerts', async (req, res) => {
   const { service, selectedDomain } = req.body
-
   const serviceResponse: ServiceResponse = {
     success: true,
     message: 'SSL Certs and domain name records successfully created'
   }
   try {
-    const serviceKeys = getProviderKeys().filter(d => d.service === service)
-    const { keys } = serviceConfig[service]
-    const envVars = keys.reduce((acc: string, key: string) => {
-      const { value } = serviceKeys.find(d => d.key === key) || { value: '' }
-      return acc + `${key}=${value} `
-    }, '')
-    const acme = `./acme.sh/acme.sh --issue --dns ${service}`
-    const cert1 = `${acme} -d ${selectedDomain} --force`
-    const cert2 = `${acme} -d *.${selectedDomain} --force`
-    const cert1Response = await exec(`${envVars} ${cert1}`)
-    const cert2Response = await exec(`${envVars} ${cert2}`)
-    if (cert1Response.stderr || cert2Response.stderr) {
-      serviceResponse.success = false
-      serviceResponse.message = `Could not create SSL Certs. Error: ${
-        cert2Response.stderr
-          ? JSON.stringify(cert2Response.stderr)
-          : JSON.stringify(cert1Response.stderr)
-      }`
-      return res.json(serviceResponse)
-    }
+    const sslCertResponse = await createSslCerts(serviceResponse, service, selectedDomain)
+    if(!sslCertResponse.success)
+      return res.json(sslCertResponse)
 
-    const { stdout: ipaddress } = await exec('curl ifconfig.me')
-    const providerService = providers[service] as ProviderService
-    if (!providerService) {
-      serviceResponse.success = false
-      serviceResponse.message = 'Provider not found'
-      return res.json(serviceResponse)
-    }
-    const setRecords: ServiceResponse = await providerService.setRecord(
-      selectedDomain,
-      ipaddress
-    )
-    if (!setRecords.success) {
-      return res.json(setRecords)
-    }
+    const cnameResponse =  await setCnameRecords(service, selectedDomain, serviceResponse)
+    if(!cnameResponse.success)
+      return res.json(cnameResponse)
 
     const domains = getAvailableDomains()
     const domain: Domain = {
@@ -63,6 +31,27 @@ app.post('/sslCerts', async (req, res) => {
     }
     domains.push(domain)
     setData('availableDomains', domains)
+    return res.json(serviceResponse)
+  } catch (err) {
+    serviceResponse.success = false
+    serviceResponse.message = `Error: ${JSON.stringify(err)}`
+    return res.json(serviceResponse)
+  }
+})
+app.patch('/sslCerts/:selectedDomain', async (req, res) => {
+  const { service, selectedDomain } = req.body
+  const serviceResponse: ServiceResponse = {
+    success: true,
+    message: 'SSL Certs and domain name records have successfully been reconfigured'
+  }
+  try {
+    const sslCertResponse = await createSslCerts(serviceResponse, service, selectedDomain)
+    if(!sslCertResponse.success)
+      return res.json(sslCertResponse)
+
+    const cnameResponse =  await setCnameRecords(service, selectedDomain, serviceResponse)
+    if(!cnameResponse.success)
+      return res.json(cnameResponse)
     return res.json(serviceResponse)
   } catch (err) {
     serviceResponse.success = false

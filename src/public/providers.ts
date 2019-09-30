@@ -69,10 +69,12 @@ class DomainElement {
       domainElement
     )
     const setUpButton = helper.getElement('.setUpButton', domainElement)
+    const method = foundDomain ? 'PATCH' : 'POST'
+    const selectedDomain = foundDomain ? domainObj.domain : ''
     setUpButton.onclick = (): void => {
       actionContainer.classList.add('isLoading')
-      fetch('/api/admin/sslCerts', {
-        method: 'POST',
+      fetch(`/api/admin/sslCerts/${selectedDomain}`, {
+        method,
         body: JSON.stringify({
           service: domainService,
           selectedDomain: domainObj.domain
