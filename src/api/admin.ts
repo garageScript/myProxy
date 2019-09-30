@@ -39,7 +39,8 @@ app.post('/sslCerts', async (req, res) => {
   }
 })
 app.patch('/sslCerts/:selectedDomain', async (req, res) => {
-  const { service, selectedDomain } = req.body
+  const service = req.body.service
+  const selectedDomain = req.params.selectedDomain
   const serviceResponse: ServiceResponse = {
     success: true,
     message: 'SSL Certs and domain name records have successfully been reconfigured'
