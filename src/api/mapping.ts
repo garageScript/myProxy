@@ -106,7 +106,37 @@ mappingRouter.patch('/edit/:id', (req, res) => {
   const updatedDomain = domains.find(
     (element: Mapping) => element.id === req.params.id
   )
-  res.json(updatedDomain)
+  const updatedConfig = {
+    apps: [
+      {
+        name: updatedDomain.fullDomain,
+        script: 'npm',
+        args: 'start',
+        instances: 1,
+        autorestart: true,
+        watch: false,
+        max_memory_restart: '1G',
+        env_production: {
+          NODE_ENV: 'production',
+          PORT: parseInt(updatedDomain.port, 10)
+        }
+      }
+    ]
+  }
+  const projectPath = '/home/git'
+  exec('id -u git').then(result => {
+    exec(
+      `
+      cd ${projectPath}/${updatedDomain.fullDomain}
+      echo 'module.exports = ${JSON.stringify(updatedConfig)}' > deploy.config.js
+      git add .
+      git commit -m "Edits deploy config file"
+      `,
+      { uid: parseInt(result.stdout) }
+    ).then(() => {
+      res.json(updatedDomain)
+    })
+  })
 })
 
 mappingRouter.get('/download', (req, res) => {
