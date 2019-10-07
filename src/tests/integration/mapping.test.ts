@@ -18,9 +18,11 @@ describe('/api', () =>{
   })
 
 
-  const subDomain = `testing${uuidv4()}`
 
   it('checks mappings for newly added mapping', async()=>{
+    const subDomain = `testing${uuidv4()}`
+    const domain = 'Rahul'
+    const port = '5678'
     await fetch(`${apiURL}/api/mappings`, {
       method: 'POST', 
       headers: {
@@ -28,13 +30,13 @@ describe('/api', () =>{
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        domain: 'Rahul',
+        domain,
         subDomain,
-        port: '5678'
+        port,
 
       })
     }).then(r => r.json()).then((data)=>{
-      expect(data.port).toEqual('5678')
+      expect(data.port).toEqual(port)
       expect(data.subDomain).toEqual(subDomain)
       expect(data.domain).toEqual('Rahul')
       expect(data.fullDomain).toEqual(`${subDomain}.Rahul`)
