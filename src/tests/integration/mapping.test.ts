@@ -38,8 +38,8 @@ describe('/api', () =>{
     }).then(r => r.json()).then((data)=>{
       expect(data.port).toEqual(port)
       expect(data.subDomain).toEqual(subDomain)
-      expect(data.domain).toEqual('Rahul')
-      expect(data.fullDomain).toEqual(`${subDomain}.Rahul`)
+      expect(data.domain).toEqual(domain)
+      expect(data.fullDomain).toEqual(`${subDomain}.${domain}`)
     })
   })
 })
