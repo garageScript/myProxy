@@ -25,12 +25,14 @@ describe('/api', () =>{
       },
       body: JSON.stringify({
         domain: 'Rahul',
-        subdomain: 'testing',
+        subDomain: 'testing',
         port: '5678'
 
       })
     }).then(r => r.json()).then((data)=>{
       expect(data.port).toEqual('5678')
+      expect(data.subDomain).toEqual('testing')
+      expect(data.domain).toEqual('Rahul')
     })
   })
 })
