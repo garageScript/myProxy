@@ -33,6 +33,7 @@ describe('/api', () =>{
       expect(data.port).toEqual('5678')
       expect(data.subDomain).toEqual('testing')
       expect(data.domain).toEqual('Rahul')
+      expect(data.fullDomain).toEqual('testing.Rahul')
     })
   })
 })
