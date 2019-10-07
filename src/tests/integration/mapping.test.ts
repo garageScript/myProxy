@@ -29,8 +29,7 @@ describe('/api', () =>{
         port: '5678'
 
       })
-    }).then(r => r.json()
-    ).then((data)=>{
+    }).then(r => r.json()).then((data)=>{
       expect(data.port).toEqual('5678')
     })
   })

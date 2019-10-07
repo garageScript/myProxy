@@ -43,6 +43,26 @@ mappingRouter.post('/', (req, res) => {
   }
   const projectPath = '/home/git'
   const scriptPath = '.scripts'
+
+  const respond = () => {
+    const mappingObject: Mapping = {
+      domain: req.body.domain,
+      subDomain: req.body.subDomain,
+      port: req.body.port || `${portCounter}`,
+      ip: req.body.ip || '127.0.0.1',
+      id: uuid4(),
+      gitLink: `git@${req.body.domain}:${projectPath}/${fullDomain}`,
+      fullDomain
+    }
+    domainKeys.push(mappingObject)
+    setData('mappings', domainKeys)
+    res.json(mappingObject)
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    return respond()
+  }
+
   exec('id -u git').then(result => {
     exec(
       `
@@ -60,18 +80,7 @@ mappingRouter.post('/', (req, res) => {
       `,
       { uid: parseInt(result.stdout) }
     ).then(() => {
-      const mappingObject: Mapping = {
-        domain: req.body.domain,
-        subDomain: req.body.subDomain,
-        port: req.body.port || `${portCounter}`,
-        ip: req.body.ip || '127.0.0.1',
-        id: uuid4(),
-        gitLink: `git@${req.body.domain}:${projectPath}/${fullDomain}`,
-        fullDomain
-      }
-      domainKeys.push(mappingObject)
-      setData('mappings', domainKeys)
-      res.json(mappingObject)
+      respond()
     })
   })
 })
