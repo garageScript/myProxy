@@ -5,6 +5,8 @@ import util from 'util'
 import cp from 'child_process'
 import { setData, getMappings } from '../lib/data'
 import { Mapping } from '../types/general'
+import prodConfigure from '../../scripts/prod.config.js'
+import { getGitUserId } from '../helpers/getGitUser'
 const mappingRouter = express.Router()
 const exec = util.promisify(cp.exec)
 const getNextPort = (map, start = 3002): number => {
@@ -13,7 +15,7 @@ const getNextPort = (map, start = 3002): number => {
   return getNextPort(map, start)
 }
 
-mappingRouter.post('/', (req, res) => {
+mappingRouter.post('/', async (req, res) => {
   const domainKeys = getMappings()
   if (parseInt(req.body.port) < 3001) {
     return res.status(400).json({ message: 'Port cannot be smaller than 3001' })
@@ -24,28 +26,17 @@ mappingRouter.post('/', (req, res) => {
   }, {})
   const portCounter = getNextPort(map)
   const fullDomain = `${req.body.subDomain}.${req.body.domain}`
+  const prodConfigApp = [...prodConfigure.apps][0]
+  prodConfigApp.name = fullDomain
+  prodConfigApp.env_production.PORT = parseInt(req.body.port || portCounter, 10)
   const prodConfig = {
-    apps: [
-      {
-        name: fullDomain,
-        script: 'npm',
-        args: 'start',
-        instances: 1,
-        autorestart: true,
-        watch: false,
-        max_memory_restart: '1G',
-        env_production: {
-          NODE_ENV: 'production',
-          PORT: parseInt(req.body.port || portCounter, 10)
-        }
-      }
-    ]
+    apps: prodConfigApp
   }
   const projectPath = '/home/git'
   const scriptPath = '.scripts'
-  exec('id -u git').then(result => {
-    exec(
-      `
+  const gitUserId = await getGitUserId()
+  exec(
+    `
       cd ${projectPath}
       mkdir ${fullDomain}
       git init ${fullDomain}
@@ -58,21 +49,20 @@ mappingRouter.post('/', (req, res) => {
       git add .
       git commit -m "Initial Commit"
       `,
-      { uid: parseInt(result.stdout) }
-    ).then(() => {
-      const mappingObject: Mapping = {
-        domain: req.body.domain,
-        subDomain: req.body.subDomain,
-        port: req.body.port || `${portCounter}`,
-        ip: req.body.ip || '127.0.0.1',
-        id: uuid4(),
-        gitLink: `git@${req.body.domain}:${projectPath}/${fullDomain}`,
-        fullDomain
-      }
-      domainKeys.push(mappingObject)
-      setData('mappings', domainKeys)
-      res.json(mappingObject)
-    })
+    { uid: gitUserId }
+  ).then(() => {
+    const mappingObject: Mapping = {
+      domain: req.body.domain,
+      subDomain: req.body.subDomain,
+      port: req.body.port || `${portCounter}`,
+      ip: req.body.ip || '127.0.0.1',
+      id: uuid4(),
+      gitLink: `git@${req.body.domain}:${projectPath}/${fullDomain}`,
+      fullDomain
+    }
+    domainKeys.push(mappingObject)
+    setData('mappings', domainKeys)
+    res.json(mappingObject)
   })
 })
 
@@ -91,7 +81,7 @@ mappingRouter.delete('/delete/:id', (req, res) => {
   res.json(deletedDomain)
 })
 
-mappingRouter.patch('/edit/:id', (req, res) => {
+mappingRouter.patch('/edit/:id', async (req, res) => {
   const domains = getMappings()
   const domainList = domains.map((element: Mapping) => {
     if (element.id === req.params.id) {
@@ -106,36 +96,24 @@ mappingRouter.patch('/edit/:id', (req, res) => {
   const updatedDomain = domains.find(
     (element: Mapping) => element.id === req.params.id
   )
+  const prodConfigApp = [...prodConfigure.apps][0]
+  prodConfigApp.name = updatedDomain.fullDomain
+  prodConfigApp.env_production.PORT = parseInt(updatedDomain.port, 10)
   const updatedConfig = {
-    apps: [
-      {
-        name: updatedDomain.fullDomain,
-        script: 'npm',
-        args: 'start',
-        instances: 1,
-        autorestart: true,
-        watch: false,
-        max_memory_restart: '1G',
-        env_production: {
-          NODE_ENV: 'production',
-          PORT: parseInt(updatedDomain.port, 10)
-        }
-      }
-    ]
+    apps: prodConfigApp
   }
   const projectPath = '/home/git'
-  exec('id -u git').then(result => {
-    exec(
-      `
+  const gitUserId = await getGitUserId()
+  exec(
+    `
       cd ${projectPath}/${updatedDomain.fullDomain}
       echo 'module.exports = ${JSON.stringify(updatedConfig)}' > deploy.config.js
       git add .
       git commit -m "Edits deploy config file"
       `,
-      { uid: parseInt(result.stdout) }
-    ).then(() => {
-      res.json(updatedDomain)
-    })
+    { uid: gitUserId }
+  ).then(() => {
+    res.json(updatedDomain)
   })
 })
 
