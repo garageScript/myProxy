@@ -32,7 +32,7 @@ describe('/api', () =>{
       body: JSON.stringify({
         domain,
         subDomain,
-        port,
+        port
 
       })
     }).then(r => r.json()).then((data)=>{
@@ -41,5 +41,36 @@ describe('/api', () =>{
       expect(data.domain).toEqual(domain)
       expect(data.fullDomain).toEqual(`${subDomain}.${domain}`)
     })
+  })
+
+  it('checks no duplicate subdomain is created for same domain', async()=>{
+    const subDomain = 'testing'
+    const domain = 'Sahil'
+    const port = '3522'
+    await fetch(`${apiURL}/api/mappings`, {
+      method: 'POST',
+      headers: {
+        authorization: ADMIN,
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify({
+        domain, 
+        subDomain,
+        port 
+      })
+    })
+    const response = await fetch(`${apiURL}/api/mappings`, {
+      method: 'POST',
+      headers: {
+        authorization: ADMIN, 
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify({
+        domain,
+        subDomain, 
+        port
+      })
+    })
+    expect(response.status).toEqual(400)
   })
 })
