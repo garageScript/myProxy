@@ -63,16 +63,16 @@ describe('/api', () =>{
       expect(data.domain).toEqual(domain)
       expect(data.fullDomain).toEqual(`${subDomain}.${domain}`)
       return data
-      }).then(async (data)=>{
-        await fetch(`${apiURL}/api/mappings/delete/${data.id}`, {
+    }).then(async (data)=>{
+      await fetch(`${apiURL}/api/mappings/delete/${data.id}`, {
         method: 'DELETE', 
         headers: {
-        authorization: ADMIN,
-        'Content-Type': 'application/json'
+          authorization: ADMIN,
+          'Content-Type': 'application/json'
         }
       }).then(r=>r.json()).then((del)=>{
         expect(del.id).toEqual(data.id)
       })
-      })  
+    })  
   })
 })
