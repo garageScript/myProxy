@@ -45,6 +45,8 @@ mappingRouter.post('/', (req, res) => {
   const scriptPath = '.scripts'
 
   const respond = () => {
+    const verifySubDomain = domainKeys.find(e => e.subDomain === req.body.subDomain)
+    if(verifySubDomain) return res.status(400).send('cannot create new mapping because subDomain already exists')
     const mappingObject: Mapping = {
       domain: req.body.domain,
       subDomain: req.body.subDomain,
