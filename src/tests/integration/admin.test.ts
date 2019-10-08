@@ -13,7 +13,7 @@ describe('/api/admin/sslCerts', () => {
     server = await startAppServer(TEST_PORT, ADMIN)
   })
 
-  afterEach(() => {
+  afterAll(() => {
     server.close()
   })
 

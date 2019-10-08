@@ -1,7 +1,7 @@
 import { startAppServer } from '../server/server'
 import fetch from 'node-fetch'
 
-const TEST_PORT = process.env.PORT || 4998
+const TEST_PORT = 4242
 const ADMIN = process.env.ADMIN || '4995'
 const apiUrl = `http://127.0.0.1:${TEST_PORT}`
 
