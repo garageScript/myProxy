@@ -1,12 +1,16 @@
 import serviceConfig from '../api/serviceConfig'
 import { getProviderKeys } from '../lib/data'
-import { ServiceResponse , ProviderService} from '../types/general'
+import { ServiceResponse, ProviderService } from '../types/general'
 import providers from '../providers'
 import cp from 'child_process'
 import util from 'util'
 const exec = util.promisify(cp.exec)
 
-const createSslCerts = async (serviceResponse, service, selectedDomain): Promise<ServiceResponse> => {
+const createSslCerts = async (
+  serviceResponse,
+  service,
+  selectedDomain
+): Promise<ServiceResponse> => {
   const serviceKeys = getProviderKeys().filter(d => d.service === service)
   const { keys } = serviceConfig[service]
   const envVars = keys.reduce((acc: string, key: string) => {
@@ -29,7 +33,11 @@ const createSslCerts = async (serviceResponse, service, selectedDomain): Promise
   return serviceResponse
 }
 
-const setCnameRecords = async (service, selectedDomain, serviceResponse): Promise<ServiceResponse> => {
+const setCnameRecords = async (
+  service,
+  selectedDomain,
+  serviceResponse
+): Promise<ServiceResponse> => {
   const { stdout: ipaddress } = await exec('curl ifconfig.me')
   const providerService = providers[service] as ProviderService
   if (!providerService) {
