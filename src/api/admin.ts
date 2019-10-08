@@ -15,13 +15,19 @@ app.post('/sslCerts', async (req, res) => {
     message: 'SSL Certs and domain name records successfully created'
   }
   try {
-    const sslCertResponse = await createSslCerts(serviceResponse, service, selectedDomain)
-    if(!sslCertResponse.success)
-      return res.json(sslCertResponse)
+    const sslCertResponse = await createSslCerts(
+      serviceResponse,
+      service,
+      selectedDomain
+    )
+    if (!sslCertResponse.success) return res.json(sslCertResponse)
 
-    const cnameResponse =  await setCnameRecords(service, selectedDomain, serviceResponse)
-    if(!cnameResponse.success)
-      return res.json(cnameResponse)
+    const cnameResponse = await setCnameRecords(
+      service,
+      selectedDomain,
+      serviceResponse
+    )
+    if (!cnameResponse.success) return res.json(cnameResponse)
 
     const domains = getAvailableDomains()
     const domain: Domain = {
@@ -38,21 +44,29 @@ app.post('/sslCerts', async (req, res) => {
     return res.json(serviceResponse)
   }
 })
+
 app.patch('/sslCerts/:selectedDomain', async (req, res) => {
   const service = req.body.service
   const selectedDomain = req.params.selectedDomain
   const serviceResponse: ServiceResponse = {
     success: true,
-    message: 'SSL Certs and domain name records have successfully been reconfigured'
+    message:
+      'SSL Certs and domain name records have successfully been reconfigured'
   }
   try {
-    const sslCertResponse = await createSslCerts(serviceResponse, service, selectedDomain)
-    if(!sslCertResponse.success)
-      return res.json(sslCertResponse)
+    const sslCertResponse = await createSslCerts(
+      serviceResponse,
+      service,
+      selectedDomain
+    )
+    if (!sslCertResponse.success) return res.json(sslCertResponse)
 
-    const cnameResponse =  await setCnameRecords(service, selectedDomain, serviceResponse)
-    if(!cnameResponse.success)
-      return res.json(cnameResponse)
+    const cnameResponse = await setCnameRecords(
+      service,
+      selectedDomain,
+      serviceResponse
+    )
+    if (!cnameResponse.success) return res.json(cnameResponse)
     return res.json(serviceResponse)
   } catch (err) {
     serviceResponse.success = false
