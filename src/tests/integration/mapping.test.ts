@@ -63,4 +63,35 @@ describe('/api', () => {
     expect(delMapping.status).toEqual(200)
     expect(createMapping.status).toEqual(200)
   })
+
+  it('checks no duplicate subdomain is created for same domain', async () => {
+    const subDomain = `testing${uuidv4()}`
+    const domain = 'Sahil'
+    const port = '3522'
+    await fetch(`${apiURL}/api/mappings`, {
+      method: 'POST',
+      headers: {
+        authorization: ADMIN,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        domain,
+        subDomain,
+        port
+      })
+    })
+    const response = await fetch(`${apiURL}/api/mappings`, {
+      method: 'POST',
+      headers: {
+        authorization: ADMIN,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        domain,
+        subDomain,
+        port
+      })
+    })
+    expect(response.status).toEqual(400)
+  })
 })

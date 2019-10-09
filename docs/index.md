@@ -6,9 +6,9 @@ MyProxy is an application that:
 * Run an unlimited number of applications on your subdomains.
 
 ## Why?
-Setting up a server is hard, especially setting up DNS records, managing certificates, and deployment. So we setup to build a simple and usable app that helps us build applications quickly.   
+Setting up a server is hard, especially setting up DNS records, managing certificates, and deployment. So we setup to build a simple and usable app that helps us build applications quickly.
 
-We are new to software engineering so if you find areas where this app could be improved, please let us know by [creating an issue](https://github.com/garageScript/myproxy/issues). We are excited to learn!  
+We are new to software engineering so if you find areas where this app could be improved, please let us know by [creating an issue](https://github.com/garageScript/myproxy/issues). We are excited to learn!
 
 Also, we are currently looking for a job. If your team needs software engineers, please hire us:
 * [Alberto Lopez](https://www.linkedin.com/in/albertolopez-siliconvalley/) - Available immediately
@@ -22,14 +22,14 @@ To use `MyProxy`, you need 2 things:
 2. A server's IP address that you have root access to. You can use your home server or get one from [AWS EC2](https://aws.amazon.com/ec2/?hp=tile&so-exp=below), [DigitalOcean](https://www.digitalocean.com/), [GoogleCloud](https://cloud.google.com/), etc.
 
 ## How To Use
-SSH into your server. ie (`ssh root@your-server-ip-address`)  
+SSH into your server. ie (`ssh root@your-server-ip-address`)
 
 Run `ADMIN=YOUR_ADMIN_PASSWORD npm run server`. You will have to run this as `root` or use `sudo`. This will install required dependencies and start the server.
 * Installs `git` if system does not have it.
 * Installs `nodeJS` and `npm` if system does not have it.
 * Enable firewall port `3000` (for the admin page UI), `80` and `443`.
 * Installs application dependencies
-* For a list of things the script runs, [look here](https://github.com/garageScript/myProxy/blob/master/scripts/setup.sh)  
+* For a list of things the script runs, [look here](https://github.com/garageScript/myProxy/blob/master/scripts/setup.sh)
 
 Exit from server `exit`
 
