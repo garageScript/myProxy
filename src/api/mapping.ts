@@ -18,6 +18,13 @@ mappingRouter.post('/', (req, res) => {
   if (parseInt(req.body.port) < 3001) {
     return res.status(400).json({ message: 'Port cannot be smaller than 3001' })
   }
+  const verifySubDomain = domainKeys.find(
+    e => e.subDomain === req.body.subDomain
+  )
+  if (verifySubDomain)
+    return res
+      .status(400)
+      .send('cannot create new mapping because subDomain already exists')
   const map = domainKeys.reduce((acc, e) => {
     acc[e.port] = true
     return acc
@@ -45,13 +52,6 @@ mappingRouter.post('/', (req, res) => {
   const scriptPath = '.scripts'
 
   const respond = () => {
-    const verifySubDomain = domainKeys.find(
-      e => e.subDomain === req.body.subDomain
-    )
-    if (verifySubDomain)
-      return res
-        .status(400)
-        .send('cannot create new mapping because subDomain already exists')
     const mappingObject: Mapping = {
       domain: req.body.domain,
       subDomain: req.body.subDomain,
