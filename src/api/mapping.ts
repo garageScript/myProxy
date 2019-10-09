@@ -29,6 +29,8 @@ mappingRouter.post('/', async (req, res) => {
   const prodConfigApp = [...prodConfigure.apps][0]
   prodConfigApp.name = fullDomain
   prodConfigApp.env_production.PORT = parseInt(req.body.port || portCounter, 10)
+  prodConfigApp.script = 'npm'
+  prodConfigApp.args = 'start'
   const prodConfig = {
     apps: prodConfigApp
   }
@@ -106,6 +108,8 @@ mappingRouter.patch('/edit/:id', async (req, res) => {
   const prodConfigApp = [...prodConfigure.apps][0]
   prodConfigApp.name = updatedDomain.fullDomain
   prodConfigApp.env_production.PORT = parseInt(updatedDomain.port, 10)
+  prodConfigApp.script = 'npm'
+  prodConfigApp.args = 'start'
   const updatedConfig = {
     apps: prodConfigApp
   }
