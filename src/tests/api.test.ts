@@ -16,7 +16,7 @@ describe('/api', () => {
     server.close()
   })
 
-  it.skip('Should respond with 401 if pw does not match', async () => {
+  it('Should respond with 401 if pw does not match', async () => {
     const response = await fetch(`${apiUrl}/api/admin/providerKeys`, {
       headers: {
         authorization: 'oaeuou aoueHello'

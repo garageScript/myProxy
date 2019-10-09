@@ -34,7 +34,7 @@ const startAppServer = (
     app.set('view engine', 'ejs')
     app.set('views', path.join(__dirname, '../../views'))
 
-    app.get('/', setupAuth(adminPass),(_, res) =>
+    app.get('/', setupAuth(adminPass), (_, res) =>
       getAvailableDomains().length > 0
         ? res.render('client')
         : res.redirect('/admin')

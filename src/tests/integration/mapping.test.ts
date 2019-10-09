@@ -6,20 +6,18 @@ const TEST_PORT = process.env.PORT || 50604
 const ADMIN = process.env.ADMIN || 'hjhj'
 const apiURL = `http://127.0.0.1:${TEST_PORT}`
 
-describe('/api', () =>{
+describe('/api', () => {
   let server
 
-  beforeAll(async ()=>{
+  beforeAll(async () => {
     server = await startAppServer(TEST_PORT, ADMIN)
   })
 
-  afterAll(()=>{
+  afterAll(() => {
     server.close()
   })
 
-
-
-  it.skip('checks mappings for newly added mapping', async()=>{
+  it.skip('checks mappings for newly added mapping', async () => {
     const subDomain = `testing${uuidv4()}`
     const domain = 'Rahul'
     const port = '5678'
@@ -32,14 +30,15 @@ describe('/api', () =>{
       body: JSON.stringify({
         domain,
         subDomain,
-        port,
-
+        port
       })
-    }).then(r => r.json()).then((data)=>{
-      expect(data.port).toEqual(port)
-      expect(data.subDomain).toEqual(subDomain)
-      expect(data.domain).toEqual(domain)
-      expect(data.fullDomain).toEqual(`${subDomain}.${domain}`)
     })
+      .then(r => r.json())
+      .then(data => {
+        expect(data.port).toEqual(port)
+        expect(data.subDomain).toEqual(subDomain)
+        expect(data.domain).toEqual(domain)
+        expect(data.fullDomain).toEqual(`${subDomain}.${domain}`)
+      })
   })
 })
