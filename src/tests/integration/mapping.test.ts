@@ -43,7 +43,7 @@ describe('/api', () => {
   })
 
   it('checks no duplicate subdomain is created for same domain', async () => {
-    const subDomain = 'testingSubDomain'
+    const subDomain = `testing${uuidv4()}`
     const domain = 'Sahil'
     const port = '3522'
     await fetch(`${apiURL}/api/mappings`, {
