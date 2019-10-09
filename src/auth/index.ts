@@ -9,15 +9,14 @@ const isCorrectCredentials = (password: string, correct: string): boolean => {
 const setupAuth = password => {
   return (req, res, next): undefined => {
     const { adminPass } = req.cookies
-    if (
-      !adminPass &&
-      !isCorrectCredentials(
-        (req.headers.authorization as string) || '',
-        password
-      )
-    ) {
-      return res.status(401).send('Unauthorized')
+    const { authorization = '' } = req.headers
+
+    if (authorization) {
+      const isCorrect = isCorrectCredentials(authorization as string, password)
+      if (!adminPass && !isCorrect) res.status(401).send('Unauthorized')
+      next()
     }
+    if (!adminPass) return res.render('login', { error: '' })
     next()
   }
 }
