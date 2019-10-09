@@ -12,8 +12,8 @@ const setupAuth = password => {
     const { authorization = '' } = req.headers
 
     if (authorization) {
-      const isAdmin = !isCorrectCredentials(authorization as string, password)
-      if (!adminPass && isAdmin) res.status(401).send('Unauthorized')
+      const isCorrect = isCorrectCredentials(authorization as string, password)
+      if (!adminPass && !isCorrect) res.status(401).send('Unauthorized')
       next()
     }
     if (!adminPass) return res.render('login', { error: '' })
