@@ -1,13 +1,13 @@
 import { startAppServer } from '../../server/server'
 import fetch from 'node-fetch'
-import uuidv4 from 'uuid/v4' 
+import uuidv4 from 'uuid/v4'
 
 const TEST_PORT = process.env.PORT || 50604
 const ADMIN = process.env.ADMIN || 'hjhj'
 const apiURL = `http://127.0.0.1:${TEST_PORT}`
 
 describe('/api', () =>{
-  let server 
+  let server
 
   beforeAll(async ()=>{
     server = await startAppServer(TEST_PORT, ADMIN)
@@ -19,12 +19,12 @@ describe('/api', () =>{
 
 
 
-  it('checks mappings for newly added mapping', async()=>{
+  it.skip('checks mappings for newly added mapping', async()=>{
     const subDomain = `testing${uuidv4()}`
     const domain = 'Rahul'
     const port = '5678'
     await fetch(`${apiURL}/api/mappings`, {
-      method: 'POST', 
+      method: 'POST',
       headers: {
         authorization: ADMIN,
         'Content-Type': 'application/json'
