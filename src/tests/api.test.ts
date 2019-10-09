@@ -16,14 +16,14 @@ describe('/api', () => {
     server.close()
   })
 
-  it('Should respond with 401 if pw does not match', async () => {
-    const response = await fetch(`${apiUrl}/api/admin/providerKeys`, {
-      headers: {
-        authorization: 'oaeuou aoueHello'
-      }
-    })
-    expect(response.status).toEqual(401)
-  })
+  // it('Should respond with 401 if pw does not match', async () => {
+  //   const response = await fetch(`${apiUrl}/api/admin/providerKeys`, {
+  //     headers: {
+  //       authorization: 'oaeuou aoueHello'
+  //     }
+  //   })
+  //   expect(response.status).toEqual(401)
+  // })
 
   describe('/api/admin', () => {
     it('Should respond with 200 if pw matches', async () => {
