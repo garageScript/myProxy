@@ -35,4 +35,17 @@ describe('/api', () => {
       expect(response.status).toEqual(200)
     })
   })
+
+  describe('api/availableDomains', () => {
+    it('Should respond with 200 and return an array', async () => {
+      const response = await fetch(`${apiUrl}/api/availableDomains`,{
+        headers: {
+          authorization: ADMIN,
+        },
+      })
+      expect(response.status).toEqual(200)
+      const data = await response.json()
+      expect(data).toEqual([])
+    })
+  })
 })
