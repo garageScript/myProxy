@@ -17,7 +17,7 @@ describe('/api', () => {
     server.close()
   })
 
-  it.skip('checks mappings for newly added mapping', async () => {
+  it('checks mappings for newly added mapping', async () => {
     const subDomain = `testing${uuidv4()}`
     const domain = 'Rahul'
     const port = '5678'
