@@ -64,8 +64,8 @@ describe('/api', () => {
     expect(deletedMapping.id).toEqual(mapping.id)
     const getMapping = await mappingAdapter(`/${mapping.id}`, 'GET')
     expect(getMapping.status).toEqual(200)
-    const checkDeletion = await getMapping.json()
-    expect(checkDeletion.checkDomain).toEqual(undefined)
+    const mappingData = await getMapping.json()
+    expect(Object.keys(mappingData).length).toEqual(0)
   })
 
   it('checks no duplicate subdomain is created for same domain', async () => {

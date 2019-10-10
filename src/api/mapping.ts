@@ -100,7 +100,7 @@ mappingRouter.get('/', (req, res) => {
 mappingRouter.get('/:id', (req, res) => {
   const domains = getMappings()
   const foundDomain = domains.find(e => e.id === req.params.id)
-  res.json({ checkDomain: foundDomain })
+  res.json(foundDomain || {})
 })
 
 mappingRouter.delete('/delete/:id', (req, res) => {
