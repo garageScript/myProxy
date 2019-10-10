@@ -44,26 +44,26 @@ describe('/api', () => {
   })
 
   it('Delete mapping', async () => {
-    const subDomain = `delete${uuidv4()}`,
-      domain = 'albertow',
-      port = '4500',
-      createMapping = await mappingAdapter('/', 'POST', {
+    const subDomain = `delete${uuidv4()}`
+    const domain = 'albertow'
+    const port = '4500'
+    const createMapping = await mappingAdapter('/', 'POST', {
         domain,
         subDomain,
         port,
-      }),
-      mapping = await createMapping.json(),
-      delMapping = await mappingAdapter(`/delete/${mapping.id}`, 'DELETE'),
-      deletedMapping = await delMapping.json(),
-      getDeletion = await mappingAdapter(`/${mapping.id}`, 'GET'),
-      checkDeletion = await getDeletion.json()
+      })
+    expect(createMapping.status).toEqual(200)
+    const mapping = await createMapping.json()
+    const delMapping = await mappingAdapter(`/delete/${mapping.id}`, 'DELETE')
+    expect(delMapping.status).toEqual(200)
+    const deletedMapping = await delMapping.json()
+    const getDeletion = await mappingAdapter(`/${mapping.id}`, 'GET')
+    const checkDeletion = await getDeletion.json()
     expect(deletedMapping.port).toEqual(port)
     expect(deletedMapping.subDomain).toEqual(subDomain)
     expect(deletedMapping.domain).toEqual(domain)
     expect(deletedMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
     expect(deletedMapping.id).toEqual(mapping.id)
-    expect(createMapping.status).toEqual(200)
-    expect(delMapping.status).toEqual(200)
     expect(checkDeletion.checkDomain).toEqual(undefined)
   })
 

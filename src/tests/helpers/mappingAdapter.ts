@@ -1,8 +1,8 @@
 const TEST_PORT = process.env.PORT || 50604
 const ADMIN = process.env.ADMIN || 'hjhj'
 const apiURL = `http://127.0.0.1:${TEST_PORT}`
-import fetch from 'node-fetch'
 import { Options, Headers } from '../../types/tests'
+import fetch, { Response } from 'node-fetch'
 
 const reqHeaders: Headers = {
   authorization: ADMIN,
@@ -13,7 +13,7 @@ const mappingAdapter = (
   path = '/',
   method: string,
   body?: object
-): Promise<any> => {
+): Promise<Response> => {
   const options: Options = {
     method,
     headers: reqHeaders 
