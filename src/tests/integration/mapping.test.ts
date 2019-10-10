@@ -48,10 +48,10 @@ describe('/api', () => {
     const domain = 'albertow'
     const port = '4500'
     const createMapping = await mappingAdapter('/', 'POST', {
-        domain,
-        subDomain,
-        port,
-      })
+      domain,
+      subDomain,
+      port,
+    })
     expect(createMapping.status).toEqual(200)
     const mapping = await createMapping.json()
     const delMapping = await mappingAdapter(`/delete/${mapping.id}`, 'DELETE')
