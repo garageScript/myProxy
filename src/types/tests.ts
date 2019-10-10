@@ -1,7 +1,12 @@
+type Headers = {
+  authorization: string 
+  'Content-Type': string
+}
+
 type Options = {
-  headers: unknown
+  headers: Headers
   method: string
   body?: string
 }
 
-export { Options }
+export { Options, Headers }
