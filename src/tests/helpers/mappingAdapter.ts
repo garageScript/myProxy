@@ -4,7 +4,7 @@ const apiURL = `http://127.0.0.1:${TEST_PORT}`
 import fetch from 'node-fetch'
 import { Options } from '../../types/tests'
 
-const requestHeaders: unknown = {
+const requestHeaders: Record<string, unknown> = {
   authorization: ADMIN,
   'Content-Type': 'application/json',
 }
@@ -13,7 +13,7 @@ const mappingAdapter = (
   path = '/',
   method: string,
   body?: object
-): Promise<unknown> => {
+): Promise<{}> => {
   const options: Options = {
     method,
     headers: requestHeaders,

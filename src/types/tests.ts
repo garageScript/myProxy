@@ -1,5 +1,5 @@
 type Options = {
-  headers: unknown
+  headers: {}
   method: string
   body?: string
 }
