@@ -43,15 +43,15 @@ mappingRouter.post('/', (req, res) => {
         max_memory_restart: '1G',
         env_production: {
           NODE_ENV: 'production',
-          PORT: parseInt(req.body.port || portCounter, 10)
-        }
-      }
-    ]
+          PORT: parseInt(req.body.port || portCounter, 10),
+        },
+      },
+    ],
   }
   const projectPath = '/home/git'
   const scriptPath = '.scripts'
 
-  const respond = () => {
+  const respond = (): void => {
     const mappingObject: Mapping = {
       domain: req.body.domain,
       subDomain: req.body.subDomain,
@@ -59,7 +59,7 @@ mappingRouter.post('/', (req, res) => {
       ip: req.body.ip || '127.0.0.1',
       id: uuid4(),
       gitLink: `git@${req.body.domain}:${projectPath}/${fullDomain}`,
-      fullDomain
+      fullDomain,
     }
     domainKeys.push(mappingObject)
     setData('mappings', domainKeys)
@@ -95,6 +95,12 @@ mappingRouter.post('/', (req, res) => {
 mappingRouter.get('/', (req, res) => {
   const domains = getMappings()
   res.json(domains)
+})
+
+mappingRouter.get('/:id', (req, res) => {
+  const domains = getMappings()
+  const foundDomain = domains.find(e => e.id === req.params.id)
+  res.json({ checkDomain: foundDomain })
 })
 
 mappingRouter.delete('/delete/:id', (req, res) => {

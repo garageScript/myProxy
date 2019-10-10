@@ -4,9 +4,4 @@ type Options = {
   body?: string
 }
 
-type Headers = {
-  authorization: string
-  'Content-Type': string
-}
-
 export { Options, Headers }

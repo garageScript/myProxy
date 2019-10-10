@@ -54,14 +54,17 @@ describe('/api', () => {
       }),
       mapping = await createMapping.json(),
       delMapping = await mappingAdapter(`/delete/${mapping.id}`, 'DELETE'),
-      deletedMapping = await delMapping.json()
+      deletedMapping = await delMapping.json(),
+      getDeletion = await mappingAdapter(`/${mapping.id}`, 'GET'),
+      checkDeletion = await getDeletion.json()
     expect(deletedMapping.port).toEqual(port)
     expect(deletedMapping.subDomain).toEqual(subDomain)
     expect(deletedMapping.domain).toEqual(domain)
     expect(deletedMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
     expect(deletedMapping.id).toEqual(mapping.id)
-    expect(delMapping.status).toEqual(200)
     expect(createMapping.status).toEqual(200)
+    expect(delMapping.status).toEqual(200)
+    expect(checkDeletion.checkDomain).toEqual(undefined)
   })
 
   it('checks no duplicate subdomain is created for same domain', async () => {
@@ -72,25 +75,25 @@ describe('/api', () => {
       method: 'POST',
       headers: {
         authorization: ADMIN,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         domain,
         subDomain,
-        port
-      })
+        port,
+      }),
     })
     const response = await fetch(`${apiURL}/api/mappings`, {
       method: 'POST',
       headers: {
         authorization: ADMIN,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         domain,
         subDomain,
-        port
-      })
+        port,
+      }),
     })
     expect(response.status).toEqual(400)
   })
