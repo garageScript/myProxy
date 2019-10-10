@@ -4,4 +4,4 @@ type Options = {
   body?: string
 }
 
-export { Options, Headers }
+export { Options }
