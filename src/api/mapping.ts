@@ -94,14 +94,27 @@ mappingRouter.get('/:id', (req, res) => {
   res.json(foundDomain || {})
 })
 
-mappingRouter.delete('/delete/:id', (req, res) => {
+mappingRouter.delete('/delete/:id', async (req, res) => {
   const domains = getMappings()
   const deletedDomain = domains.find(e => e.id === req.params.id)
   const updatedDomains = domains.filter(e => {
     return e.id !== req.params.id
   })
   setData('mappings', updatedDomains)
-  res.json(deletedDomain)
+  if(process.env.NODE_ENV !== 'production') {
+    return res.json(deletedDomain)
+  }
+  const gitUserPath = '/home/git'
+  const gitUserId = await getGitUserId()
+  exec(
+    `
+      cd ${gitUserPath}
+      rm -rf ${deletedDomain.fullDomain}
+    `,
+    { uid: gitUserId }
+  ).then(() => {
+    res.json(deletedDomain)
+  })
 })
 
 mappingRouter.patch('/edit/:id', async (req, res) => {
