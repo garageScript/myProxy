@@ -39,7 +39,7 @@ class DomainElement {
       : ''
     const isSetup = foundDomain ? 'Reconfigure' : 'Setup'
     const setUpButtonClass =
-      isSetup === 'Reconfigure' ? 'btn-danger' : 'btn-primary'
+      isSetup === 'Reconfigure' ? 'btn-outline-danger' : 'btn-outline-primary'
     domainElement.innerHTML = `
       <div class="
         actionContainer d-flex
@@ -53,7 +53,7 @@ class DomainElement {
           m-0 p-1 loading"
           role="alert"
         >
-          Please wait this might take a little while...
+          Please wait, this might take up to 3-4 minutes...
         </div>
         <button type="button" class="btn ${setUpButtonClass} setUpButton">
           ${isSetup}
@@ -121,7 +121,7 @@ class ProviderKeyElement {
         >
         <div class="input-group-append">
           <button
-            class="btn btn-primary createOrUpdateButton"
+            class="btn btn-outline-primary createOrUpdateButton"
             type="button">
               ${buttonText}
           </button>

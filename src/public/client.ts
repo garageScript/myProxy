@@ -116,7 +116,7 @@ class MappingItem {
             </div>
           </div>
           </div>
-          <button class="btn btn-primary save">Save</button>
+          <button class="btn btn-outline-primary save">Save</button>
         `
 
       const save = helper.getElement('.save', mappingElement)
