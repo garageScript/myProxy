@@ -43,7 +43,8 @@ mappingRouter.post('/', async (req, res) => {
   }
   const projectPath = '/home/git'
   const scriptPath = '.scripts'
-  const respond = () => {
+
+  const respond = (): void => {
     const mappingObject: Mapping = {
       domain: req.body.domain,
       subDomain: req.body.subDomain,
@@ -51,7 +52,7 @@ mappingRouter.post('/', async (req, res) => {
       ip: req.body.ip || '127.0.0.1',
       id: uuid4(),
       gitLink: `git@${req.body.domain}:${projectPath}/${fullDomain}`,
-      fullDomain
+      fullDomain,
     }
     domainKeys.push(mappingObject)
     setData('mappings', domainKeys)
@@ -87,14 +88,27 @@ mappingRouter.get('/', (req, res) => {
   res.json(domains)
 })
 
-mappingRouter.delete('/delete/:id', (req, res) => {
+mappingRouter.delete('/delete/:id', async (req, res) => {
   const domains = getMappings()
   const deletedDomain = domains.find(e => e.id === req.params.id)
   const updatedDomains = domains.filter(e => {
     return e.id !== req.params.id
   })
   setData('mappings', updatedDomains)
-  res.json(deletedDomain)
+  if(process.env.NODE_ENV !== 'production') {
+    return res.json(deletedDomain)
+  }
+  const gitUserPath = '/home/git'
+  const gitUserId = await getGitUserId()
+  exec(
+    `
+      cd ${gitUserPath}
+      rm -rf ${deletedDomain.fullDomain}
+    `,
+    { uid: gitUserId }
+  ).then(() => {
+    res.json(deletedDomain)
+  })
 })
 
 mappingRouter.patch('/edit/:id', async (req, res) => {
@@ -142,6 +156,12 @@ mappingRouter.get('/download', (req, res) => {
   res.download(filePath, err => {
     console.log('Failed to download file', err)
   })
+})
+
+mappingRouter.get('/:id', (req, res) => {
+  const domains = getMappings()
+  const foundDomain = domains.find(e => e.id === req.params.id)
+  res.json(foundDomain || {})
 })
 
 export default mappingRouter
