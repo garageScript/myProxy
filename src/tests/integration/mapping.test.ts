@@ -93,6 +93,12 @@ describe('/api', () => {
     expect(patchedMapping.id).toEqual(mapping.id)
     const getMapping = await mappingAdapter(`/${mapping.id}`, 'GET')
     expect(getMapping.status).toEqual(200)
+    const mappingData = await getMapping.json()
+    expect(mappingData.port).toEqual('2345')
+    expect(mappingData.subDomain).toEqual('testingPatch')
+    expect(mappingData.domain).toEqual('testingIntegrations')
+    expect(mappingData.fullDomain).toEqual(`${subDomain}.${domain}`)
+    expect(mappingData.id).toEqual(mapping.id)
   })
 
   it('checks no duplicate subdomain is created for same domain', async () => {
