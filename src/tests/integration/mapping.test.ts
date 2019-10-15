@@ -99,6 +99,7 @@ describe('/api', () => {
     expect(mappingData.domain).toEqual('testingIntegrations')
     expect(mappingData.fullDomain).toEqual(`${subDomain}.${domain}`)
     expect(mappingData.id).toEqual(mapping.id)
+    const delMapping = await mappingAdapter(`/delete/${mapping.id}`, 'DELETE')
   })
 
   it('checks no duplicate subdomain is created for same domain', async () => {
