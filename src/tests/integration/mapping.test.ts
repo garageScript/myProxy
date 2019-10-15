@@ -22,17 +22,10 @@ describe('/api', () => {
     const subDomain = `testing${uuidv4()}`
     const domain = 'Rahul'
     const port = '5678'
-    const postResponse = await fetch(`${apiURL}/api/mappings`, {
-      method: 'POST',
-      headers: {
-        authorization: ADMIN,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        domain,
-        subDomain,
-        port,
-      }),
+    const postResponse = await mappingAdapter('/', 'POST', {
+      domain,
+      subDomain,
+      port,
     })
     const postMapping = await postResponse.json()
     expect(postMapping.port).toEqual(port)
