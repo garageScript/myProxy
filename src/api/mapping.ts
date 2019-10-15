@@ -126,6 +126,9 @@ mappingRouter.patch('/edit/:id', async (req, res) => {
   const updatedDomain = domains.find(
     (element: Mapping) => element.id === req.params.id
   )
+  if(process.env.NODE_ENV !== 'production') {
+    return res.json(updatedDomain)
+  }
   const prodConfigApp = [...prodConfigure.apps][0]
   prodConfigApp.name = updatedDomain.fullDomain
   prodConfigApp.env_production.PORT = parseInt(updatedDomain.port, 10)

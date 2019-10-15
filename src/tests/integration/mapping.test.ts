@@ -67,6 +67,33 @@ describe('/api', () => {
     const mappingData = await getMapping.json()
     expect(Object.keys(mappingData).length).toEqual(0)
   })
+  
+  it('checks if changes to the resource has been saved', async () => {
+    const subDomain = `testing${uuidv4()}`
+    const domain = 'integration'
+    const port = '3457'
+    const createMapping = await mappingAdapter('/', 'POST', {
+      domain, 
+      subDomain,
+      port
+    })
+    expect(createMapping.status).toEqual(200)
+    const mapping = await createMapping.json()
+    const patchMapping = await mappingAdapter(`/edit/${mapping.id}`, 'PATCH', {
+      subDomain: 'testingPatch',
+      domain: 'testingIntegrations',
+      port: '2345'
+    }) 
+    expect(patchMapping.status).toEqual(200)
+    const patchedMapping = await patchMapping.json()
+    expect(patchedMapping.port).toEqual('2345')
+    expect(patchedMapping.subDomain).toEqual('testingPatch')
+    expect(patchedMapping.domain).toEqual('testingIntegrations')
+    expect(patchedMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
+    expect(patchedMapping.id).toEqual(mapping.id)
+    const getMapping = await mappingAdapter(`/${mapping.id}`, 'GET')
+    expect(getMapping.status).toEqual(200)
+  })
 
   it('checks no duplicate subdomain is created for same domain', async () => {
     const subDomain = `testing${uuidv4()}`
@@ -97,40 +124,5 @@ describe('/api', () => {
       }),
     })
     expect(response.status).toEqual(400)
-  })
-
-  it('checks if changes to the resource has been saved', async () => {
-    const subDomain = `testing${uuidv4()}`
-    const domain = 'integration'
-    const port = '3457'
-
-    const maps = await fetch(`${apiURL}/api/mappings`, {
-      method: 'POST',
-      headers: {
-        authentication: ADMIN,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        domain,
-        subDomain,
-        port
-      })
-    }).then(r => r.json())
-    const id = maps.id
-
-    const response = await fetch(`${apiURL}/api/mappings/${id}`, {
-      method: 'PATCH',
-      headers: {
-        authentication: ADMIN,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        subDomain: 'testingPatch',
-        domain,
-        port: '4563'
-      })
-    })
-    const data = await fetch(`${apiURL}/api/mappings`).then(r => r.json())
-    return expect(data.id).toEqual(id)
   })
 })
