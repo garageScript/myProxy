@@ -88,12 +88,6 @@ mappingRouter.get('/', (req, res) => {
   res.json(domains)
 })
 
-mappingRouter.get('/:id', (req, res) => {
-  const domains = getMappings()
-  const foundDomain = domains.find(e => e.id === req.params.id)
-  res.json(foundDomain || {})
-})
-
 mappingRouter.delete('/delete/:id', async (req, res) => {
   const domains = getMappings()
   const deletedDomain = domains.find(e => e.id === req.params.id)
@@ -162,6 +156,12 @@ mappingRouter.get('/download', (req, res) => {
   res.download(filePath, err => {
     console.log('Failed to download file', err)
   })
+})
+
+mappingRouter.get('/:id', (req, res) => {
+  const domains = getMappings()
+  const foundDomain = domains.find(e => e.id === req.params.id)
+  res.json(foundDomain || {})
 })
 
 export default mappingRouter
