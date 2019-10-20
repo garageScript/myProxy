@@ -22,25 +22,22 @@ describe('/api', () => {
     const subDomain = `testing${uuidv4()}`
     const domain = 'Rahul'
     const port = '5678'
-    await fetch(`${apiURL}/api/mappings`, {
-      method: 'POST',
-      headers: {
-        authorization: ADMIN,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        domain,
-        subDomain,
-        port,
-      }),
+    const postResponse = await mappingAdapter('/', 'POST', {
+      domain,
+      subDomain,
+      port,
     })
-      .then(r => r.json())
-      .then(data => {
-        expect(data.port).toEqual(port)
-        expect(data.subDomain).toEqual(subDomain)
-        expect(data.domain).toEqual(domain)
-        expect(data.fullDomain).toEqual(`${subDomain}.${domain}`)
-      })
+    const postMapping = await postResponse.json()
+    expect(postMapping.port).toEqual(port)
+    expect(postMapping.subDomain).toEqual(subDomain)
+    expect(postMapping.domain).toEqual(domain)
+    expect(postMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
+    const deleteResponse = await mappingAdapter(`/delete/${postMapping.id}`, 'DELETE')
+    expect(deleteResponse.status).toEqual(200)
+    const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
+    expect(getMapping.status).toEqual(200)
+    const mappingData = await getMapping.json()
+    expect(Object.keys(mappingData).length).toEqual(0)
   })
 
   it('Delete mapping', async () => {
@@ -111,30 +108,24 @@ describe('/api', () => {
     const subDomain = `testing${uuidv4()}`
     const domain = 'Sahil'
     const port = '3522'
-    await fetch(`${apiURL}/api/mappings`, {
-      method: 'POST',
-      headers: {
-        authorization: ADMIN,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        domain,
-        subDomain,
-        port,
-      }),
+    const postResponse = await mappingAdapter('/', 'POST', {
+      domain,
+      subDomain,
+      port,
     })
-    const response = await fetch(`${apiURL}/api/mappings`, {
-      method: 'POST',
-      headers: {
-        authorization: ADMIN,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        domain,
-        subDomain,
-        port,
-      }),
+    expect(postResponse.status).toEqual(200)
+    const duplicatePostResponse = await mappingAdapter('/', 'POST', {
+      domain,
+      subDomain,
+      port,
     })
-    expect(response.status).toEqual(400)
+    expect(duplicatePostResponse.status).toEqual(400)
+    const postMapping = await postResponse.json()
+    const deleteResponse = await mappingAdapter(`/delete/${postMapping.id}`, 'DELETE')
+    expect(deleteResponse.status).toEqual(200)
+    const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
+    expect(getMapping.status).toEqual(200)
+    const mappingData = await getMapping.json()
+    expect(Object.keys(mappingData).length).toEqual(0)
   })
 })

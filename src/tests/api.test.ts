@@ -45,7 +45,7 @@ describe('/api', () => {
       })
       expect(response.status).toEqual(200)
       const data = await response.json()
-      expect(data).toEqual([])
+      expect(data).toBeInstanceOf(Array)
     })
   })
 })
