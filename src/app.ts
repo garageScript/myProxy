@@ -1,9 +1,7 @@
 import { startAppServer, startProxyServer } from './server/server'
+import dotEnv from './helpers/dotEnv'
 
-const ENV = process.env.NODE_ENV || 'development'
-const PORT = process.env.PORT || 3000
-const ADMIN_PASS = process.env.ADMIN || null
-const HOME = process.env.HOME || null
+const { PORT, ADMIN_PASS, ENV, HOME } = dotEnv
 
 startAppServer(PORT, ADMIN_PASS)
 

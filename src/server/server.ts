@@ -22,10 +22,8 @@ const startAppServer = (
   adminPass: string
 ): Promise<unknown> => {
   return new Promise((resolve, reject) => {
-    if (!adminPass) {
-      console.error(red, warningMsg)
-      return reject(warningMsg)
-    }
+    if (!adminPass) return console.error(red, warningMsg)
+
     const app = express()
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
