@@ -21,7 +21,7 @@ const startAppServer = (
   port: string | number,
   adminPass: string
 ): Promise<unknown> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     if (!adminPass) return console.error(red, warningMsg)
 
     const app = express()
