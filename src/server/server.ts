@@ -15,14 +15,16 @@ import { ProxyMapping } from '../types/general'
 
 const cyan = '\x1b[36m\u001b[1m%s\x1b[0m'
 const red = '\x1b[31m\u001b[1m%s\x1b[0m'
+const warningMsg = 'WARNING! You have to setup ADMIN password first before to run the app.'
 
 const startAppServer = (
   port: string | number,
   adminPass: string
 ): Promise<unknown> => {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     if (!adminPass) {
-      return console.log(red, 'Admin UI/API is turned off')
+      console.error(red, warningMsg)
+      return reject(warningMsg)
     }
     const app = express()
     app.use(express.json())
