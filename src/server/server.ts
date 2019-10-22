@@ -21,8 +21,11 @@ const startAppServer = (
   port: string | number,
   adminPass: string
 ): Promise<unknown> => {
-  return new Promise((resolve) => {
-    if (!adminPass) return console.error(red, errorMsg)
+  return new Promise((resolve, reject) => {
+    if (!adminPass) {
+      console.error(red, errorMsg)
+      return reject(errorMsg)
+    }
 
     const app = express()
     app.use(express.json())

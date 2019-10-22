@@ -6,9 +6,9 @@ import { Domain, ServiceResponse } from '../types/general'
 import { getAvailableDomains, setData, getProviderKeys } from '../lib/data'
 import { createSslCerts, setCnameRecords } from '../helpers/domainSetup'
 import providers from '../providers'
-import dotEnv from '../helpers/dotEnv'
+import environment from '../helpers/environment'
 
-const { ENV } = dotEnv
+const { isProduction } = environment
 const app = express.Router()
 
 app.post('/sslCerts', async (req, res) => {
@@ -19,21 +19,22 @@ app.post('/sslCerts', async (req, res) => {
   }
 
   try {
-    if(ENV === 'production'){
+    if(isProduction()){
       const sslCertResponse = await createSslCerts(
         serviceResponse,
         service,
         selectedDomain
       )
       if (!sslCertResponse.success) return res.json(sslCertResponse)
+
+      const cnameResponse = await setCnameRecords(
+        service,
+        selectedDomain,
+        serviceResponse
+      )
+      if (!cnameResponse.success) return res.json(cnameResponse)
     }
 
-    const cnameResponse = await setCnameRecords(
-      service,
-      selectedDomain,
-      serviceResponse
-    )
-    if (!cnameResponse.success) return res.json(cnameResponse)
 
     const domains = getAvailableDomains()
     const domain: Domain = {
@@ -60,19 +61,21 @@ app.patch('/sslCerts/:selectedDomain', async (req, res) => {
       'SSL Certs and domain name records have successfully been reconfigured'
   }
   try {
-    const sslCertResponse = await createSslCerts(
-      serviceResponse,
-      service,
-      selectedDomain
-    )
-    if (!sslCertResponse.success) return res.json(sslCertResponse)
+    if(isProduction()){
+      const sslCertResponse = await createSslCerts(
+        serviceResponse,
+        service,
+        selectedDomain
+      )
+      if (!sslCertResponse.success) return res.json(sslCertResponse)
 
-    const cnameResponse = await setCnameRecords(
-      service,
-      selectedDomain,
-      serviceResponse
-    )
-    if (!cnameResponse.success) return res.json(cnameResponse)
+      const cnameResponse = await setCnameRecords(
+        service,
+        selectedDomain,
+        serviceResponse
+      )
+      if (!cnameResponse.success) return res.json(cnameResponse)
+    }
     return res.json(serviceResponse)
   } catch (err) {
     serviceResponse.success = false
