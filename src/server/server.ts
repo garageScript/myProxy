@@ -15,14 +15,14 @@ import { ProxyMapping } from '../types/general'
 
 const cyan = '\x1b[36m\u001b[1m%s\x1b[0m'
 const red = '\x1b[31m\u001b[1m%s\x1b[0m'
-const warningMsg = 'WARNING! You have to setup ADMIN password first before to run the app.'
+const errorMsg = 'ERROR: App cannot be started because you must set an ADMIN password in the environment variable when running this app. Visit https://github.com/garageScript/myproxy#how-to-install'
 
 const startAppServer = (
   port: string | number,
   adminPass: string
 ): Promise<unknown> => {
   return new Promise((resolve) => {
-    if (!adminPass) return console.error(red, warningMsg)
+    if (!adminPass) return console.error(red, errorMsg)
 
     const app = express()
     app.use(express.json())
