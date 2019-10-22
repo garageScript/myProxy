@@ -1,6 +1,6 @@
 export default {
-  ENV: process.env.NODE_ENV || 'development',
-  PORT: process.env.PORT || 3000,
-  ADMIN_PASS: process.env.ADMIN || null,
-  HOME: process.env.HOME || null,
+  ENV: process.env.NODE_ENV || process.env.ENV || 'development',
+  PORT: process.env.PORT || process.env.ENV || 3000,
+  ADMIN_PASS: process.env.ADMIN || process.env.ENV || null,
+  HOME: process.env.HOME || process.env.ENV || null,
 }
