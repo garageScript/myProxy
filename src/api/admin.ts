@@ -1,11 +1,14 @@
+import express from 'express'
+import uuid4 from 'uuid/v4'
+
 import { ServiceKey } from '../types/admin'
 import { Domain, ServiceResponse } from '../types/general'
 import { getAvailableDomains, setData, getProviderKeys } from '../lib/data'
 import { createSslCerts, setCnameRecords } from '../helpers/domainSetup'
-import express from 'express'
-import uuid4 from 'uuid/v4'
 import providers from '../providers'
+import environment from '../helpers/environment'
 
+const { isProduction } = environment
 const app = express.Router()
 
 app.post('/sslCerts', async (req, res) => {
@@ -14,20 +17,24 @@ app.post('/sslCerts', async (req, res) => {
     success: true,
     message: 'SSL Certs and domain name records successfully created'
   }
-  try {
-    const sslCertResponse = await createSslCerts(
-      serviceResponse,
-      service,
-      selectedDomain
-    )
-    if (!sslCertResponse.success) return res.json(sslCertResponse)
 
-    const cnameResponse = await setCnameRecords(
-      service,
-      selectedDomain,
-      serviceResponse
-    )
-    if (!cnameResponse.success) return res.json(cnameResponse)
+  try {
+    if(isProduction()){
+      const sslCertResponse = await createSslCerts(
+        serviceResponse,
+        service,
+        selectedDomain
+      )
+      if (!sslCertResponse.success) return res.json(sslCertResponse)
+
+      const cnameResponse = await setCnameRecords(
+        service,
+        selectedDomain,
+        serviceResponse
+      )
+      if (!cnameResponse.success) return res.json(cnameResponse)
+    }
+
 
     const domains = getAvailableDomains()
     const domain: Domain = {
@@ -44,6 +51,7 @@ app.post('/sslCerts', async (req, res) => {
     return res.json(serviceResponse)
   }
 })
+
 app.patch('/sslCerts/:selectedDomain', async (req, res) => {
   const service = req.body.service
   const selectedDomain = req.params.selectedDomain
@@ -53,19 +61,21 @@ app.patch('/sslCerts/:selectedDomain', async (req, res) => {
       'SSL Certs and domain name records have successfully been reconfigured'
   }
   try {
-    const sslCertResponse = await createSslCerts(
-      serviceResponse,
-      service,
-      selectedDomain
-    )
-    if (!sslCertResponse.success) return res.json(sslCertResponse)
+    if(isProduction()){
+      const sslCertResponse = await createSslCerts(
+        serviceResponse,
+        service,
+        selectedDomain
+      )
+      if (!sslCertResponse.success) return res.json(sslCertResponse)
 
-    const cnameResponse = await setCnameRecords(
-      service,
-      selectedDomain,
-      serviceResponse
-    )
-    if (!cnameResponse.success) return res.json(cnameResponse)
+      const cnameResponse = await setCnameRecords(
+        service,
+        selectedDomain,
+        serviceResponse
+      )
+      if (!cnameResponse.success) return res.json(cnameResponse)
+    }
     return res.json(serviceResponse)
   } catch (err) {
     serviceResponse.success = false
