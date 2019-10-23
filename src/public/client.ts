@@ -66,6 +66,9 @@ class MappingItem {
       <button class="btn btn-sm btn-outline-primary edit" type="button">
         Edit
       </button>
+      <button class="btn btn-sm btn-outline-primary edit" type="button">
+        Cancel
+      </button>
     `
 
     const delButton = helper.getElement('.deleteButton', mappingElement)

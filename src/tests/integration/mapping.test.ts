@@ -76,11 +76,12 @@ describe('/api', () => {
     })
     expect(createMapping.status).toEqual(200)
     const mapping = await createMapping.json()
-    const patchMapping = await mappingAdapter(`/edit/${mapping.id}`, 'PATCH', {
+    const newMappingData = {
       subDomain: 'testingPatch',
       domain: 'testingIntegrations',
       port: '2345'
-    }) 
+    }
+    const patchMapping = await mappingAdapter(`/${mapping.id}`, 'PATCH', { newMappingData }) 
     expect(patchMapping.status).toEqual(200)
     const patchedMapping = await patchMapping.json()
     expect(patchedMapping.port).toEqual('2345')
