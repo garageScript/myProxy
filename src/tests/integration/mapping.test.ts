@@ -1,11 +1,9 @@
 import { startAppServer } from '../../server/server'
-import fetch from 'node-fetch'
 import uuidv4 from 'uuid/v4'
 import { mappingAdapter } from '../helpers/mappingAdapter'
 
 const TEST_PORT = process.env.PORT || 50604
 const ADMIN = process.env.ADMIN || 'hjhj'
-const apiURL = `http://127.0.0.1:${TEST_PORT}`
 
 describe('/api', () => {
   let server
