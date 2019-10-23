@@ -1,6 +1,13 @@
 import { startAppServer, startProxyServer } from './server/server'
+import environment from './helpers/environment'
 
-startAppServer(process.env.PORT || 3000, process.env.ADMIN)
-if (process.env.NODE_ENV === 'production') {
-  startProxyServer(process.env.HOME)
-}
+const { PORT, ADMIN_PASS, HOME, isProduction } = environment
+
+startAppServer(PORT, ADMIN_PASS)
+
+/**
+ * Proxy Server will create SSL Certificates on the server
+ * for your domains in production.
+ * Development mode do not have to run the proxy server.
+ * */
+if (isProduction()) startProxyServer(HOME)
