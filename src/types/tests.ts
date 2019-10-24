@@ -1,5 +1,5 @@
 type Headers = {
-  authorization: string 
+  authorization: string
   'Content-Type': string
 }
 
