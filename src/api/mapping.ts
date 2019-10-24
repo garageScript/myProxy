@@ -111,7 +111,7 @@ mappingRouter.delete('/delete/:id', async (req, res) => {
   })
 })
 
-mappingRouter.patch('/edit/:id', async (req, res) => {
+mappingRouter.patch('/:id', async (req, res) => {
   const domains = getMappings()
   const existingDomain = domains.find(e => e.fullDomain === req.body.fullDomain)
   if(existingDomain) return res.status(400)
