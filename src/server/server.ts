@@ -62,14 +62,12 @@ const startAppServer = (
 }
 
 const startProxyServer = (): void => {
-  console.log('🐙 Proxy Running')
   const proxy = httpProxy.createProxyServer({})
   proxy.on('error', err => {
     console.error('Proxy error', err)
   })
 
   const server = https.createServer({ SNICallback }, (req, res) => {
-    console.log('🐙 createServer Running')
     try {
       const mappings = getMappings()
       const { ip, port }: ProxyMapping =

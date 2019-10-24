@@ -20,13 +20,13 @@ const readFile = async (path: string) => {
 
 const SNICallback = async (host, cb) => {
   const filteredHost = host.split('.')
-  console.log(`🔥: SNICallback -> filteredHost`, filteredHost)
+  console.log(`🔥: filteredHost`, filteredHost)
   const [domain, topLevelDomain] = filteredHost.slice(
     filteredHost.length - 2,
     filteredHost.length
   )
   const filteredDomain = `${domain}.${topLevelDomain}`
-  const hasWildStar = filteredHost.length > 2 ? '*' : ''
+  const hasWildStar = filteredHost.length >= 2 ? '*' : ''
   const certPath = `${acmePath}/${hasWildStar}${filteredDomain}/fullchain.cer`
   const keyPath = `${acmePath}/${hasWildStar}\.${filteredDomain}/${hasWildStar}\.${filteredDomain}\.key`
 
