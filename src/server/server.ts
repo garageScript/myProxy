@@ -63,9 +63,7 @@ const startAppServer = (
 
 const startProxyServer = (): void => {
   const proxy = httpProxy.createProxyServer({})
-  proxy.on('error', err => {
-    console.error('Proxy error', err)
-  })
+  proxy.on('error', err => console.error('Proxy error', err))
 
   const server = https.createServer({ SNICallback }, (req, res) => {
     try {
@@ -75,7 +73,7 @@ const startProxyServer = (): void => {
           return `${subDomain}.${domain}` === req.headers.host
         }) || {}
       if (!port || !ip) return res.end('Not Found')
-      proxy.web(req, res, { target: `http://${ip}:${port}` }, err => {
+      proxy.web(req, res, { target: `https://${ip}:${port}` }, err => {
         console.error('Error communicating with server', err)
         res.end(`Error communicating with server that runs ${req.headers.host}`)
       })
