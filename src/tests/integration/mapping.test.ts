@@ -23,14 +23,17 @@ describe('/api', () => {
     const postResponse = await mappingAdapter('/', 'POST', {
       domain,
       subDomain,
-      port,
+      port
     })
     const postMapping = await postResponse.json()
     expect(postMapping.port).toEqual(port)
     expect(postMapping.subDomain).toEqual(subDomain)
     expect(postMapping.domain).toEqual(domain)
     expect(postMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
-    const deleteResponse = await mappingAdapter(`/delete/${postMapping.id}`, 'DELETE')
+    const deleteResponse = await mappingAdapter(
+      `/delete/${postMapping.id}`,
+      'DELETE'
+    )
     expect(deleteResponse.status).toEqual(200)
     const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
     expect(getMapping.status).toEqual(200)
@@ -45,7 +48,7 @@ describe('/api', () => {
     const createMapping = await mappingAdapter('/', 'POST', {
       domain,
       subDomain,
-      port,
+      port
     })
     expect(createMapping.status).toEqual(200)
     const mapping = await createMapping.json()
@@ -109,17 +112,20 @@ describe('/api', () => {
     const postResponse = await mappingAdapter('/', 'POST', {
       domain,
       subDomain,
-      port,
+      port
     })
     expect(postResponse.status).toEqual(200)
     const duplicatePostResponse = await mappingAdapter('/', 'POST', {
       domain,
       subDomain,
-      port,
+      port
     })
     expect(duplicatePostResponse.status).toEqual(400)
     const postMapping = await postResponse.json()
-    const deleteResponse = await mappingAdapter(`/delete/${postMapping.id}`, 'DELETE')
+    const deleteResponse = await mappingAdapter(
+      `/delete/${postMapping.id}`,
+      'DELETE'
+    )
     expect(deleteResponse.status).toEqual(200)
     const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
     expect(getMapping.status).toEqual(200)
