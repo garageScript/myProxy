@@ -136,15 +136,17 @@ mappingRouter.patch('/edit/:id', async (req, res) => {
   }
   const projectPath = '/home/git'
   const gitUserId = await getGitUserId()
+  /*eslint-disable */
   exec(
     `
       cd ${projectPath}/${updatedDomain.fullDomain}
       echo 'module.exports = ${JSON.stringify(
-    updatedConfig
-  )}' > deploy.config.js
+        updatedConfig
+      )}' > deploy.config.js
       git add .
       git commit -m "Edits deploy config file"
       `,
+    /*eslint-enable */
     { uid: gitUserId }
   ).then(() => {
     res.json(updatedDomain)
