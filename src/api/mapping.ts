@@ -52,7 +52,7 @@ mappingRouter.post('/', async (req, res) => {
       ip: req.body.ip || '127.0.0.1',
       id: uuid4(),
       gitLink: `git@${req.body.domain}:${projectPath}/${fullDomain}`,
-      fullDomain,
+      fullDomain
     }
     domainKeys.push(mappingObject)
     setData('mappings', domainKeys)
@@ -95,7 +95,7 @@ mappingRouter.delete('/delete/:id', async (req, res) => {
     return e.id !== req.params.id
   })
   setData('mappings', updatedDomains)
-  if(process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     return res.json(deletedDomain)
   }
   const gitUserPath = '/home/git'
@@ -141,13 +141,17 @@ mappingRouter.patch('/:id', async (req, res) => {
   }
   const projectPath = '/home/git'
   const gitUserId = await getGitUserId()
+  /*eslint-disable */
   exec(
     `
       cd ${projectPath}/${updatedDomain.fullDomain}
-      echo 'module.exports = ${JSON.stringify(updatedConfig)}' > deploy.config.js
+      echo 'module.exports = ${JSON.stringify(
+        updatedConfig
+      )}' > deploy.config.js
       git add .
       git commit -m "Edits deploy config file"
       `,
+    /*eslint-enable */
     { uid: gitUserId }
   ).then(() => {
     res.json(updatedDomain)

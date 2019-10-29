@@ -19,7 +19,7 @@ app.post('/sslCerts', async (req, res) => {
   }
 
   try {
-    if(isProduction()){
+    if (isProduction()) {
       const sslCertResponse = await createSslCerts(
         serviceResponse,
         service,
@@ -34,7 +34,6 @@ app.post('/sslCerts', async (req, res) => {
       )
       if (!cnameResponse.success) return res.json(cnameResponse)
     }
-
 
     const domains = getAvailableDomains()
     const domain: Domain = {
@@ -61,7 +60,7 @@ app.patch('/sslCerts/:selectedDomain', async (req, res) => {
       'SSL Certs and domain name records have successfully been reconfigured'
   }
   try {
-    if(isProduction()){
+    if (isProduction()) {
       const sslCertResponse = await createSslCerts(
         serviceResponse,
         service,
