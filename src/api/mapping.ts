@@ -117,8 +117,6 @@ mappingRouter.patch('/:id', async (req, res) => {
   if (existingDomain) return res.status(400)
   const domainList = domains.map((element: Mapping) => {
     if (element.id === req.params.id) {
-      if (req.body.domain) element.domain = req.body.domain
-      if (req.body.subDomain) element.subDomain = req.body.subDomain
       if (req.body.port) element.port = req.body.port
       if (req.body.ip) element.ip = req.body.ip
     }
