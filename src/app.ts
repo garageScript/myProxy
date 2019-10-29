@@ -1,7 +1,7 @@
 import { startAppServer, startProxyServer } from './server/server'
 import environment from './helpers/environment'
 
-const { PORT, ADMIN_PASS, HOME, isProduction } = environment
+const { PORT, ADMIN_PASS, isProduction } = environment
 
 startAppServer(PORT, ADMIN_PASS)
 
@@ -10,4 +10,4 @@ startAppServer(PORT, ADMIN_PASS)
  * for your domains in production.
  * Development mode do not have to run the proxy server.
  * */
-if (isProduction()) startProxyServer(HOME)
+if (isProduction()) startProxyServer()
