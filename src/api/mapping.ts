@@ -114,7 +114,7 @@ mappingRouter.delete('/delete/:id', async (req, res) => {
 mappingRouter.patch('/:id', async (req, res) => {
   const domains = getMappings()
   const existingDomain = domains.find(e => e.fullDomain === req.body.fullDomain)
-  if(existingDomain) return res.status(400)
+  if (existingDomain) return res.status(400)
   const domainList = domains.map((element: Mapping) => {
     if (element.id === req.params.id) {
       if (req.body.domain) element.domain = req.body.domain
@@ -128,7 +128,7 @@ mappingRouter.patch('/:id', async (req, res) => {
   const updatedDomain = domains.find(
     (element: Mapping) => element.id === req.params.id
   )
-  if(process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     return res.json(updatedDomain)
   }
   const prodConfigApp = [...prodConfigure.apps][0]

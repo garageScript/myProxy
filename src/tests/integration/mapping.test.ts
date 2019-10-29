@@ -65,13 +65,13 @@ describe('/api', () => {
     const mappingData = await getMapping.json()
     expect(Object.keys(mappingData).length).toEqual(0)
   })
-  
+
   it('checks if changes to the resource has been saved', async () => {
     const subDomain = `testing${uuidv4()}`
     const domain = 'integration'
     const port = '3457'
     const createMapping = await mappingAdapter('/', 'POST', {
-      domain, 
+      domain,
       subDomain,
       port
     })
@@ -80,11 +80,13 @@ describe('/api', () => {
     const newMappingData = {
       port: '2345'
     }
-    const patchMapping = await mappingAdapter(`/${mapping.id}`, 'PATCH', { newMappingData }) 
+    const patchMapping = await mappingAdapter(`/${mapping.id}`, 'PATCH', {
+      newMappingData
+    })
     expect(patchMapping.status).toEqual(200)
     const patchedMapping = await patchMapping.json()
-    expect(patchedMapping.port).toEqual('2345')
     expect(patchedMapping.id).toEqual(mapping.id)
+    expect(patchedMapping.port).toEqual('2345')
     const getMapping = await mappingAdapter(`/${mapping.id}`, 'GET')
     expect(getMapping.status).toEqual(200)
     const mappingData = await getMapping.json()
