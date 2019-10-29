@@ -78,25 +78,17 @@ describe('/api', () => {
     expect(createMapping.status).toEqual(200)
     const mapping = await createMapping.json()
     const newMappingData = {
-      subDomain: 'testingPatch',
-      domain: 'testingIntegrations',
       port: '2345'
     }
     const patchMapping = await mappingAdapter(`/${mapping.id}`, 'PATCH', { newMappingData }) 
     expect(patchMapping.status).toEqual(200)
     const patchedMapping = await patchMapping.json()
     expect(patchedMapping.port).toEqual('2345')
-    expect(patchedMapping.subDomain).toEqual('testingPatch')
-    expect(patchedMapping.domain).toEqual('testingIntegrations')
-    expect(patchedMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
     expect(patchedMapping.id).toEqual(mapping.id)
     const getMapping = await mappingAdapter(`/${mapping.id}`, 'GET')
     expect(getMapping.status).toEqual(200)
     const mappingData = await getMapping.json()
     expect(mappingData.port).toEqual('2345')
-    expect(mappingData.subDomain).toEqual('testingPatch')
-    expect(mappingData.domain).toEqual('testingIntegrations')
-    expect(mappingData.fullDomain).toEqual(`${subDomain}.${domain}`)
     expect(mappingData.id).toEqual(mapping.id)
     const delMapping = await mappingAdapter(`/delete/${mapping.id}`, 'DELETE')
     expect(delMapping.status).toEqual(200)
