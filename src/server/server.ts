@@ -73,7 +73,7 @@ const startProxyServer = (): void => {
           return `${subDomain}.${domain}` === req.headers.host
         }) || {}
       if (!port || !ip) return res.end('Not Found')
-      proxy.web(req, res, { target: `https://${ip}:${port}` }, err => {
+      proxy.web(req, res, { target: `http://${ip}:${port}` }, err => {
         console.error('Error communicating with server', err)
         res.end(`Error communicating with server that runs ${req.headers.host}`)
       })
