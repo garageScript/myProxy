@@ -19,8 +19,8 @@ describe('/api', () => {
   it('Should respond with 401 if pw does not match', async () => {
     const response = await fetch(`${apiUrl}/api/admin/providerKeys`, {
       headers: {
-        authorization: 'oaeuou aoueHello',
-      },
+        authorization: 'oaeuou aoueHello'
+      }
     })
     expect(response.status).toEqual(401)
   })
@@ -29,8 +29,8 @@ describe('/api', () => {
     it('Should respond with 200 if pw matches', async () => {
       const response = await fetch(`${apiUrl}/api/admin/providerKeys`, {
         headers: {
-          authorization: ADMIN,
-        },
+          authorization: ADMIN
+        }
       })
       expect(response.status).toEqual(200)
     })
@@ -40,8 +40,8 @@ describe('/api', () => {
     it('Should respond with 200 and return an array', async () => {
       const response = await fetch(`${apiUrl}/api/availableDomains`, {
         headers: {
-          authorization: ADMIN,
-        },
+          authorization: ADMIN
+        }
       })
       expect(response.status).toEqual(200)
       const data = await response.json()

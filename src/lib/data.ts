@@ -5,7 +5,7 @@ import { Mapping, Domain } from '../types/general'
 const data: DB = {
   serviceKeys: [],
   mappings: [],
-  availableDomains: [],
+  availableDomains: []
 }
 
 fs.readFile('./data.db', (err, file) => {

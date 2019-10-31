@@ -75,8 +75,8 @@ class MappingItem {
           method: 'DELETE',
           body: JSON.stringify({ data }),
           headers: {
-            'Content-Type': 'application/json',
-          },
+            'Content-Type': 'application/json'
+          }
         }).then(() => {
           window.location.reload()
         })
@@ -147,11 +147,11 @@ class MappingItem {
             subDomain: subDomainNameValue,
             port: portValue,
             ip: ipValue,
-            id: id,
+            id: id
           }),
           headers: {
-            'Content-Type': 'application/json',
-          },
+            'Content-Type': 'application/json'
+          }
         }).then(() => {
           window.location.reload()
         })
@@ -196,11 +196,11 @@ create.onclick = (): void => {
       domain: domain,
       subDomain: subDomainValue,
       port: portValue,
-      ip: ipValue,
+      ip: ipValue
     }),
     headers: {
-      'Content-Type': 'application/json',
-    },
+      'Content-Type': 'application/json'
+    }
   }).then(res => {
     if (res.status === 400)
       return alert('Port Value cannot be smaller than 3001')

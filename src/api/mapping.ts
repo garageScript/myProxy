@@ -39,7 +39,7 @@ mappingRouter.post('/', async (req, res) => {
   prodConfigApp.script = 'npm'
   prodConfigApp.args = 'start'
   const prodConfig = {
-    apps: prodConfigApp,
+    apps: prodConfigApp
   }
   const projectPath = '/home/git'
   const scriptPath = '.scripts'
@@ -52,7 +52,7 @@ mappingRouter.post('/', async (req, res) => {
       ip: req.body.ip || '127.0.0.1',
       id: uuid4(),
       gitLink: `git@${req.body.domain}:${projectPath}/${fullDomain}`,
-      fullDomain,
+      fullDomain
     }
     domainKeys.push(mappingObject)
     setData('mappings', domainKeys)
@@ -132,7 +132,7 @@ mappingRouter.patch('/edit/:id', async (req, res) => {
   prodConfigApp.script = 'npm'
   prodConfigApp.args = 'start'
   const updatedConfig = {
-    apps: prodConfigApp,
+    apps: prodConfigApp
   }
   const projectPath = '/home/git'
   const gitUserId = await getGitUserId()

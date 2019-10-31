@@ -23,7 +23,7 @@ describe('/api', () => {
     const postResponse = await mappingAdapter('/', 'POST', {
       domain,
       subDomain,
-      port,
+      port
     })
     const postMapping = await postResponse.json()
     expect(postMapping.port).toEqual(port)
@@ -48,7 +48,7 @@ describe('/api', () => {
     const createMapping = await mappingAdapter('/', 'POST', {
       domain,
       subDomain,
-      port,
+      port
     })
     expect(createMapping.status).toEqual(200)
     const mapping = await createMapping.json()
@@ -73,13 +73,13 @@ describe('/api', () => {
     const postResponse = await mappingAdapter('/', 'POST', {
       domain,
       subDomain,
-      port,
+      port
     })
     expect(postResponse.status).toEqual(200)
     const duplicatePostResponse = await mappingAdapter('/', 'POST', {
       domain,
       subDomain,
-      port,
+      port
     })
     expect(duplicatePostResponse.status).toEqual(400)
     const postMapping = await postResponse.json()

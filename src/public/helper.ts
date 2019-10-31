@@ -11,5 +11,5 @@ const helper = {
       root.querySelector(query) ||
       (document.createElement('div') as HTMLElement)
     )
-  },
+  }
 }

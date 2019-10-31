@@ -15,7 +15,7 @@ app.post('/sslCerts', async (req, res) => {
   const { service, selectedDomain } = req.body
   const serviceResponse: ServiceResponse = {
     success: true,
-    message: 'SSL Certs and domain name records successfully created',
+    message: 'SSL Certs and domain name records successfully created'
   }
 
   try {
@@ -39,7 +39,7 @@ app.post('/sslCerts', async (req, res) => {
     const domain: Domain = {
       domain: selectedDomain,
       expiration: '<ssl expiration date will go here>',
-      provider: service,
+      provider: service
     }
     domains.push(domain)
     setData('availableDomains', domains)
@@ -57,7 +57,7 @@ app.patch('/sslCerts/:selectedDomain', async (req, res) => {
   const serviceResponse: ServiceResponse = {
     success: true,
     message:
-      'SSL Certs and domain name records have successfully been reconfigured',
+      'SSL Certs and domain name records have successfully been reconfigured'
   }
   try {
     if (isProduction()) {
@@ -88,7 +88,7 @@ app.post('/providerKeys', (req, res) => {
   const serviceKeys = getProviderKeys()
   const providerKey: ServiceKey = {
     id: uuid4(),
-    ...req.body,
+    ...req.body
   }
   serviceKeys.push(providerKey)
   setData('serviceKeys', serviceKeys)
