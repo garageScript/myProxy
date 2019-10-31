@@ -12,7 +12,7 @@ MyProxy is an application that proxies requests to other servers
 Connect to your server:
 
 ```bash
-ssh user@my_server_ip
+ssh root@my_server_ip
 ```
 
 Clone the app:
@@ -30,7 +30,7 @@ cd myProxy/
 Set it up:
 
 ```bash
-npm run setup
+./scripts/setup.sh
 ```
 
 > Will install [acme.sh](https://github.com/Neilpang/acme.sh) and all dependencies
