@@ -119,8 +119,16 @@ class MappingItem {
             </div>
           </div>
           </div>
-          <button class="btn btn-outline-primary save">Save</button>
+          <div class="btn-group-vertical">
+            <button class="btn btn-outline-primary save">Save</button>
+            <button class="btn btn-outline-danger cancel">Cancel</button>
+          </div>
         `
+
+      const cancel = helper.getElement('.cancel', mappingElement)
+      cancel.onclick = (): void => {
+        window.location.reload()
+      }
 
       const save = helper.getElement('.save', mappingElement)
       save.onclick = (): void => {
