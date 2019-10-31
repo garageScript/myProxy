@@ -72,8 +72,8 @@ After your domain is setup, you will be able to generate as many subdomain repos
 1. In the terminal, run `git clone <your fullDomain repo>` to clone your app folder.
 2. Enter your repo `cd <your fullDomain folder>`
 3. Run `npm init -y`
-4. Run `npm i express --save'
-5. Run `touch app.js'
+4. Run `npm i express --save`
+5. Run `touch app.js`
 6. Copy the following code into app.js.
 
 ```javascript
@@ -88,9 +88,9 @@ app.get('/', (req, res) => {
 app.listen(process.env.PORT || 8123);
 ```
 
-7. Update scripts section of Package.JSON with `"start": "node app.js"`
+7. Update scripts section of package.JSON with `"start": "node app.js"`
 8. Run `git add .`
-9. Run `git commit -m "Initial Commit"
+9. Run `git commit -m "Initial Commit"`
 10. Run `git push origin master`
 
 # Contribution
