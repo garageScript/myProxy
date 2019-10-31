@@ -70,34 +70,39 @@ describe('/api', () => {
     const subDomain = `testing${uuidv4()}`
     const domain = 'integration'
     const port = '3457'
-    const createMapping = await mappingAdapter('/', 'POST', {
+    const ip = '123.23.25'
+
+    // Create mapping
+    const mapping = await mappingAdapter('/', 'POST', {
       domain,
       subDomain,
+      ip,
       port
-    })
-    expect(createMapping.status).toEqual(200)
-    const mapping = await createMapping.json()
-    const newMappingData = {
-      port: '2345'
-    }
+    }).then(r => r.json())
+
+    // Patch created mapping with different port
+    //     and make sure patch resolves correctly
+    const newPort = '2345'
+    const newIp = '234.34.36'
     const patchMapping = await mappingAdapter(`/${mapping.id}`, 'PATCH', {
-      newMappingData
+      port: newPort,
+      ip: newIp
     })
     expect(patchMapping.status).toEqual(200)
     const patchedMapping = await patchMapping.json()
     expect(patchedMapping.id).toEqual(mapping.id)
-    expect(patchedMapping.port).toEqual('2345')
+
+    // Get the mapping id to make sure the change is persisted
     const getMapping = await mappingAdapter(`/${mapping.id}`, 'GET')
     expect(getMapping.status).toEqual(200)
     const mappingData = await getMapping.json()
-    expect(mappingData.port).toEqual('2345')
+    expect(mappingData.port).toEqual(newPort)
+    expect(mappingData.ip).toEqual(newIp)
     expect(mappingData.id).toEqual(mapping.id)
+
+    // Cleanup: Delete the mapping
     const delMapping = await mappingAdapter(`/delete/${mapping.id}`, 'DELETE')
     expect(delMapping.status).toEqual(200)
-    const getUpdatedMapping = await mappingAdapter(`/${mapping.id}`, 'GET')
-    expect(getUpdatedMapping.status).toEqual(200)
-    const updatedMappingData = await getUpdatedMapping.json()
-    expect(Object.keys(updatedMappingData).length).toEqual(0)
   })
 
   it('checks no duplicate subdomain is created for same domain', async () => {

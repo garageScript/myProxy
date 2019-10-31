@@ -113,47 +113,31 @@ mappingRouter.delete('/delete/:id', async (req, res) => {
 
 mappingRouter.patch('/:id', async (req, res) => {
   const domains = getMappings()
-  const existingDomain = domains.find(e => e.fullDomain === req.body.fullDomain)
-  if (existingDomain) return res.status(400)
+
+  // Make sure this domain actually exist
+  const existingDomain = domains.find(e => e.id === req.params.id)
+  if (!existingDomain) {
+    return res.status(400)
+  }
+
   const domainList = domains.map((element: Mapping) => {
     if (element.id === req.params.id) {
-      if (req.body.port) element.port = req.body.port
-      if (req.body.ip) element.ip = req.body.ip
+      console.log('req body', req.body)
+      if (req.body.port) {
+        element.port = req.body.port
+      }
+      if (req.body.ip) {
+        element.ip = req.body.ip
+      }
     }
     return element
   })
   setData('mappings', domainList)
+
   const updatedDomain = domains.find(
     (element: Mapping) => element.id === req.params.id
   )
-  if (process.env.NODE_ENV !== 'production') {
-    return res.json(updatedDomain)
-  }
-  const prodConfigApp = [...prodConfigure.apps][0]
-  prodConfigApp.name = updatedDomain.fullDomain
-  prodConfigApp.env_production.PORT = parseInt(updatedDomain.port, 10)
-  prodConfigApp.script = 'npm'
-  prodConfigApp.args = 'start'
-  const updatedConfig = {
-    apps: prodConfigApp
-  }
-  const projectPath = '/home/git'
-  const gitUserId = await getGitUserId()
-  /*eslint-disable */
-  exec(
-    `
-      cd ${projectPath}/${updatedDomain.fullDomain}
-      echo 'module.exports = ${JSON.stringify(
-        updatedConfig
-      )}' > deploy.config.js
-      git add .
-      git commit -m "Edits deploy config file"
-      `,
-    /*eslint-enable */
-    { uid: gitUserId }
-  ).then(() => {
-    res.json(updatedDomain)
-  })
+  return res.json(updatedDomain)
 })
 
 mappingRouter.get('/download', (req, res) => {
