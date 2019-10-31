@@ -77,11 +77,11 @@ class DomainElement {
         method,
         body: JSON.stringify({
           service: domainService,
-          selectedDomain: domainObj.domain
+          selectedDomain: domainObj.domain,
         }),
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       })
         .then(res => {
           return res.json()
@@ -144,11 +144,11 @@ class ProviderKeyElement {
         body: JSON.stringify({
           key: providerKey.key,
           value: keyInput.value,
-          service: providerId
+          service: providerId,
         }),
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       }).then(() => window.location.reload())
     }
     providerKeysContainer.appendChild(providerKeyElement)

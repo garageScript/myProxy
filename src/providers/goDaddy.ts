@@ -10,7 +10,7 @@ const SERVICE = 'https://api.godaddy.com'
 const getKeys = (): ServiceKey[] => {
   const keysDefault: { key: string }[] = [
     { key: 'GD_Key' },
-    { key: 'GD_Secret' }
+    { key: 'GD_Secret' },
   ]
   const keys = keysDefault.map(keyInfo => {
     const serviceKeys = getProviderKeys()
@@ -32,8 +32,8 @@ export const getDomains = async (): Promise<Provider> => {
   const options = {
     headers: {
       Authorization: `sso-key ${findKey('GD_Key')}:${findKey('GD_Secret')}`,
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   }
 
   domains = await sendRequest<Array<unknown>>(url, options)
@@ -43,7 +43,7 @@ export const getDomains = async (): Promise<Provider> => {
     service: SERVICE,
     name: NAME,
     keys,
-    domains
+    domains,
   }
 }
 
@@ -55,41 +55,41 @@ export const setRecord = async (
   const data = [
     {
       data: ipaddress,
-      ttl: 600
-    }
+      ttl: 600,
+    },
   ]
   const options = {
     method: 'PUT',
     headers: {
       Authorization: `sso-key ${findKey('GD_Key')}:${findKey('GD_Secret')}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   }
   const cnameUrl = `${SERVICE}/v1/domains/${domain}/records/CNAME/*`
   const cnameData = [
     {
       data: '@',
-      ttl: 600
-    }
+      ttl: 600,
+    },
   ]
   const cnameOptions = {
     method: 'PUT',
     headers: {
       Authorization: `sso-key ${findKey('GD_Key')}:${findKey('GD_Secret')}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(cnameData)
+    body: JSON.stringify(cnameData),
   }
   const response: ServiceResponse = {
     success: true,
-    message: 'Successfully set CNAME records for wildcard domain'
+    message: 'Successfully set CNAME records for wildcard domain',
   }
   try {
     // eslint-disable-next-line
     const results = await Promise.all([
       fetch(url, options),
-      fetch(cnameUrl, cnameOptions)
+      fetch(cnameUrl, cnameOptions),
     ])
   } catch (e) {
     console.error('Error setting CNAME records', e)

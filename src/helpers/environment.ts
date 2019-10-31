@@ -4,5 +4,5 @@ export default {
   ADMIN_PASS: process.env.ADMIN || process.env.ENV || null,
   HOME: process.env.HOME || process.env.ENV || null,
   isProduction: (): boolean =>
-    (process.env.NODE_ENV || process.env.ENV) === 'production'
+    (process.env.NODE_ENV || process.env.ENV) === 'production',
 }

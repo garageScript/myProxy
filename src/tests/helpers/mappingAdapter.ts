@@ -6,7 +6,7 @@ import fetch, { Response } from 'node-fetch'
 
 const reqHeaders: Headers = {
   authorization: ADMIN,
-  'Content-Type': 'application/json'
+  'Content-Type': 'application/json',
 }
 
 const mappingAdapter = (
@@ -16,7 +16,7 @@ const mappingAdapter = (
 ): Promise<Response> => {
   const options: Options = {
     method,
-    headers: reqHeaders
+    headers: reqHeaders,
   }
   if (body) {
     options.body = JSON.stringify(body)

@@ -48,5 +48,5 @@ export {
   ServiceResponse,
   ServiceConfig,
   ProviderService,
-  ProxyMapping
+  ProxyMapping,
 }
