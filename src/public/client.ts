@@ -123,7 +123,7 @@ class MappingItem {
         `
 
       const cancel = helper.getElement('.cancel', mappingElement)
-      cancel.onclick = () : void => {
+      cancel.onclick = (): void => {
         window.location.reload()
       }
 
