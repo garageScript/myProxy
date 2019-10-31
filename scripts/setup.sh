@@ -15,8 +15,8 @@ if [ ! -d "./acme.sh" ] ; then
   cd ../
 fi
 if [ ! -d $PATH ] ; then
-  sudo useradd -m -c "git" git -s /bin/bash -p $(echo $ADMIN | openssl passwd -1 -stdin) -d $PATH
-  sudo -u git bash <<EOF
+  sudo useradd -m -c "myproxy" myproxy -s /bin/bash -p $(echo $ADMIN | openssl passwd -1 -stdin) -d $PATH
+  sudo -u myproxy bash <<EOF
     cd $PATH
     git clone https://github.com/garageScript/myproxy/
     mkdir .scripts
