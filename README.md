@@ -7,7 +7,9 @@ MyProxy is an application that proxies requests to other servers
 
 - [x] A valid Domain name `Eg: mydomain.com` (Currently supported providers: GoDaddy)
 
-# How to use the app
+# Installation and Usage 
+
+## Installation
 
 Connect to your server:
 
@@ -34,6 +36,8 @@ Set it up:
 ```
 
 > Will install [acme.sh](https://github.com/Neilpang/acme.sh) and all dependencies
+
+## Usage
 
 Run the app:
 
@@ -65,11 +69,12 @@ After your domain is setup, you will be able to generate as many subdomain repos
 
 
 ## Building-Your-Local-App 
-1. In the terminal, go to your App folder.
-2. Run `npm init -y`
-3. Run `npm i express --save'
-3. Run `touch app.js'
-4. Copy the following code into app.js.
+1. In the terminal, run `git clone <your fullDomain repo>` to clone your app folder.
+2. Enter your repo `cd <your fullDomain folder>`
+3. Run `npm init -y`
+4. Run `npm i express --save'
+5. Run `touch app.js'
+6. Copy the following code into app.js.
 
 ```javascript
 const express = require('express');
@@ -83,10 +88,10 @@ app.get('/', (req, res) => {
 app.listen(process.env.PORT || 8123);
 ```
 
-5. Update scripts section of Package.JSON with `"start": "node app.js"`
-6. Run `git add .`
-7. Run `git commit -m "Initial Commit"
-8. Run `git push origin master`
+7. Update scripts section of Package.JSON with `"start": "node app.js"`
+8. Run `git add .`
+9. Run `git commit -m "Initial Commit"
+10. Run `git push origin master`
 
 # Contribution
 

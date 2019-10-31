@@ -22,7 +22,8 @@ To use `MyProxy`, you need 2 things:
 1. A domain name. MyProxy uses [acme.sh](https://github.com/Neilpang/acme.sh/wiki/dnsapi), so you would have to buy the domains from any of the [DNS APIs listed there](https://github.com/Neilpang/acme.sh/wiki/dnsapi) (includes all of the major providers like namecheap, goDaddy, etc.)
 2. A server's IP address that you have root access to. You can use your home server or get one from [AWS EC2](https://aws.amazon.com/ec2/?hp=tile&so-exp=below), [DigitalOcean](https://www.digitalocean.com/), [GoogleCloud](https://cloud.google.com/), etc.
 
-## How To Use
+# Installation and Usage 
+## Installation
 1. Connect to your server: `ssh root@your-server-ip-address`
 
 2. Clone the app: `git clone https://github.com/garageScript/myProxy.git`
@@ -36,28 +37,29 @@ To use `MyProxy`, you need 2 things:
     * Installs application dependencies
     * For a list of things the script runs, [look here](https://github.com/garageScript/myProxy/blob/master/scripts/setup.sh)
 
-5. Run the App: `ADMIN=YOUR_ADMIN_PASSWORD npm run server` 
+## Usage
+1. Run the App: `ADMIN=YOUR_ADMIN_PASSWORD npm run server` 
 > You can also run the app under your own defined port by setting a `PORT` environment variable
 
-6. Exit from server `exit`
+2. Exit from server `exit`
 
-7. Go to your server url: `http://your-server-ip-address:3000`. You will be prompted to enter your admin password and your domain provider's API Key and Secret, [find out how here](https://github.com/Neilpang/acme.sh/wiki/dnsapi)
+3. Go to your server url: `http://your-server-ip-address:3000`. You will be prompted to enter your admin password and your domain provider's API Key and Secret, [find out how here](https://github.com/Neilpang/acme.sh/wiki/dnsapi)
 
-8. All your domain names in that provider will show up. Click the `setup` button next to the domain you wish to setup (could take up to 4 minutes)
+4. All your domain names in that provider will show up. Click the `setup` button next to the domain you wish to setup (could take up to 4 minutes)
 
-9. After your domain is setup, you will be able to generate as many subdomain repository as you want! To do that:
+5. After your domain is setup, you will be able to generate as many subdomain repository as you want! To do that:
     1. Go to your server url:  `http://your-server-ip-address:3000`
     2. Create a subdomain. IP and port are optional. You should see a git link that was created for you.
     3. `git clone` the app, then build the app locally. [find out how here](##Build-Your-Local-App)  
     4. When you are done, `git push origin master` and watch your app run in production!
 
-
 ## Building-Your-Local-App 
-1. In the terminal, go to your App folder.
-2. Run `npm init -y`
-3. Run `npm i express --save'
-3. Run `touch app.js'
-4. Copy the following code into app.js.
+1. In the terminal, run `git clone <your fullDomain repo>` to clone your app folder.
+2. Enter your repo `cd <your fullDomain folder>`
+3. Run `npm init -y`
+4. Run `npm i express --save'
+5. Run `touch app.js'
+6. Copy the following code into app.js.
 
 ```javascript
 const express = require('express');
@@ -71,10 +73,10 @@ app.get('/', (req, res) => {
 app.listen(process.env.PORT || 8123);
 ```
 
-5. Update scripts section of Package.JSON with `"start": "node app.js"`
-6. Run `git add .`
-7. Run `git commit -m "Initial Commit"
-8. Run `git push origin master`
+7. Update scripts section of Package.JSON with `"start": "node app.js"`
+8. Run `git add .`
+9. Run `git commit -m "Initial Commit"
+10. Run `git push origin master
 
 # Development
 The following steps will guide you through how to setup your development environment to send pull requests or build your own custom features.
