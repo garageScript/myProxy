@@ -146,6 +146,10 @@ mappingRouter.patch('/:id', async (req, res) => {
     apps: prodConfigApp
   }
 
+  if (process.env.NODE_ENV !== 'production') {
+    return res.json(updatedDomain)
+  }
+
   const gitUserId = await getGitUserId()
   /*eslint-disable */
   exec(
