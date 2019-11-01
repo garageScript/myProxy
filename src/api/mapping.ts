@@ -123,21 +123,20 @@ mappingRouter.patch('/:id', async (req, res) => {
 
   const domainList = domains.map((element: Mapping) => {
     if (element.id === req.params.id) {
-      console.log('req body', req.body)
       if (req.body.port) {
         element.port = req.body.port
       }
       if (req.body.ip) {
         element.ip = req.body.ip
       }
+      const prodConfigApp = [...prodConfigure.apps][0]
     }
     return element
   })
   setData('mappings', domainList)
 
   const updatedDomain = domains.find(
-    (element: Mapping) => element.id === req.params.id
-  )
+    (element: Mapping) => element.id === req.params.id )
   const prodConfigApp = [...prodConfigure.apps][0]
   prodConfigApp.name = updatedDomain.fullDomain
   prodConfigApp.env_production.PORT = parseInt(updatedDomain.port, 10)
@@ -147,6 +146,7 @@ mappingRouter.patch('/:id', async (req, res) => {
     apps: prodConfigApp
   }
 
+  const projectPath = '/home/git'
   const gitUserId = await getGitUserId()
   /*eslint-disable */
   exec(
@@ -163,7 +163,6 @@ mappingRouter.patch('/:id', async (req, res) => {
   ).then(() => {
     res.json(updatedDomain)
   })
-
   return res.json(updatedDomain)
 })
 
