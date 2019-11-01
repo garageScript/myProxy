@@ -16,7 +16,7 @@ const getNextPort = (map, start = 3002): number => {
   return getNextPort(map, start)
 }
 
-const { WORKPATH } = environment
+const { WORKPATH, isProduction } = environment
 
 mappingRouter.post('/', async (req, res) => {
   const domainKeys = getMappings()
@@ -61,7 +61,7 @@ mappingRouter.post('/', async (req, res) => {
     res.json(mappingObject)
   }
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (!isProduction()) {
     return respond()
   }
   const gitUserId = await getGitUserId()
@@ -97,7 +97,7 @@ mappingRouter.delete('/delete/:id', async (req, res) => {
     return e.id !== req.params.id
   })
   setData('mappings', updatedDomains)
-  if (process.env.NODE_ENV !== 'production') {
+  if (!isProduction()) {
     return res.json(deletedDomain)
   }
   const gitUserId = await getGitUserId()
@@ -146,7 +146,7 @@ mappingRouter.patch('/:id', async (req, res) => {
     apps: prodConfigApp
   }
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (!isProduction()) {
     return res.json(updatedDomain)
   }
 
