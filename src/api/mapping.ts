@@ -7,6 +7,7 @@ import { setData, getMappings } from '../lib/data'
 import { Mapping } from '../types/general'
 import prodConfigure from '../../scripts/prod.config.js'
 import { getGitUserId } from '../helpers/getGitUser'
+import environment from '../helpers/environment'
 const mappingRouter = express.Router()
 const exec = util.promisify(cp.exec)
 const getNextPort = (map, start = 3002): number => {
@@ -14,6 +15,8 @@ const getNextPort = (map, start = 3002): number => {
   if (map[start]) start += 1
   return getNextPort(map, start)
 }
+
+const { WORKPATH } = environment
 
 mappingRouter.post('/', async (req, res) => {
   const domainKeys = getMappings()
@@ -41,7 +44,6 @@ mappingRouter.post('/', async (req, res) => {
   const prodConfig = {
     apps: prodConfigApp
   }
-  const projectPath = '/home/git'
   const scriptPath = '.scripts'
 
   const respond = (): void => {
@@ -51,7 +53,7 @@ mappingRouter.post('/', async (req, res) => {
       port: req.body.port || `${portCounter}`,
       ip: req.body.ip || '127.0.0.1',
       id: uuid4(),
-      gitLink: `git@${req.body.domain}:${projectPath}/${fullDomain}`,
+      gitLink: `myproxy@${req.body.domain}:${WORKPATH}/${fullDomain}`,
       fullDomain
     }
     domainKeys.push(mappingObject)
@@ -65,7 +67,7 @@ mappingRouter.post('/', async (req, res) => {
   const gitUserId = await getGitUserId()
   exec(
     `
-      cd ${projectPath}
+      cd ${WORKPATH}
       mkdir ${fullDomain}
       git init ${fullDomain}
       cp ${scriptPath}/post-receive ${fullDomain}/.git/hooks/
@@ -98,11 +100,10 @@ mappingRouter.delete('/delete/:id', async (req, res) => {
   if (process.env.NODE_ENV !== 'production') {
     return res.json(deletedDomain)
   }
-  const gitUserPath = '/home/git'
   const gitUserId = await getGitUserId()
   exec(
     `
-      cd ${gitUserPath}
+      cd ${WORKPATH}
       rm -rf ${deletedDomain.fullDomain}
     `,
     { uid: gitUserId }
@@ -137,11 +138,37 @@ mappingRouter.patch('/:id', async (req, res) => {
   const updatedDomain = domains.find(
     (element: Mapping) => element.id === req.params.id
   )
+  const prodConfigApp = [...prodConfigure.apps][0]
+  prodConfigApp.name = updatedDomain.fullDomain
+  prodConfigApp.env_production.PORT = parseInt(updatedDomain.port, 10)
+  prodConfigApp.script = 'npm'
+  prodConfigApp.args = 'start'
+  const updatedConfig = {
+    apps: prodConfigApp
+  }
+
+  const gitUserId = await getGitUserId()
+  /*eslint-disable */
+  exec(
+    `
+      cd ${WORKPATH}/${updatedDomain.fullDomain}
+      echo 'module.exports = ${JSON.stringify(
+        updatedConfig
+      )}' > deploy.config.js
+      git add .
+      git commit -m "Edits deploy config file"
+      `,
+    /*eslint-enable */
+    { uid: gitUserId }
+  ).then(() => {
+    res.json(updatedDomain)
+  })
+
   return res.json(updatedDomain)
 })
 
 mappingRouter.get('/download', (req, res) => {
-  const filePath = `/home/git/${req.query.fullDomain}/deploy.config.js`
+  const filePath = `${WORKPATH}/${req.query.fullDomain}/deploy.config.js`
   res.setHeader('Content-disposition', 'attachment; filename=deploy.config.js')
   res.setHeader('Content-type', 'application/javascript')
   res.download(filePath, err => {

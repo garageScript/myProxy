@@ -10,7 +10,8 @@ module.exports = {
       env_production: {
         NODE_ENV: process.env.NODE_ENV || 'production',
         PORT: process.env.PORT || 3000,
-        ADMIN: process.env.ADMIN
+        ADMIN: process.env.ADMIN,
+        WORKPATH: process.env.WORKPATH || '/home/myproxy'
       },
     },
   ],
