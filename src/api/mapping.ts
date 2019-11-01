@@ -16,7 +16,7 @@ const getNextPort = (map, start = 3002): number => {
   return getNextPort(map, start)
 }
 
-const { PATH } = environment
+const { WORKPATH } = environment
 
 mappingRouter.post('/', async (req, res) => {
   const domainKeys = getMappings()
@@ -53,7 +53,7 @@ mappingRouter.post('/', async (req, res) => {
       port: req.body.port || `${portCounter}`,
       ip: req.body.ip || '127.0.0.1',
       id: uuid4(),
-      gitLink: `myproxy@${req.body.domain}:${PATH}/${fullDomain}`,
+      gitLink: `myproxy@${req.body.domain}:${WORKPATH}/${fullDomain}`,
       fullDomain
     }
     domainKeys.push(mappingObject)
@@ -67,7 +67,7 @@ mappingRouter.post('/', async (req, res) => {
   const gitUserId = await getGitUserId()
   exec(
     `
-      cd ${PATH}
+      cd ${WORKPATH}
       mkdir ${fullDomain}
       git init ${fullDomain}
       cp ${scriptPath}/post-receive ${fullDomain}/.git/hooks/
@@ -103,7 +103,7 @@ mappingRouter.delete('/delete/:id', async (req, res) => {
   const gitUserId = await getGitUserId()
   exec(
     `
-      cd ${PATH}
+      cd ${WORKPATH}
       rm -rf ${deletedDomain.fullDomain}
     `,
     { uid: gitUserId }
@@ -140,7 +140,7 @@ mappingRouter.patch('/edit/:id', async (req, res) => {
   /*eslint-disable */
   exec(
     `
-      cd ${PATH}/${updatedDomain.fullDomain}
+      cd ${WORKPATH}/${updatedDomain.fullDomain}
       echo 'module.exports = ${JSON.stringify(
         updatedConfig
       )}' > deploy.config.js
@@ -155,7 +155,7 @@ mappingRouter.patch('/edit/:id', async (req, res) => {
 })
 
 mappingRouter.get('/download', (req, res) => {
-  const filePath = `${PATH}/${req.query.fullDomain}/deploy.config.js`
+  const filePath = `${WORKPATH}/${req.query.fullDomain}/deploy.config.js`
   res.setHeader('Content-disposition', 'attachment; filename=deploy.config.js')
   res.setHeader('Content-type', 'application/javascript')
   res.download(filePath, err => {
