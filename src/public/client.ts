@@ -16,12 +16,6 @@ const dropDownDomains: HTMLElement = helper.getElement('.dropdown-menu')
 let selectedHost = ''
 
 // eslint-disable-next-line
-
-const adminPage = helper.getElement('.adminPage')
-adminPage.onclick = () => {
-  window.location.href = '/admin'
-}
-
 class DomainOption {
   constructor(domain: string) {
     const dropdownElement = document.createElement('button')

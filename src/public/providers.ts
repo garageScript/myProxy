@@ -22,11 +22,6 @@ type Domain = {
   provider?: string
 }
 
-const myProxyPage = helper.getElement('.myProxy')
-myProxyPage.onclick = () => {
-  window.location.href = '/'
-}
-
 class DomainElement {
   constructor(
     domainObj: Domain,
