@@ -16,7 +16,7 @@ const getNextPort = (map, start = 3002): number => {
   return getNextPort(map, start)
 }
 
-const { WORKPATH } = environment
+const { WORKPATH, isProduction } = environment
 
 mappingRouter.post('/', async (req, res) => {
   const domainKeys = getMappings()
@@ -61,7 +61,7 @@ mappingRouter.post('/', async (req, res) => {
     res.json(mappingObject)
   }
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (!isProduction()) {
     return respond()
   }
   const gitUserId = await getGitUserId()
@@ -97,7 +97,7 @@ mappingRouter.delete('/delete/:id', async (req, res) => {
     return e.id !== req.params.id
   })
   setData('mappings', updatedDomains)
-  if (process.env.NODE_ENV !== 'production') {
+  if (!isProduction()) {
     return res.json(deletedDomain)
   }
   const gitUserId = await getGitUserId()
@@ -112,18 +112,28 @@ mappingRouter.delete('/delete/:id', async (req, res) => {
   })
 })
 
-mappingRouter.patch('/edit/:id', async (req, res) => {
+mappingRouter.patch('/:id', async (req, res) => {
   const domains = getMappings()
+
+  // Make sure this domain actually exist
+  const existingDomain = domains.find(e => e.id === req.params.id)
+  if (!existingDomain) {
+    return res.status(400)
+  }
+
   const domainList = domains.map((element: Mapping) => {
     if (element.id === req.params.id) {
-      if (req.body.domain) element.domain = req.body.domain
-      if (req.body.subDomain) element.subDomain = req.body.subDomain
-      if (req.body.port) element.port = req.body.port
-      if (req.body.ip) element.ip = req.body.ip
+      if (req.body.port) {
+        element.port = req.body.port
+      }
+      if (req.body.ip) {
+        element.ip = req.body.ip
+      }
     }
     return element
   })
   setData('mappings', domainList)
+
   const updatedDomain = domains.find(
     (element: Mapping) => element.id === req.params.id
   )
@@ -134,6 +144,10 @@ mappingRouter.patch('/edit/:id', async (req, res) => {
   prodConfigApp.args = 'start'
   const updatedConfig = {
     apps: prodConfigApp
+  }
+
+  if (!isProduction()) {
+    return res.json(updatedDomain)
   }
 
   const gitUserId = await getGitUserId()
@@ -152,6 +166,7 @@ mappingRouter.patch('/edit/:id', async (req, res) => {
   ).then(() => {
     res.json(updatedDomain)
   })
+  return res.json(updatedDomain)
 })
 
 mappingRouter.get('/download', (req, res) => {
