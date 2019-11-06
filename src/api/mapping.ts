@@ -104,6 +104,10 @@ mappingRouter.delete('/delete/:id', async (req, res) => {
   exec(
     `
       cd ${WORKPATH}
+      export PM2_HOME=/home/myproxy/.pm2
+      if command ls ${deletedDomain.fullDomain} | grep "package.json" &>/dev/null; then
+      pm2 delete ${deletedDomain.fullDomain}
+      fi
       rm -rf ${deletedDomain.fullDomain}
     `,
     { uid: gitUserId }
