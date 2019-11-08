@@ -54,6 +54,10 @@ const startAppServer = (
       return res.render('login', { error: 'Wrong Admin Password' })
     })
 
+    app.get('/sshKeys', (req, res) => {
+      res.render('sshKeys')
+    })
+
     const server = app.listen(port, () => {
       console.log(cyan, `myProxy is running on port ${port}!`)
       resolve(server)
