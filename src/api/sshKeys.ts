@@ -1,15 +1,12 @@
 import express from 'express'
 
-import { authorizedKeys, addAuthorizedKey } from '../helpers/authorizedKeys'
+import {
+  authorizedKeys,
+  addAuthorizedKey,
+  removeAuthorizedKey
+} from '../helpers/authorizedKeys'
 
 const sshKeyRouter = express.Router()
-
-// The steps below are covered by the setup script. This is not necessssary.
-/* 
-  if (!fs.existsSync(`${userHomeDirectory}/.ssh`)) {
-    fs.mkdirSync(`${userHomeDirectory}/.ssh`, { recursive: true })
-  }
-*/
 
 sshKeyRouter.get('/', (req, res) => {
   res.json(authorizedKeys)
@@ -18,6 +15,12 @@ sshKeyRouter.get('/', (req, res) => {
 sshKeyRouter.post('/', (req, res) => {
   const { id, key } = req.body
   addAuthorizedKey(id, key)
+  res.json(authorizedKeys)
+})
+
+sshKeyRouter.delete('/', (req, res) => {
+  const { id } = req.body
+  removeAuthorizedKey(id)
   res.json(authorizedKeys)
 })
 
