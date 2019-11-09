@@ -15,7 +15,9 @@ import { setupAuth, isCorrectCredentials } from '../auth'
 import { ProxyMapping } from '../types/general'
 import { SNICallback } from '../helpers/SNICallback'
 import { setAuthorizedKeys } from '../helpers/authorizedKeys'
+import environment from '../helpers/environment'
 
+const { isProduction } = environment
 const userHomeDirectory = os.homedir()
 
 // The steps below are covered by the setup script. This is not necessssary.
@@ -34,20 +36,25 @@ const startAppServer = (
       return reject(errorMsg)
     }
 
-    fs.readFile(`${userHomeDirectory}/.ssh/authorized_keys`, (error, data) => {
-      if (error) {
-        console.log(error)
-      }
-      const keysObj = {}
-      data
-        .toString()
-        .split('\n')
-        .filter(e => e !== '')
-        .forEach((item, index) => {
-          keysObj[`default+${index}`] = item
-        })
-      setAuthorizedKeys(keysObj)
-    })
+    if (isProduction()) {
+      fs.readFile(
+        `${userHomeDirectory}/.ssh/authorized_keys`,
+        (error, data) => {
+          if (error) {
+            console.log(error)
+          }
+          const keysObj = {}
+          data
+            .toString()
+            .split('\n')
+            .filter(e => e !== '')
+            .forEach((item, index) => {
+              keysObj[`default+${index}`] = item
+            })
+          setAuthorizedKeys(keysObj)
+        }
+      )
+    }
 
     const app = express()
     app.use(express.json())
