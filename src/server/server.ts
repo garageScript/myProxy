@@ -1,7 +1,9 @@
 import 'dotenv/config'
 import express from 'express'
+import fs from 'fs'
 import https from 'https'
 import httpProxy from 'http-proxy'
+import os from 'os'
 import path from 'path'
 import cookieParser from 'cookie-parser'
 
@@ -12,7 +14,11 @@ import { getAvailableDomains, getMappings } from '../lib/data'
 import { setupAuth, isCorrectCredentials } from '../auth'
 import { ProxyMapping } from '../types/general'
 import { SNICallback } from '../helpers/SNICallback'
+import { setAuthorizedKeys } from '../helpers/authorizedKeys'
 
+const userHomeDirectory = os.homedir()
+
+// The steps below are covered by the setup script. This is not necessssary.
 const cyan = '\x1b[36m\u001b[1m%s\x1b[0m'
 const red = '\x1b[31m\u001b[1m%s\x1b[0m'
 const errorMsg =
@@ -27,6 +33,21 @@ const startAppServer = (
       console.error(red, errorMsg)
       return reject(errorMsg)
     }
+
+    fs.readFile(`${userHomeDirectory}/.ssh/authorized_keys`, (error, data) => {
+      if (error) {
+        console.log(error)
+      }
+      const keysObj = {}
+      data
+        .toString()
+        .split('\n')
+        .filter(e => e !== '')
+        .forEach((item, index) => {
+          keysObj[`default+${index}`] = item
+        })
+      setAuthorizedKeys(keysObj)
+    })
 
     const app = express()
     app.use(express.json())
