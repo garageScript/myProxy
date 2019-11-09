@@ -12,11 +12,10 @@ const sshKeyRouter = express.Router()
 */
 
 sshKeyRouter.get('/', (req, res) => {
-  // Read from file if authorizedKeys is empty
   res.json(authorizedKeys)
 })
 
-sshKeyRouter.post('/add', (req, res) => {
+sshKeyRouter.post('/', (req, res) => {
   const { id, key } = req.body
   addAuthorizedKey(id, key)
   res.json(authorizedKeys)
