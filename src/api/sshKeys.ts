@@ -26,11 +26,11 @@ sshKeyRouter.get('/', (req, res) => {
         console.log(error)
       }
       const keysObj = {}
-      const keysArray = data
+      data
         .toString()
         .split('\n')
         .filter(e => e !== '')
-        .forEach((item, index)  => {
+        .forEach((item, index) => {
           keysObj[`default+${index}`] = item
         })
       setAuthorizedKeys(keysObj)
@@ -41,7 +41,7 @@ sshKeyRouter.get('/', (req, res) => {
 
 sshKeyRouter.post('/add', (req, res) => {
   const { id, key } = req.body
-  addAuthorizedKey(id,key)
+  addAuthorizedKey(id, key)
   res.json(authorizedKeys)
 })
 
