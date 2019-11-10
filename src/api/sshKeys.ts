@@ -15,13 +15,13 @@ sshKeyRouter.get('/', (req, res) => {
 sshKeyRouter.post('/', (req, res) => {
   const { key } = req.body
   addAuthorizedKey(key)
-  res.json(authorizedKeys)
+  res.json(authorizedKeys.map(v => v.split(' ')[2]))
 })
 
 sshKeyRouter.delete('/', (req, res) => {
   const { id } = req.body
   removeAuthorizedKey(id)
-  res.json(authorizedKeys)
+  res.json(authorizedKeys.map(v => v.split(' ')[2]))
 })
 
 export default sshKeyRouter
