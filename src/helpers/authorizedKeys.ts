@@ -5,13 +5,14 @@ const userHomeDirectory = os.homedir()
 let authorizedKeys: { [key: string]: string } = {}
 
 const updateSSHKey = (): void => {
-  fs.writeFile(
-    `${userHomeDirectory}/.ssh/authorized_keys`,
-    Object.values(authorizedKeys),
-    err => {
-      if (err) console.log(err)
-    }
-  )
+  const file = fs.createWriteStream(`${userHomeDirectory}/.ssh/authorized_keys`)
+  file.on('error', err => {
+    console.log(err)
+  })
+  Object.values(authorizedKeys).forEach(v => {
+    file.write(`${v}\n`)
+  })
+  file.end()
 }
 
 const addAuthorizedKey = (id: string, key: string): void => {
