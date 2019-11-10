@@ -2,7 +2,7 @@ import fs from 'fs'
 import os from 'os'
 const userHomeDirectory = os.homedir()
 
-let authorizedKeys: { [key: string]: string } = {}
+let authorizedKeys: Array<string> = []
 
 const updateSSHKey = (): void => {
   const file = fs.createWriteStream(`${userHomeDirectory}/.ssh/authorized_keys`)
@@ -15,8 +15,8 @@ const updateSSHKey = (): void => {
   file.end()
 }
 
-const addAuthorizedKey = (id: string, key: string): void => {
-  authorizedKeys[id] = key
+const addAuthorizedKey = (key: string): void => {
+  authorizedKeys.push(key)
   updateSSHKey()
 }
 
@@ -25,7 +25,7 @@ const removeAuthorizedKey = (id: string): void => {
   updateSSHKey()
 }
 
-const setAuthorizedKeys = (keys: { [key: string]: string }): void => {
+const setAuthorizedKeys = (keys: Array<string>): void => {
   authorizedKeys = keys
 }
 

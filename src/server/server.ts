@@ -43,15 +43,12 @@ const startAppServer = (
           if (error) {
             console.log(error)
           }
-          const keysObj = {}
-          data
-            .toString()
-            .split('\n')
-            .filter(e => e !== '')
-            .forEach((item, index) => {
-              keysObj[`default+${index}`] = item
-            })
-          setAuthorizedKeys(keysObj)
+          setAuthorizedKeys(
+            data
+              .toString()
+              .split('\n')
+              .filter(e => e !== '')
+          )
         }
       )
     }

@@ -9,12 +9,12 @@ import {
 const sshKeyRouter = express.Router()
 
 sshKeyRouter.get('/', (req, res) => {
-  res.json(authorizedKeys)
+  res.json(authorizedKeys.map(v => v.split(' '))[1])
 })
 
 sshKeyRouter.post('/', (req, res) => {
-  const { id, key } = req.body
-  addAuthorizedKey(id, key)
+  const { key } = req.body
+  addAuthorizedKey(key)
   res.json(authorizedKeys)
 })
 
