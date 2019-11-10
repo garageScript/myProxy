@@ -9,7 +9,7 @@ const updateSSHKey = (): void => {
   file.on('error', err => {
     console.log(err)
   })
-  Object.values(authorizedKeys).forEach(v => {
+  authorizedKeys.forEach(v => {
     file.write(`${v}\n`)
   })
   file.end()
@@ -20,8 +20,8 @@ const addAuthorizedKey = (key: string): void => {
   updateSSHKey()
 }
 
-const removeAuthorizedKey = (id: string): void => {
-  delete authorizedKeys[id]
+const removeAuthorizedKey = (id: number): void => {
+  authorizedKeys.splice(id, 1)
   updateSSHKey()
 }
 
