@@ -3,7 +3,6 @@ import express from 'express'
 import fs from 'fs'
 import https from 'https'
 import httpProxy from 'http-proxy'
-import os from 'os'
 import path from 'path'
 import cookieParser from 'cookie-parser'
 
@@ -18,7 +17,6 @@ import { setAuthorizedKeys } from '../helpers/authorizedKeys'
 import environment from '../helpers/environment'
 
 const { isProduction } = environment
-const userHomeDirectory = os.homedir()
 
 // The steps below are covered by the setup script. This is not necessssary.
 const cyan = '\x1b[36m\u001b[1m%s\x1b[0m'
@@ -37,20 +35,17 @@ const startAppServer = (
     }
 
     if (isProduction()) {
-      fs.readFile(
-        `${userHomeDirectory}/.ssh/authorized_keys`,
-        (error, data) => {
-          if (error) {
-            console.log(error)
-          }
-          setAuthorizedKeys(
-            data
-              .toString()
-              .split('\n')
-              .filter(e => e !== '')
-          )
+      fs.readFile(`/home/myproxy/.ssh/authorized_keys`, (error, data) => {
+        if (error) {
+          console.log(error)
         }
-      )
+        setAuthorizedKeys(
+          data
+            .toString()
+            .split('\n')
+            .filter(e => e !== '')
+        )
+      })
     }
 
     const app = express()

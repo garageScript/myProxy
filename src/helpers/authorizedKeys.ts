@@ -1,11 +1,9 @@
 import fs from 'fs'
-import os from 'os'
-const userHomeDirectory = os.homedir()
 
 let authorizedKeys: Array<string> = []
 
 const updateSSHKey = (): void => {
-  const file = fs.createWriteStream(`${userHomeDirectory}/.ssh/authorized_keys`)
+  const file = fs.createWriteStream(`/home/myproxy/.ssh/authorized_keys`)
   file.on('error', err => {
     console.log(err)
   })

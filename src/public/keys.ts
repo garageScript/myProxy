@@ -4,7 +4,7 @@ const submitSSHKey = document.getElementById('newSshKey')
 
 const title = document.getElementById('title') as HTMLInputElement
 
-newKey.oninput = e => {
+newKey.oninput = (e): void => {
   const { value } = e.target as HTMLInputElement
   title.value = value.split(' ')[2] || ''
 }
