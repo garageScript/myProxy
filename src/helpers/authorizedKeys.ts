@@ -3,7 +3,7 @@ import fs from 'fs'
 let authorizedKeys: Array<string> = []
 
 const updateSSHKey = (): void => {
-  const file = fs.createWriteStream(`/home/myproxy/.ssh/authorized_keys`)
+  const file = fs.createWriteStream('/home/myproxy/.ssh/authorized_keys')
   file.on('error', err => {
     console.log(err)
   })

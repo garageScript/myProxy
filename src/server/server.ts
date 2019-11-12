@@ -35,7 +35,7 @@ const startAppServer = (
     }
 
     if (isProduction()) {
-      fs.readFile(`/home/myproxy/.ssh/authorized_keys`, (error, data) => {
+      fs.readFile('/home/myproxy/.ssh/authorized_keys', (error, data) => {
         if (error) {
           console.log(error)
         }
