@@ -1,5 +1,6 @@
 import { startAppServer } from '../../server/server'
 import fetch from 'node-fetch'
+import { authorizedKeys } from '../../helpers/authorizedKeys'
 
 const TEST_PORT = process.env.PORT || 5001
 const ADMIN = process.env.ADMIN || '123'
@@ -30,6 +31,7 @@ describe('/api/sshKeys', () => {
   })
 
   it('check if SSH keys can be added', async () => {
+    const currentSSHKeyLength = authorizedKeys.length
     const res = await fetch(`http://localhost:${TEST_PORT}/api/sshKeys`, {
       method: 'POST',
       body: JSON.stringify({
@@ -38,8 +40,8 @@ describe('/api/sshKeys', () => {
       headers: reqHeaders
     })
     const data = await res.json()
-    expect(res.status).toEqual(200)
-    expect(data).toStrictEqual(['schacon@mylaptop.local'])
+    expect(authorizedKeys.length).toEqual(currentSSHKeyLength + 1)
+    expect(data).toContain('schacon@mylaptop.local')
   })
 
   it('check if SSH keys can be deleted', async () => {
