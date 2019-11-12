@@ -1,16 +1,20 @@
 import fs from 'fs'
+import environment from '../helpers/environment'
 
+const { isProduction } = environment
 let authorizedKeys: Array<string> = []
 
 const updateSSHKey = (): void => {
-  const file = fs.createWriteStream('/home/myproxy/.ssh/authorized_keys')
-  file.on('error', err => {
-    console.log(err)
-  })
-  authorizedKeys.forEach(v => {
-    file.write(`${v}\n`)
-  })
-  file.end()
+  if (isProduction()) {
+    const file = fs.createWriteStream('/home/myproxy/.ssh/authorized_keys')
+    file.on('error', err => {
+      console.log(err)
+    })
+    authorizedKeys.forEach(v => {
+      file.write(`${v}\n`)
+    })
+    file.end()
+  }
 }
 
 const addAuthorizedKey = (key: string): void => {
