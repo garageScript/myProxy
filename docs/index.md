@@ -50,7 +50,7 @@ To use `MyProxy`, you need 2 things:
 3. After your domain is setup, you will be able to generate as many subdomain repository as you want! To do that:
     1. Go to your server url:  `http://your-server-ip-address:3000`
     2. Create a subdomain. IP and port are optional. You should see a git link that was created for you.
-    3. `git clone` the app, then build the app locally. [find out how here](##Building-Your-Local-App)  
+    3. `git clone` the app, then build the app locally. Find out how in the Building Your Local App section below. 
     4. When you are done, `git push origin master` and watch your app run in production!
 
 ## Building-Your-Local-App 
