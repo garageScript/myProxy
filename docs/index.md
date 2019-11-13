@@ -37,20 +37,20 @@ To use `MyProxy`, you need 2 things:
     * Installs application dependencies
     * For a list of things the script runs, [look here](https://github.com/garageScript/myProxy/blob/master/scripts/setup.sh)
 
-## Usage
-1. Run the App: `ADMIN=YOUR_ADMIN_PASSWORD npm run server` 
+5. Run the App: `ADMIN=YOUR_ADMIN_PASSWORD npm run server` 
 > You can also run the app under your own defined port by setting a `PORT` environment variable
 
-2. Exit from server `exit`
+6. Exit from server `exit`
 
-3. Go to your server url: `http://your-server-ip-address:3000`. You will be prompted to enter your admin password and your domain provider's API Key and Secret, [find out how here](https://github.com/Neilpang/acme.sh/wiki/dnsapi)
+## Usage
+1. Go to your server url: `http://your-server-ip-address:3000`. You will be prompted to enter your admin password and your domain provider's API Key and Secret, [find out how here](https://github.com/Neilpang/acme.sh/wiki/dnsapi)
 
-4. All your domain names in that provider will show up. Click the `setup` button next to the domain you wish to setup (could take up to 4 minutes)
+2. All your domain names in that provider will show up. Click the `setup` button next to the domain you wish to setup (could take up to 4 minutes)
 
-5. After your domain is setup, you will be able to generate as many subdomain repository as you want! To do that:
+3. After your domain is setup, you will be able to generate as many subdomain repository as you want! To do that:
     1. Go to your server url:  `http://your-server-ip-address:3000`
     2. Create a subdomain. IP and port are optional. You should see a git link that was created for you.
-    3. `git clone` the app, then build the app locally. [find out how here](##Build-Your-Local-App)  
+    3. `git clone` the app, then build the app locally. Find out how in the Building Your Local App section below. 
     4. When you are done, `git push origin master` and watch your app run in production!
 
 ## Building-Your-Local-App 
