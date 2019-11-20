@@ -29,11 +29,30 @@ describe('/api', () => {
     expect(postMapping.port).toEqual(port)
     expect(postMapping.subDomain).toEqual(subDomain)
     expect(postMapping.domain).toEqual(domain)
-    if (postMapping.subDomain === '') {
-      expect(postMapping.fullDomain).toEqual(`${domain}`)
-    } else {
-      expect(postMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
-    }
+    expect(postMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
+    const deleteResponse = await mappingAdapter(
+      `/delete/${postMapping.id}`,
+      'DELETE'
+    )
+    expect(deleteResponse.status).toEqual(200)
+    const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
+    expect(getMapping.status).toEqual(200)
+    const mappingData = await getMapping.json()
+    expect(Object.keys(mappingData).length).toEqual(0)
+  })
+  
+  
+  it('checks mappings for newly added rootdomain', async () => {
+    const domain = 'Rahul'
+    const port = '5678'
+    const postResponse = await mappingAdapter('/', 'POST', {
+      domain,
+      port
+    })
+    const postMapping = await postResponse.json()
+    expect(postMapping.port).toEqual(port)
+    expect(postMapping.domain).toEqual(domain)
+    expect(postMapping.fullDomain).toEqual(`${domain}`)
     const deleteResponse = await mappingAdapter(
       `/delete/${postMapping.id}`,
       'DELETE'
@@ -62,11 +81,7 @@ describe('/api', () => {
     expect(deletedMapping.port).toEqual(port)
     expect(deletedMapping.subDomain).toEqual(subDomain)
     expect(deletedMapping.domain).toEqual(domain)
-    if (deletedMapping.subDomain === '') {
-      expect(deletedMapping.fullDomain).toEqual(`${domain}`)
-    } else {
-      expect(deletedMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
-    }
+    expect(deletedMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
     expect(deletedMapping.id).toEqual(mapping.id)
     const getMapping = await mappingAdapter(`/${mapping.id}`, 'GET')
     expect(getMapping.status).toEqual(200)
