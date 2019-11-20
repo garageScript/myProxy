@@ -53,15 +53,15 @@ describe('/api', () => {
     expect(postMapping.port).toEqual(port)
     expect(postMapping.domain).toEqual(domain)
     expect(postMapping.fullDomain).toEqual(`${domain}`)
+    const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
+    expect(getMapping.status).toEqual(200)
+    const mappingData = await getMapping.json()
+    console.log('Mapping Data:', mappingData)
     const deleteResponse = await mappingAdapter(
       `/delete/${postMapping.id}`,
       'DELETE'
     )
     expect(deleteResponse.status).toEqual(200)
-    const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
-    expect(getMapping.status).toEqual(200)
-    const mappingData = await getMapping.json()
-    console.log('Mapping Data:', mappingData)
     expect(Object.keys(mappingData).length).toEqual(0)
   })
 
