@@ -48,8 +48,8 @@ describe('/api', () => {
       domain,
       port
     })
-    const postMapping = await postResponse.json()
-    console.log('Post Mapping Response:', postMapping)
+    // const postMapping = await postResponse.json()
+    //console.log('Post Mapping Response:', postMapping)
     // expect(postMapping.port).toEqual(port)
     //expect(postMapping.domain).toEqual(domain)
     //expect(postMapping.fullDomain).toEqual(`${domain}`)
