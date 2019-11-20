@@ -42,7 +42,7 @@ describe('/api', () => {
   })
 
   it('checks mappings for newly added root domain', async () => {
-    const domain = `rahul${Date.now}`
+    const domain = `rahul${Date.now()}`
     const port = '5612'
     const postResponse = await mappingAdapter('/', 'POST', {
       domain,
