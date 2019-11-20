@@ -65,12 +65,15 @@ Exit the server:
 exit
 ```
 
-# Usage
+# Usage-of-myProxy-Website
 
-Sign in using my\_admin\_password and use provider's API key and secret to setup domains:
+Sign in using admin password and use provider's API key and secret to setup domains:
 
 1. Go to server URL: ```http://my\_server\_ip:3000```
-2. Create domain provider's API Key and Secret, [find out how here](https://github.com/Neilpang/acme.sh/wiki/dnsapi#4-use-godaddycom-domain-api-to-automatically-issue-cert)
+2. Sign in with my\_admin\_password to gain access to admin page
+3. Create domain provider's API Key and Secret, [find out how here](https://github.com/Neilpang/acme.sh/wiki/dnsapi#4-use-godaddycom-domain-api-to-automatically-issue-cert)
+4. Input GD key and GD Secret, enter one at a time
+5. You will now be able to see your domains, click on setup
 
 After your domain is setup, you will be able to generate as many subdomain repository as you want! To do that:
 
