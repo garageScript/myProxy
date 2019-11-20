@@ -7,6 +7,19 @@ MyProxy is an application that proxies requests to other servers
 
 - [x] A valid Domain name `Eg: mydomain.com` (Currently supported providers: GoDaddy)
 
+- [x] Create an ssh server
+
+## Prerequisite examples
+
+Create ssh server: 
+
+DigitalOcean Droplets: [create my\_server\_ip here](https://www.digitalocean.com/docs/droplets/how-to/connect-with-ssh/)
+
+Sign up to GoDaddy and buy a domain:
+
+```https://www.godaddy.com/domains
+```
+
 # Installation and Usage 
 
 ## Installation
@@ -52,23 +65,22 @@ Exit the server:
 exit
 ```
 
-## Usage
+# Usage
 
-Go to server URL:
-```
-http://your-server-ip-address:3000
-```
+Sign in using my\_admin\_password and use provider's API key and secret to setup domains:
 
-You will be prompted to enter your admin password and your domain provider's API Key and Secret, [find out how here](https://github.com/Neilpang/acme.sh/wiki/dnsapi)
+1. Go to server URL: ```http://my\_server\_ip:3000```
+2. Create domain provider's API Key and Secret, [find out how here](https://github.com/Neilpang/acme.sh/wiki/dnsapi#4-use-godaddycom-domain-api-to-automatically-issue-cert)
 
 After your domain is setup, you will be able to generate as many subdomain repository as you want! To do that:
-1. Go to your server url:  `http://your-server-ip-address:3000`
-2. Create a subdomain. Ip and port are optional. You should see a git link that was created for you.
-3. `git clone` the app, then build the app locally. Find out how in the Building Your Local App section below.
-4. When you are done, `git push origin master` and watch your app run in production!
 
+1. Go to your server url using My Proxy button or type url:  `http://my\_server\_ip:3000`
+2. Create a subdomain. Ip and port are optional. You should see a git link `<your fullDomain repo>` that was created for you, copy the git link for use below.
 
 ## Building-Your-Local-App 
+
+Build the app locally. When you are done watch your app run in production:
+
 1. In the terminal, run `git clone <your fullDomain repo>` to clone your app folder.
 2. Enter your repo `cd <your fullDomain folder>`
 3. Run `npm init -y`
@@ -92,6 +104,14 @@ app.listen(process.env.PORT || 8123);
 8. Run `git add .`
 9. Run `git commit -m "Initial Commit"`
 10. Run `git push origin master`
+
+Note: If you make changes to the app redo steps 8-10.
+
+# How to change ADMIN Password
+
+1. `ssh root@my\_server\_ip`
+2. `pm2 list` then `pm2 delete 0`
+3. `ADMIN=YOUR\_NEW\_ADMIN\_PASSWORD (start script)`
 
 # Contribution
 
