@@ -40,16 +40,16 @@ describe('/api', () => {
     const mappingData = await getMapping.json()
     expect(Object.keys(mappingData).length).toEqual(0)
   })
-  
-  
+
   it('checks mappings for newly added rootdomain', async () => {
     const domain = 'Rahul'
-    const port = '5678'
+    const port = '5612'
     const postResponse = await mappingAdapter('/', 'POST', {
       domain,
       port
     })
     const postMapping = await postResponse.json()
+    console.log('Post Mapping Response:', postMapping)
     expect(postMapping.port).toEqual(port)
     expect(postMapping.domain).toEqual(domain)
     expect(postMapping.fullDomain).toEqual(`${domain}`)
@@ -61,6 +61,7 @@ describe('/api', () => {
     const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
     expect(getMapping.status).toEqual(200)
     const mappingData = await getMapping.json()
+    console.log('Mapping Data:', mappingData)
     expect(Object.keys(mappingData).length).toEqual(0)
   })
 
