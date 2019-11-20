@@ -41,7 +41,7 @@ describe('/api', () => {
     expect(Object.keys(mappingData).length).toEqual(0)
   })
 
-  it('checks mappings for newly added rootdomain', async () => {
+  it('checks mappings for newly added root domain', async () => {
     const domain = 'Rahul'
     const port = '5612'
     const postResponse = await mappingAdapter('/', 'POST', {
