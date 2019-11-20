@@ -29,6 +29,9 @@ describe('/api', () => {
     expect(postMapping.port).toEqual(port)
     expect(postMapping.subDomain).toEqual(subDomain)
     expect(postMapping.domain).toEqual(domain)
+    if (postMapping.subDomain === '') {
+      expect(postMapping.fullDomain).toEqual(`${domain}`)
+    }
     expect(postMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
     const deleteResponse = await mappingAdapter(
       `/delete/${postMapping.id}`,
@@ -58,6 +61,9 @@ describe('/api', () => {
     expect(deletedMapping.port).toEqual(port)
     expect(deletedMapping.subDomain).toEqual(subDomain)
     expect(deletedMapping.domain).toEqual(domain)
+    if (deletedMapping.subDomain === '') {
+      expect(deletedMapping.fullDomain).toEqual(`${domain}`)
+    }
     expect(deletedMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
     expect(deletedMapping.id).toEqual(mapping.id)
     const getMapping = await mappingAdapter(`/${mapping.id}`, 'GET')

@@ -36,7 +36,7 @@ mappingRouter.post('/', async (req, res) => {
   }, {})
   const portCounter = getNextPort(map)
   const fullDomain = ''
-  if(req.body.subDomain === ''){
+  if (req.body.subDomain === '') {
     const fullDomain = `${req.body.domain}`
   } else {
     const fullDomain = `${req.body.subDomain}.${req.body.domain}`
