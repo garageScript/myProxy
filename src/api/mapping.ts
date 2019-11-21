@@ -35,7 +35,10 @@ mappingRouter.post('/', async (req, res) => {
     return acc
   }, {})
   const portCounter = getNextPort(map)
-  const fullDomain = `${req.body.subDomain}.${req.body.domain}`
+  let fullDomain = `${req.body.subDomain}.${req.body.domain}`
+  if (!req.body.subDomain) {
+    fullDomain = `${req.body.domain}`
+  }
   const prodConfigApp = [...prodConfigure.apps][0]
   prodConfigApp.name = fullDomain
   prodConfigApp.env_production.PORT = parseInt(req.body.port || portCounter, 10)
