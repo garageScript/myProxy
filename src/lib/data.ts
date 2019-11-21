@@ -29,12 +29,18 @@ const getData = (table: string): unknown => {
 // Typescript disable, because this is meant as a helper function to be used with N number of input types
 const setData = (table: string, records: unknown): void => {
   data[table] = records
-  const fileData: string = JSON.stringify(data)
+  const fileData = `${JSON.stringify(data, null, 2)}`
+
   fs.writeFile('./data.db', fileData, err => {
     if (err) {
       return console.log('writing to DB failed', err)
     }
     console.log('successfully wrote to DB')
+
+    // The line below needs to be here. For some reason,
+    // data[table] value seems to be an old value and
+    //   does not take the records value. Strange.
+    data[table] = records
   })
 }
 
