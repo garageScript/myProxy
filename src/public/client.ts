@@ -38,18 +38,13 @@ class MappingItem {
       'd-flex',
       'align-items-center'
     )
-
-    let domainLink = `${data.subDomain}.${data.domain}`
-    if (!data.subDomain) {
-      domainLink = `${data.domain}`
-    }
     domainList.appendChild(mappingElement)
     mappingElement.innerHTML = `
       <div style='width: 100%'>
         <div style='display: flex'>
           <a class="font-weight-bold"
-            href="https://${domainLink}">
-            ${domainLink}
+            href="https://${data.fullDomain}">
+            ${data.fullDomain}
           </a>
           <small class="form-text text-muted ml-1">
             PORT: ${data.port}
