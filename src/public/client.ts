@@ -43,8 +43,8 @@ class MappingItem {
       <div style='width: 100%'>
         <div style='display: flex'>
           <a class="font-weight-bold"
-            href="https://${data.subDomain}.${data.domain}">
-            ${data.subDomain}.${data.domain}
+            href="https://${data.fullDomain}">
+            ${data.fullDomain}
           </a>
           <small class="form-text text-muted ml-1">
             PORT: ${data.port}
@@ -175,14 +175,7 @@ fetch('/api/mappings')
     data.reverse()
     data
       .filter(
-        e =>
-          e.subDomain &&
-          e.domain &&
-          e.port &&
-          e.id &&
-          e.ip &&
-          e.gitLink &&
-          e.fullDomain
+        e => e.domain && e.port && e.id && e.ip && e.gitLink && e.fullDomain
       )
       .forEach(e => {
         new MappingItem(e)
