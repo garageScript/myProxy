@@ -38,13 +38,18 @@ class MappingItem {
       'd-flex',
       'align-items-center'
     )
+
+    let domainLink = `${data.subDomain}.${data.domain}`
+    if (!data.subDomain) {
+      domainLink = `${data.domain}`
+    }
     domainList.appendChild(mappingElement)
     mappingElement.innerHTML = `
       <div style='width: 100%'>
         <div style='display: flex'>
           <a class="font-weight-bold"
-            href="https://${data.subDomain}.${data.domain}">
-            ${data.subDomain}.${data.domain}
+            href="https://${domainLink}">
+            ${domainLink}
           </a>
           <small class="form-text text-muted ml-1">
             PORT: ${data.port}
@@ -175,14 +180,7 @@ fetch('/api/mappings')
     data.reverse()
     data
       .filter(
-        e =>
-          e.subDomain &&
-          e.domain &&
-          e.port &&
-          e.id &&
-          e.ip &&
-          e.gitLink &&
-          e.fullDomain
+        e => e.domain && e.port && e.id && e.ip && e.gitLink && e.fullDomain
       )
       .forEach(e => {
         new MappingItem(e)
