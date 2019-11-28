@@ -94,7 +94,8 @@ const startProxyServer = (): void => {
       const mappings = getMappings()
       const { ip, port }: ProxyMapping =
         mappings.find(({ subDomain, domain }) => {
-          return `${subDomain}.${domain}` === req.headers.host
+          const prefix = subDomain ? `${subDomain}.` : ''
+          return `${prefix}${domain}` === req.headers.host
         }) || {}
       if (!port || !ip) return res.end('Not Found')
       proxy.web(req, res, { target: `http://${ip}:${port}` }, err => {
