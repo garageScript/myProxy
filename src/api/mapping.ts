@@ -75,6 +75,7 @@ mappingRouter.post('/', async (req, res) => {
       git init ${fullDomain}
       cp ${scriptPath}/post-receive ${fullDomain}/.git/hooks/
       cp ${scriptPath}/pre-receive ${fullDomain}/.git/hooks/
+      cp ${scriptPath}/.gitignore ${fullDomain}/.gitignore
       cd ${fullDomain}
       git config user.email "root@ipaddress"
       git config user.name "user"

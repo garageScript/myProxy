@@ -20,11 +20,12 @@ if [ ! -d "/home/myproxy" ] ; then
   cp ~/.ssh/authorized_keys /home/myproxy/.ssh/authorized_keys
   chown myproxy:myproxy -R /home/myproxy/.ssh
   sudo -u myproxy bash <<EOF
-    cd /home/myproxy 
+    cd /home/myproxy
     git clone https://github.com/garageScript/myproxy/
     mkdir .scripts
     cp myproxy/scripts/post-receive .scripts/post-receive
     cp myproxy/scripts/pre-receive .scripts/pre-receive
+    cp myproxy/scripts/gitgnore .scripts/.gitignore
     rm -rf myproxy/ |\
     bash
 EOF
