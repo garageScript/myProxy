@@ -23,9 +23,9 @@ mappingRouter.post('/', async (req, res) => {
   if (parseInt(req.body.port) < 3001) {
     return res.status(400).json({ message: 'Port cannot be smaller than 3001' })
   }
-  const existingSubDomain = domainKeys.find(
-    e => e.subDomain === req.body.subDomain
-  )
+  const existingSubDomain =
+    domainKeys.find(e => e.subDomain === req.body.subDomain) &&
+    domainKeys.find(e => e.domain === req.body.domain)
   if (existingSubDomain)
     return res
       .status(400)

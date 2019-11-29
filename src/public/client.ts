@@ -203,8 +203,11 @@ create.onclick = (): void => {
       'Content-Type': 'application/json'
     }
   }).then(res => {
-    if (res.status === 400)
-      return alert('Port Value cannot be smaller than 3001')
+    if (res.status === 400) {
+      return res.text().then(response => {
+        alert(response)
+      })
+    }
     window.location.reload()
   })
   port.value = ''
