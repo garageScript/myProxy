@@ -43,7 +43,7 @@ mappingRouter.post('/', async (req, res) => {
   prodConfigApp.name = fullDomain
   prodConfigApp.env_production.PORT = parseInt(req.body.port || portCounter, 10)
   prodConfigApp.script = 'npm'
-  prodConfigApp.args = 'start'
+  prodConfigApp.args = 'run start:myproxy'
   const prodConfig = {
     apps: prodConfigApp
   }
