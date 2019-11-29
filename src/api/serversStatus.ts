@@ -7,7 +7,7 @@ const exec = util.promisify(cp.exec)
 
 statusRouter.get('/', async (req, res) => {
   try {
-    const data = await exec('su myproxy -c "pm2 jlist"')
+    const data = await exec('su - myproxy -c "pm2 jlist"')
     res.send(data)
   } catch (err) {
     res.status(500).send({ err })
