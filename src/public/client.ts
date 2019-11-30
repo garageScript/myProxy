@@ -246,6 +246,4 @@ fetch('/api/status')
 
       statusContainer.appendChild(newInfo)
     })
-
-    console.log(dataObj)
   })
