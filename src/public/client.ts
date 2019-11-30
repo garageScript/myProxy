@@ -41,7 +41,7 @@ class MappingItem {
     domainList.appendChild(mappingElement)
     mappingElement.innerHTML = `
       <div style='width: 100%'>
-        <div style='display: flex'>
+        <div style='display: flex' id="${data.fullDomain}">
           <a class="font-weight-bold"
             href="https://${data.fullDomain}">
             ${data.fullDomain}
@@ -54,7 +54,7 @@ class MappingItem {
           ${data.gitLink}
         </small>
       </div>
-      <a href="/api/mappings/download/?fullDomain=${data.fullDomain}" 
+      <a href="/api/mappings/download/?fullDomain=${data.fullDomain}"
 	      target="_blank" class="btn btn-sm btn-outline-success mr-3">
 	      Download<i class="fa fa-download"></i>
       </a>
@@ -222,4 +222,30 @@ fetch('/api/availableDomains')
     domains.forEach(domain => new DomainOption(domain))
     selectedHost = domains[0]
     hostSelector.innerText = domains[0]
+  })
+
+fetch('/api/status')
+  .then(r => r.json())
+  .then(data => {
+    const dataObj = JSON.parse(data.stdout).map(el => ({
+      name: el.name,
+      status: el.pm2_env.status
+    }))
+
+    dataObj.forEach(el => {
+      const statusContainer = document.getElementById(el.name)
+      const newInfo = document.createElement('i')
+
+      if (el.status === 'online') {
+        newInfo.className = 'fa fa-check-circle'
+        newInfo.style.color = 'green'
+      } else {
+        newInfo.className = 'fa fa-times-circle'
+        newInfo.style.color = '#FE0C0C'
+      }
+
+      statusContainer.appendChild(newInfo)
+    })
+
+    console.log(dataObj)
   })
