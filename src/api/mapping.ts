@@ -27,9 +27,9 @@ mappingRouter.post('/', async (req, res) => {
     domainKeys.find(e => e.subDomain === req.body.subDomain) &&
     domainKeys.find(e => e.domain === req.body.domain)
   if (existingSubDomain)
-    return res
-      .status(400)
-      .send('cannot create new mapping because subDomain already exists')
+    return res.status(400).json({
+      message: 'Subdomain already exists'
+    })
   const map = domainKeys.reduce((acc, e) => {
     acc[e.port] = true
     return acc
