@@ -237,10 +237,10 @@ fetch('/api/status')
       const newInfo = document.createElement('i')
 
       if (el.status === 'online') {
-        newInfo.className = 'fa fa-check-circle'
+        newInfo.className = 'fa fa-check-circle ml-1 mt-1'
         newInfo.style.color = 'green'
       } else {
-        newInfo.className = 'fa fa-times-circle'
+        newInfo.className = 'fa fa-times-circle ml-1 mt-1'
         newInfo.style.color = '#FE0C0C'
       }
 
