@@ -197,6 +197,13 @@ describe('/api', () => {
     const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
     expect(getMapping.status).toEqual(200)
     const mappingData = await getMapping.json()
+    const getSecondMapping = await mappingAdapter(
+      `/${secondPostMapping.id}`,
+      'GET'
+    )
+    expect(getSecondMapping.status).toEqual(200)
+    const secondMappingData = await getSecondMapping.json()
     expect(Object.keys(mappingData).length).toEqual(0)
+    expect(Object.keys(secondMappingData).length).toEqual(0)
   })
 })
