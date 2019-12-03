@@ -20,7 +20,7 @@ describe('api/status', () => {
     server.close()
   })
 
-  it('Server should return empty array for test run', async () => {
+  it('Server should return empty array when no domains are specified', async () => {
     const res = await fetch(`http://localhost:${TEST_PORT}/api/status`, {
       headers: reqHeaders
     })
