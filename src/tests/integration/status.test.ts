@@ -26,7 +26,7 @@ describe('api/status', () => {
     })
 
     const data = await res.json()
-    expect(data).toStrictEqual([])
+    expect(data).toStrictEqual({})
     expect(res.status).toEqual(200)
   })
 })
