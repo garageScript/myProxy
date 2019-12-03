@@ -9,6 +9,26 @@ type Mapping = {
   fullDomain: string
 }
 
+type Status = {
+  fullDomain: string
+  status: string
+}
+
+type StatusMap = {
+  [key: string]: string
+}
+
+type FullDomainStatusMap = {
+  domain: string
+  subDomain: string
+  ip: string
+  port: string
+  id: string
+  gitLink: string
+  fullDomain: string
+  status: string
+}
+
 const create: HTMLElement = helper.getElement('.create')
 const hostSelector: HTMLElement = helper.getElement('#hostSelector')
 const domainList: HTMLElement = helper.getElement('.domainList')
@@ -168,6 +188,42 @@ class MappingItem {
   }
 }
 
+Promise.all([
+  fetch('/api/mappings').then(r => r.json()),
+  fetch('/api/statuses').then(r => r.json())
+]).then(([mappings, statuses]: [Mapping[], Status[]]) => {
+  // Populating an initial status of 'not started'
+  const initialDomainStatusMap = mappings.map(el => ({
+    ...el,
+    status: 'not started'
+  }))
+
+  // Reducing Status Response to an array so it can be looked up
+  const statusObj = statuses.reduce(
+    (fullStatus, status) => ({
+      ...fullStatus,
+      [status.fullDomain]: status.status
+    }),
+    {}
+  )
+
+  const fullDomainStatusMap = initialDomainStatusMap.reduce((totalMap, dom) => {
+    if (!statusObj[dom.fullDomain]) {
+      return [...totalMap, dom]
+    }
+
+    return [
+      ...totalMap,
+      {
+        ...dom,
+        status: statusObj[dom.fullDomain]
+      }
+    ]
+  }, [])
+
+  console.log(fullDomainStatusMap)
+})
+
 fetch('/api/mappings')
   .then(r => r.json())
   .then((data: Mapping[]) => {
@@ -227,18 +283,15 @@ fetch('/api/availableDomains')
 fetch('/api/statuses')
   .then(r => r.json())
   .then(data => {
-    const dataObj = JSON.parse(data.stdout).map(el => ({
-      name: el.name,
-      status: el.pm2_env.status
-    }))
-
-    dataObj.forEach(el => {
+    data.forEach(el => {
       const statusContainer = document.getElementById(el.name)
       const newInfo = document.createElement('i')
 
       if (el.status === 'online') {
         newInfo.className = 'fa fa-check-circle ml-1 mt-1'
         newInfo.style.color = 'green'
+      } else if (el.status === 'not-started') {
+        // Do nothing
       } else {
         newInfo.className = 'fa fa-times-circle ml-1 mt-1'
         newInfo.style.color = '#FE0C0C'
