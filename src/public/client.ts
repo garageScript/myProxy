@@ -224,7 +224,7 @@ fetch('/api/availableDomains')
     hostSelector.innerText = domains[0]
   })
 
-fetch('/api/status')
+fetch('/api/statuses')
   .then(r => r.json())
   .then(data => {
     const dataObj = JSON.parse(data.stdout).map(el => ({
