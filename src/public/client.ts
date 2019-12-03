@@ -198,17 +198,8 @@ Promise.all([
     status: 'not started'
   }))
 
-  // Reducing Status Response to an array so it can be looked up
-  const statusObj = statuses.reduce(
-    (fullStatus, status) => ({
-      ...fullStatus,
-      [status.fullDomain]: status.status
-    }),
-    {}
-  )
-
   const fullDomainStatusMap = initialDomainStatusMap.reduce((totalMap, dom) => {
-    if (!statusObj[dom.fullDomain]) {
+    if (!statuses[dom.fullDomain]) {
       return [...totalMap, dom]
     }
 
@@ -216,7 +207,7 @@ Promise.all([
       ...totalMap,
       {
         ...dom,
-        status: statusObj[dom.fullDomain]
+        status: statuses[dom.fullDomain]
       }
     ]
   }, [])

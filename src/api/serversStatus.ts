@@ -12,13 +12,12 @@ statusRouter.get('/', async (req, res) => {
     if (isProduction()) {
       const data = await exec('su - myproxy -c "pm2 jlist"')
       res.json(
-        JSON.parse(data.stdout).map(el => ({
-          fullDomain: el.name,
-          status: el.pm2_env.status
+        JSON.parse(data.stdout).reduce((statusObj, el) => ({
+          [el.name]: el.pm2_env.status
         }))
       )
     } else {
-      res.json([])
+      res.json({})
     }
   } catch (err) {
     res.status(500).send({ err })
