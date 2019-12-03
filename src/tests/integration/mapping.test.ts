@@ -166,15 +166,15 @@ describe('/api', () => {
   it('checks same subdomain can be used for different domains', async () => {
     const subDomain = `testing${uuidv4()}`
     const domain = 'VinDiesel'
-    const secondDomain = 'PaulWalker'
     const port = '3522'
-    const nextPort = '3523'
     const postResponse = await mappingAdapter('/', 'POST', {
       domain,
       subDomain,
       port
     })
     expect(postResponse.status).toEqual(200)
+    const secondDomain = 'PaulWalker'
+    const nextPort = '3523'
     const secondResponse = await mappingAdapter('/', 'POST', {
       secondDomain,
       subDomain,
@@ -183,12 +183,12 @@ describe('/api', () => {
     expect(secondResponse.status).toEqual(200)
 
     const postMapping = await postResponse.json()
-    const secondPostMapping = await secondResponse.json()
     const deleteResponse = await mappingAdapter(
       `/delete/${postMapping.id}`,
       'DELETE'
     )
     expect(deleteResponse.status).toEqual(200)
+    const secondPostMapping = await secondResponse.json()
     const secondDeleteResponse = await mappingAdapter(
       `/delete/${secondPostMapping.id}`,
       'DELETE'
