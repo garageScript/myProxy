@@ -60,7 +60,7 @@ class MappingItem {
       iconColor = 'green'
     } else if (data.status === 'not started') {
       iconClass = ''
-      iconColor = 'white'
+      iconColor = 'transparent'
     } else {
       iconClass = 'fa fa-times-circle ml-1 mt-1'
       iconColor = 'red'
