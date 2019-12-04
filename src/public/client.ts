@@ -250,8 +250,8 @@ create.onclick = (): void => {
     }
   }).then(res => {
     if (res.status === 400) {
-      return res.text().then(response => {
-        alert(response)
+      return res.json().then(response => {
+        alert(response.message)
       })
     }
     window.location.reload()
