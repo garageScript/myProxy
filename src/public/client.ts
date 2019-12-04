@@ -7,24 +7,10 @@ type Mapping = {
   id: string
   gitLink: string
   fullDomain: string
+  status?: string
 }
 
 type Status = {
-  fullDomain: string
-  status: string
-}
-
-type StatusMap = {
-  [key: string]: string
-}
-
-type FullDomainStatusMap = {
-  domain: string
-  subDomain: string
-  ip: string
-  port: string
-  id: string
-  gitLink: string
   fullDomain: string
   status: string
 }
@@ -51,7 +37,7 @@ class DomainOption {
 }
 
 class MappingItem {
-  constructor(data: FullDomainStatusMap) {
+  constructor(data: Mapping) {
     const mappingElement = document.createElement('li')
     let iconClass
     let iconColor
@@ -205,25 +191,12 @@ Promise.all([
   fetch('/api/mappings').then(r => r.json()),
   fetch('/api/statuses').then(r => r.json())
 ]).then(([mappings, statuses]: [Mapping[], Status[]]) => {
-  const fullDomainStatusMap = mappings.reduce((totalMap, dom) => {
-    if (!statuses[dom.fullDomain]) {
-      return [...totalMap, { ...dom, status: 'not started' }]
-    }
-
-    return [
-      ...totalMap,
-      {
-        ...dom,
-        status: statuses[dom.fullDomain]
-      }
-    ]
-  }, [])
-
   domainList.innerHTML = ''
-  fullDomainStatusMap.reverse()
-  fullDomainStatusMap
+  mappings
+    .reverse()
     .filter(e => e.domain && e.port && e.id && e.gitLink && e.fullDomain)
     .forEach(e => {
+      e.status = statuses[e.fullDomain] || 'not started'
       new MappingItem(e)
     })
 })
