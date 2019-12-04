@@ -51,8 +51,20 @@ class DomainOption {
 }
 
 class MappingItem {
-  constructor(data: Mapping) {
+  constructor(data: FullDomainStatusMap) {
     const mappingElement = document.createElement('li')
+    let iconClass
+    let iconColor
+    if (data.status === 'online') {
+      iconClass = 'fa fa-check-circle ml-1 mt-1'
+      iconColor = 'green'
+    } else if (data.status === 'not started') {
+      iconClass = ''
+      iconColor = 'white'
+    } else {
+      iconClass = 'fa fa-times-circle ml-1 mt-1'
+      iconColor = 'red'
+    }
     mappingElement.classList.add(
       'list-group-item',
       'd-flex',
@@ -61,7 +73,7 @@ class MappingItem {
     domainList.appendChild(mappingElement)
     mappingElement.innerHTML = `
       <div style='width: 100%'>
-        <div style='display: flex' id="${data.fullDomain}">
+        <div style='display: flex'>
           <a class="font-weight-bold"
             href="https://${data.fullDomain}">
             ${data.fullDomain}
@@ -69,6 +81,7 @@ class MappingItem {
           <small class="form-text text-muted ml-1">
             PORT: ${data.port}
           </small>
+          <i class="${iconClass}" style="color: ${iconColor}"></i>
         </div>
         <small class="form-text text-muted" style="display: inline-block;">
           ${data.gitLink}
@@ -192,15 +205,9 @@ Promise.all([
   fetch('/api/mappings').then(r => r.json()),
   fetch('/api/statuses').then(r => r.json())
 ]).then(([mappings, statuses]: [Mapping[], Status[]]) => {
-  // Populating an initial status of 'not started'
-  const initialDomainStatusMap = mappings.map(el => ({
-    ...el,
-    status: 'not started'
-  }))
-
-  const fullDomainStatusMap = initialDomainStatusMap.reduce((totalMap, dom) => {
+  const fullDomainStatusMap = mappings.reduce((totalMap, dom) => {
     if (!statuses[dom.fullDomain]) {
-      return [...totalMap, dom]
+      return [...totalMap, { ...dom, status: 'not started' }]
     }
 
     return [
@@ -212,22 +219,14 @@ Promise.all([
     ]
   }, [])
 
-  console.log(fullDomainStatusMap)
+  domainList.innerHTML = ''
+  fullDomainStatusMap.reverse()
+  fullDomainStatusMap
+    .filter(e => e.domain && e.port && e.id && e.gitLink && e.fullDomain)
+    .forEach(e => {
+      new MappingItem(e)
+    })
 })
-
-fetch('/api/mappings')
-  .then(r => r.json())
-  .then((data: Mapping[]) => {
-    domainList.innerHTML = ''
-    data.reverse()
-    data
-      .filter(
-        e => e.domain && e.port && e.id && e.ip && e.gitLink && e.fullDomain
-      )
-      .forEach(e => {
-        new MappingItem(e)
-      })
-  })
 
 create.onclick = (): void => {
   const subDomain = helper.getElement('.subDomain') as HTMLInputElement
@@ -269,25 +268,4 @@ fetch('/api/availableDomains')
     domains.forEach(domain => new DomainOption(domain))
     selectedHost = domains[0]
     hostSelector.innerText = domains[0]
-  })
-
-fetch('/api/statuses')
-  .then(r => r.json())
-  .then(data => {
-    data.forEach(el => {
-      const statusContainer = document.getElementById(el.name)
-      const newInfo = document.createElement('i')
-
-      if (el.status === 'online') {
-        newInfo.className = 'fa fa-check-circle ml-1 mt-1'
-        newInfo.style.color = 'green'
-      } else if (el.status === 'not-started') {
-        // Do nothing
-      } else {
-        newInfo.className = 'fa fa-times-circle ml-1 mt-1'
-        newInfo.style.color = '#FE0C0C'
-      }
-
-      statusContainer.appendChild(newInfo)
-    })
   })
