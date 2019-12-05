@@ -167,7 +167,7 @@ describe('/api', () => {
     const subDomain = `testing${uuidv4()}`
     const domain = 'VinDiesel'
     const port = '3522'
-    await mappingAdapter('/', 'POST', {
+    const postResponse = await mappingAdapter('/', 'POST', {
       domain,
       subDomain,
       port
@@ -182,7 +182,9 @@ describe('/api', () => {
     expect(secondResponse.status).toEqual(200)
     const getMapping = await mappingAdapter('/', 'GET')
     const getMappingResponse = await getMapping.json()
-    expect(getMappingResponse.length).toBe(2)
+    const postMap = await postResponse.json()
+    const secondPostMap = await secondResponse.json()
+    expect(getMappingResponse).toEqual([postMap, secondPostMap])
     await mappingAdapter(`/delete/${getMappingResponse[0].id}`, 'DELETE')
     await mappingAdapter(`/delete/${getMappingResponse[1].id}`, 'DELETE')
   })
