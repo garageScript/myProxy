@@ -111,15 +111,13 @@ const startProxyServer = (): void => {
   server.on('upgrade', function(req, socket, head) {
     const mappings = getMappings()
     const { ip, port }: ProxyMapping =
-      mappings.find(({ subDomain, domain }) => {
+      mappings.find(({ subDomain, domain, fullDomain }) => {
         const prefix = subDomain ? `${subDomain}.` : ''
-        return `${prefix}${domain}` === req.headers.host
+        return fullDomain === req.headers.host
       }) || {}
-    if (port)
-      return proxy.ws(req, socket, { target: `http://127.0.0.1:${port}` })
-
-    server.listen(443)
+    if (port) return proxy.ws(req, socket, { target: `${ip}:${port}` })
   })
+  server.listen(443)
   const httpApp = express()
   httpApp.get('/*', (req, res) => {
     const paramCheck = req.headers.host.split('?')[1]
