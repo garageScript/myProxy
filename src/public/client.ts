@@ -42,14 +42,14 @@ class MappingItem {
     let iconClass
     let iconColor
     if (data.status === 'online') {
-      iconClass = 'fa fa-check-circle ml-1 mt-1'
-      iconColor = 'green'
+      iconClass = 'fa fa-circle mr-1 mt-1'
+      iconColor = 'rgba(50,255,50,0.5)'
     } else if (data.status === 'not started') {
       iconClass = ''
       iconColor = 'transparent'
     } else {
-      iconClass = 'fa fa-times-circle ml-1 mt-1'
-      iconColor = 'red'
+      iconClass = 'fa fa-circle mr-1 mt-1'
+      iconColor = 'rgba(255, 50, 50, 0.5)'
     }
     mappingElement.classList.add(
       'list-group-item',
@@ -60,6 +60,7 @@ class MappingItem {
     mappingElement.innerHTML = `
       <div style='width: 100%'>
         <div style='display: flex'>
+          <i class="${iconClass}" style="font-size: 15px; color: ${iconColor}"></i>
           <a class="font-weight-bold"
             href="https://${data.fullDomain}">
             ${data.fullDomain}
@@ -67,7 +68,6 @@ class MappingItem {
           <small class="form-text text-muted ml-1">
             PORT: ${data.port}
           </small>
-          <i class="${iconClass}" style="color: ${iconColor}"></i>
         </div>
         <small class="form-text text-muted" style="display: inline-block;">
           ${data.gitLink}
