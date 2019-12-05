@@ -41,9 +41,9 @@ const startAppServer = (
         }
         setAuthorizedKeys(
           data
-            .toString()
-            .split('\n')
-            .filter(e => e !== '')
+          .toString()
+          .split('\n')
+          .filter(e => e !== '')
         )
       })
     }
@@ -60,8 +60,8 @@ const startAppServer = (
 
     app.get('/', setupAuth(adminPass), (_, res) =>
       getAvailableDomains().length > 0
-        ? res.render('client')
-        : res.redirect('/admin')
+      ? res.render('client')
+      : res.redirect('/admin')
     )
     app.get('/login', (req, res) => res.render('login', { error: '' }))
 
@@ -102,13 +102,25 @@ const startProxyServer = (): void => {
         console.error('Error communicating with server', err)
         res.end(`Error communicating with server that runs ${req.headers.host}`)
       })
+
     } catch (err) {
       console.error('Error: proxy failed', err)
       return res.end(`Error: failed to create proxy ${req.headers.host}`)
     }
   })
-  server.listen(443)
 
+  server.on('upgrade', function(req, socket, head) {
+    const mappings = getMappings()
+    const { ip, port }: ProxyMapping = 
+      mappings.find(({ subDomain, domain}) => {
+        const prefix = subDomain ? `${subDomain}.`: ''
+        return `${prefix}${domain}` === req.headers.host 
+      }) || {}
+    if (port)
+      return proxy.ws(req,socket, { target: `http://127.0.0.1:${port}` })
+
+    server.listen(443)
+  })
   const httpApp = express()
   httpApp.get('/*', (req, res) => {
     const paramCheck = req.headers.host.split('?')[1]
