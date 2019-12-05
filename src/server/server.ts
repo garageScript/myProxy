@@ -108,14 +108,13 @@ const startProxyServer = (): void => {
     }
   })
 
-  server.on('upgrade', function(req, socket, head) {
+  server.on('upgrade', function(req, socket) {
     const mappings = getMappings()
     const { ip, port }: ProxyMapping =
-      mappings.find(({ subDomain, domain, fullDomain }) => {
-        const prefix = subDomain ? `${subDomain}.` : ''
+      mappings.find(({ fullDomain }) => {
         return fullDomain === req.headers.host
       }) || {}
-    if (port) return proxy.ws(req, socket, { target: `${ip}:${port}` })
+    if (port) return proxy.ws(req, socket, { target: `http://${ip}:${port}` })
   })
   server.listen(443)
   const httpApp = express()
