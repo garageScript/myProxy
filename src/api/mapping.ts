@@ -23,27 +23,24 @@ mappingRouter.post('/', async (req, res) => {
   if (parseInt(req.body.port) < 3001) {
     return res.status(400).json({ message: 'Port cannot be smaller than 3001' })
   }
-  const existingSubDomain = domainKeys.find(
-    e => e.subDomain === req.body.subDomain
-  )
+  const fullDomain = req.body.subDomain
+    ? `${req.body.subDomain}.${req.body.domain}`
+    : `${req.body.domain}`
+  const existingSubDomain = domainKeys.find(e => e.fullDomain === fullDomain)
   if (existingSubDomain)
-    return res
-      .status(400)
-      .send('cannot create new mapping because subDomain already exists')
+    return res.status(400).json({
+      message: 'Subdomain already exists'
+    })
   const map = domainKeys.reduce((acc, e) => {
     acc[e.port] = true
     return acc
   }, {})
   const portCounter = getNextPort(map)
-  let fullDomain = `${req.body.subDomain}.${req.body.domain}`
-  if (!req.body.subDomain) {
-    fullDomain = `${req.body.domain}`
-  }
   const prodConfigApp = [...prodConfigure.apps][0]
   prodConfigApp.name = fullDomain
   prodConfigApp.env_production.PORT = parseInt(req.body.port || portCounter, 10)
   prodConfigApp.script = 'npm'
-  prodConfigApp.args = 'start'
+  prodConfigApp.args = 'run start:myproxy'
   const prodConfig = {
     apps: prodConfigApp
   }
@@ -75,6 +72,7 @@ mappingRouter.post('/', async (req, res) => {
       git init ${fullDomain}
       cp ${scriptPath}/post-receive ${fullDomain}/.git/hooks/
       cp ${scriptPath}/pre-receive ${fullDomain}/.git/hooks/
+      cp ${scriptPath}/.gitignore ${fullDomain}/.gitignore
       cd ${fullDomain}
       git config user.email "root@ipaddress"
       git config user.name "user"

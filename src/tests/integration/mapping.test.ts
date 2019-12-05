@@ -162,4 +162,30 @@ describe('/api', () => {
     const mappingData = await getMapping.json()
     expect(Object.keys(mappingData).length).toEqual(0)
   })
+
+  it('checks same subdomain can be used for different domains', async () => {
+    const subDomain = `testing${uuidv4()}`
+    const domain = 'VinDiesel'
+    const port = '3522'
+    const postResponse = await mappingAdapter('/', 'POST', {
+      domain,
+      subDomain,
+      port
+    })
+    const secondDomain = 'PaulWalker'
+    const nextPort = '3523'
+    const secondResponse = await mappingAdapter('/', 'POST', {
+      secondDomain,
+      subDomain,
+      nextPort
+    })
+    expect(secondResponse.status).toEqual(200)
+    const getMapping = await mappingAdapter('/', 'GET')
+    const getMappingResponse = await getMapping.json()
+    const postMap = await postResponse.json()
+    const secondPostMap = await secondResponse.json()
+    expect(getMappingResponse).toEqual([postMap, secondPostMap])
+    await mappingAdapter(`/delete/${getMappingResponse[0].id}`, 'DELETE')
+    await mappingAdapter(`/delete/${getMappingResponse[1].id}`, 'DELETE')
+  })
 })

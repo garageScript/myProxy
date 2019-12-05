@@ -7,6 +7,12 @@ type Mapping = {
   id: string
   gitLink: string
   fullDomain: string
+  status?: string
+}
+
+type Status = {
+  fullDomain: string
+  status: string
 }
 
 const create: HTMLElement = helper.getElement('.create')
@@ -33,6 +39,18 @@ class DomainOption {
 class MappingItem {
   constructor(data: Mapping) {
     const mappingElement = document.createElement('li')
+    let iconClass
+    let iconColor
+    if (data.status === 'online') {
+      iconClass = 'fa fa-circle mr-1 mt-1'
+      iconColor = 'rgba(50,255,50,0.5)'
+    } else if (data.status === 'not started') {
+      iconClass = ''
+      iconColor = 'transparent'
+    } else {
+      iconClass = 'fa fa-circle mr-1 mt-1'
+      iconColor = 'rgba(255, 50, 50, 0.5)'
+    }
     mappingElement.classList.add(
       'list-group-item',
       'd-flex',
@@ -42,6 +60,7 @@ class MappingItem {
     mappingElement.innerHTML = `
       <div style='width: 100%'>
         <div style='display: flex'>
+          <i class="${iconClass}" style="font-size: 15px; color: ${iconColor}"></i>
           <a class="font-weight-bold"
             href="https://${data.fullDomain}">
             ${data.fullDomain}
@@ -54,7 +73,7 @@ class MappingItem {
           ${data.gitLink}
         </small>
       </div>
-      <a href="/api/mappings/download/?fullDomain=${data.fullDomain}" 
+      <a href="/api/mappings/download/?fullDomain=${data.fullDomain}"
 	      target="_blank" class="btn btn-sm btn-outline-success mr-3">
 	      Download<i class="fa fa-download"></i>
       </a>
@@ -168,19 +187,19 @@ class MappingItem {
   }
 }
 
-fetch('/api/mappings')
-  .then(r => r.json())
-  .then((data: Mapping[]) => {
-    domainList.innerHTML = ''
-    data.reverse()
-    data
-      .filter(
-        e => e.domain && e.port && e.id && e.ip && e.gitLink && e.fullDomain
-      )
-      .forEach(e => {
-        new MappingItem(e)
-      })
-  })
+Promise.all([
+  fetch('/api/mappings').then(r => r.json()),
+  fetch('/api/statuses').then(r => r.json())
+]).then(([mappings, statuses]: [Mapping[], Status[]]) => {
+  domainList.innerHTML = ''
+  mappings
+    .reverse()
+    .filter(e => e.domain && e.port && e.id && e.gitLink && e.fullDomain)
+    .forEach(e => {
+      e.status = statuses[e.fullDomain] || 'not started'
+      new MappingItem(e)
+    })
+})
 
 create.onclick = (): void => {
   const subDomain = helper.getElement('.subDomain') as HTMLInputElement
@@ -203,8 +222,11 @@ create.onclick = (): void => {
       'Content-Type': 'application/json'
     }
   }).then(res => {
-    if (res.status === 400)
-      return alert('Port Value cannot be smaller than 3001')
+    if (res.status === 400) {
+      return res.json().then(response => {
+        alert(response.message)
+      })
+    }
     window.location.reload()
   })
   port.value = ''
