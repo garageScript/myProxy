@@ -167,12 +167,11 @@ describe('/api', () => {
     const subDomain = `testing${uuidv4()}`
     const domain = 'VinDiesel'
     const port = '3522'
-    const postResponse = await mappingAdapter('/', 'POST', {
+    await mappingAdapter('/', 'POST', {
       domain,
       subDomain,
       port
     })
-    expect(postResponse.status).toEqual(200)
     const secondDomain = 'PaulWalker'
     const nextPort = '3523'
     const secondResponse = await mappingAdapter('/', 'POST', {
@@ -181,29 +180,10 @@ describe('/api', () => {
       nextPort
     })
     expect(secondResponse.status).toEqual(200)
-
-    const postMapping = await postResponse.json()
-    const deleteResponse = await mappingAdapter(
-      `/delete/${postMapping.id}`,
-      'DELETE'
-    )
-    expect(deleteResponse.status).toEqual(200)
-    const secondPostMapping = await secondResponse.json()
-    const secondDeleteResponse = await mappingAdapter(
-      `/delete/${secondPostMapping.id}`,
-      'DELETE'
-    )
-    expect(secondDeleteResponse.status).toEqual(200)
-    const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
-    expect(getMapping.status).toEqual(200)
-    const mappingData = await getMapping.json()
-    const getSecondMapping = await mappingAdapter(
-      `/${secondPostMapping.id}`,
-      'GET'
-    )
-    expect(getSecondMapping.status).toEqual(200)
-    const secondMappingData = await getSecondMapping.json()
-    expect(Object.keys(mappingData).length).toEqual(0)
-    expect(Object.keys(secondMappingData).length).toEqual(0)
+    const getMapping = await mappingAdapter('/', 'GET')
+    const getMappingResponse = await getMapping.json()
+    expect(getMappingResponse.length).toBe(2)
+    await mappingAdapter(`/delete/${getMappingResponse[0].id}`, 'DELETE')
+    await mappingAdapter(`/delete/${getMappingResponse[1].id}`, 'DELETE')
   })
 })
