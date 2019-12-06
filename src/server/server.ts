@@ -107,8 +107,16 @@ const startProxyServer = (): void => {
       return res.end(`Error: failed to create proxy ${req.headers.host}`)
     }
   })
-  server.listen(443)
 
+  server.on('upgrade', function(req, socket) {
+    const mappings = getMappings()
+    const { ip, port }: ProxyMapping =
+      mappings.find(({ fullDomain }) => {
+        return fullDomain === req.headers.host
+      }) || {}
+    if (port) return proxy.ws(req, socket, { target: `http://${ip}:${port}` })
+  })
+  server.listen(443)
   const httpApp = express()
   httpApp.get('/*', (req, res) => {
     const paramCheck = req.headers.host.split('?')[1]
