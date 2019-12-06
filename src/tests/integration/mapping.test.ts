@@ -184,6 +184,7 @@ describe('/api', () => {
     const getMappingResponse = await getMapping.json()
     const postMap = await postResponse.json()
     const secondPostMap = await secondResponse.json()
+    console.log('getMAPPINGresponse:', getMappingResponse)
     expect(getMappingResponse).toEqual([postMap, secondPostMap])
     await mappingAdapter(`/${getMappingResponse[0].id}`, 'DELETE')
     await mappingAdapter(`/${getMappingResponse[1].id}`, 'DELETE')
