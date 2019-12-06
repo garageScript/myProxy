@@ -82,7 +82,7 @@ describe('/api', () => {
     })
     expect(createMapping.status).toEqual(200)
     const mapping = await createMapping.json()
-    const delMapping = await mappingAdapter(`/delete/${mapping.id}`, 'DELETE')
+    const delMapping = await mappingAdapter(`/${mapping.id}`, 'DELETE')
     expect(delMapping.status).toEqual(200)
     const deletedMapping = await delMapping.json()
     expect(deletedMapping.port).toEqual(port)
@@ -131,7 +131,7 @@ describe('/api', () => {
     expect(mappingData.id).toEqual(mapping.id)
 
     // Cleanup: Delete the mapping
-    const delMapping = await mappingAdapter(`/delete/${mapping.id}`, 'DELETE')
+    const delMapping = await mappingAdapter(`/${mapping.id}`, 'DELETE')
     expect(delMapping.status).toEqual(200)
   })
 
@@ -185,7 +185,7 @@ describe('/api', () => {
     const postMap = await postResponse.json()
     const secondPostMap = await secondResponse.json()
     expect(getMappingResponse).toEqual([postMap, secondPostMap])
-    await mappingAdapter(`/delete/${getMappingResponse[0].id}`, 'DELETE')
-    await mappingAdapter(`/delete/${getMappingResponse[1].id}`, 'DELETE')
+    await mappingAdapter(`/${getMappingResponse[0].id}`, 'DELETE')
+    await mappingAdapter(`/${getMappingResponse[1].id}`, 'DELETE')
   })
 })
