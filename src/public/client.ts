@@ -82,9 +82,6 @@ class MappingItem {
         type="button">
           Delete
       </button>
-      <button class="btn btn-sm btn-outline-primary edit" type="button">
-        Edit
-      </button>
     `
 
     const delButton = helper.getElement('.deleteButton', mappingElement)
@@ -93,89 +90,6 @@ class MappingItem {
         fetch(`/api/mappings/${data.id}`, {
           method: 'DELETE',
           body: JSON.stringify({ data }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then(() => {
-          window.location.reload()
-        })
-      }
-    }
-    const editButton = helper.getElement('.edit', mappingElement)
-    editButton.onclick = (): void => {
-      mappingElement.innerHTML = `
-        <div class="col d-flex">
-          <div class="col">
-            <div class="input-group m-1">
-              <div class="input-group-prepend">
-                <span class="input-group-text">Subdomain</span>
-              </div>
-              <input type="text" class="form-control subDomainName" placeholder=${data.subDomain} disabled>
-            </div>
-            <div class="input-group m-1">
-              <div class="input-group-prepend">
-                <span class="input-group-text">Domain</span>
-              </div>
-              <input type="text" class="form-control domainName" placeholder=${data.domain} disabled>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="input-group m-1">
-              <div class="input-group-prepend">
-                <span class="input-group-text">Port Number</span>
-              </div>
-              <input type="text" class="form-control port" placeholder=${data.port}>
-            </div>
-            <div class="input-group m-1">
-              <div class="input-group-prepend">
-                <span class="input-group-text">IP Adress</span>
-              </div>
-              <input type="text" class="form-control ip" placeholder=${data.ip}>
-            </div>
-          </div>
-          </div>
-          <div class="btn-group-vertical">
-            <button class="btn btn-outline-primary save">Save</button>
-            <button class="btn btn-outline-danger cancel">Cancel</button>
-          </div>
-        `
-
-      const cancel = helper.getElement('.cancel', mappingElement)
-      cancel.onclick = (): void => {
-        window.location.reload()
-      }
-
-      const save = helper.getElement('.save', mappingElement)
-      save.onclick = (): void => {
-        const domainName = helper.getElement(
-          '.domain',
-          mappingElement
-        ) as HTMLInputElement
-        const subDomainName = helper.getElement(
-          '.subDomainName',
-          mappingElement
-        ) as HTMLInputElement
-        const port = helper.getElement(
-          '.port',
-          mappingElement
-        ) as HTMLInputElement
-        const ip = helper.getElement('.ip', mappingElement) as HTMLInputElement
-
-        const domainNameValue = domainName.value
-        const subDomainNameValue = subDomainName.value
-        const portValue = port.value
-        const ipValue = ip.value
-        const id = data.id
-        fetch(`/api/mappings/edit/${data.id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({
-            domain: domainNameValue,
-            subDomain: subDomainNameValue,
-            port: portValue,
-            ip: ipValue,
-            id: id
-          }),
           headers: {
             'Content-Type': 'application/json'
           }
