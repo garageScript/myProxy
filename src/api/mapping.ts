@@ -3,7 +3,7 @@ import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
 import cp from 'child_process'
-import { setData, getMappings, getMappingFromId } from '../lib/data'
+import { setData, getMappings, idToMapping } from '../lib/data'
 import { Mapping } from '../types/general'
 import prodConfigure from '../../scripts/prod.config.js'
 import { getGitUserId } from '../helpers/getGitUser'
@@ -94,7 +94,7 @@ mappingRouter.get('/', (req, res) => {
 
 mappingRouter.delete('/:id', async (req, res) => {
   const domains = getMappings()
-  const deletedDomain = getMappingFromId(req.params.id)
+  const deletedDomain = idToMapping(req.params.id)
   const updatedDomains = { ...domains }
   delete updatedDomains[deletedDomain.fullDomain]
   // Setting data as array to retain data structure of existing sites
@@ -128,7 +128,7 @@ mappingRouter.get('/download', (req, res) => {
 })
 
 mappingRouter.get('/:id', (req, res) => {
-  const foundDomain = getMappingFromId(req.params.id)
+  const foundDomain = idToMapping(req.params.id)
   res.json(foundDomain || {})
 })
 
