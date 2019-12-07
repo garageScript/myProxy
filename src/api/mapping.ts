@@ -3,7 +3,7 @@ import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
 import cp from 'child_process'
-import { setData, getMappings } from '../lib/data'
+import { setData, getMappings, getMappingFromId } from '../lib/data'
 import { Mapping } from '../types/general'
 import prodConfigure from '../../scripts/prod.config.js'
 import { getGitUserId } from '../helpers/getGitUser'
@@ -26,12 +26,12 @@ mappingRouter.post('/', async (req, res) => {
   const fullDomain = req.body.subDomain
     ? `${req.body.subDomain}.${req.body.domain}`
     : `${req.body.domain}`
-  const existingSubDomain = domainKeys.find(e => e.fullDomain === fullDomain)
+  const existingSubDomain = domainKeys[fullDomain]
   if (existingSubDomain)
     return res.status(400).json({
       message: 'Subdomain already exists'
     })
-  const map = domainKeys.reduce((acc, e) => {
+  const map = Object.values(domainKeys).reduce((acc, e) => {
     acc[e.port] = true
     return acc
   }, {})
@@ -56,7 +56,7 @@ mappingRouter.post('/', async (req, res) => {
       gitLink: `myproxy@${req.body.domain}:${WORKPATH}/${fullDomain}`,
       fullDomain
     }
-    domainKeys.push(mappingObject)
+    domainKeys[mappingObject.fullDomain] = mappingObject
     setData('mappings', domainKeys)
     res.json(mappingObject)
   }
@@ -93,10 +93,9 @@ mappingRouter.get('/', (req, res) => {
 
 mappingRouter.delete('/:id', async (req, res) => {
   const domains = getMappings()
-  const deletedDomain = domains.find(e => e.id === req.params.id)
-  const updatedDomains = domains.filter(e => {
-    return e.id !== req.params.id
-  })
+  const deletedDomain = getMappingFromId(req.params.id)
+  const updatedDomains = { ...domains }
+  delete updatedDomains[deletedDomain.fullDomain]
   setData('mappings', updatedDomains)
   if (!isProduction()) {
     return res.json(deletedDomain)
@@ -127,8 +126,7 @@ mappingRouter.get('/download', (req, res) => {
 })
 
 mappingRouter.get('/:id', (req, res) => {
-  const domains = getMappings()
-  const foundDomain = domains.find(e => e.id === req.params.id)
+  const foundDomain = getMappingFromId(req.params.id)
   res.json(foundDomain || {})
 })
 
