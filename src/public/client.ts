@@ -87,7 +87,7 @@ class MappingItem {
     const delButton = helper.getElement('.deleteButton', mappingElement)
     delButton.onclick = (): void => {
       if (confirm('Are you sure want to delete this domain?')) {
-        fetch(`/api/mappings/delete/${data.id}`, {
+        fetch(`/api/mappings/${data.id}`, {
           method: 'DELETE',
           body: JSON.stringify({ data }),
           headers: {

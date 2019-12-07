@@ -91,7 +91,7 @@ mappingRouter.get('/', (req, res) => {
   res.json(domains)
 })
 
-mappingRouter.delete('/delete/:id', async (req, res) => {
+mappingRouter.delete('/:id', async (req, res) => {
   const domains = getMappings()
   const deletedDomain = domains.find(e => e.id === req.params.id)
   const updatedDomains = domains.filter(e => {
