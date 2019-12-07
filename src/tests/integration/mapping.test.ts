@@ -139,8 +139,8 @@ describe('/api', () => {
 
     const firstFullDomain = `${subDomain}.${domain}`
     const secondFullDomain = `${secondDomain}.${domain}`
-    const match1 = mappings.find(e => e.fullDomain === firstFullDomain)
-    const match2 = mappings.find(e => e.fullDomain === secondFullDomain)
+    const match1 = mappings[firstFullDomain]
+    const match2 = mappings[secondFullDomain]
 
     expect(match1.fullDomain).toEqual(firstFullDomain)
     expect(match2.fullDomain).toEqual(secondFullDomain)

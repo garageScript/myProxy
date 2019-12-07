@@ -1,12 +1,14 @@
 import fs from 'fs'
 import { DB, ServiceKey } from '../types/admin'
-import { Mapping, Domain } from '../types/general'
+import { Mapping, MappingObj, Domain } from '../types/general'
 
 const data: DB = {
   serviceKeys: [],
-  mappings: [],
+  mappings: {},
   availableDomains: []
 }
+
+let mappingsDict: MappingObj | {} = {}
 
 fs.readFile('./data.db', (err, file) => {
   if (err) {
@@ -17,8 +19,16 @@ fs.readFile('./data.db', (err, file) => {
   }
   const fileData: DB = JSON.parse(file.toString() || '{}')
   data.serviceKeys = fileData.serviceKeys || []
-  data.mappings = fileData.mappings || []
+  data.mappings = fileData.mappings || {}
   data.availableDomains = fileData.availableDomains || []
+
+  mappingsDict = Object.values(data.mappings).reduce(
+    (obj, item) => ({
+      ...obj,
+      [item.id]: item
+    }),
+    {}
+  )
 })
 
 // Typescript disable, because this is meant as a helper function to be used with N number of input types
@@ -36,6 +46,15 @@ const setData = (table: string, records: unknown): void => {
       return console.log('writing to DB failed', err)
     }
     console.log('successfully wrote to DB')
+    if (table === 'mappings') {
+      mappingsDict = Object.values(records).reduce(
+        (obj, item) => ({
+          ...obj,
+          [item.id]: item
+        }),
+        {}
+      )
+    }
 
     // The line below needs to be here. For some reason,
     // data[table] value seems to be an old value and
@@ -49,9 +68,9 @@ const getProviderKeys = (): ServiceKey[] => {
   return initialData || []
 }
 
-const getMappings = (): Mapping[] => {
-  const initialData = getData('mappings') as Mapping[] | undefined
-  return initialData || []
+const getMappings = (): MappingObj | {} => {
+  const initialData = getData('mappings') as MappingObj | undefined
+  return initialData || {}
 }
 
 const getAvailableDomains = (): Domain[] => {
@@ -59,4 +78,21 @@ const getAvailableDomains = (): Domain[] => {
   return initialData || []
 }
 
-export { getData, setData, getProviderKeys, getMappings, getAvailableDomains }
+const getMappingFromDomain = (domain: string): Mapping => {
+  const initialData = getData('mappings') as MappingObj | undefined
+  return initialData[domain] || {}
+}
+
+const getMappingFromId = (id: string): Mapping => {
+  return mappingsDict[id]
+}
+
+export {
+  getData,
+  setData,
+  getProviderKeys,
+  getMappings,
+  getAvailableDomains,
+  getMappingFromDomain,
+  getMappingFromId
+}
