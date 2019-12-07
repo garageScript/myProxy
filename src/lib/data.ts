@@ -24,10 +24,13 @@ fs.readFile('./data.db', (err, file) => {
   data.mappings = fileData.mappings || []
   data.availableDomains = fileData.availableDomains || []
 
-  mappingCache = data.mappings.reduce((obj, item) => ({
-    ...obj,
-    [item.fullDomain]: item
-  }))
+  mappingCache = data.mappings.reduce(
+    (obj, item) => ({
+      ...obj,
+      [item.fullDomain]: item
+    }),
+    {}
+  )
 
   mappingsDict = Object.values(data.mappings).reduce(
     (obj, item) => ({
@@ -54,10 +57,13 @@ const setData = (table: string, records: unknown): void => {
     }
     console.log('successfully wrote to DB')
     if (table === 'mappings') {
-      mappingCache = data.mappings.reduce((obj, item) => ({
-        ...obj,
-        [item.fullDomain]: item
-      }))
+      mappingCache = data.mappings.reduce(
+        (obj, item) => ({
+          ...obj,
+          [item.fullDomain]: item
+        }),
+        {}
+      )
       mappingsDict = Object.values(records).reduce(
         (obj, item) => ({
           ...obj,
