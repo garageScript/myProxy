@@ -9,7 +9,7 @@ import cookieParser from 'cookie-parser'
 import { adminRouter } from '../admin/index'
 import { apiRouter } from '../api/index'
 import { hashPass } from '../helpers/crypto'
-import { getAvailableDomains, getMappingFromDomain } from '../lib/data'
+import { getAvailableDomains, domainToMapping } from '../lib/data'
 import { setupAuth, isCorrectCredentials } from '../auth'
 import { ProxyMapping } from '../types/general'
 import { SNICallback } from '../helpers/SNICallback'
@@ -91,8 +91,7 @@ const startProxyServer = (): void => {
 
   const server = https.createServer({ SNICallback }, (req, res) => {
     try {
-      const { ip, port }: ProxyMapping =
-        getMappingFromDomain(req.headers.host) || {}
+      const { ip, port }: ProxyMapping = domainToMapping(req.headers.host) || {}
       if (!port || !ip) return res.end('Not Found')
       proxy.web(req, res, { target: `http://${ip}:${port}` }, err => {
         console.error('Error communicating with server', err)
@@ -105,8 +104,7 @@ const startProxyServer = (): void => {
   })
 
   server.on('upgrade', function(req, socket) {
-    const { ip, port }: ProxyMapping =
-      getMappingFromDomain(req.headers.host) || {}
+    const { ip, port }: ProxyMapping = domainToMapping(req.headers.host) || {}
     if (port) return proxy.ws(req, socket, { target: `http://${ip}:${port}` })
   })
   server.listen(443)

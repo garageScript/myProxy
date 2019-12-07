@@ -3,7 +3,13 @@ import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
 import cp from 'child_process'
-import { setData, getMappings, getMappingFromId } from '../lib/data'
+import {
+  setData,
+  getMappings,
+  domainToMapping,
+  getIdToMapping,
+  deleteDomain
+} from '../lib/data'
 import { Mapping } from '../types/general'
 import prodConfigure from '../../scripts/prod.config.js'
 import { getGitUserId } from '../helpers/getGitUser'
@@ -26,12 +32,12 @@ mappingRouter.post('/', async (req, res) => {
   const fullDomain = req.body.subDomain
     ? `${req.body.subDomain}.${req.body.domain}`
     : `${req.body.domain}`
-  const existingSubDomain = domainKeys[fullDomain]
+  const existingSubDomain = domainToMapping(fullDomain)
   if (existingSubDomain)
     return res.status(400).json({
       message: 'Subdomain already exists'
     })
-  const map = Object.values(domainKeys).reduce((acc, e) => {
+  const map = domainKeys.reduce((acc, e) => {
     acc[e.port] = true
     return acc
   }, {})
@@ -56,9 +62,8 @@ mappingRouter.post('/', async (req, res) => {
       gitLink: `myproxy@${req.body.domain}:${WORKPATH}/${fullDomain}`,
       fullDomain
     }
-    domainKeys[mappingObject.fullDomain] = mappingObject
-    // Setting data as array to retain data structure of existing sites
-    setData('mappings', Object.values(domainKeys))
+    domainKeys.push(mappingObject)
+    setData('mappings', domainKeys)
     res.json(mappingObject)
   }
 
@@ -93,12 +98,8 @@ mappingRouter.get('/', (req, res) => {
 })
 
 mappingRouter.delete('/:id', async (req, res) => {
-  const domains = getMappings()
-  const deletedDomain = getMappingFromId(req.params.id)
-  const updatedDomains = { ...domains }
-  delete updatedDomains[deletedDomain.fullDomain]
-  // Setting data as array to retain data structure of existing sites
-  setData('mappings', Object.values(updatedDomains))
+  const deletedDomain = getIdToMapping(req.params.id)
+  deleteDomain(deletedDomain.fullDomain)
   if (!isProduction()) {
     return res.json(deletedDomain)
   }
@@ -128,7 +129,7 @@ mappingRouter.get('/download', (req, res) => {
 })
 
 mappingRouter.get('/:id', (req, res) => {
-  const foundDomain = getMappingFromId(req.params.id)
+  const foundDomain = getIdToMapping(req.params.id)
   res.json(foundDomain || {})
 })
 
