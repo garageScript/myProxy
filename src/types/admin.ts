@@ -9,7 +9,7 @@ type ServiceKey = {
 
 type DB = {
   serviceKeys: ServiceKey[]
-  mappings: Mapping[]
+  mappings: { string?: Mapping }
   availableDomains: Domain[]
 }
 
