@@ -2,6 +2,7 @@
 cd ..
 GIT_DIR='.git'
 umask 002 && git reset --hard
+git clean -f
 git checkout master
 git branch -D prod
 npm install
