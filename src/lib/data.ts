@@ -32,7 +32,7 @@ fs.readFile('./data.db', (err, file) => {
     {}
   )
 
-  mappingsDict = Object.values(data.mappings).reduce(
+  mappingsDict = data.mappings.reduce(
     (obj, item) => ({
       ...obj,
       [item.id]: item
@@ -64,7 +64,7 @@ const setData = (table: string, records: unknown): void => {
         }),
         {}
       )
-      mappingsDict = Object.values(records).reduce(
+      mappingsDict = data.mappings.reduce(
         (obj, item) => ({
           ...obj,
           [item.id]: item
