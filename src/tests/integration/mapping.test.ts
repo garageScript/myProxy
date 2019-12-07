@@ -96,45 +96,6 @@ describe('/api', () => {
     expect(Object.keys(mappingData).length).toEqual(0)
   })
 
-  it('checks if changes to the resource has been saved', async () => {
-    const subDomain = `testing${uuidv4()}`
-    const domain = 'integration'
-    const port = '3457'
-    const ip = '123.23.25'
-
-    // Create mapping
-    const mapping = await mappingAdapter('/', 'POST', {
-      domain,
-      subDomain,
-      ip,
-      port
-    }).then(r => r.json())
-
-    // Patch created mapping with different port
-    //     and make sure patch resolves correctly
-    const newPort = '2345'
-    const newIp = '234.34.36'
-    const patchMapping = await mappingAdapter(`/${mapping.id}`, 'PATCH', {
-      port: newPort,
-      ip: newIp
-    })
-    expect(patchMapping.status).toEqual(200)
-    const patchedMapping = await patchMapping.json()
-    expect(patchedMapping.id).toEqual(mapping.id)
-
-    // Get the mapping id to make sure the change is persisted
-    const getMapping = await mappingAdapter(`/${mapping.id}`, 'GET')
-    expect(getMapping.status).toEqual(200)
-    const mappingData = await getMapping.json()
-    expect(mappingData.port).toEqual(newPort)
-    expect(mappingData.ip).toEqual(newIp)
-    expect(mappingData.id).toEqual(mapping.id)
-
-    // Cleanup: Delete the mapping
-    const delMapping = await mappingAdapter(`/delete/${mapping.id}`, 'DELETE')
-    expect(delMapping.status).toEqual(200)
-  })
-
   it('checks no duplicate subdomain is created for same domain', async () => {
     const subDomain = `testing${uuidv4()}`
     const domain = 'Sahil'
