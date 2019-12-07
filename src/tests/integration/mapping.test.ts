@@ -30,10 +30,7 @@ describe('/api', () => {
     expect(postMapping.subDomain).toEqual(subDomain)
     expect(postMapping.domain).toEqual(domain)
     expect(postMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
-    const deleteResponse = await mappingAdapter(
-      `/delete/${postMapping.id}`,
-      'DELETE'
-    )
+    const deleteResponse = await mappingAdapter(`/${postMapping.id}`, 'DELETE')
     expect(deleteResponse.status).toEqual(200)
     const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
     expect(getMapping.status).toEqual(200)
@@ -64,10 +61,7 @@ describe('/api', () => {
     expect(mappingData.subDomain).toEqual(subDomain)
     expect(mappingData.fullDomain).toEqual(`${domain}`)
 
-    const deleteResponse = await mappingAdapter(
-      `/delete/${postMapping.id}`,
-      'DELETE'
-    )
+    const deleteResponse = await mappingAdapter(`/${postMapping.id}`, 'DELETE')
     expect(deleteResponse.status).toEqual(200)
   })
 
@@ -152,11 +146,9 @@ describe('/api', () => {
     })
     expect(duplicatePostResponse.status).toEqual(400)
     const postMapping = await postResponse.json()
-    const deleteResponse = await mappingAdapter(
-      `/delete/${postMapping.id}`,
-      'DELETE'
-    )
+    const deleteResponse = await mappingAdapter(`/${postMapping.id}`, 'DELETE')
     expect(deleteResponse.status).toEqual(200)
+
     const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
     expect(getMapping.status).toEqual(200)
     const mappingData = await getMapping.json()
@@ -167,26 +159,31 @@ describe('/api', () => {
     const subDomain = `testing${uuidv4()}`
     const domain = 'VinDiesel'
     const port = '3522'
-    const postResponse = await mappingAdapter('/', 'POST', {
+    await mappingAdapter('/', 'POST', {
       domain,
       subDomain,
       port
     })
+
     const secondDomain = 'PaulWalker'
     const nextPort = '3523'
-    const secondResponse = await mappingAdapter('/', 'POST', {
-      secondDomain,
-      subDomain,
-      nextPort
+    await mappingAdapter('/', 'POST', {
+      subDomain: secondDomain,
+      port: nextPort,
+      domain
     })
-    expect(secondResponse.status).toEqual(200)
-    const getMapping = await mappingAdapter('/', 'GET')
-    const getMappingResponse = await getMapping.json()
-    const postMap = await postResponse.json()
-    const secondPostMap = await secondResponse.json()
-    console.log('getMAPPINGresponse:', getMappingResponse)
-    expect(getMappingResponse).toEqual([postMap, secondPostMap])
-    await mappingAdapter(`/${getMappingResponse[0].id}`, 'DELETE')
-    await mappingAdapter(`/${getMappingResponse[1].id}`, 'DELETE')
+
+    const mappingResponse = await mappingAdapter('/', 'GET')
+    const mappings = await mappingResponse.json()
+
+    const firstFullDomain = `${subDomain}.${domain}`
+    const secondFullDomain = `${secondDomain}.${domain}`
+    const match1 = mappings.find(e => e.fullDomain === firstFullDomain)
+    const match2 = mappings.find(e => e.fullDomain === secondFullDomain)
+
+    expect(match1.fullDomain).toEqual(firstFullDomain)
+    expect(match2.fullDomain).toEqual(secondFullDomain)
+    await mappingAdapter(`/${match1.id}`, 'DELETE')
+    await mappingAdapter(`/${match2.id}`, 'DELETE')
   })
 })
