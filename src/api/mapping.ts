@@ -117,63 +117,6 @@ mappingRouter.delete('/:id', async (req, res) => {
   })
 })
 
-mappingRouter.patch('/:id', async (req, res) => {
-  const domains = getMappings()
-
-  // Make sure this domain actually exist
-  const existingDomain = domains.find(e => e.id === req.params.id)
-  if (!existingDomain) {
-    return res.status(400)
-  }
-
-  const domainList = domains.map((element: Mapping) => {
-    if (element.id === req.params.id) {
-      if (req.body.port) {
-        element.port = req.body.port
-      }
-      if (req.body.ip) {
-        element.ip = req.body.ip
-      }
-    }
-    return element
-  })
-  setData('mappings', domainList)
-
-  const updatedDomain = domains.find(
-    (element: Mapping) => element.id === req.params.id
-  )
-  const prodConfigApp = [...prodConfigure.apps][0]
-  prodConfigApp.name = updatedDomain.fullDomain
-  prodConfigApp.env_production.PORT = parseInt(updatedDomain.port, 10)
-  prodConfigApp.script = 'npm'
-  prodConfigApp.args = 'start'
-  const updatedConfig = {
-    apps: prodConfigApp
-  }
-
-  if (!isProduction()) {
-    return res.json(updatedDomain)
-  }
-
-  const gitUserId = await getGitUserId()
-  /*eslint-disable */
-  exec(
-    `
-      cd ${WORKPATH}/${updatedDomain.fullDomain}
-      echo 'module.exports = ${JSON.stringify(
-        updatedConfig
-      )}' > deploy.config.js
-      git add .
-      git commit -m "Edits deploy config file"
-      `,
-    /*eslint-enable */
-    { uid: gitUserId }
-  ).then(() => {
-    res.json(updatedDomain)
-  })
-  return res.json(updatedDomain)
-})
-
 mappingRouter.get('/download', (req, res) => {
   const filePath = `${WORKPATH}/${req.query.fullDomain}/deploy.config.js`
   res.setHeader('Content-disposition', 'attachment; filename=deploy.config.js')
