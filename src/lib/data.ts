@@ -1,4 +1,5 @@
 import fs from 'fs'
+import { createDomainCache, createIdCache } from '../helpers/cache'
 import { DB, ServiceKey } from '../types/admin'
 import { Mapping, MappingObj, Domain } from '../types/general'
 
@@ -24,21 +25,8 @@ fs.readFile('./data.db', (err, file) => {
   data.mappings = fileData.mappings || []
   data.availableDomains = fileData.availableDomains || []
 
-  mappingsCache = data.mappings.reduce(
-    (obj, item) => ({
-      ...obj,
-      [item.fullDomain]: item
-    }),
-    {}
-  )
-
-  mappingsDict = data.mappings.reduce(
-    (obj, item) => ({
-      ...obj,
-      [item.id]: item
-    }),
-    {}
-  )
+  mappingsCache = createDomainCache(data.mappings)
+  mappingsDict = createIdCache(data.mappings)
 })
 
 // Typescript disable, because this is meant as a helper function to be used with N number of input types
@@ -49,24 +37,6 @@ const getData = (table: string): unknown => {
 // Typescript disable, because this is meant as a helper function to be used with N number of input types
 const setData = (table: string, records: unknown): void => {
   data[table] = records
-  if (table === 'mappings') {
-    const initialData = records as Mapping[]
-    mappingsCache = initialData.reduce(
-      (obj, item) => ({
-        ...obj,
-        [item.fullDomain]: item
-      }),
-      {}
-    )
-    mappingsDict = initialData.reduce(
-      (obj, item) => ({
-        ...obj,
-        [item.id]: item
-      }),
-      {}
-    )
-  }
-
   const fileData = `${JSON.stringify(data, null, 2)}`
 
   fs.writeFile('./data.db', fileData, err => {
@@ -80,20 +50,8 @@ const setData = (table: string, records: unknown): void => {
 
     if (table === 'mappings') {
       const initialData = records as Mapping[]
-      mappingsCache = initialData.reduce(
-        (obj, item) => ({
-          ...obj,
-          [item.fullDomain]: item
-        }),
-        {}
-      )
-      mappingsDict = initialData.reduce(
-        (obj, item) => ({
-          ...obj,
-          [item.id]: item
-        }),
-        {}
-      )
+      mappingsCache = createDomainCache(initialData)
+      mappingsDict = createIdCache(initialData)
     }
     // The line below needs to be here. For some reason,
     // data[table] value seems to be an old value and
@@ -107,8 +65,9 @@ const getProviderKeys = (): ServiceKey[] => {
   return initialData || []
 }
 
-const getMappings = (): MappingObj | {} => {
-  return mappingsCache || {}
+const getMappings = (): Mapping[] => {
+  const initialData = getData('mappings') as Mapping[] | undefined
+  return initialData || []
 }
 
 const getAvailableDomains = (): Domain[] => {
@@ -124,6 +83,12 @@ const idToMapping = (id: string): Mapping => {
   return mappingsDict[id]
 }
 
+const deleteDomain = (domain: string): Mapping[] => {
+  delete mappingsCache[domain]
+  setData('mappings', Object.values(mappingsCache))
+  return getData('mappings') as Mapping[]
+}
+
 export {
   getData,
   setData,
@@ -131,5 +96,6 @@ export {
   getMappings,
   getAvailableDomains,
   domainToMapping,
-  idToMapping
+  idToMapping,
+  deleteDomain
 }

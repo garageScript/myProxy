@@ -3,7 +3,7 @@ import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
 import cp from 'child_process'
-import { setData, getMappings, idToMapping } from '../lib/data'
+import { setData, getMappings, idToMapping, deleteDomain } from '../lib/data'
 import { Mapping } from '../types/general'
 import prodConfigure from '../../scripts/prod.config.js'
 import { getGitUserId } from '../helpers/getGitUser'
@@ -31,7 +31,7 @@ mappingRouter.post('/', async (req, res) => {
     return res.status(400).json({
       message: 'Subdomain already exists'
     })
-  const map = Object.values(domainKeys).reduce((acc, e) => {
+  const map = domainKeys.reduce((acc, e) => {
     acc[e.port] = true
     return acc
   }, {})
@@ -56,9 +56,8 @@ mappingRouter.post('/', async (req, res) => {
       gitLink: `myproxy@${req.body.domain}:${WORKPATH}/${fullDomain}`,
       fullDomain
     }
-    domainKeys[mappingObject.fullDomain] = mappingObject
-    // Setting data as array to retain data structure of existing sites
-    setData('mappings', Object.values(domainKeys))
+    domainKeys.push(mappingObject)
+    setData('mappings', domainKeys)
     res.json(mappingObject)
   }
 
@@ -93,12 +92,8 @@ mappingRouter.get('/', (req, res) => {
 })
 
 mappingRouter.delete('/:id', async (req, res) => {
-  const domains = getMappings()
   const deletedDomain = idToMapping(req.params.id)
-  const updatedDomains = { ...domains }
-  delete updatedDomains[deletedDomain.fullDomain]
-  // Setting data as array to retain data structure of existing sites
-  setData('mappings', Object.values(updatedDomains))
+  deleteDomain(deletedDomain.fullDomain)
   if (!isProduction()) {
     return res.json(deletedDomain)
   }

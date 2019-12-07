@@ -106,7 +106,7 @@ Promise.all([
   fetch('/api/statuses').then(r => r.json())
 ]).then(([mappings, statuses]: [Mapping[], Status[]]) => {
   domainList.innerHTML = ''
-  Object.values(mappings)
+  mappings
     .reverse()
     .filter(e => e.domain && e.port && e.id && e.gitLink && e.fullDomain)
     .forEach(e => {
