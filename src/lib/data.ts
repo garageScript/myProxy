@@ -4,9 +4,11 @@ import { Mapping, MappingObj, Domain } from '../types/general'
 
 const data: DB = {
   serviceKeys: [],
-  mappings: {},
+  mappings: [],
   availableDomains: []
 }
+
+let mappingCache: MappingObj | {} = {}
 
 let mappingsDict: MappingObj | {} = {}
 
@@ -19,8 +21,13 @@ fs.readFile('./data.db', (err, file) => {
   }
   const fileData: DB = JSON.parse(file.toString() || '{}')
   data.serviceKeys = fileData.serviceKeys || []
-  data.mappings = fileData.mappings || {}
+  data.mappings = fileData.mappings || []
   data.availableDomains = fileData.availableDomains || []
+
+  mappingCache = data.mappings.reduce((obj, item) => ({
+    ...obj,
+    [item.fullDomain]: item
+  }))
 
   mappingsDict = Object.values(data.mappings).reduce(
     (obj, item) => ({
@@ -47,6 +54,10 @@ const setData = (table: string, records: unknown): void => {
     }
     console.log('successfully wrote to DB')
     if (table === 'mappings') {
+      mappingCache = data.mappings.reduce((obj, item) => ({
+        ...obj,
+        [item.fullDomain]: item
+      }))
       mappingsDict = Object.values(records).reduce(
         (obj, item) => ({
           ...obj,
@@ -69,8 +80,7 @@ const getProviderKeys = (): ServiceKey[] => {
 }
 
 const getMappings = (): MappingObj | {} => {
-  const initialData = getData('mappings') as MappingObj | undefined
-  return initialData || {}
+  return mappingCache
 }
 
 const getAvailableDomains = (): Domain[] => {
@@ -79,8 +89,7 @@ const getAvailableDomains = (): Domain[] => {
 }
 
 const getMappingFromDomain = (domain: string): Mapping => {
-  const initialData = getData('mappings') as MappingObj | undefined
-  return initialData[domain] || {}
+  return mappingCache[domain] || {}
 }
 
 const getMappingFromId = (id: string): Mapping => {

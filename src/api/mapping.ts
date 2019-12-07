@@ -57,7 +57,8 @@ mappingRouter.post('/', async (req, res) => {
       fullDomain
     }
     domainKeys[mappingObject.fullDomain] = mappingObject
-    setData('mappings', domainKeys)
+    // Setting data as array to retain data structure of existing sites
+    setData('mappings', Object.values(domainKeys))
     res.json(mappingObject)
   }
 
@@ -96,7 +97,8 @@ mappingRouter.delete('/:id', async (req, res) => {
   const deletedDomain = getMappingFromId(req.params.id)
   const updatedDomains = { ...domains }
   delete updatedDomains[deletedDomain.fullDomain]
-  setData('mappings', updatedDomains)
+  // Setting data as array to retain data structure of existing sites
+  setData('mappings', Object.values(updatedDomains))
   if (!isProduction()) {
     return res.json(deletedDomain)
   }
