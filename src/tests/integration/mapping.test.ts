@@ -160,5 +160,6 @@ describe('/api', () => {
     const getMappings = await getResponse.json()
 
     expect(getMappings[0].status).toEqual('not started')
+    await mappingAdapter(`/${getMappings[0].id}`, 'DELETE')
   })
 })
