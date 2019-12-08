@@ -93,9 +93,29 @@ mappingRouter.post('/', async (req, res) => {
   })
 })
 
-mappingRouter.get('/', (req, res) => {
+mappingRouter.get('/', async (req, res) => {
   const domains = getMappings()
-  res.json(domains)
+  if (isProduction()) {
+    const data = await exec('su - myproxy -c "pm2 jlist"')
+
+    const statusData = JSON.parse(data.stdout).reduce(
+      (statusObj, el) => ({
+        ...statusObj,
+        [el.name]: el.pm2_env.status
+      }),
+      {}
+    )
+    const fullDomainStatusMapping = domains.map(el => {
+      if (statusData[el.fullDomain]) {
+        return { ...el, status: statusData[el.fullDomain] }
+      } else {
+        return { ...el, status: 'not started' }
+      }
+    })
+
+    res.json(fullDomainStatusMapping)
+  }
+  res.json(domains.map(el => ({ ...el, status: 'not started' })))
 })
 
 mappingRouter.delete('/:id', async (req, res) => {
