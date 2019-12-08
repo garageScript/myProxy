@@ -6,8 +6,8 @@ import cp from 'child_process'
 import {
   setData,
   getMappings,
-  domainToMapping,
-  getIdToMapping,
+  getMappingByDomain,
+  getMappingById,
   deleteDomain
 } from '../lib/data'
 import { Mapping } from '../types/general'
@@ -32,7 +32,7 @@ mappingRouter.post('/', async (req, res) => {
   const fullDomain = req.body.subDomain
     ? `${req.body.subDomain}.${req.body.domain}`
     : `${req.body.domain}`
-  const existingSubDomain = domainToMapping(fullDomain)
+  const existingSubDomain = getMappingByDomain(fullDomain)
   if (existingSubDomain)
     return res.status(400).json({
       message: 'Subdomain already exists'
@@ -98,7 +98,7 @@ mappingRouter.get('/', (req, res) => {
 })
 
 mappingRouter.delete('/:id', async (req, res) => {
-  const deletedDomain = getIdToMapping(req.params.id)
+  const deletedDomain = getMappingById(req.params.id)
   deleteDomain(deletedDomain.fullDomain)
   if (!isProduction()) {
     return res.json(deletedDomain)
@@ -129,7 +129,7 @@ mappingRouter.get('/download', (req, res) => {
 })
 
 mappingRouter.get('/:id', (req, res) => {
-  const foundDomain = getIdToMapping(req.params.id)
+  const foundDomain = getMappingById(req.params.id)
   res.json(foundDomain || {})
 })
 

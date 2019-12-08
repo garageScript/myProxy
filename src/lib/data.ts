@@ -76,11 +76,11 @@ const getAvailableDomains = (): Domain[] => {
   return initialData || []
 }
 
-const domainToMapping = (domain: string): Mapping => {
+const getMappingByDomain = (domain: string): Mapping => {
   return mappingsCache[domain]
 }
 
-const getIdToMapping = (id: string): Mapping => {
+const getMappingById = (id: string): Mapping => {
   return mappingsDict[id]
 }
 
@@ -95,7 +95,7 @@ export {
   getProviderKeys,
   getMappings,
   getAvailableDomains,
-  domainToMapping,
-  getIdToMapping,
+  getMappingByDomain,
+  getMappingById,
   deleteDomain
 }
