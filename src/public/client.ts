@@ -110,7 +110,9 @@ fetch('/api/mappings')
     domainList.innerHTML = ''
     mappings
       .reverse()
-      .filter(e => e.domain && e.port && e.id && e.gitLInk && e.fullDomain)
+      .filter(
+        e => e.domain && e.port && e.id && e.gitLink && e.fullDomain && e.status
+      )
       .forEach(e => {
         new MappingItem(e)
       })
