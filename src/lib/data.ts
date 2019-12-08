@@ -49,6 +49,26 @@ const setData = (table: string, records: unknown): void => {
     }
     console.log('successfully wrote to DB')
 
+    // The set of code below will cause error when running
+    // tests if it's pasted outside the writefile context.
+
+    if (table === 'mappings') {
+      const initialData = records as Mapping[]
+      mappingsCache = initialData.reduce(
+        (obj, item) => ({
+          ...obj,
+          [item.fullDomain]: item
+        }),
+        {}
+      )
+      mappingsDict = initialData.reduce(
+        (obj, item) => ({
+          ...obj,
+          [item.id]: item
+        }),
+        {}
+      )
+    }
     // The line below needs to be here. For some reason,
     // data[table] value seems to be an old value and
     // does not take the records value. Strange.
@@ -66,9 +86,8 @@ const getProviderKeys = (): ServiceKey[] => {
   return initialData || []
 }
 
-const getMappings = (): Mapping[] => {
-  const initialData = getData('mappings') as Mapping[] | undefined
-  return initialData || []
+const getMappings = (): MappingObj | {} => {
+  return mappingsCache || {}
 }
 
 const getAvailableDomains = (): Domain[] => {

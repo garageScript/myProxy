@@ -37,7 +37,7 @@ mappingRouter.post('/', async (req, res) => {
     return res.status(400).json({
       message: 'Subdomain already exists'
     })
-  const map = domainKeys.reduce((acc, e) => {
+  const map = Object.values(domainKeys).reduce((acc, e) => {
     acc[e.port] = true
     return acc
   }, {})
@@ -62,8 +62,9 @@ mappingRouter.post('/', async (req, res) => {
       gitLink: `myproxy@${req.body.domain}:${WORKPATH}/${fullDomain}`,
       fullDomain
     }
-    domainKeys.push(mappingObject)
-    setData('mappings', domainKeys)
+    domainKeys[mappingObject.fullDomain] = mappingObject
+    // Setting data as array to retain data structure of existing sites
+    setData('mappings', Object.values(domainKeys))
     res.json(mappingObject)
   }
 
