@@ -99,7 +99,6 @@ mappingRouter.get('/', (req, res) => {
 
 mappingRouter.delete('/:id', async (req, res) => {
   const deletedDomain = getIdToMapping(req.params.id)
-  console.log('deleted', deletedDomain)
   deleteDomain(deletedDomain.fullDomain)
   if (!isProduction()) {
     return res.json(deletedDomain)

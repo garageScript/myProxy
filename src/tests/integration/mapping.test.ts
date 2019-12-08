@@ -17,7 +17,7 @@ describe('/api', () => {
     server.close()
   })
 
-  it.only('checks mappings for newly added mapping', async () => {
+  it('checks mappings for newly added mapping', async () => {
     const subDomain = `testing${uuidv4()}`
     const domain = 'Rahul'
     const port = '5678'
@@ -33,10 +33,10 @@ describe('/api', () => {
     expect(postMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
     const deleteResponse = await mappingAdapter(`/${postMapping.id}`, 'DELETE')
     expect(deleteResponse.status).toEqual(200)
-    // const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
-    // expect(getMapping.status).toEqual(200)
-    // const mappingData = await getMapping.json()
-    // expect(Object.keys(mappingData).length).toEqual(0)
+    const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
+    expect(getMapping.status).toEqual(200)
+    const mappingData = await getMapping.json()
+    expect(Object.keys(mappingData).length).toEqual(0)
   })
 
   it('checks mappings for newly added root domain', async () => {

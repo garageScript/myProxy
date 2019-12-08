@@ -48,13 +48,13 @@ const setData = (table: string, records: unknown): void => {
       return console.log('writing to DB failed', err)
     }
     console.log('successfully wrote to DB')
-  })
 
-  data[table] = records
-  if (table === 'mappings') {
-    mappingsCache = createDomainCache(data.mappings)
-    mappingsDict = createIdCache(data.mappings)
-  }
+    data[table] = records
+    if (table === 'mappings') {
+      mappingsCache = createDomainCache(data.mappings)
+      mappingsDict = createIdCache(data.mappings)
+    }
+  })
 }
 
 const getProviderKeys = (): ServiceKey[] => {
@@ -77,8 +77,6 @@ const domainToMapping = (domain: string): Mapping => {
 }
 
 const getIdToMapping = (id: string): Mapping => {
-  console.log('id:', id)
-  console.log('mappingdict', mappingsDict)
   return mappingsDict[id]
 }
 
