@@ -147,4 +147,20 @@ describe('/api', () => {
     await mappingAdapter(`/${match1.id}`, 'DELETE')
     await mappingAdapter(`/${match2.id}`, 'DELETE')
   })
+
+  it('checks status is returned when querying mappings', async () => {
+    const subDomain = uuidv4()
+    const domain = 'VinDiesel'
+    const port = '3533'
+    await mappingAdapter('/', 'POST', {
+      domain,
+      subDomain,
+      port
+    })
+
+    const getResponse = await mappingAdapter('/', 'GET')
+    const getMappings = await getResponse.json()
+
+    expect(getMappings[0].status).toEqual('not started')
+  })
 })
