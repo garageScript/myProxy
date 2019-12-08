@@ -1,11 +1,20 @@
 /* eslint @typescript-eslint/camelcase: 0 */
 import express from 'express'
-import uuid4 from 'uuid/v4'
+import uuidv4 from 'uuid/v4'
 import { ApiTokens } from '../types/general'
-import { getApiTokens } from '../lib/data'
+import { setData, getApiTokens } from '../lib/data'
 
 const apiTokenRouter = express.Router()
 
-apiTokenRouter.post('/', (req, res) => {
+apiTokenRouter.post('/api/tokens', (req, res) => {
   const allApiTokens = getApiTokens()
+  const tokensObject: ApiTokens = {
+    name: req.body.name,
+    id: `${uuidv4()}`
+  }
+  allApiTokens.push(tokensObject)
+  setData('apiTokens', allApiTokens)
+  res.json(tokensObject)
 })
+
+export default apiTokenRouter
