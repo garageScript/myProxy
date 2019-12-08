@@ -36,7 +36,7 @@ const getData = (table: string): unknown => {
 // Typescript disable, because this is meant as a helper function to be used with N number of input types
 const setData = (table: string, records: unknown): void => {
   data[table] = records
-  if (table === 'mapping') {
+  if (table === 'mappings') {
     mappingsCache = createDomainCache(data.mappings)
     mappingsDict = createIdCache(data.mappings)
   }
@@ -48,13 +48,13 @@ const setData = (table: string, records: unknown): void => {
       return console.log('writing to DB failed', err)
     }
     console.log('successfully wrote to DB')
-
-    data[table] = records
-    if (table === 'mapping') {
-      mappingsCache = createDomainCache(data.mappings)
-      mappingsDict = createIdCache(data.mappings)
-    }
   })
+
+  data[table] = records
+  if (table === 'mappings') {
+    mappingsCache = createDomainCache(data.mappings)
+    mappingsDict = createIdCache(data.mappings)
+  }
 }
 
 const getProviderKeys = (): ServiceKey[] => {
@@ -77,14 +77,14 @@ const domainToMapping = (domain: string): Mapping => {
 }
 
 const getIdToMapping = (id: string): Mapping => {
-  console.log('mappingsdict', mappingsDict)
+  console.log('id:', id)
+  console.log('mappingdict', mappingsDict)
   return mappingsDict[id]
 }
 
-const deleteDomain = (domain: string): Mapping[] => {
+const deleteDomain = (domain: string): void => {
   delete mappingsCache[domain]
   setData('mappings', Object.values(mappingsCache))
-  return getData('mappings') as Mapping[]
 }
 
 export {
@@ -94,6 +94,6 @@ export {
   getMappings,
   getAvailableDomains,
   domainToMapping,
-  getIdToMapping as idToMapping,
+  getIdToMapping,
   deleteDomain
 }

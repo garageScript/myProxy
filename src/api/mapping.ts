@@ -7,7 +7,7 @@ import {
   setData,
   getMappings,
   domainToMapping,
-  idToMapping,
+  getIdToMapping,
   deleteDomain
 } from '../lib/data'
 import { Mapping } from '../types/general'
@@ -98,7 +98,8 @@ mappingRouter.get('/', (req, res) => {
 })
 
 mappingRouter.delete('/:id', async (req, res) => {
-  const deletedDomain = idToMapping(req.params.id)
+  const deletedDomain = getIdToMapping(req.params.id)
+  console.log('deleted', deletedDomain)
   deleteDomain(deletedDomain.fullDomain)
   if (!isProduction()) {
     return res.json(deletedDomain)
@@ -129,7 +130,7 @@ mappingRouter.get('/download', (req, res) => {
 })
 
 mappingRouter.get('/:id', (req, res) => {
-  const foundDomain = idToMapping(req.params.id)
+  const foundDomain = getIdToMapping(req.params.id)
   res.json(foundDomain || {})
 })
 
