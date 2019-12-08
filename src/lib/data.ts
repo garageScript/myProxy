@@ -1,11 +1,12 @@
 import fs from 'fs'
 import { DB, ServiceKey } from '../types/admin'
-import { Mapping, Domain } from '../types/general'
+import { Mapping, Domain, ApiTokens } from '../types/general'
 
 const data: DB = {
   serviceKeys: [],
   mappings: [],
-  availableDomains: []
+  availableDomains: [],
+  apiTokens: []
 }
 
 fs.readFile('./data.db', (err, file) => {
@@ -59,4 +60,16 @@ const getAvailableDomains = (): Domain[] => {
   return initialData || []
 }
 
-export { getData, setData, getProviderKeys, getMappings, getAvailableDomains }
+const getApiTokens = (): ApiTokens[] => {
+  const initialData = getData('apiTokens') as ApiTokens[] | undefined
+  return initialData || []
+}
+
+export {
+  getData,
+  setData,
+  getProviderKeys,
+  getMappings,
+  getAvailableDomains,
+  getApiTokens
+}
