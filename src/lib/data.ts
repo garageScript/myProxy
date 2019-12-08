@@ -10,7 +10,6 @@ const data: DB = {
 }
 
 let mappingsCache: MappingObj | {} = {}
-
 let mappingsDict: MappingObj | {} = {}
 
 fs.readFile('./data.db', (err, file) => {
@@ -37,6 +36,11 @@ const getData = (table: string): unknown => {
 // Typescript disable, because this is meant as a helper function to be used with N number of input types
 const setData = (table: string, records: unknown): void => {
   data[table] = records
+  if (table === 'mapping') {
+    mappingsCache = createDomainCache(data.mappings)
+    mappingsDict = createIdCache(data.mappings)
+  }
+
   const fileData = `${JSON.stringify(data, null, 2)}`
 
   fs.writeFile('./data.db', fileData, err => {
@@ -45,18 +49,11 @@ const setData = (table: string, records: unknown): void => {
     }
     console.log('successfully wrote to DB')
 
-    // The set of code below will cause error when running
-    // tests if it's pasted outside the writefile context.
-
-    if (table === 'mappings') {
-      const initialData = records as Mapping[]
-      mappingsCache = createDomainCache(initialData)
-      mappingsDict = createIdCache(initialData)
-    }
-    // The line below needs to be here. For some reason,
-    // data[table] value seems to be an old value and
-    //   does not take the records value. Strange.
     data[table] = records
+    if (table === 'mapping') {
+      mappingsCache = createDomainCache(data.mappings)
+      mappingsDict = createIdCache(data.mappings)
+    }
   })
 }
 
@@ -79,7 +76,8 @@ const domainToMapping = (domain: string): Mapping => {
   return mappingsCache[domain]
 }
 
-const idToMapping = (id: string): Mapping => {
+const getIdToMapping = (id: string): Mapping => {
+  console.log('mappingsdict', mappingsDict)
   return mappingsDict[id]
 }
 
@@ -96,6 +94,6 @@ export {
   getMappings,
   getAvailableDomains,
   domainToMapping,
-  idToMapping,
+  getIdToMapping as idToMapping,
   deleteDomain
 }

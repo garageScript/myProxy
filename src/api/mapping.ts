@@ -3,7 +3,13 @@ import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
 import cp from 'child_process'
-import { setData, getMappings, idToMapping, deleteDomain } from '../lib/data'
+import {
+  setData,
+  getMappings,
+  domainToMapping,
+  idToMapping,
+  deleteDomain
+} from '../lib/data'
 import { Mapping } from '../types/general'
 import prodConfigure from '../../scripts/prod.config.js'
 import { getGitUserId } from '../helpers/getGitUser'
@@ -26,7 +32,7 @@ mappingRouter.post('/', async (req, res) => {
   const fullDomain = req.body.subDomain
     ? `${req.body.subDomain}.${req.body.domain}`
     : `${req.body.domain}`
-  const existingSubDomain = domainKeys[fullDomain]
+  const existingSubDomain = domainToMapping(fullDomain)
   if (existingSubDomain)
     return res.status(400).json({
       message: 'Subdomain already exists'
