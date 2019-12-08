@@ -107,8 +107,9 @@ mappingRouter.get('/', async (req, res) => {
     })
 
     res.json(fullDomainStatusMapping)
+  } else {
+    res.json(domains.map(el => ({ ...el, status: 'not started' })))
   }
-  res.json(domains.map(el => ({ ...el, status: 'not started' })))
 })
 
 mappingRouter.delete('/:id', async (req, res) => {
