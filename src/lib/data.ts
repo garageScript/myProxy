@@ -1,11 +1,22 @@
 import fs from 'fs'
+import { createDomainCache, createIdCache } from '../helpers/cache'
 import { DB, ServiceKey } from '../types/admin'
-import { Mapping, Domain } from '../types/general'
+import { Mapping, MappingObj, Domain } from '../types/general'
 
 const data: DB = {
   serviceKeys: [],
   mappings: [],
   availableDomains: []
+}
+
+let domainToMapping: MappingObj | {} = {}
+let idToMapping: MappingObj | {} = {}
+
+const updateCache = (table: string): void => {
+  if (table === 'mappings') {
+    domainToMapping = createDomainCache(data.mappings)
+    idToMapping = createIdCache(data.mappings)
+  }
 }
 
 fs.readFile('./data.db', (err, file) => {
@@ -19,6 +30,9 @@ fs.readFile('./data.db', (err, file) => {
   data.serviceKeys = fileData.serviceKeys || []
   data.mappings = fileData.mappings || []
   data.availableDomains = fileData.availableDomains || []
+
+  domainToMapping = createDomainCache(data.mappings)
+  idToMapping = createIdCache(data.mappings)
 })
 
 // Typescript disable, because this is meant as a helper function to be used with N number of input types
@@ -29,6 +43,8 @@ const getData = (table: string): unknown => {
 // Typescript disable, because this is meant as a helper function to be used with N number of input types
 const setData = (table: string, records: unknown): void => {
   data[table] = records
+  updateCache(table)
+
   const fileData = `${JSON.stringify(data, null, 2)}`
 
   fs.writeFile('./data.db', fileData, err => {
@@ -39,8 +55,9 @@ const setData = (table: string, records: unknown): void => {
 
     // The line below needs to be here. For some reason,
     // data[table] value seems to be an old value and
-    //   does not take the records value. Strange.
+    // does not take the records value. Strange.
     data[table] = records
+    updateCache(table)
   })
 }
 
@@ -59,4 +76,26 @@ const getAvailableDomains = (): Domain[] => {
   return initialData || []
 }
 
-export { getData, setData, getProviderKeys, getMappings, getAvailableDomains }
+const getMappingByDomain = (domain: string): Mapping => {
+  return domainToMapping[domain]
+}
+
+const getMappingById = (id: string): Mapping => {
+  return idToMapping[id]
+}
+
+const deleteDomain = (domain: string): void => {
+  delete domainToMapping[domain]
+  setData('mappings', Object.values(domainToMapping))
+}
+
+export {
+  getData,
+  setData,
+  getProviderKeys,
+  getMappings,
+  getAvailableDomains,
+  getMappingByDomain,
+  getMappingById,
+  deleteDomain
+}

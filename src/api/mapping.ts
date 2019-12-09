@@ -3,7 +3,13 @@ import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
 import cp from 'child_process'
-import { setData, getMappings } from '../lib/data'
+import {
+  setData,
+  getMappings,
+  getMappingByDomain,
+  getMappingById,
+  deleteDomain
+} from '../lib/data'
 import { Mapping } from '../types/general'
 import prodConfigure from '../../scripts/prod.config.js'
 import { getGitUserId } from '../helpers/getGitUser'
@@ -26,7 +32,7 @@ mappingRouter.post('/', async (req, res) => {
   const fullDomain = req.body.subDomain
     ? `${req.body.subDomain}.${req.body.domain}`
     : `${req.body.domain}`
-  const existingSubDomain = domainKeys.find(e => e.fullDomain === fullDomain)
+  const existingSubDomain = getMappingByDomain(fullDomain)
   if (existingSubDomain)
     return res.status(400).json({
       message: 'Subdomain already exists'
@@ -113,12 +119,8 @@ mappingRouter.get('/', async (req, res) => {
 })
 
 mappingRouter.delete('/:id', async (req, res) => {
-  const domains = getMappings()
-  const deletedDomain = domains.find(e => e.id === req.params.id)
-  const updatedDomains = domains.filter(e => {
-    return e.id !== req.params.id
-  })
-  setData('mappings', updatedDomains)
+  const deletedDomain = getMappingById(req.params.id)
+  deleteDomain(deletedDomain.fullDomain)
   if (!isProduction()) {
     return res.json(deletedDomain)
   }
@@ -148,8 +150,7 @@ mappingRouter.get('/download', (req, res) => {
 })
 
 mappingRouter.get('/:id', (req, res) => {
-  const domains = getMappings()
-  const foundDomain = domains.find(e => e.id === req.params.id)
+  const foundDomain = getMappingById(req.params.id)
   res.json(foundDomain || {})
 })
 

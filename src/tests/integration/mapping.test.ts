@@ -1,6 +1,7 @@
 import { startAppServer } from '../../server/server'
 import uuidv4 from 'uuid/v4'
 import { mappingAdapter } from '../helpers/mappingAdapter'
+import { getMappingByDomain } from '../../lib/data'
 
 const TEST_PORT = process.env.PORT || 50604
 const ADMIN = process.env.ADMIN || 'hjhj'
@@ -129,18 +130,15 @@ describe('/api', () => {
     const secondDomain = 'PaulWalker'
     const nextPort = '3523'
     await mappingAdapter('/', 'POST', {
-      subDomain: secondDomain,
+      domain: secondDomain,
       port: nextPort,
-      domain
+      subDomain
     })
 
-    const mappingResponse = await mappingAdapter('/', 'GET')
-    const mappings = await mappingResponse.json()
-
     const firstFullDomain = `${subDomain}.${domain}`
-    const secondFullDomain = `${secondDomain}.${domain}`
-    const match1 = mappings.find(e => e.fullDomain === firstFullDomain)
-    const match2 = mappings.find(e => e.fullDomain === secondFullDomain)
+    const secondFullDomain = `${subDomain}.${secondDomain}`
+    const match1 = getMappingByDomain(firstFullDomain)
+    const match2 = getMappingByDomain(secondFullDomain)
 
     expect(match1.fullDomain).toEqual(firstFullDomain)
     expect(match2.fullDomain).toEqual(secondFullDomain)
