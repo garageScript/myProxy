@@ -101,19 +101,19 @@ class MappingItem {
   }
 }
 
-Promise.all([
-  fetch('/api/mappings').then(r => r.json()),
-  fetch('/api/statuses').then(r => r.json())
-]).then(([mappings, statuses]: [Mapping[], Status[]]) => {
-  domainList.innerHTML = ''
-  Object.values(mappings)
-    .reverse()
-    .filter(e => e.domain && e.port && e.id && e.gitLink && e.fullDomain)
-    .forEach(e => {
-      e.status = statuses[e.fullDomain] || 'not started'
-      new MappingItem(e)
-    })
-})
+fetch('/api/mappings')
+  .then(r => r.json())
+  .then(mappings => {
+    domainList.innerHTML = ''
+    mappings
+      .reverse()
+      .filter(
+        e => e.domain && e.port && e.id && e.gitLink && e.fullDomain && e.status
+      )
+      .forEach(e => {
+        new MappingItem(e)
+      })
+  })
 
 create.onclick = (): void => {
   const subDomain = helper.getElement('.subDomain') as HTMLInputElement
