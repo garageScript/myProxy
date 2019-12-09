@@ -12,6 +12,13 @@ const data: DB = {
 let domainToMapping: MappingObj | {} = {}
 let idToMapping: MappingObj | {} = {}
 
+const updateCache = table => {
+  if (table === 'mappings') {
+    domainToMapping = createDomainCache(data.mappings)
+    idToMapping = createIdCache(data.mappings)
+  }
+}
+
 fs.readFile('./data.db', (err, file) => {
   if (err) {
     return console.log(
@@ -36,10 +43,7 @@ const getData = (table: string): unknown => {
 // Typescript disable, because this is meant as a helper function to be used with N number of input types
 const setData = (table: string, records: unknown): void => {
   data[table] = records
-  if (table === 'mappings') {
-    domainToMapping = createDomainCache(data.mappings)
-    idToMapping = createIdCache(data.mappings)
-  }
+  updateCache(table)
 
   const fileData = `${JSON.stringify(data, null, 2)}`
 
@@ -53,10 +57,7 @@ const setData = (table: string, records: unknown): void => {
     // data[table] value seems to be an old value and
     // does not take the records value. Strange.
     data[table] = records
-    if (table === 'mappings') {
-      domainToMapping = createDomainCache(data.mappings)
-      idToMapping = createIdCache(data.mappings)
-    }
+    updateCache(table)
   })
 }
 
