@@ -9,8 +9,15 @@ const data: DB = {
   availableDomains: []
 }
 
-let mappingsCache: MappingObj | {} = {}
-let mappingsDict: MappingObj | {} = {}
+let domainToMapping: MappingObj | {} = {}
+let idToMapping: MappingObj | {} = {}
+
+const updateCache = table => {
+  if (table === 'mappings') {
+    domainToMapping = createDomainCache(data.mappings)
+    idToMapping = createIdCache(data.mappings)
+  }
+}
 
 fs.readFile('./data.db', (err, file) => {
   if (err) {
@@ -24,8 +31,8 @@ fs.readFile('./data.db', (err, file) => {
   data.mappings = fileData.mappings || []
   data.availableDomains = fileData.availableDomains || []
 
-  mappingsCache = createDomainCache(data.mappings)
-  mappingsDict = createIdCache(data.mappings)
+  domainToMapping = createDomainCache(data.mappings)
+  idToMapping = createIdCache(data.mappings)
 })
 
 // Typescript disable, because this is meant as a helper function to be used with N number of input types
@@ -36,10 +43,7 @@ const getData = (table: string): unknown => {
 // Typescript disable, because this is meant as a helper function to be used with N number of input types
 const setData = (table: string, records: unknown): void => {
   data[table] = records
-  if (table === 'mappings') {
-    mappingsCache = createDomainCache(data.mappings)
-    mappingsDict = createIdCache(data.mappings)
-  }
+  updateCache(table)
 
   const fileData = `${JSON.stringify(data, null, 2)}`
 
@@ -49,35 +53,11 @@ const setData = (table: string, records: unknown): void => {
     }
     console.log('successfully wrote to DB')
 
-    // The set of code below will cause error when running
-    // tests if it's pasted outside the writefile context.
-
-    if (table === 'mappings') {
-      const initialData = records as Mapping[]
-      mappingsCache = initialData.reduce(
-        (obj, item) => ({
-          ...obj,
-          [item.fullDomain]: item
-        }),
-        {}
-      )
-      mappingsDict = initialData.reduce(
-        (obj, item) => ({
-          ...obj,
-          [item.id]: item
-        }),
-        {}
-      )
-    }
     // The line below needs to be here. For some reason,
     // data[table] value seems to be an old value and
     // does not take the records value. Strange.
-
     data[table] = records
-    if (table === 'mappings') {
-      mappingsCache = createDomainCache(data.mappings)
-      mappingsDict = createIdCache(data.mappings)
-    }
+    updateCache(table)
   })
 }
 
@@ -97,16 +77,16 @@ const getAvailableDomains = (): Domain[] => {
 }
 
 const getMappingByDomain = (domain: string): Mapping => {
-  return mappingsCache[domain]
+  return domainToMapping[domain]
 }
 
 const getMappingById = (id: string): Mapping => {
-  return mappingsDict[id]
+  return idToMapping[id]
 }
 
 const deleteDomain = (domain: string): void => {
-  delete mappingsCache[domain]
-  setData('mappings', Object.values(mappingsCache))
+  delete domainToMapping[domain]
+  setData('mappings', Object.values(domainToMapping))
 }
 
 export {
