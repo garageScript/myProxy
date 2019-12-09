@@ -41,7 +41,7 @@ type ProxyMapping = {
   port?: string
 }
 
-type ApiTokens = {
+type AccessToken = {
   name?: string
   id?: string
 }
@@ -54,5 +54,5 @@ export {
   ServiceConfig,
   ProviderService,
   ProxyMapping,
-  ApiTokens
+  AccessToken
 }
