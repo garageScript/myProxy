@@ -65,12 +65,12 @@ class MappingItem {
             href="https://${data.fullDomain}">
             ${data.fullDomain}
           </a>
-          <a class="fa fa-file-text" style="font-size: 15px"
-            href="/api/logs/${data.id}">
-          </a>
           <small class="form-text text-muted ml-1">
             PORT: ${data.port}
           </small>
+          <a class="fa fa-file-text ml-1 mt-1" style="font-size: 15px"
+            href="/api/logs/${data.id}">
+          </a>
         </div>
         <small class="form-text text-muted" style="display: inline-block;">
           ${data.gitLink}
