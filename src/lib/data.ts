@@ -68,7 +68,7 @@ const getProviderKeys = (): ServiceKey[] => {
 
 const getMappings = (): Mapping[] => {
   const initialData = getData('mappings') as Mapping[] | undefined
-  return initialData
+  return initialData || []
 }
 
 const getAvailableDomains = (): Domain[] => {
