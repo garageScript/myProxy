@@ -86,8 +86,9 @@ const getProviderKeys = (): ServiceKey[] => {
   return initialData || []
 }
 
-const getMappings = (): MappingObj | {} => {
-  return mappingsCache || {}
+const getMappings = (): Mapping[] => {
+  const initialData = getData('mappings') as Mapping[] | undefined
+  return initialData
 }
 
 const getAvailableDomains = (): Domain[] => {
