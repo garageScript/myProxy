@@ -5,7 +5,7 @@ import { accessTokensAdapter } from '../helpers/accessTokensAdapter'
 const TEST_PORT = process.env.PORT || 50605
 const ADMIN = process.env.ADMIN || 'hjhj'
 
-describe('/api/accessTokens', () => {
+describe('/api/accessToken', () => {
   let server
 
   beforeAll(async () => {

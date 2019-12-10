@@ -6,7 +6,7 @@ import { setData, getAccessTokens } from '../lib/data'
 
 const accessTokensRouter = express.Router()
 
-accessTokensRouter.post('/accessTokens', (req, res) => {
+accessTokensRouter.post('/', (req, res) => {
   const allApiTokens = getAccessTokens()
   const tokensObject: AccessToken = {
     name: req.body.name,
@@ -15,6 +15,14 @@ accessTokensRouter.post('/accessTokens', (req, res) => {
   allApiTokens.push(tokensObject)
   setData('apiTokens', allApiTokens)
   res.json(tokensObject)
+})
+
+accessTokensRouter.get('/', (req, res) => {
+  res.json([
+    {
+      name: 'hello world'
+    }
+  ])
 })
 
 export default accessTokensRouter
