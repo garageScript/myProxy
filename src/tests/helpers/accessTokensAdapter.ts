@@ -21,7 +21,7 @@ const accessTokensAdapter = (
   if (body) {
     options.body = JSON.stringify(body)
   }
-  return fetch(`${apiURL}/accessTokens${path}`, options)
+  return fetch(`${apiURL}/api/accessTokens${path}`, options)
 }
 
 export { accessTokensAdapter }
