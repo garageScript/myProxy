@@ -8,21 +8,24 @@ const accessTokensRouter = express.Router()
 
 accessTokensRouter.post('/', (req, res) => {
   const allAccessTokens = getAccessTokens()
+  allAccessTokens.find
   const tokensObject: AccessToken = {
     name: req.body.name,
     id: `${uuidv4()}`
   }
+  const existingToken = allAccessTokens.find(e => e.name === tokensObject.name)
+  if (existingToken)
+    return res.status(400).json({
+      message: 'This token alreadu exits'
+    })
   allAccessTokens.push(tokensObject)
   setData('apiTokens', allAccessTokens)
   res.json(tokensObject)
 })
 
 accessTokensRouter.get('/', (req, res) => {
-  res.json([
-    {
-      name: 'hello world'
-    }
-  ])
+  const tokens = getAccessTokens()
+  res.json(tokens)
 })
 
 export default accessTokensRouter

@@ -3,7 +3,7 @@ import adminRouter from './admin'
 import mappingRouter from './mapping'
 import sshKeyRouter from './sshKeys'
 import statusRouter from './serverStatus'
-import accessTokensRouter from './accessTokens'
+import accessTokensRouter from './accessToken'
 import { getAvailableDomains } from '../lib/data'
 
 const apiRouter = express.Router()

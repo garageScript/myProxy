@@ -17,11 +17,23 @@ describe('/api/accessTokens', () => {
   })
 
   it('checks to see if accesstoken is created', async () => {
-    const name = 'c0d3access'
+    const name = `c0d3access${uuidv4()}`
     const postResponse = await accessTokensAdapter('/', 'POST', {
       name
     })
     const postAccessToken = await postResponse.json()
     expect(postAccessToken.name).toEqual(name)
+  })
+  it('checks to see if dupicate names are not created', async () => {
+    const firstName = `c0d3access${uuidv4()}`
+    const postResponse = await accessTokensAdapter('/', 'POST', {
+      name: firstName
+    })
+    expect(postResponse.status).toEqual(200)
+    const secondName = firstName
+    const duplicatePostResponse = await accessTokensAdapter('/', 'POST', {
+      name: secondName
+    })
+    expect(duplicatePostResponse.status).toEqual(400)
   })
 })
