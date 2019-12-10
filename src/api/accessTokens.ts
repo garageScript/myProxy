@@ -7,13 +7,13 @@ import { setData, getAccessTokens } from '../lib/data'
 const accessTokensRouter = express.Router()
 
 accessTokensRouter.post('/', (req, res) => {
-  const allApiTokens = getAccessTokens()
+  const allAccessTokens = getAccessTokens()
   const tokensObject: AccessToken = {
     name: req.body.name,
     id: `${uuidv4()}`
   }
-  allApiTokens.push(tokensObject)
-  setData('apiTokens', allApiTokens)
+  allAccessTokens.push(tokensObject)
+  setData('apiTokens', allAccessTokens)
   res.json(tokensObject)
 })
 
