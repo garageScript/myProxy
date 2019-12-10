@@ -22,7 +22,6 @@ describe('/api/accessTokens', () => {
       name
     })
     const postAccessToken = await postResponse.json()
-    console.log('PostAccessToken:', postAccessToken)
     expect(postAccessToken.name).toEqual(name)
   })
 })
