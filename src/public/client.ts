@@ -69,7 +69,7 @@ class MappingItem {
             PORT: ${data.port}
           </small>
           <a class="fa fa-file-text-o ml-1 mt-1" style="font-size: 15px"
-            href="/api/logs/${data.domain}">
+            href="/api/logs/${data.fullDomain}">
           </a>
         </div>
         <small class="form-text text-muted" style="display: inline-block;">
