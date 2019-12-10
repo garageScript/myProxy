@@ -45,8 +45,9 @@ mappingRouter.post('/', async (req, res) => {
   const prodConfigApp = [...prodConfigure.apps][0]
   prodConfigApp.name = fullDomain
   prodConfigApp.env_production.PORT = parseInt(req.body.port || portCounter, 10)
-  prodConfigApp.script = 'npm'
-  prodConfigApp.args = 'run start:myproxy'
+  prodConfigApp.script = `npm run start:myproxy << /home/myproxy/.pm2/logs/${fullDomain}-out.log`
+  prodConfigApp['error_file'] = `/home/myproxy/.pm2/logs/${fullDomain}-err.log`
+  prodConfigApp['merge_logs'] = 'true'
   const prodConfig = {
     apps: prodConfigApp
   }

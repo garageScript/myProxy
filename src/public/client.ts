@@ -41,15 +41,19 @@ class MappingItem {
     const mappingElement = document.createElement('li')
     let iconClass
     let iconColor
+    let errLogClass
+    let infoLogClass
     if (data.status === 'online') {
       iconClass = 'fa fa-circle mr-1 mt-1'
       iconColor = 'rgba(50,255,50,0.5)'
+      errLogClass = 'fa fa-file-text-o ml-1 mt-1'
     } else if (data.status === 'not started') {
       iconClass = ''
       iconColor = 'transparent'
     } else {
       iconClass = 'fa fa-circle mr-1 mt-1'
       iconColor = 'rgba(255, 50, 50, 0.5)'
+      errLogClass = 'fa fa-file-text-o ml-1 mt-1'
     }
     mappingElement.classList.add(
       'list-group-item',
@@ -68,8 +72,10 @@ class MappingItem {
           <small class="form-text text-muted ml-1">
             PORT: ${data.port}
           </small>
-          <a class="fa fa-file-text-o ml-1 mt-1" style="font-size: 15px"
-            href="/api/logs/${data.fullDomain}">
+          <a class="${errLogClass}" style="font-size: 15px; color: rgba(255,50,50,0.5)"
+            href="/api/logs/${data.fullDomain}/err">
+          </a>
+          <a class="${infoLogClass}" style="font-size: 15px" href="/api/logs/${data.fullDomain}/log">
           </a>
         </div>
         <small class="form-text text-muted" style="display: inline-block;">
