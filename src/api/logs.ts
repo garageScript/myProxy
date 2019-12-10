@@ -1,9 +1,6 @@
 import express from 'express'
-// import environment from '../helpers/environment'
 import fs from 'fs'
 import { getMappingByDomain } from '../lib/data'
-
-// const { isProduction } = environment
 
 const logsRouter = express.Router()
 
@@ -13,13 +10,19 @@ logsRouter.get('/:domain', (req, res) => {
 
   res.setHeader('content-type', 'text/plain')
   fs.readdir('/home/myproxy/.pm2/logs', (err, files) => {
-    if (err) res.end({ error: err })
-    const re = new RegExp(`${fullDomain}-error-\\d.log`, 'g')
+    if (err) return res.status(500).send({ error: err })
+    const re = new RegExp(`^${fullDomain}-error-\\d.log`, 'g')
     const matches = files.filter(file => file.match(re))
-    // This loops through matches to find latest log file
-    const file = matches.reduce(
-      (latest, current) => (latest < current ? current : latest),
-      ''
+    /*
+        PM2 logs file as domain-error-#.log. When the user
+        first creates the domain it would be domain-error-0.log.
+        However, when the user deletes the app and recreate the app
+        using the same name, the error log would be domain-error-1.log
+        The code below always ensures the current log file is being 
+        fetched.
+    */
+    const file = matches.reduce((latest, current) =>
+      latest < current ? current : latest
     )
     fs.createReadStream(`/home/myproxy/.pm2/logs/${file}`).pipe(res)
   })
