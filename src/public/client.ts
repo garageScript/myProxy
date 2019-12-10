@@ -77,7 +77,7 @@ class MappingItem {
           <a class="${errLogClass}" style="font-size: 15px; color: rgba(255,50,50,0.5)"
             href="/api/logs/${data.fullDomain}/err">
           </a>
-          <a class="${infoLogClass}" style="font-size: 15px" href="/api/logs/${data.fullDomain}/log">
+          <a class="${infoLogClass}" style="font-size: 15px" href="/api/logs/${data.fullDomain}/out">
           </a>
         </div>
         <small class="form-text text-muted" style="display: inline-block;">
