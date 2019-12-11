@@ -24,17 +24,13 @@ describe('/api/logs', () => {
       subDomain,
       port
     })
-
     const postMapping = await postResponse.json()
-
     const logResponse = await logAdapter(
       `/out/${postMapping.fullDomain}`,
       'GET',
       'logs'
     )
-
     expect(logResponse.status).toEqual(200)
-
     await logAdapter(`/${postMapping.id}`, 'DELETE', 'mappings')
   })
 
@@ -47,17 +43,13 @@ describe('/api/logs', () => {
       subDomain,
       port
     })
-
     const postMapping = await postResponse.json()
-
     const logResponse = await logAdapter(
       `/err/${postMapping.fullDomain}`,
       'GET',
       'logs'
     )
-
     expect(logResponse.status).toEqual(200)
-
     await logAdapter(`/${postMapping.id}`, 'DELETE', 'mappings')
   })
 })
