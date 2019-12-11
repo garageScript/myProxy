@@ -8,6 +8,10 @@ type Mapping = {
   fullDomain: string
 }
 
+type MappingObj = {
+  string: Mapping
+}
+
 type Provider = {
   id: string
   service: string
@@ -48,6 +52,7 @@ type AccessToken = {
 
 export {
   Mapping,
+  MappingObj,
   Provider,
   Domain,
   ServiceResponse,
