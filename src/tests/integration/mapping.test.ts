@@ -54,11 +54,9 @@ describe('/api', () => {
     expect(postMapping.subDomain).toEqual(subDomain)
     expect(postMapping.fullDomain).toEqual(`${domain}`)
 
-    const mappingData = await mappingAdapter(`/${postMapping.id}`, 'GET').then(
-      r => {
-        r.json()
-      }
-    )
+    const mappingResponse = await mappingAdapter(`/${postMapping.id}`, 'GET')
+    const mappingData = await mappingResponse.json()
+
     expect(mappingData.port).toEqual(port)
     expect(mappingData.domain).toEqual(domain)
     expect(mappingData.subDomain).toEqual(subDomain)

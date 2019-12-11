@@ -42,7 +42,7 @@ describe('/api/accessTokens', () => {
     const updatedTokens = await accessTokensAdapter('/', 'GET').then(r =>
       r.json()
     )
-    const allTokens = updatedTokens.filter(e => e.name === name)
-    expect(allTokens.lenght).toEqual(1)
+    const allTokens = updatedTokens.filter(e => e.name === firstName)
+    expect(allTokens.length).toEqual(1)
   })
 })
