@@ -9,6 +9,8 @@ import environment from '../helpers/environment'
 const { HOME } = environment
 const acmePath = `${HOME}/.acme.sh`
 const readFileAsync = util.promisify(fs.readFile)
+let key
+let cert
 
 const readFile = async (path: string) => {
   const data = await readFileAsync(path, 'utf8')
@@ -22,8 +24,8 @@ const SNICallback = async (host, cb) => {
   const wildstar = subDomains.length > 0 ? '*.' : ''
   const keyPath = `${acmePath}/${wildstar}${domain}/${wildstar}${domain}\.key`
   const certPath = `${acmePath}/${wildstar}${domain}/fullchain.cer`
-  const key = await readFile(keyPath)
-  const cert = await readFile(certPath)
+  if (!key) key = await readFile(keyPath)
+  if (!cert) cert = await readFile(certPath)
   const secureContext = tls.createSecureContext({ key, cert })
   if (cb) return cb(null, secureContext)
   return secureContext
