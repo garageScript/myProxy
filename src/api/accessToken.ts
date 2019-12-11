@@ -7,21 +7,22 @@ import { setData, getAccessTokens } from '../lib/data'
 const accessTokensRouter = express.Router()
 
 accessTokensRouter.post('/', (req, res) => {
-  const allAccessTokens = getAccessTokens()
   if (req.body.name.length < 2) {
     return res.status(400).json({
       message: 'invalid name'
+    })
+  }
+  const allAccessTokens = getAccessTokens()
+  const existingToken = allAccessTokens.find(e => e.name === req.body.name)
+  if (existingToken) {
+    return res.status(400).json({
+      message: 'This token already exits'
     })
   }
   const tokensObject: AccessToken = {
     name: req.body.name,
     id: `${uuidv4()}`
   }
-  const existingToken = allAccessTokens.find(e => e.name === tokensObject.name)
-  if (existingToken)
-    return res.status(400).json({
-      message: 'This token already exits'
-    })
   allAccessTokens.push(tokensObject)
   setData('apiTokens', allAccessTokens)
   res.json(tokensObject)
