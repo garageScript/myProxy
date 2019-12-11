@@ -24,8 +24,8 @@ describe('/api/accessTokens', () => {
     const postAccessToken = await postResponse.json()
     expect(postAccessToken.name).toEqual(name)
     const getTokens = await accessTokensAdapter('/', 'GET').then(r => r.json())
-    const tokenExists = getTokens.find(e => e.name === name)
-    if (tokenExists) return `Access token for ${name} was created successfully!`
+    const foundToken = getTokens.find(e => e.name === name)
+    expect(foundToken.name).toEqual(name)
   })
 
   it('should not allow dulplicate tokens', async () => {
