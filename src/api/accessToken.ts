@@ -8,7 +8,11 @@ const accessTokensRouter = express.Router()
 
 accessTokensRouter.post('/', (req, res) => {
   const allAccessTokens = getAccessTokens()
-  allAccessTokens.find
+  if (req.body.name.length < 2) {
+    return res.status(400).json({
+      message: 'invalid name'
+    })
+  }
   const tokensObject: AccessToken = {
     name: req.body.name,
     id: `${uuidv4()}`
@@ -16,7 +20,7 @@ accessTokensRouter.post('/', (req, res) => {
   const existingToken = allAccessTokens.find(e => e.name === tokensObject.name)
   if (existingToken)
     return res.status(400).json({
-      message: 'This token alreadu exits'
+      message: 'This token already exits'
     })
   allAccessTokens.push(tokensObject)
   setData('apiTokens', allAccessTokens)

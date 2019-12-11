@@ -16,15 +16,19 @@ describe('/api/accessTokens', () => {
     server.close()
   })
 
-  it('checks to see if accesstoken is created', async () => {
+  it('should create an access token successfully', async () => {
     const name = `c0d3access${uuidv4()}`
     const postResponse = await accessTokensAdapter('/', 'POST', {
       name
     })
     const postAccessToken = await postResponse.json()
     expect(postAccessToken.name).toEqual(name)
+    const getTokens = await accessTokensAdapter('/', 'GET').then(r => r.json())
+    const tokenExists = getTokens.find(e => e.name === name)
+    if (tokenExists) return `Access token for ${name} was created successfully!`
   })
-  it('checks to see if dupicate names are not created', async () => {
+
+  it('should not allow dulplicate tokens', async () => {
     const firstName = `c0d3access${uuidv4()}`
     const postResponse = await accessTokensAdapter('/', 'POST', {
       name: firstName
@@ -35,5 +39,10 @@ describe('/api/accessTokens', () => {
       name: secondName
     })
     expect(duplicatePostResponse.status).toEqual(400)
+    const updatedTokens = await accessTokensAdapter('/', 'GET').then(r =>
+      r.json()
+    )
+    const allTokens = updatedTokens.filter(e => e.name === name)
+    expect(allTokens.lenght).toEqual(1)
   })
 })
