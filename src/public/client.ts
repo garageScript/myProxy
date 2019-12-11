@@ -74,11 +74,11 @@ class MappingItem {
           </small>
           <a class="${logClass}"
             style="font-size: 15px; color: rgba(255,50,50,0.5)"
-            href="/api/logs/${data.fullDomain}/err">
+            href="/api/logs/err/${data.fullDomain}">
           </a>
           <a class="${logClass}"
            style="font-size: 15px; color: rgba(40,167,70,0.5)"
-           href="/api/logs/${data.fullDomain}/out">
+           href="/api/logs/out/${data.fullDomain}">
           </a>
         </div>
         <small class="form-text text-muted" style="display: inline-block;">
