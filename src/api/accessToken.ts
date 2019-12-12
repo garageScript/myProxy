@@ -42,7 +42,7 @@ accessTokensRouter.delete('/:id', (req, res) => {
       return true
     }
   })
-  setData('apiTokens', tokens)
+  setData('accessToken', tokens)
 })
 
 export default accessTokensRouter

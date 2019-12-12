@@ -52,19 +52,13 @@ describe('/api/accessTokens', () => {
       name
     })
     expect(postResponse.status).toEqual(200)
-    const postToken = postResponse
+    const postResult = postResponse
       .json()
       .then(data => console.log('DATA:', data))
-    const tokens = await accessTokensAdapter(`/${postToken.id}`, 'GET').then(
-      r => r.json()
-    )
-    console.log('ALL TOKENS:', tokens)
-    tokens.forEach((e, i) => {
-      if (e.name === name) {
-        tokens.splice(i, 1)
-      }
-    })
-    console.log('POST DELETE:', tokens)
+    //const selectedToken = await accessTokensAdapter(`/${postResult.id}`, 'GET').then(
+    //r => r.json()
+    //)
+    //console.log('Delete Token:', selectedToken)
 
     //const foundToken = tokens.find(e => e.name === name)
     //expect(!foundToken).toEqual(true)
