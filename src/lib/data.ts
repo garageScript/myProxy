@@ -13,7 +13,7 @@ const data: DB = {
 let domainToMapping: MappingById = {}
 let idToMapping: MappingById = {}
 
-const updateCache = (table: keyof typeof data): void => {
+const updateCache = (table: keyof DB): void => {
   if (table === 'mappings') {
     domainToMapping = createDomainCache(data.mappings)
     idToMapping = createIdCache(data.mappings)
