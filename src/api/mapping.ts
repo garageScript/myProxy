@@ -22,7 +22,7 @@ const getNextPort = (map, start = 3002): number => {
   return getNextPort(map, start)
 }
 
-const { WORKPATH, isProduction, isTest } = environment
+const { WORKPATH, isProduction } = environment
 
 mappingRouter.post('/', async (req, res) => {
   const domainKeys = getMappings()
@@ -95,7 +95,7 @@ mappingRouter.post('/', async (req, res) => {
 
 mappingRouter.get('/', async (req, res) => {
   const domains = getMappings()
-  if (isTest())
+  if (!isProduction())
     return res.json(domains.map(el => ({ ...el, status: 'not started' })))
   const data = await exec('su - myproxy -c "pm2 jlist"')
 
@@ -122,9 +122,7 @@ mappingRouter.get('/', async (req, res) => {
 mappingRouter.delete('/:id', async (req, res) => {
   const deletedDomain = getMappingById(req.params.id)
   deleteDomain(deletedDomain.fullDomain)
-  if (!isProduction()) {
-    return res.json(deletedDomain)
-  }
+  if (!isProduction()) return res.json(deletedDomain)
   const gitUserId = await getGitUserId()
   exec(
     `
