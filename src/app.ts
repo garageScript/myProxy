@@ -3,7 +3,9 @@ import environment from './helpers/environment'
 
 const { PORT, ADMIN_PASS, isProduction } = environment
 
-startAppServer(PORT, ADMIN_PASS)
+startAppServer(PORT, ADMIN_PASS).catch(error =>
+  console.error(`startAppServer: ${error}`)
+)
 
 /**
  * Proxy Server will create SSL Certificates on the server
