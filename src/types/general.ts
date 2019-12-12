@@ -8,6 +8,10 @@ type Mapping = {
   fullDomain: string
 }
 
+type MappingById = {
+  [mappingId: string]: Mapping
+}
+
 type Provider = {
   id: string
   service: string
@@ -41,12 +45,19 @@ type ProxyMapping = {
   port?: string
 }
 
+type AccessToken = {
+  name?: string
+  id?: string
+}
+
 export {
   Mapping,
+  MappingById,
   Provider,
   Domain,
   ServiceResponse,
   ServiceConfig,
   ProviderService,
-  ProxyMapping
+  ProxyMapping,
+  AccessToken
 }

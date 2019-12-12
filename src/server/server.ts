@@ -9,7 +9,7 @@ import cookieParser from 'cookie-parser'
 import { adminRouter } from '../admin/index'
 import { apiRouter } from '../api/index'
 import { hashPass } from '../helpers/crypto'
-import { getAvailableDomains, getMappings } from '../lib/data'
+import { getAvailableDomains, getMappingByDomain } from '../lib/data'
 import { setupAuth, isCorrectCredentials } from '../auth'
 import { ProxyMapping } from '../types/general'
 import { SNICallback } from '../helpers/SNICallback'
@@ -91,11 +91,8 @@ const startProxyServer = (): void => {
 
   const server = https.createServer({ SNICallback }, (req, res) => {
     try {
-      const mappings = getMappings()
       const { ip, port }: ProxyMapping =
-        mappings.find(({ subDomain, domain }) => {
-          return `${subDomain}.${domain}` === req.headers.host
-        }) || {}
+        getMappingByDomain(req.headers.host) || {}
       if (!port || !ip) return res.end('Not Found')
       proxy.web(req, res, { target: `http://${ip}:${port}` }, err => {
         console.error('Error communicating with server', err)
@@ -106,8 +103,13 @@ const startProxyServer = (): void => {
       return res.end(`Error: failed to create proxy ${req.headers.host}`)
     }
   })
-  server.listen(443)
 
+  server.on('upgrade', function(req, socket) {
+    const { ip, port }: ProxyMapping =
+      getMappingByDomain(req.headers.host) || {}
+    if (port) return proxy.ws(req, socket, { target: `http://${ip}:${port}` })
+  })
+  server.listen(443)
   const httpApp = express()
   httpApp.get('/*', (req, res) => {
     const paramCheck = req.headers.host.split('?')[1]

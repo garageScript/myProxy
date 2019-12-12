@@ -103,7 +103,7 @@ app.get('/', (req, res) => {
 app.listen(process.env.PORT || 8123);
 ```
 
-7. Update scripts section of package.JSON with `"start": "node app.js"`
+7. Update scripts section of package.JSON with `"start:myproxy": "node app.js"`
 8. Run `git add .`
 9. Run `git commit -m "Initial Commit"`
 10. Run `git push origin master`

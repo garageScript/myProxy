@@ -1,6 +1,7 @@
 import { startAppServer } from '../../server/server'
 import uuidv4 from 'uuid/v4'
 import { mappingAdapter } from '../helpers/mappingAdapter'
+import { getMappingByDomain } from '../../lib/data'
 
 const TEST_PORT = process.env.PORT || 50604
 const ADMIN = process.env.ADMIN || 'hjhj'
@@ -30,15 +31,39 @@ describe('/api', () => {
     expect(postMapping.subDomain).toEqual(subDomain)
     expect(postMapping.domain).toEqual(domain)
     expect(postMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
-    const deleteResponse = await mappingAdapter(
-      `/delete/${postMapping.id}`,
-      'DELETE'
-    )
+    const deleteResponse = await mappingAdapter(`/${postMapping.id}`, 'DELETE')
     expect(deleteResponse.status).toEqual(200)
     const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
     expect(getMapping.status).toEqual(200)
     const mappingData = await getMapping.json()
     expect(Object.keys(mappingData).length).toEqual(0)
+  })
+
+  it('checks mappings for newly added root domain', async () => {
+    const subDomain = ''
+    const domain = `rahul${Date.now()}`
+    const port = '5612'
+    const postResponse = await mappingAdapter('/', 'POST', {
+      subDomain,
+      domain,
+      port
+    })
+    const postMapping = await postResponse.json()
+    expect(postMapping.port).toEqual(port)
+    expect(postMapping.domain).toEqual(domain)
+    expect(postMapping.subDomain).toEqual(subDomain)
+    expect(postMapping.fullDomain).toEqual(`${domain}`)
+
+    const mappingResponse = await mappingAdapter(`/${postMapping.id}`, 'GET')
+    const mappingData = await mappingResponse.json()
+
+    expect(mappingData.port).toEqual(port)
+    expect(mappingData.domain).toEqual(domain)
+    expect(mappingData.subDomain).toEqual(subDomain)
+    expect(mappingData.fullDomain).toEqual(`${domain}`)
+
+    const deleteResponse = await mappingAdapter(`/${postMapping.id}`, 'DELETE')
+    expect(deleteResponse.status).toEqual(200)
   })
 
   it('Delete mapping', async () => {
@@ -52,7 +77,7 @@ describe('/api', () => {
     })
     expect(createMapping.status).toEqual(200)
     const mapping = await createMapping.json()
-    const delMapping = await mappingAdapter(`/delete/${mapping.id}`, 'DELETE')
+    const delMapping = await mappingAdapter(`/${mapping.id}`, 'DELETE')
     expect(delMapping.status).toEqual(200)
     const deletedMapping = await delMapping.json()
     expect(deletedMapping.port).toEqual(port)
@@ -64,45 +89,6 @@ describe('/api', () => {
     expect(getMapping.status).toEqual(200)
     const mappingData = await getMapping.json()
     expect(Object.keys(mappingData).length).toEqual(0)
-  })
-
-  it('checks if changes to the resource has been saved', async () => {
-    const subDomain = `testing${uuidv4()}`
-    const domain = 'integration'
-    const port = '3457'
-    const ip = '123.23.25'
-
-    // Create mapping
-    const mapping = await mappingAdapter('/', 'POST', {
-      domain,
-      subDomain,
-      ip,
-      port
-    }).then(r => r.json())
-
-    // Patch created mapping with different port
-    //     and make sure patch resolves correctly
-    const newPort = '2345'
-    const newIp = '234.34.36'
-    const patchMapping = await mappingAdapter(`/${mapping.id}`, 'PATCH', {
-      port: newPort,
-      ip: newIp
-    })
-    expect(patchMapping.status).toEqual(200)
-    const patchedMapping = await patchMapping.json()
-    expect(patchedMapping.id).toEqual(mapping.id)
-
-    // Get the mapping id to make sure the change is persisted
-    const getMapping = await mappingAdapter(`/${mapping.id}`, 'GET')
-    expect(getMapping.status).toEqual(200)
-    const mappingData = await getMapping.json()
-    expect(mappingData.port).toEqual(newPort)
-    expect(mappingData.ip).toEqual(newIp)
-    expect(mappingData.id).toEqual(mapping.id)
-
-    // Cleanup: Delete the mapping
-    const delMapping = await mappingAdapter(`/delete/${mapping.id}`, 'DELETE')
-    expect(delMapping.status).toEqual(200)
   })
 
   it('checks no duplicate subdomain is created for same domain', async () => {
@@ -122,14 +108,58 @@ describe('/api', () => {
     })
     expect(duplicatePostResponse.status).toEqual(400)
     const postMapping = await postResponse.json()
-    const deleteResponse = await mappingAdapter(
-      `/delete/${postMapping.id}`,
-      'DELETE'
-    )
+    const deleteResponse = await mappingAdapter(`/${postMapping.id}`, 'DELETE')
     expect(deleteResponse.status).toEqual(200)
+
     const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
     expect(getMapping.status).toEqual(200)
     const mappingData = await getMapping.json()
     expect(Object.keys(mappingData).length).toEqual(0)
+  })
+
+  it('checks same subdomain can be used for different domains', async () => {
+    const subDomain = `testing${uuidv4()}`
+    const domain = 'VinDiesel'
+    const port = '3522'
+    await mappingAdapter('/', 'POST', {
+      domain,
+      subDomain,
+      port
+    })
+
+    const secondDomain = 'PaulWalker'
+    const nextPort = '3523'
+    await mappingAdapter('/', 'POST', {
+      domain: secondDomain,
+      port: nextPort,
+      subDomain
+    })
+
+    const firstFullDomain = `${subDomain}.${domain}`
+    const secondFullDomain = `${subDomain}.${secondDomain}`
+    const match1 = getMappingByDomain(firstFullDomain)
+    const match2 = getMappingByDomain(secondFullDomain)
+
+    expect(match1.fullDomain).toEqual(firstFullDomain)
+    expect(match2.fullDomain).toEqual(secondFullDomain)
+    await mappingAdapter(`/${match1.id}`, 'DELETE')
+    await mappingAdapter(`/${match2.id}`, 'DELETE')
+  })
+
+  it('checks status is returned when querying mappings', async () => {
+    const subDomain = uuidv4()
+    const domain = 'VinDiesel'
+    const port = '3533'
+    await mappingAdapter('/', 'POST', {
+      domain,
+      subDomain,
+      port
+    })
+
+    const getResponse = await mappingAdapter('/', 'GET')
+    const getMappings = await getResponse.json()
+
+    expect(getMappings[0].status).toEqual('not started')
+    await mappingAdapter(`/${getMappings[0].id}`, 'DELETE')
   })
 })

@@ -3,7 +3,13 @@ import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
 import cp from 'child_process'
-import { setData, getMappings } from '../lib/data'
+import {
+  setData,
+  getMappings,
+  getMappingByDomain,
+  getMappingById,
+  deleteDomain
+} from '../lib/data'
 import { Mapping } from '../types/general'
 import prodConfigure from '../../scripts/prod.config.js'
 import { getGitUserId } from '../helpers/getGitUser'
@@ -23,24 +29,24 @@ mappingRouter.post('/', async (req, res) => {
   if (parseInt(req.body.port) < 3001) {
     return res.status(400).json({ message: 'Port cannot be smaller than 3001' })
   }
-  const existingSubDomain = domainKeys.find(
-    e => e.subDomain === req.body.subDomain
-  )
+  const fullDomain = req.body.subDomain
+    ? `${req.body.subDomain}.${req.body.domain}`
+    : `${req.body.domain}`
+  const existingSubDomain = getMappingByDomain(fullDomain)
   if (existingSubDomain)
-    return res
-      .status(400)
-      .send('cannot create new mapping because subDomain already exists')
+    return res.status(400).json({
+      message: 'Subdomain already exists'
+    })
   const map = domainKeys.reduce((acc, e) => {
     acc[e.port] = true
     return acc
   }, {})
   const portCounter = getNextPort(map)
-  const fullDomain = `${req.body.subDomain}.${req.body.domain}`
   const prodConfigApp = [...prodConfigure.apps][0]
   prodConfigApp.name = fullDomain
   prodConfigApp.env_production.PORT = parseInt(req.body.port || portCounter, 10)
   prodConfigApp.script = 'npm'
-  prodConfigApp.args = 'start'
+  prodConfigApp.args = 'run start:myproxy'
   const prodConfig = {
     apps: prodConfigApp
   }
@@ -72,6 +78,7 @@ mappingRouter.post('/', async (req, res) => {
       git init ${fullDomain}
       cp ${scriptPath}/post-receive ${fullDomain}/.git/hooks/
       cp ${scriptPath}/pre-receive ${fullDomain}/.git/hooks/
+      cp ${scriptPath}/.gitignore ${fullDomain}/.gitignore
       cd ${fullDomain}
       git config user.email "root@ipaddress"
       git config user.name "user"
@@ -85,18 +92,37 @@ mappingRouter.post('/', async (req, res) => {
   })
 })
 
-mappingRouter.get('/', (req, res) => {
+mappingRouter.get('/', async (req, res) => {
   const domains = getMappings()
-  res.json(domains)
+  if (isProduction()) {
+    const data = await exec('su - myproxy -c "pm2 jlist"')
+
+    const outArr = data.stdout.split('\n')
+
+    const statusData = JSON.parse(outArr[outArr.length - 1]).reduce(
+      (statusObj, el) => ({
+        ...statusObj,
+        [el.name]: el.pm2_env.status
+      }),
+      {}
+    )
+    const fullDomainStatusMapping = domains.map(el => {
+      if (statusData[el.fullDomain]) {
+        return { ...el, status: statusData[el.fullDomain] }
+      } else {
+        return { ...el, status: 'not started' }
+      }
+    })
+
+    res.json(fullDomainStatusMapping)
+  } else {
+    res.json(domains.map(el => ({ ...el, status: 'not started' })))
+  }
 })
 
-mappingRouter.delete('/delete/:id', async (req, res) => {
-  const domains = getMappings()
-  const deletedDomain = domains.find(e => e.id === req.params.id)
-  const updatedDomains = domains.filter(e => {
-    return e.id !== req.params.id
-  })
-  setData('mappings', updatedDomains)
+mappingRouter.delete('/:id', async (req, res) => {
+  const deletedDomain = getMappingById(req.params.id)
+  deleteDomain(deletedDomain.fullDomain)
   if (!isProduction()) {
     return res.json(deletedDomain)
   }
@@ -116,63 +142,6 @@ mappingRouter.delete('/delete/:id', async (req, res) => {
   })
 })
 
-mappingRouter.patch('/:id', async (req, res) => {
-  const domains = getMappings()
-
-  // Make sure this domain actually exist
-  const existingDomain = domains.find(e => e.id === req.params.id)
-  if (!existingDomain) {
-    return res.status(400)
-  }
-
-  const domainList = domains.map((element: Mapping) => {
-    if (element.id === req.params.id) {
-      if (req.body.port) {
-        element.port = req.body.port
-      }
-      if (req.body.ip) {
-        element.ip = req.body.ip
-      }
-    }
-    return element
-  })
-  setData('mappings', domainList)
-
-  const updatedDomain = domains.find(
-    (element: Mapping) => element.id === req.params.id
-  )
-  const prodConfigApp = [...prodConfigure.apps][0]
-  prodConfigApp.name = updatedDomain.fullDomain
-  prodConfigApp.env_production.PORT = parseInt(updatedDomain.port, 10)
-  prodConfigApp.script = 'npm'
-  prodConfigApp.args = 'start'
-  const updatedConfig = {
-    apps: prodConfigApp
-  }
-
-  if (!isProduction()) {
-    return res.json(updatedDomain)
-  }
-
-  const gitUserId = await getGitUserId()
-  /*eslint-disable */
-  exec(
-    `
-      cd ${WORKPATH}/${updatedDomain.fullDomain}
-      echo 'module.exports = ${JSON.stringify(
-        updatedConfig
-      )}' > deploy.config.js
-      git add .
-      git commit -m "Edits deploy config file"
-      `,
-    /*eslint-enable */
-    { uid: gitUserId }
-  ).then(() => {
-    res.json(updatedDomain)
-  })
-  return res.json(updatedDomain)
-})
-
 mappingRouter.get('/download', (req, res) => {
   const filePath = `${WORKPATH}/${req.query.fullDomain}/deploy.config.js`
   res.setHeader('Content-disposition', 'attachment; filename=deploy.config.js')
@@ -183,8 +152,7 @@ mappingRouter.get('/download', (req, res) => {
 })
 
 mappingRouter.get('/:id', (req, res) => {
-  const domains = getMappings()
-  const foundDomain = domains.find(e => e.id === req.params.id)
+  const foundDomain = getMappingById(req.params.id)
   res.json(foundDomain || {})
 })
 
