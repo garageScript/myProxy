@@ -33,6 +33,12 @@ accessTokensRouter.get('/', (req, res) => {
   res.json(tokens)
 })
 
+accessTokensRouter.get('/:id', (req, res) => {
+  const tokens = getAccessTokens()
+  const found = tokens.find(t => t.id === req.params.id)
+  res.json(found || {})
+})
+
 accessTokensRouter.delete('/:id', (req, res) => {
   const tokens = getAccessTokens()
   tokens.find((e, i) => {
