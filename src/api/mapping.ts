@@ -22,7 +22,7 @@ const getNextPort = (map, start = 3002): number => {
   return getNextPort(map, start)
 }
 
-const { WORKPATH, isProduction } = environment
+const { WORKPATH, isProduction, isTest } = environment
 
 mappingRouter.post('/', async (req, res) => {
   const domainKeys = getMappings()
@@ -95,30 +95,28 @@ mappingRouter.post('/', async (req, res) => {
 
 mappingRouter.get('/', async (req, res) => {
   const domains = getMappings()
-  if (isProduction()) {
-    const data = await exec('su - myproxy -c "pm2 jlist"')
+  if (isTest())
+    return res.json(domains.map(el => ({ ...el, status: 'not started' })))
+  const data = await exec('su - myproxy -c "pm2 jlist"')
 
-    const outArr = data.stdout.split('\n')
+  const outArr = data.stdout.split('\n')
 
-    const statusData = JSON.parse(outArr[outArr.length - 1]).reduce(
-      (statusObj, el) => ({
-        ...statusObj,
-        [el.name]: el.pm2_env.status
-      }),
-      {}
-    )
-    const fullDomainStatusMapping = domains.map(el => {
-      if (statusData[el.fullDomain]) {
-        return { ...el, status: statusData[el.fullDomain] }
-      } else {
-        return { ...el, status: 'not started' }
-      }
-    })
+  const statusData = JSON.parse(outArr[outArr.length - 1]).reduce(
+    (statusObj, el) => ({
+      ...statusObj,
+      [el.name]: el.pm2_env.status
+    }),
+    {}
+  )
+  const fullDomainStatusMapping = domains.map(el => {
+    if (statusData[el.fullDomain]) {
+      return { ...el, status: statusData[el.fullDomain] }
+    } else {
+      return { ...el, status: 'not started' }
+    }
+  })
 
-    res.json(fullDomainStatusMapping)
-  } else {
-    res.json(domains.map(el => ({ ...el, status: 'not started' })))
-  }
+  res.json(fullDomainStatusMapping)
 })
 
 mappingRouter.delete('/:id', async (req, res) => {
