@@ -9,11 +9,7 @@ const reqHeaders: Headers = {
   'Content-Type': 'application/json'
 }
 
-const logAdapter = (
-  path = '/',
-  method: string,
-  body?: object
-): Promise<Response> => {
+const logAdapter = (path = '/', method: string): Promise<Response> => {
   const options: Options = {
     method,
     headers: reqHeaders
