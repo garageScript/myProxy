@@ -35,10 +35,11 @@ accessTokensRouter.get('/', (req, res) => {
 
 accessTokensRouter.delete('/:id', (req, res) => {
   const tokens = getAccessTokens()
-  tokens.forEach((e, i) => {
+  tokens.find((e, i) => {
     if (e.id === req.params.id) {
-      res.json(e)
       tokens.splice(i, 1)
+      res.json(e)
+      return true
     }
   })
   setData('apiTokens', tokens)
