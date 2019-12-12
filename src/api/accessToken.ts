@@ -24,7 +24,7 @@ accessTokensRouter.post('/', (req, res) => {
     id: `${uuidv4()}`
   }
   allAccessTokens.push(tokensObject)
-  setData('apiTokens', allAccessTokens)
+  setData('accessToken', allAccessTokens)
   res.json(tokensObject)
 })
 

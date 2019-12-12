@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { createDomainCache, createIdCache } from '../helpers/cache'
 import { DB, ServiceKey } from '../types/admin'
-import { Mapping, MappingObj, Domain, AccessToken } from '../types/general'
+import { Mapping, MappingById, Domain, AccessToken } from '../types/general'
 
 const data: DB = {
   serviceKeys: [],
@@ -10,10 +10,10 @@ const data: DB = {
   accessToken: []
 }
 
-let domainToMapping: MappingObj | {} = {}
-let idToMapping: MappingObj | {} = {}
+let domainToMapping: MappingById = {}
+let idToMapping: MappingById = {}
 
-const updateCache = (table: string): void => {
+const updateCache = (table: keyof DB): void => {
   if (table === 'mappings') {
     domainToMapping = createDomainCache(data.mappings)
     idToMapping = createIdCache(data.mappings)
@@ -37,13 +37,11 @@ try {
   )
 }
 
-// Typescript disable, because this is meant as a helper function to be used with N number of input types
-const getData = (table: string): unknown => {
+const getData = <T extends keyof DB>(table: T): DB[T] => {
   return data[table]
 }
 
-// Typescript disable, because this is meant as a helper function to be used with N number of input types
-const setData = (table: string, records: unknown): void => {
+const setData = <T extends keyof DB>(table: T, records: DB[T]): void => {
   data[table] = records
   updateCache(table)
 
@@ -72,7 +70,7 @@ const getAvailableDomains = (): Domain[] => {
 }
 
 const getAccessTokens = (): AccessToken[] => {
-  const initialData = getData('apiTokens') as AccessToken[] | undefined
+  const initialData = getData('accessToken') as AccessToken[] | undefined
   return initialData || []
 }
 
@@ -80,7 +78,7 @@ const getMappingByDomain = (domain: string): Mapping => {
   return domainToMapping[domain]
 }
 
-const getMappingById = (id: string): Mapping => {
+const getMappingById = (id: string): Mapping | undefined => {
   return idToMapping[id]
 }
 
