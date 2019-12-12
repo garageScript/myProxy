@@ -41,15 +41,21 @@ class MappingItem {
     const mappingElement = document.createElement('li')
     let iconClass
     let iconColor
+    // LogClass is used to hide the button to download logs when
+    // pm2 is not managing the apps. Since pm2 is not managing the apps,
+    // the logs will not be located at the same location
+    let logClass
     if (data.status === 'online') {
       iconClass = 'fa fa-circle mr-1 mt-1'
       iconColor = 'rgba(50,255,50,0.5)'
+      logClass = 'fa fa-file-text-o ml-1 mt-1'
     } else if (data.status === 'not started') {
       iconClass = ''
       iconColor = 'transparent'
     } else {
       iconClass = 'fa fa-circle mr-1 mt-1'
       iconColor = 'rgba(255, 50, 50, 0.5)'
+      logClass = 'fa fa-file-text-o ml-1 mt-1'
     }
     mappingElement.classList.add(
       'list-group-item',
@@ -60,7 +66,8 @@ class MappingItem {
     mappingElement.innerHTML = `
       <div style='width: 100%'>
         <div style='display: flex'>
-          <i class="${iconClass}" style="font-size: 15px; color: ${iconColor}"></i>
+          <i class="${iconClass}" style="font-size: 15px; color: ${iconColor}">
+          </i>
           <a class="font-weight-bold"
             href="https://${data.fullDomain}">
             ${data.fullDomain}
@@ -68,6 +75,14 @@ class MappingItem {
           <small class="form-text text-muted ml-1">
             PORT: ${data.port}
           </small>
+          <a class="${logClass}"
+            style="font-size: 15px; color: rgba(255,50,50,0.5)"
+            href="/api/logs/err/${data.fullDomain}">
+          </a>
+          <a class="${logClass}"
+           style="font-size: 15px; color: rgba(40,167,70,0.5)"
+           href="/api/logs/out/${data.fullDomain}">
+          </a>
         </div>
         <small class="form-text text-muted" style="display: inline-block;">
           ${data.gitLink}
