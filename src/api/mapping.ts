@@ -99,7 +99,9 @@ mappingRouter.get('/', async (req, res) => {
   if (isProduction()) {
     const data = await exec('su - myproxy -c "pm2 jlist"')
 
-    const statusData = JSON.parse(data.stdout).reduce(
+    const outArr = data.stdout.split('\n')
+
+    const statusData = JSON.parse(outArr[outArr.length - 1]).reduce(
       (statusObj, el) => ({
         ...statusObj,
         [el.name]: el.pm2_env.status
