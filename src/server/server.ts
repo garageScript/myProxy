@@ -82,7 +82,7 @@ const startAppServer = (
       console.log(cyan, `myProxy is running on port ${port}!`)
       resolve(server)
     })
-  })
+  }).catch(error => console.error(`startAppServer: ${error}`))
 }
 
 const startProxyServer = (): void => {
