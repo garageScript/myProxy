@@ -20,13 +20,8 @@ const updateCache = (table: string): void => {
   }
 }
 
-fs.readFile('./data.db', (err, file) => {
-  if (err) {
-    return console.log(
-      'File does not exist, but do not worry. File will be created on first save',
-      err
-    )
-  }
+try {
+  const file = fs.readFileSync('./data.db')
   const fileData: DB = JSON.parse(file.toString() || '{}')
   data.serviceKeys = fileData.serviceKeys || []
   data.mappings = fileData.mappings || []
@@ -35,7 +30,12 @@ fs.readFile('./data.db', (err, file) => {
 
   domainToMapping = createDomainCache(data.mappings)
   idToMapping = createIdCache(data.mappings)
-})
+} catch (err) {
+  console.log(
+    'File does not exist, but do not worry. File will be created on first save',
+    err
+  )
+}
 
 // Typescript disable, because this is meant as a helper function to be used with N number of input types
 const getData = (table: string): unknown => {
@@ -53,13 +53,6 @@ const setData = (table: string, records: unknown): void => {
     if (err) {
       return console.log('writing to DB failed', err)
     }
-    console.log('successfully wrote to DB')
-
-    // The line below needs to be here. For some reason,
-    // data[table] value seems to be an old value and
-    // does not take the records value. Strange.
-    data[table] = records
-    updateCache(table)
   })
 }
 
