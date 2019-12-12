@@ -41,6 +41,9 @@ class MappingItem {
     const mappingElement = document.createElement('li')
     let iconClass
     let iconColor
+    // LogClass is used to hide the button to download logs when
+    // pm2 is not managing the apps. Since pm2 is not managing the apps,
+    // the logs will not be located at the same location
     let logClass
     if (data.status === 'online') {
       iconClass = 'fa fa-circle mr-1 mt-1'
