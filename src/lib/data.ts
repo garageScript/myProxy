@@ -78,7 +78,7 @@ const getMappingByDomain = (domain: string): Mapping => {
   return domainToMapping[domain]
 }
 
-const getMappingById = (id: string): Mapping => {
+const getMappingById = (id: string): Mapping | undefined => {
   return idToMapping[id]
 }
 
