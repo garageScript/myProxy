@@ -87,9 +87,11 @@ mappingRouter.post('/', async (req, res) => {
       git commit -m "Initial Commit"
       `,
     { uid: gitUserId }
-  ).then(() => {
-    respond()
-  })
+  )
+    .then(() => {
+      respond()
+    })
+    .catch(error => console.error(`mappingRouter.post exec: ${error}`))
 })
 
 mappingRouter.get('/', async (req, res) => {
