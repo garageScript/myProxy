@@ -9,8 +9,8 @@ import environment from '../helpers/environment'
 const { HOME } = environment
 const acmePath = `${HOME}/.acme.sh`
 const readFileAsync = util.promisify(fs.readFile)
-const keyCache = {}
-const certCache = {}
+const keyCache: { [key: string]: string } = {}
+const certCache: { [key: string]: string } = {}
 
 const readFile = async (path: string) => {
   const data = await readFileAsync(path, 'utf8')
