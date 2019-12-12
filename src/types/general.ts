@@ -45,6 +45,11 @@ type ProxyMapping = {
   port?: string
 }
 
+type AccessToken = {
+  name?: string
+  id?: string
+}
+
 export {
   Mapping,
   MappingObj,
@@ -53,5 +58,6 @@ export {
   ServiceResponse,
   ServiceConfig,
   ProviderService,
-  ProxyMapping
+  ProxyMapping,
+  AccessToken
 }
