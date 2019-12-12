@@ -31,7 +31,10 @@ try {
   domainToMapping = createDomainCache(data.mappings)
   idToMapping = createIdCache(data.mappings)
 } catch (err) {
-  console.error(`Error reading from data.db on startup, ${err}`)
+  console.error(
+    'File does not exist, but do not worry. File will be created on first save',
+    err
+  )
 }
 
 // Typescript disable, because this is meant as a helper function to be used with N number of input types
