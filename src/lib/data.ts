@@ -20,7 +20,7 @@ const updateCache = (table: string): void => {
   }
 }
 
-{
+try {
   const file = fs.readFileSync('./data.db')
   const fileData: DB = JSON.parse(file.toString() || '{}')
   data.serviceKeys = fileData.serviceKeys || []
@@ -30,6 +30,8 @@ const updateCache = (table: string): void => {
 
   domainToMapping = createDomainCache(data.mappings)
   idToMapping = createIdCache(data.mappings)
+} catch (err) {
+  console.error(`Error reading from data.db on startup, ${err}`)
 }
 
 // Typescript disable, because this is meant as a helper function to be used with N number of input types
