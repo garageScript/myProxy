@@ -33,4 +33,15 @@ accessTokensRouter.get('/', (req, res) => {
   res.json(tokens)
 })
 
+accessTokensRouter.delete('/:id', (req, res) => {
+  const tokens = getAccessTokens()
+  tokens.forEach((e, i) => {
+    if (e.id === req.params.id) {
+      res.json(e)
+      tokens.splice(i, 1)
+    }
+  })
+  setData('apiTokens', tokens)
+})
+
 export default accessTokensRouter

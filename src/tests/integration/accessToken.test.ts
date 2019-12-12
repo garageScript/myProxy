@@ -45,4 +45,21 @@ describe('/api/accessTokens', () => {
     const allTokens = updatedTokens.filter(e => e.name === firstName)
     expect(allTokens.length).toEqual(1)
   })
+
+  it('should delete the token', async () => {
+    const name = `c0d3accessDELETE${uuidv4()}`
+    const postResponse = await accessTokensAdapter('/', 'POST', {
+      name
+    })
+    expect(postResponse.status).toEqual(200)
+    const postToken = postResponse.json()
+    const tokens = await accessTokensAdapter('/', 'GET').then(r => r.json())
+    tokens.forEach((e, i) => {
+      if (e.name === name) {
+        tokens.splice(i, 1)
+      }
+    })
+    const foundToken = tokens.find(e => e.name === name)
+    expect(!foundToken).toEqual(true)
+  })
 })
