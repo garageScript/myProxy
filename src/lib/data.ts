@@ -31,7 +31,7 @@ try {
   domainToMapping = createDomainCache(data.mappings)
   idToMapping = createIdCache(data.mappings)
 } catch (err) {
-  console.error(
+  console.log(
     'File does not exist, but do not worry. File will be created on first save',
     err
   )
