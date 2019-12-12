@@ -23,12 +23,9 @@ describe('/api/logs', () => {
   })
 
   it('checks that error logs endpoint exists', async () => {
-    // I can't get this test to pass without the timeout. Strange
-    setTimeout(async () => {
-      const subDomain = 'Luke'
-      const domain = 'Walker'
-      const logResponse = await logAdapter(`/err/${subDomain}.${domain}`, 'GET')
-      expect(logResponse.status).toEqual(200)
-    }, 1000)
+    const subDomain = 'Luke'
+    const domain = 'Walker'
+    const logResponse = await logAdapter(`/err/${subDomain}.${domain}`, 'GET')
+    expect(logResponse.status).toEqual(200)
   })
 })
