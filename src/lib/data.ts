@@ -1,12 +1,13 @@
 import fs from 'fs'
 import { createDomainCache, createIdCache } from '../helpers/cache'
 import { DB, ServiceKey } from '../types/admin'
-import { Mapping, MappingObj, Domain } from '../types/general'
+import { Mapping, MappingObj, Domain, AccessToken } from '../types/general'
 
 const data: DB = {
   serviceKeys: [],
   mappings: [],
-  availableDomains: []
+  availableDomains: [],
+  accessToken: []
 }
 
 let domainToMapping: MappingObj | {} = {}
@@ -30,6 +31,7 @@ fs.readFile('./data.db', (err, file) => {
   data.serviceKeys = fileData.serviceKeys || []
   data.mappings = fileData.mappings || []
   data.availableDomains = fileData.availableDomains || []
+  data.accessToken = fileData.accessToken || []
 
   domainToMapping = createDomainCache(data.mappings)
   idToMapping = createIdCache(data.mappings)
@@ -76,6 +78,11 @@ const getAvailableDomains = (): Domain[] => {
   return initialData || []
 }
 
+const getAccessTokens = (): AccessToken[] => {
+  const initialData = getData('apiTokens') as AccessToken[] | undefined
+  return initialData || []
+}
+
 const getMappingByDomain = (domain: string): Mapping => {
   return domainToMapping[domain]
 }
@@ -95,6 +102,7 @@ export {
   getProviderKeys,
   getMappings,
   getAvailableDomains,
+  getAccessTokens,
   getMappingByDomain,
   getMappingById,
   deleteDomain
