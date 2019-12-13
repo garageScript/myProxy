@@ -87,13 +87,17 @@ class MappingItem {
            href="/api/logs/out/${data.fullDomain}">
           </a>
           <div className="dropright">
-            <button type="button" data-toggle="dropdown" class="dropdown-toggle">
+            <a href="#" role="button" data-toggle="dropdown" class="btn-link dropdown-toggle">
               <span class="${settingClass}"
                 style="font-size: 15; color: rgba(255,50,50,0.5)">
               </span>
-            </button>
-            <div class="dropdown-menu">
-              <button type="button" class="btn btn-link">Clear Logs</button>
+            </a>
+            <div class="dropdown-menu"
+              <button type="button"
+               class="btn btn-link deleteLogButton"
+                style="color: rgba(255,50,50,0.5)>
+                Clear Logs
+               </button>
             </div>
           </div>
         </div>
