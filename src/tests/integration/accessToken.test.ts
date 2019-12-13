@@ -18,6 +18,7 @@ describe('/api/accessTokens', () => {
 
   it('should create an access token successfully', async () => {
     const name = `c0d3access${uuidv4()}`
+
     const postResponse = await accessTokensAdapter('/', 'POST', {
       name
     })
@@ -44,5 +45,28 @@ describe('/api/accessTokens', () => {
     )
     const allTokens = updatedTokens.filter(e => e.name === firstName)
     expect(allTokens.length).toEqual(1)
+  })
+
+  it('should delete the token', async () => {
+    const name = `c0d3accessDELETE${uuidv4()}`
+    const postResponse = await accessTokensAdapter('/', 'POST', {
+      name
+    })
+    expect(postResponse.status).toEqual(200)
+
+    const postResult = await postResponse.json()
+    const selectedToken = await accessTokensAdapter(
+      `/${postResult.id}`,
+      'GET'
+    ).then(r => r.json())
+    expect(selectedToken.name).toEqual(name)
+
+    const deleteToken = await accessTokensAdapter(`/${postResult.id}`, 'DELETE')
+    const postDeleteResult = await deleteToken.json()
+    expect(postResult.name).toEqual(postDeleteResult.name)
+
+    const allTokens = await accessTokensAdapter('/', 'GET').then(r => r.json())
+    const findDeletedToken = allTokens.find(e => e.name === postResult.name)
+    expect(findDeletedToken).toEqual(undefined)
   })
 })
