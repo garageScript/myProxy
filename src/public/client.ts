@@ -141,7 +141,7 @@ class MappingItem {
         })
       }
     }
-    const clearLogButton = helper.getElement('.deleteLogButton')
+    const clearLogButton = helper.getElement('.deleteLogButton', mappingElement)
     clearLogButton.onclick = (): void => {
       fetch(`/api/logs/${data.fullDomain}`, {
         method: 'DELETE'
