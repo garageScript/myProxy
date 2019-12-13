@@ -50,7 +50,7 @@ class MappingItem {
       iconClass = 'fa fa-circle mr-1 mt-1'
       iconColor = 'rgba(50,255,50,0.5)'
       logClass = 'fa fa-file-text-o ml-1 mt-1'
-      settingClass = 'fa fa-cog'
+      settingClass = 'ml-1 fa fa-cog'
     } else if (data.status === 'not started') {
       iconClass = ''
       iconColor = 'transparent'
@@ -90,12 +90,7 @@ class MappingItem {
           >
           </a>
           <div className="dropright">
-            <a
-              href="#"
-              role="button"
-              data-toggle="dropdown"
-              class="btn-link dropdown-toggle"
-            >
+            <a href="#" role="button" data-toggle="dropdown" class="btn-link">
               <span
                 class="${settingClass}"
                 style="font-size: 15; color: rgba(255,50,50,0.5)"
