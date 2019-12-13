@@ -91,17 +91,13 @@ class MappingItem {
           </a>
           <div class="dropright">
             <a href="#" role="button" data-toggle="dropdown" class="btn-link">
-              <span
-                class="${settingClass}"
-                style="font-size: 15; color: rgba(255,50,50,0.5)"
-              >
-              </span>
+              <span class="${settingClass}" style="font-size: 15px"> </span>
             </a>
             <div class="dropdown-menu">
               <button
                 type="button"
                 class="btn btn-link deleteLogButton"
-                style="color: rgba(255,50,50,1)"
+                style="color: rgba(25,25,255,0.6)"
               >
                 Clear Logs
               </button>
