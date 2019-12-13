@@ -45,14 +45,14 @@ logsRouter.delete('/:domain', (req, res) => {
 
   fs.writeFile(
     `/home/myproxy/.pm2/logs/${domain}-out.log`,
-    'Log cleared',
+    'Log cleared\n',
     err => {
       if (err) console.log('Error deleting output log')
     }
   )
   fs.writeFile(
     `/home/myproxy/.pm2/logs/${domain}-err.log`,
-    'Log cleared',
+    'Log cleared\n',
     err => {
       if (err) console.log('Error deleting error log')
     }
