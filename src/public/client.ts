@@ -101,7 +101,7 @@ class MappingItem {
               <button
                 type="button"
                 class="btn btn-link deleteLogButton"
-                style="color: rgba(255,50,50,0.5)"
+                style="color: rgba(255,50,50,1)"
               >
                 Clear Logs
               </button>
@@ -140,6 +140,14 @@ class MappingItem {
           window.location.reload()
         })
       }
+    }
+    const clearLogButton = helper.getElement('.deleteLogButton')
+    clearLogButton.onclick = (): void => {
+      fetch(`/api/logs/${data.fullDomain}`, {
+        method: 'DELETE'
+      }).then(() => {
+        window.location.reload()
+      })
     }
   }
 }
