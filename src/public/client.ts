@@ -139,11 +139,15 @@ class MappingItem {
     }
     const clearLogButton = helper.getElement('.deleteLogButton', mappingElement)
     clearLogButton.onclick = (): void => {
-      fetch(`/api/logs/${data.fullDomain}`, {
-        method: 'DELETE'
-      }).then(() => {
-        window.location.reload()
-      })
+      if (
+        confirm(`Are you sure you want to clear ${data.fullDomain}'s logs?`)
+      ) {
+        fetch(`/api/logs/${data.fullDomain}`, {
+          method: 'DELETE'
+        }).then(() => {
+          window.location.reload()
+        })
+      }
     }
   }
 }
