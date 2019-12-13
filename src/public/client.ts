@@ -97,7 +97,7 @@ class MappingItem {
               <button
                 type="button"
                 class="btn btn-link deleteLogButton"
-                style="color: rgba(25,25,255,0.6)"
+                style="color: rgba(255,50,50,1)"
               >
                 Clear Logs
               </button>
