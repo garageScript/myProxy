@@ -41,14 +41,16 @@ class MappingItem {
     const mappingElement = document.createElement('li')
     let iconClass
     let iconColor
-    // LogClass is used to hide the button to download logs when
-    // pm2 is not managing the apps. Since pm2 is not managing the apps,
-    // the logs will not be located at the same location
+    // The variables below are to hide log related icons when pm2 is not
+    // being used to monitor the apps. These apps will not have status since
+    // they are not managed by pm2.
+    let settingClass
     let logClass
     if (data.status === 'online') {
       iconClass = 'fa fa-circle mr-1 mt-1'
       iconColor = 'rgba(50,255,50,0.5)'
       logClass = 'fa fa-file-text-o ml-1 mt-1'
+      settingClass = 'fa fa-cog'
     } else if (data.status === 'not started') {
       iconClass = ''
       iconColor = 'transparent'
@@ -56,6 +58,7 @@ class MappingItem {
       iconClass = 'fa fa-circle mr-1 mt-1'
       iconColor = 'rgba(255, 50, 50, 0.5)'
       logClass = 'fa fa-file-text-o ml-1 mt-1'
+      settingClass = 'fa fa-cog'
     }
     mappingElement.classList.add(
       'list-group-item',
@@ -83,6 +86,16 @@ class MappingItem {
            style="font-size: 15px; color: rgba(40,167,70,0.5)"
            href="/api/logs/out/${data.fullDomain}">
           </a>
+          <div className="dropright">
+            <button type="button" data-toggle="dropdown" class="dropdown-toggle">
+              <span class="${settingClass}"
+                style="font-size: 15; color: rgba(255,50,50,0.5)">
+              </span>
+            </button>
+            <div class="dropdown-menu">
+              <button type="button" class="btn btn-link">Clear Logs</button>
+            </div>
+          </div>
         </div>
         <small class="form-text text-muted" style="display: inline-block;">
           ${data.gitLink}
