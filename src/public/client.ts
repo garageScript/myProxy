@@ -89,7 +89,7 @@ class MappingItem {
             href="/api/logs/out/${data.fullDomain}"
           >
           </a>
-          <div className="dropright">
+          <div class="dropright">
             <a href="#" role="button" data-toggle="dropdown" class="btn-link">
               <span
                 class="${settingClass}"
