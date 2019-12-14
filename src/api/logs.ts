@@ -43,13 +43,14 @@ logsRouter.get('/out/:domain', (req, res) => {
 logsRouter.delete('/:domain', (req, res) => {
   const { domain } = req.params
 
-  fs.writeFile(
-    `/home/myproxy/.pm2/logs/${domain}-out.log`,
-    'Log cleared\n',
-    err => {
-      if (err) console.log('Error deleting output log')
-    }
-  )
+  if (isProduction())
+    fs.writeFile(
+      `/home/myproxy/.pm2/logs/${domain}-out.log`,
+      'Log cleared\n',
+      err => {
+        if (err) console.log('Error deleting output log')
+      }
+    )
   fs.writeFile(
     `/home/myproxy/.pm2/logs/${domain}-err.log`,
     'Log cleared\n',
