@@ -17,16 +17,14 @@ describe('/api/logs', () => {
   })
 
   it('checks that output logs endpoint exists', async () => {
-    const subDomain = 'Cloud'
-    const domain = 'Walker'
-    const logResponse = await logAdapter(`/out/${subDomain}.${domain}`, 'GET')
+    const fullDomain = 'Cloud.Walker.com'
+    const logResponse = await logAdapter(`/out/${fullDomain}`, 'GET')
     expect(logResponse.status).toEqual(200)
   })
 
   it('checks that error logs endpoint exists', async () => {
-    const subDomain = 'Luke'
-    const domain = 'Walker'
-    const logResponse = await logAdapter(`/err/${subDomain}.${domain}`, 'GET')
+    const fullDomain = 'Luke.Walker.com'
+    const logResponse = await logAdapter(`/err/${fullDomain}`, 'GET')
     expect(logResponse.status).toEqual(200)
   })
 
