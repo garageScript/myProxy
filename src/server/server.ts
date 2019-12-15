@@ -10,7 +10,7 @@ import { adminRouter } from '../admin'
 import { apiRouter } from '../api/index'
 import { hashPass } from '../helpers/crypto'
 import { getAvailableDomains, getMappingByDomain } from '../lib/data'
-import { setPass, setupTokenAuth, isCorrectCredentials } from '../auth'
+import { setPass, setupAuth, setupTokenAuth, isCorrectCredentials } from '../auth'
 import { ProxyMapping } from '../types/general'
 import { SNICallback } from '../helpers/SNICallback'
 import { setAuthorizedKeys } from '../helpers/authorizedKeys'
@@ -55,7 +55,7 @@ const startAppServer = (
     app.use(express.urlencoded({ extended: true }))
     app.use(cookieParser())
     app.use(express.static(path.join(__dirname, '../public')))
-    app.use('/admin', adminRouter)
+    app.use('/admin', setupAuth, adminRouter)
     app.use('/api', apiRouter)
     app.set('view engine', 'ejs')
     app.set('views', path.join(__dirname, '../../views'))
@@ -105,7 +105,7 @@ const startProxyServer = (): void => {
     }
   })
 
-  server.on('upgrade', function(req, socket) {
+  server.on('upgrade', function (req, socket) {
     const { ip, port }: ProxyMapping =
       getMappingByDomain(req.headers.host) || {}
     if (port) return proxy.ws(req, socket, { target: `http://${ip}:${port}` })
