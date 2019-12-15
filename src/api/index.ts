@@ -5,14 +5,15 @@ import mappingRouter from './mapping'
 import sshKeyRouter from './sshKeys'
 import accessTokensRouter from './accessToken'
 import { getAvailableDomains } from '../lib/data'
+import { setupAuth, setupTokenAuth } from '../auth'
 
 const apiRouter = express.Router()
 
-apiRouter.use('/admin', adminRouter.app)
-apiRouter.use('/logs', logsRouter)
-apiRouter.use('/mappings', mappingRouter)
-apiRouter.use('/sshKeys', sshKeyRouter)
-apiRouter.use('/accessTokens', accessTokensRouter)
+apiRouter.use('/admin', setupAuth, adminRouter.app)
+apiRouter.use('/logs', setupTokenAuth, logsRouter)
+apiRouter.use('/mappings', setupTokenAuth, mappingRouter)
+apiRouter.use('/sshKeys', setupTokenAuth, sshKeyRouter)
+apiRouter.use('/accessTokens', setupTokenAuth, accessTokensRouter)
 
 apiRouter.get('/availableDomains', (req, res) => {
   const domains = getAvailableDomains()

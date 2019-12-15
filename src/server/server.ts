@@ -6,11 +6,10 @@ import httpProxy from 'http-proxy'
 import path from 'path'
 import cookieParser from 'cookie-parser'
 
-import { adminRouter } from '../admin/index'
 import { apiRouter } from '../api/index'
 import { hashPass } from '../helpers/crypto'
 import { getAvailableDomains, getMappingByDomain } from '../lib/data'
-import { setupAuth, isCorrectCredentials } from '../auth'
+import { setPass, setupTokenAuth, isCorrectCredentials } from '../auth'
 import { ProxyMapping } from '../types/general'
 import { SNICallback } from '../helpers/SNICallback'
 import { setAuthorizedKeys } from '../helpers/authorizedKeys'
@@ -34,6 +33,8 @@ const startAppServer = (
       return reject(errorMsg)
     }
 
+    setPass(adminPass)
+
     if (isProduction()) {
       fs.readFile('/home/myproxy/.ssh/authorized_keys', (error, data) => {
         if (error) {
@@ -53,12 +54,12 @@ const startAppServer = (
     app.use(express.urlencoded({ extended: true }))
     app.use(cookieParser())
     app.use(express.static(path.join(__dirname, '../public')))
-    app.use('/admin', adminRouter)
-    app.use('/api', setupAuth(adminPass), apiRouter)
+    app.use('/api', apiRouter)
     app.set('view engine', 'ejs')
     app.set('views', path.join(__dirname, '../../views'))
 
-    app.get('/', setupAuth(adminPass), (_, res) =>
+    // TODO: add new middleware for accesstoken
+    app.get('/', setupTokenAuth, (_, res) =>
       getAvailableDomains().length > 0
         ? res.render('client')
         : res.redirect('/admin')
@@ -74,7 +75,7 @@ const startAppServer = (
       return res.render('login', { error: 'Wrong Admin Password' })
     })
 
-    app.get('/sshKeys', (req, res) => {
+    app.get('/sshKeys', setupTokenAuth, (req, res) => {
       res.render('sshKeys')
     })
 

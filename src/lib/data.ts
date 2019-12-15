@@ -1,22 +1,36 @@
 import fs from 'fs'
-import { createDomainCache, createIdCache } from '../helpers/cache'
+import {
+  createDomainCache,
+  createIdCache,
+  createTokenCache
+} from '../helpers/cache'
 import { DB, ServiceKey } from '../types/admin'
-import { Mapping, MappingById, Domain, AccessToken } from '../types/general'
+import {
+  Mapping,
+  MappingById,
+  Domain,
+  AccessToken,
+  TokenById
+} from '../types/general'
 
 const data: DB = {
   serviceKeys: [],
   mappings: [],
   availableDomains: [],
-  accessToken: []
+  accessTokens: []
 }
 
 let domainToMapping: MappingById = {}
 let idToMapping: MappingById = {}
+let idToAccessToken: TokenById = {}
 
 const updateCache = (table: keyof DB): void => {
   if (table === 'mappings') {
     domainToMapping = createDomainCache(data.mappings)
     idToMapping = createIdCache(data.mappings)
+  }
+  if (table === 'accessTokens') {
+    idToAccessToken = createTokenCache(data.accessTokens)
   }
 }
 
@@ -26,7 +40,7 @@ try {
   data.serviceKeys = fileData.serviceKeys || []
   data.mappings = fileData.mappings || []
   data.availableDomains = fileData.availableDomains || []
-  data.accessToken = fileData.accessToken || []
+  data.accessTokens = fileData.accessTokens || []
 
   domainToMapping = createDomainCache(data.mappings)
   idToMapping = createIdCache(data.mappings)
@@ -70,7 +84,7 @@ const getAvailableDomains = (): Domain[] => {
 }
 
 const getAccessTokens = (): AccessToken[] => {
-  const initialData = getData('accessToken') as AccessToken[] | undefined
+  const initialData = getData('accessTokens') as AccessToken[] | undefined
   return initialData || []
 }
 
@@ -80,6 +94,10 @@ const getMappingByDomain = (domain: string): Mapping => {
 
 const getMappingById = (id: string): Mapping | undefined => {
   return idToMapping[id]
+}
+
+const getTokenById = (id: string): AccessToken | undefined => {
+  return idToAccessToken[id]
 }
 
 const deleteDomain = (domain: string): void => {
@@ -96,5 +114,6 @@ export {
   getAccessTokens,
   getMappingByDomain,
   getMappingById,
+  getTokenById,
   deleteDomain
 }
