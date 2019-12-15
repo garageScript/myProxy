@@ -19,7 +19,7 @@ const isValidToken = (token: string): boolean => {
 }
 
 // From Express, middleware functions return void
-const setupAuth = (req, res, next): void => {
+const setupPwAuth = (req, res, next): void => {
   const { adminPass } = req.cookies
   const { authorization = '' } = req.headers
 
@@ -32,7 +32,7 @@ const setupAuth = (req, res, next): void => {
   return next()
 }
 
-const setupTokenAuth = (req, res, next): void => {
+const setupPwTokenAuth = (req, res, next): void => {
   const { adminPass } = req.cookies
   const { access, authorization = '' } = req.headers
 
@@ -47,4 +47,4 @@ const setupTokenAuth = (req, res, next): void => {
   return next()
 }
 
-export { setupAuth, isCorrectCredentials, setPass, setupTokenAuth }
+export { setupPwAuth, isCorrectCredentials, setPass, setupPwTokenAuth }

@@ -10,7 +10,12 @@ import { adminRouter } from '../admin'
 import { apiRouter } from '../api/index'
 import { hashPass } from '../helpers/crypto'
 import { getAvailableDomains, getMappingByDomain } from '../lib/data'
-import { setPass, setupAuth, setupTokenAuth, isCorrectCredentials } from '../auth'
+import {
+  setPass,
+  setupPwAuth,
+  setupPwTokenAuth,
+  isCorrectCredentials
+} from '../auth'
 import { ProxyMapping } from '../types/general'
 import { SNICallback } from '../helpers/SNICallback'
 import { setAuthorizedKeys } from '../helpers/authorizedKeys'
@@ -55,12 +60,12 @@ const startAppServer = (
     app.use(express.urlencoded({ extended: true }))
     app.use(cookieParser())
     app.use(express.static(path.join(__dirname, '../public')))
-    app.use('/admin', setupAuth, adminRouter)
+    app.use('/admin', setupPwAuth, adminRouter)
     app.use('/api', apiRouter)
     app.set('view engine', 'ejs')
     app.set('views', path.join(__dirname, '../../views'))
 
-    app.get('/', setupTokenAuth, (_, res) =>
+    app.get('/', setupPwTokenAuth, (_, res) =>
       getAvailableDomains().length > 0
         ? res.render('client')
         : res.redirect('/admin')
@@ -75,7 +80,7 @@ const startAppServer = (
       return res.render('login', { error: 'Wrong Admin Password' })
     })
 
-    app.get('/sshKeys', setupTokenAuth, (req, res) => {
+    app.get('/sshKeys', setupPwTokenAuth, (req, res) => {
       res.render('sshKeys')
     })
 
@@ -105,7 +110,7 @@ const startProxyServer = (): void => {
     }
   })
 
-  server.on('upgrade', function (req, socket) {
+  server.on('upgrade', function(req, socket) {
     const { ip, port }: ProxyMapping =
       getMappingByDomain(req.headers.host) || {}
     if (port) return proxy.ws(req, socket, { target: `http://${ip}:${port}` })
