@@ -1,9 +1,5 @@
 import fs from 'fs'
-import {
-  createDomainCache,
-  createIdCache,
-  createTokenCache
-} from '../helpers/cache'
+import { mapById, mapByDomain } from '../helpers/cache'
 import { DB, ServiceKey } from '../types/admin'
 import {
   Mapping,
@@ -26,11 +22,11 @@ let idToAccessToken: TokenById = {}
 
 const updateCache = (table: keyof DB): void => {
   if (table === 'mappings') {
-    domainToMapping = createDomainCache(data.mappings)
-    idToMapping = createIdCache(data.mappings)
+    domainToMapping = mapByDomain(data.mappings)
+    idToMapping = mapById(data.mappings)
   }
   if (table === 'accessTokens') {
-    idToAccessToken = createTokenCache(data.accessTokens)
+    idToAccessToken = mapById(data.accessTokens)
   }
 }
 
@@ -42,8 +38,8 @@ try {
   data.availableDomains = fileData.availableDomains || []
   data.accessTokens = fileData.accessTokens || []
 
-  domainToMapping = createDomainCache(data.mappings)
-  idToMapping = createIdCache(data.mappings)
+  domainToMapping = mapByDomain(data.mappings)
+  idToMapping = mapById(data.mappings)
 } catch (err) {
   console.log(
     'File does not exist, but do not worry. File will be created on first save',
@@ -51,7 +47,7 @@ try {
   )
 }
 
-const getData = <T extends keyof DB>(table: T): DB[T] => {
+const getData = <T extends keyof DB>(table: T): DB[T] | undefined => {
   return data[table]
 }
 
@@ -69,22 +65,22 @@ const setData = <T extends keyof DB>(table: T, records: DB[T]): void => {
 }
 
 const getProviderKeys = (): ServiceKey[] => {
-  const initialData = getData('serviceKeys') as ServiceKey[] | undefined
+  const initialData = getData('serviceKeys')
   return initialData || []
 }
 
 const getMappings = (): Mapping[] => {
-  const initialData = getData('mappings') as Mapping[] | undefined
+  const initialData = getData('mappings')
   return initialData || []
 }
 
 const getAvailableDomains = (): Domain[] => {
-  const initialData = getData('availableDomains') as Domain[] | undefined
+  const initialData = getData('availableDomains')
   return initialData || []
 }
 
 const getAccessTokens = (): AccessToken[] => {
-  const initialData = getData('accessTokens') as AccessToken[] | undefined
+  const initialData = getData('accessTokens')
   return initialData || []
 }
 
