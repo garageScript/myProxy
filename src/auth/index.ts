@@ -19,32 +19,24 @@ const isValidToken = (token: string): boolean => {
 }
 
 // From Express, middleware functions return void
-const setupPwAuth = (req, res, next): void => {
-  const { adminPass } = req.cookies
-  const { authorization = '' } = req.headers
-
-  if (authorization) {
-    const isCorrect = isCorrectCredentials(authorization as string, pass)
-    if (!adminPass && !isCorrect) return res.status(401).send('Unauthorized')
-    return next()
-  }
-  if (!adminPass) return res.render('login', { error: '' })
-  return next()
-}
-
-const setupPwTokenAuth = (req, res, next): void => {
+const setupAuth = (req, res, next): void => {
   const { adminPass } = req.cookies
   const { access, authorization = '' } = req.headers
 
-  if (access || authorization) {
-    const isCorrect =
-      isValidToken(access) ||
-      isCorrectCredentials(authorization as string, pass)
-    if (!adminPass && !isCorrect) return res.status(401).send('Unauthorized')
+  if (authorization || access) {
+    if (authorization) {
+      const isCorrect = isCorrectCredentials(authorization as string, pass)
+      if (isCorrect) req.admin = true
+    }
+    if (access) {
+      const isCorrect = isValidToken(access)
+      if (isCorrect) req.user = true
+    }
     return next()
   }
+
   if (!adminPass) return res.render('login', { error: '' })
   return next()
 }
 
-export { setupPwAuth, isCorrectCredentials, setPass, setupPwTokenAuth }
+export { isCorrectCredentials, setPass, setupAuth }

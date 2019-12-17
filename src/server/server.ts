@@ -9,13 +9,9 @@ import cookieParser from 'cookie-parser'
 import { adminRouter } from '../admin'
 import { apiRouter } from '../api/index'
 import { hashPass } from '../helpers/crypto'
+import { validAdmin, validUser } from '../helpers/auth'
 import { getAvailableDomains, getMappingByDomain } from '../lib/data'
-import {
-  setPass,
-  setupPwAuth,
-  setupPwTokenAuth,
-  isCorrectCredentials
-} from '../auth'
+import { setPass, isCorrectCredentials, setupAuth } from '../auth'
 import { ProxyMapping } from '../types/general'
 import { SNICallback } from '../helpers/SNICallback'
 import { setAuthorizedKeys } from '../helpers/authorizedKeys'
@@ -33,7 +29,7 @@ const startAppServer = (
   port: string | number,
   adminPass: string
 ): Promise<unknown> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject): unknown => {
     if (!adminPass) {
       console.error(red, errorMsg)
       return reject(errorMsg)
@@ -60,12 +56,12 @@ const startAppServer = (
     app.use(express.urlencoded({ extended: true }))
     app.use(cookieParser())
     app.use(express.static(path.join(__dirname, '../public')))
-    app.use('/admin', setupPwAuth, adminRouter)
-    app.use('/api', apiRouter)
+    app.use('/admin', setupAuth, validAdmin, adminRouter)
+    app.use('/api', setupAuth, apiRouter)
     app.set('view engine', 'ejs')
     app.set('views', path.join(__dirname, '../../views'))
 
-    app.get('/', setupPwTokenAuth, (_, res) =>
+    app.get('/', setupAuth, validUser, (_, res) =>
       getAvailableDomains().length > 0
         ? res.render('client')
         : res.redirect('/admin')
@@ -80,7 +76,7 @@ const startAppServer = (
       return res.render('login', { error: 'Wrong Admin Password' })
     })
 
-    app.get('/sshKeys', setupPwTokenAuth, (req, res) => {
+    app.get('/sshKeys', setupAuth, validUser, (req, res) => {
       res.render('sshKeys')
     })
 
