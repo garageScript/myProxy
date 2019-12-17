@@ -31,7 +31,6 @@ const setupAuth = (req, res, next): void => {
       const isCorrect = isValidToken(access)
       if (isCorrect) req.user = true
     }
-    if (adminPass === hashPass(pass)) req.admin = true
     return next()
   }
   if (adminPass === hashPass(pass)) {
