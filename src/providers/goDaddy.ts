@@ -36,7 +36,10 @@ export const getDomains = async (): Promise<Provider> => {
     }
   }
 
-  domains = await sendRequest<Array<unknown>>(url, options)
+  domains = await sendRequest<Array<unknown>>(url, options).catch(err => {
+    console.error(`getDomains Error: ${err}`)
+    return []
+  })
 
   return {
     id: 'dns_gd',
