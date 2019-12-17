@@ -22,7 +22,6 @@ const isValidToken = (token: string): boolean => {
 const setupAuth = (req, res, next): void => {
   const { adminPass } = req.cookies
   const { access, authorization = '' } = req.headers
-
   if (authorization || access) {
     if (authorization) {
       const isCorrect = isCorrectCredentials(authorization as string, pass)
@@ -32,13 +31,13 @@ const setupAuth = (req, res, next): void => {
       const isCorrect = isValidToken(access)
       if (isCorrect) req.user = true
     }
-    if (adminPass) {
-      const isCorrect = isCorrectCredentials(adminPass, pass)
-      if (isCorrect) req.admin = true
-    }
+    if (adminPass === hashPass(pass)) req.admin = true
     return next()
   }
-
+  if (adminPass === hashPass(pass)) {
+    req.admin = true
+    return next()
+  }
   if (!adminPass) return res.render('login', { error: '' })
   return next()
 }
