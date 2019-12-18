@@ -45,8 +45,9 @@ mappingRouter.post('/', async (req, res) => {
   const prodConfigApp = [...prodConfigure.apps][0]
   prodConfigApp.name = fullDomain
   prodConfigApp.env_production.PORT = parseInt(req.body.port || portCounter, 10)
-  prodConfigApp.script = 'npm'
-  prodConfigApp.args = 'run start:myproxy'
+  prodConfigApp.script = `npm run start:myproxy << /home/myproxy/.pm2/logs/${fullDomain}-out.log`
+  prodConfigApp.error_file = `/home/myproxy/.pm2/logs/${fullDomain}-err.log`
+  prodConfigApp.merge_logs = true
   const prodConfig = {
     apps: prodConfigApp
   }
@@ -87,43 +88,43 @@ mappingRouter.post('/', async (req, res) => {
       git commit -m "Initial Commit"
       `,
     { uid: gitUserId }
-  ).then(() => {
-    respond()
-  })
+  )
+    .then(() => {
+      respond()
+    })
+    .catch(error => console.error(`mappingRouter.post exec: ${error}`))
 })
 
 mappingRouter.get('/', async (req, res) => {
   const domains = getMappings()
-  if (isProduction()) {
-    const data = await exec('su - myproxy -c "pm2 jlist"')
+  if (!isProduction())
+    return res.json(domains.map(el => ({ ...el, status: 'not started' })))
+  const data = await exec('su - myproxy -c "pm2 jlist"')
 
-    const statusData = JSON.parse(data.stdout).reduce(
-      (statusObj, el) => ({
-        ...statusObj,
-        [el.name]: el.pm2_env.status
-      }),
-      {}
-    )
-    const fullDomainStatusMapping = domains.map(el => {
-      if (statusData[el.fullDomain]) {
-        return { ...el, status: statusData[el.fullDomain] }
-      } else {
-        return { ...el, status: 'not started' }
-      }
-    })
+  const outArr = data.stdout.split('\n')
 
-    res.json(fullDomainStatusMapping)
-  } else {
-    res.json(domains.map(el => ({ ...el, status: 'not started' })))
-  }
+  const statusData = JSON.parse(outArr[outArr.length - 1]).reduce(
+    (statusObj, el) => ({
+      ...statusObj,
+      [el.name]: el.pm2_env.status
+    }),
+    {}
+  )
+  const fullDomainStatusMapping = domains.map(el => {
+    if (statusData[el.fullDomain]) {
+      return { ...el, status: statusData[el.fullDomain] }
+    } else {
+      return { ...el, status: 'not started' }
+    }
+  })
+
+  res.json(fullDomainStatusMapping)
 })
 
 mappingRouter.delete('/:id', async (req, res) => {
   const deletedDomain = getMappingById(req.params.id)
   deleteDomain(deletedDomain.fullDomain)
-  if (!isProduction()) {
-    return res.json(deletedDomain)
-  }
+  if (!isProduction()) return res.json(deletedDomain)
   const gitUserId = await getGitUserId()
   exec(
     `

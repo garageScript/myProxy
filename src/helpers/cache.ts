@@ -1,6 +1,6 @@
-import { Mapping, MappingObj } from '../types/general'
+import { Mapping, MappingById } from '../types/general'
 
-const createIdCache = (records: Mapping[]): MappingObj | {} => {
+const createIdCache = (records: Mapping[]): MappingById => {
   return records.reduce(
     (obj, item) => ({
       ...obj,
@@ -10,7 +10,7 @@ const createIdCache = (records: Mapping[]): MappingObj | {} => {
   )
 }
 
-const createDomainCache = (records: Mapping[]): MappingObj | {} => {
+const createDomainCache = (records: Mapping[]): MappingById => {
   return records.reduce(
     (obj, item) => ({
       ...obj,

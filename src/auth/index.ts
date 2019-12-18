@@ -14,10 +14,10 @@ const setupAuth = password => {
     if (authorization) {
       const isCorrect = isCorrectCredentials(authorization as string, password)
       if (!adminPass && !isCorrect) res.status(401).send('Unauthorized')
-      next()
+      return next()
     }
     if (!adminPass) return res.render('login', { error: '' })
-    next()
+    return next()
   }
 }
 

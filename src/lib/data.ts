@@ -1,47 +1,47 @@
 import fs from 'fs'
 import { createDomainCache, createIdCache } from '../helpers/cache'
 import { DB, ServiceKey } from '../types/admin'
-import { Mapping, MappingObj, Domain } from '../types/general'
+import { Mapping, MappingById, Domain, AccessToken } from '../types/general'
 
 const data: DB = {
   serviceKeys: [],
   mappings: [],
-  availableDomains: []
+  availableDomains: [],
+  accessToken: []
 }
 
-let domainToMapping: MappingObj | {} = {}
-let idToMapping: MappingObj | {} = {}
+let domainToMapping: MappingById = {}
+let idToMapping: MappingById = {}
 
-const updateCache = (table: string): void => {
+const updateCache = (table: keyof DB): void => {
   if (table === 'mappings') {
     domainToMapping = createDomainCache(data.mappings)
     idToMapping = createIdCache(data.mappings)
   }
 }
 
-fs.readFile('./data.db', (err, file) => {
-  if (err) {
-    return console.log(
-      'File does not exist, but do not worry. File will be created on first save',
-      err
-    )
-  }
+try {
+  const file = fs.readFileSync('./data.db')
   const fileData: DB = JSON.parse(file.toString() || '{}')
   data.serviceKeys = fileData.serviceKeys || []
   data.mappings = fileData.mappings || []
   data.availableDomains = fileData.availableDomains || []
+  data.accessToken = fileData.accessToken || []
 
   domainToMapping = createDomainCache(data.mappings)
   idToMapping = createIdCache(data.mappings)
-})
+} catch (err) {
+  console.log(
+    'File does not exist, but do not worry. File will be created on first save',
+    err
+  )
+}
 
-// Typescript disable, because this is meant as a helper function to be used with N number of input types
-const getData = (table: string): unknown => {
+const getData = <T extends keyof DB>(table: T): DB[T] => {
   return data[table]
 }
 
-// Typescript disable, because this is meant as a helper function to be used with N number of input types
-const setData = (table: string, records: unknown): void => {
+const setData = <T extends keyof DB>(table: T, records: DB[T]): void => {
   data[table] = records
   updateCache(table)
 
@@ -51,13 +51,6 @@ const setData = (table: string, records: unknown): void => {
     if (err) {
       return console.log('writing to DB failed', err)
     }
-    console.log('successfully wrote to DB')
-
-    // The line below needs to be here. For some reason,
-    // data[table] value seems to be an old value and
-    // does not take the records value. Strange.
-    data[table] = records
-    updateCache(table)
   })
 }
 
@@ -76,11 +69,16 @@ const getAvailableDomains = (): Domain[] => {
   return initialData || []
 }
 
+const getAccessTokens = (): AccessToken[] => {
+  const initialData = getData('accessToken') as AccessToken[] | undefined
+  return initialData || []
+}
+
 const getMappingByDomain = (domain: string): Mapping => {
   return domainToMapping[domain]
 }
 
-const getMappingById = (id: string): Mapping => {
+const getMappingById = (id: string): Mapping | undefined => {
   return idToMapping[id]
 }
 
@@ -95,6 +93,7 @@ export {
   getProviderKeys,
   getMappings,
   getAvailableDomains,
+  getAccessTokens,
   getMappingByDomain,
   getMappingById,
   deleteDomain

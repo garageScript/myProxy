@@ -8,8 +8,8 @@ type Mapping = {
   fullDomain: string
 }
 
-type MappingObj = {
-  string: Mapping
+type MappingById = {
+  [mappingId: string]: Mapping
 }
 
 type Provider = {
@@ -58,9 +58,14 @@ type RequestForName = {
   domains: DomainForName[] | []
 }
 
+type AccessToken = {
+  name?: string
+  id?: string
+}
+
 export {
   Mapping,
-  MappingObj,
+  MappingById,
   Provider,
   Domain,
   ServiceResponse,
@@ -68,5 +73,6 @@ export {
   ProviderService,
   ProxyMapping,
   DomainForName,
-  RequestForName
+  RequestForName,
+  AccessToken
 }
