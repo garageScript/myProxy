@@ -63,50 +63,35 @@ export const setRecord = async (
   domain: string,
   ipaddress: string
 ): Promise<ServiceResponse> => {
-  const url = `${SERVICE}/v1/domains/${domain}/records/A/@`
+  const url = `${SERVICE}/v4/domains/${domain}/records`
   const data = [
     {
-      data: ipaddress,
-      ttl: 600
+      domainName: domain,
+      type: 'A',
+      answer: ipaddress,
+      ttl: 300
     }
   ]
   const options = {
-    method: 'PUT',
+    method: 'POST',
     headers: {
-      Authorization: `sso-key ${findKey('GD_Key')}:${findKey('GD_Secret')}`,
-      'Content-Type': 'application/json'
+      Authorization: `Basic ${Buffer.from(
+        `${findKey('NAME_Key')}:${findKey('NAME_Secret')}`
+      ).toString('base64')}`
     },
     body: JSON.stringify(data)
   }
-  const cnameUrl = `${SERVICE}/v1/domains/${domain}/records/CNAME/*`
-  const cnameData = [
-    {
-      data: '@',
-      ttl: 600
-    }
-  ]
-  const cnameOptions = {
-    method: 'PUT',
-    headers: {
-      Authorization: `sso-key ${findKey('GD_Key')}:${findKey('GD_Secret')}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(cnameData)
-  }
+
   const response: ServiceResponse = {
     success: true,
     message: 'Successfully set CNAME records for wildcard domain'
   }
-  try {
-    // eslint-disable-next-line
-    const results = await Promise.all([
-      fetch(url, options),
-      fetch(cnameUrl, cnameOptions)
-    ])
-  } catch (e) {
-    console.error('Error setting CNAME records', e)
+
+  await fetch(url, options).catch(error => {
+    console.error('Error setting CNAME records', error)
     response.success = false
     response.message = 'Error setting CNAME records'
-  }
+  })
+
   return response
 }
