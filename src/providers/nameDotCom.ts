@@ -48,7 +48,7 @@ export const getDomains = async (): Promise<Provider> => {
     return { domains: [] }
   })
 
-  domains = [...request.domains]
+  if (request.domains) domains = [...request.domains]
 
   return {
     id: 'dns_name',
