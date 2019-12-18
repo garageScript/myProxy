@@ -38,11 +38,24 @@ type ProviderService = {
 
 type ServiceConfig = {
   dns_gd: ProviderService
+  nameDotCom: ProviderService
 }
 
 type ProxyMapping = {
   ip?: string
   port?: string
+}
+
+type DomainForName = {
+  domainName: string
+  locked: boolean
+  autorenewEnabled: boolean
+  expireDate: string
+  createDate: string
+}
+
+type RequestForName = {
+  domains: DomainForName[] | []
 }
 
 export {
@@ -53,5 +66,7 @@ export {
   ServiceResponse,
   ServiceConfig,
   ProviderService,
-  ProxyMapping
+  ProxyMapping,
+  DomainForName,
+  RequestForName
 }
