@@ -40,6 +40,7 @@ try {
 
   domainToMapping = mapByDomain(data.mappings)
   idToMapping = mapById(data.mappings)
+  idToAccessToken = mapById(data.accessTokens)
 } catch (err) {
   console.log(
     'File does not exist, but do not worry. File will be created on first save',
