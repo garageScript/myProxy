@@ -1,0 +1,21 @@
+<%- include('../layout/head.ejs') %>
+
+<div class="container">
+  <div class='headContainer' style="diplay: flex; justify-content: space between;">
+    <h1>AccessTokens</h1>
+
+    <input class="inputBox"type="text">
+    <button class="createToken">SUBMIT</button>
+
+    <hr />
+
+    <div class="row">
+      <div class="col-12">
+        <ul class="list-group tokensList"></ul>
+      </div>
+    </div>
+
+    <%- include('../layout/footer.ejs') %>
+    <script src="/accessTokens.js"></script>
+
+
