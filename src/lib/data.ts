@@ -1,7 +1,13 @@
 import fs from 'fs'
-import { createDomainCache, createIdCache } from '../helpers/cache'
+import { createDomainCache, createIdCache, mapById } from '../helpers/cache'
 import { DB, ServiceKey } from '../types/admin'
-import { Mapping, MappingById, Domain, AccessToken } from '../types/general'
+import {
+  Mapping,
+  MappingById,
+  Domain,
+  AccessToken,
+  AccessTokenById
+} from '../types/general'
 
 const data: DB = {
   serviceKeys: [],
@@ -12,11 +18,15 @@ const data: DB = {
 
 let domainToMapping: MappingById = {}
 let idToMapping: MappingById = {}
+let idToAccessToken: AccessTokenById = {}
 
 const updateCache = (table: keyof DB): void => {
   if (table === 'mappings') {
     domainToMapping = createDomainCache(data.mappings)
     idToMapping = createIdCache(data.mappings)
+  }
+  if (table === 'accessTokens') {
+    idToAccessToken = mapById(data.accessTokens)
   }
 }
 
@@ -82,6 +92,10 @@ const getMappingById = (id: string): Mapping | undefined => {
   return idToMapping[id]
 }
 
+const getTokenById = (id: string): AccessToken | undefined => {
+  return idToAccessToken[id]
+}
+
 const deleteDomain = (domain: string): void => {
   delete domainToMapping[domain]
   setData('mappings', Object.values(domainToMapping))
@@ -96,5 +110,6 @@ export {
   getAccessTokens,
   getMappingByDomain,
   getMappingById,
+  getTokenById,
   deleteDomain
 }
