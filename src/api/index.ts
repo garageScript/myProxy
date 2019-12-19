@@ -9,11 +9,12 @@ import { validUser } from '../helpers/authentication'
 
 const apiRouter = express.Router()
 
+apiRouter.use(validUser)
 apiRouter.use('/admin', adminRouter.app)
-apiRouter.use('/logs', validUser, logsRouter)
-apiRouter.use('/mappings', validUser, mappingRouter)
-apiRouter.use('/sshKeys', validUser, sshKeyRouter)
-apiRouter.use('/accessTokens', validUser, accessTokensRouter)
+apiRouter.use('/logs', logsRouter)
+apiRouter.use('/mappings', mappingRouter)
+apiRouter.use('/sshKeys', sshKeyRouter)
+apiRouter.use('/accessTokens', accessTokensRouter)
 
 apiRouter.get('/availableDomains', (req, res) => {
   const domains = getAvailableDomains()
