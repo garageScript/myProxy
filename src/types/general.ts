@@ -12,6 +12,10 @@ type MappingById = {
   [mappingId: string]: Mapping
 }
 
+type AccessTokenById = {
+  [id: string]: AccessToken
+}
+
 type Provider = {
   id: string
   service: string
@@ -46,8 +50,8 @@ type ProxyMapping = {
 }
 
 type AccessToken = {
-  name?: string
-  id?: string
+  name: string
+  id: string
 }
 
 export {
@@ -59,5 +63,6 @@ export {
   ServiceConfig,
   ProviderService,
   ProxyMapping,
-  AccessToken
+  AccessToken,
+  AccessTokenById
 }
