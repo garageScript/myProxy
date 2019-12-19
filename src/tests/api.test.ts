@@ -34,12 +34,12 @@ describe('/api', () => {
       })
       expect(response.status).toEqual(401)
     })
-    // This test will be enabled in the next PR when the logic is implemented
-    it.skip('Mappings should respond with 200 if token matches', async () => {
+    it('Mappings should respond with 200 if token matches', async () => {
       const createTokenResponse = await fetch(`${apiUrl}/api/accessTokens`, {
         method: 'POST',
         headers: {
-          authorization: ADMIN
+          authorization: ADMIN,
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ name: 'PaulWalker' })
       })
@@ -57,12 +57,12 @@ describe('/api', () => {
         }
       })
     })
-    // This test will be enabled in the next PR when logic is implemented.
-    it.skip('Admin should respond with 401 with token ', async () => {
+    it('Admin should respond with 401 with token ', async () => {
       const createTokenResponse = await fetch(`${apiUrl}/api/accessTokens`, {
         method: 'POST',
         headers: {
-          authorization: ADMIN
+          authorization: ADMIN,
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ name: 'PaulWalker' })
       })
