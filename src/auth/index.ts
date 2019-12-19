@@ -34,7 +34,6 @@ const setupAuth = password => {
 }
 
 // This will be changed into setupAuth at a PR later
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const setupAccessToken = (req, res, next): void => {
   const { adminPass } = req.cookies
   const { access = '', authorization = '' } = req.headers
@@ -55,7 +54,7 @@ const setupAccessToken = (req, res, next): void => {
     req.admin = true
     return next()
   }
-  return res.status(401).send('Unauthorized')
+  return next()
 }
 
-export { setupAuth, setPass, isCorrectCredentials }
+export { setupAuth, setPass, setupAccessToken, isCorrectCredentials }
