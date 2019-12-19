@@ -7,9 +7,12 @@ import { getAvailableDomains, setData, getProviderKeys } from '../lib/data'
 import { createSslCerts, setCnameRecords } from '../helpers/domainSetup'
 import providers from '../providers'
 import environment from '../helpers/environment'
+import { validAdmin } from '../helpers/authentication'
 
 const { isProduction } = environment
 const app = express.Router()
+
+app.use(validAdmin)
 
 app.post('/sslCerts', async (req, res) => {
   const { service, selectedDomain } = req.body
