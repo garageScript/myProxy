@@ -27,7 +27,7 @@ jobs:
     executor: node
     steps:
       - checkout_and_restore_cache
-      - run: ./scripts/setup.sh
+      - run: ./scripts/setup.sh 
       - persist_to_workspace:
           root: .
           paths:
@@ -51,6 +51,17 @@ jobs:
       - workspace
       - checkout_and_restore_cache
       - run: npm run test
+  deploy:
+      executor: node
+      steps:
+        - add_ssh_keys:
+            fingerprints:
+            - "a1:09:f8:12:0e:f2:aa:75:39:62:1f:31:55:d3:0c:a8"
+        - workspace
+        - checkout_and_restore_cache
+        - run:
+            name: Deploy Over SSH
+            command: ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "/home/dev/prodProxy/scripts/deploy.sh"
 
 workflows:
   version: 2

@@ -27,9 +27,10 @@ describe('/api/accessTokens', () => {
     const getTokens = await accessTokensAdapter('/', 'GET').then(r => r.json())
     const foundToken = getTokens.find(e => e.name === name)
     expect(foundToken.name).toEqual(name)
+    await accessTokensAdapter(`/${postAccessToken.id}`, 'DELETE')
   })
 
-  it('should not allow dulplicate tokens', async () => {
+  it('should not allow duplicate tokens', async () => {
     const firstName = `c0d3access${uuidv4()}`
     const postResponse = await accessTokensAdapter('/', 'POST', {
       name: firstName
@@ -45,6 +46,7 @@ describe('/api/accessTokens', () => {
     )
     const allTokens = updatedTokens.filter(e => e.name === firstName)
     expect(allTokens.length).toEqual(1)
+    await accessTokensAdapter(`/${allTokens[0].id}`, 'DELETE')
   })
 
   it('should delete the token', async () => {
