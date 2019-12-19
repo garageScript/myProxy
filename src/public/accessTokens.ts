@@ -15,7 +15,7 @@ class AccessTokens {
     tokensList.appendChild(token)
     token.innerHTML = `
      <div style="width: 100%">
-      <div style="diplay: flex;>
+      <div style="diplay: flex; color:#0066FF;">
         <a class="font-weight-bold">
         Token Name: ${data.name}
         </a>
