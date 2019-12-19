@@ -1,17 +1,26 @@
 <%- include('../layout/head.ejs') %>
 
 <div class="container" style="margin-top:50px">
-  <div class='headContainer' style="diplay: flex; justify-content: space between;">
+  <div class='headContainer' style=" justify-content: space between;">
     <h1>AccessTokens</h1>
 
-    <input class="inputBox"type="text">
+    <div class="input-group mr-3 mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">
+          Create Token:
+        </span>
+      </div>
+
+    <input class=" inputBox"type="text">
+
     <a 
       class="btn-outline-success btn createToken"
-      style="margin-left: 0px"
+      style="margin-right: 100px;"
       href="/api/accessTokens"
       >
       SUBMIT
     </a>
+   </div>
 
     <hr />
 
