@@ -38,7 +38,7 @@ type ProviderService = {
 
 type ServiceConfig = {
   dns_gd: ProviderService
-  nameDotCom: ProviderService
+  dns_namecom: ProviderService
 }
 
 type ProxyMapping = {

@@ -21,7 +21,7 @@ const getKeys = (): ServiceKey[] => {
     const serviceKeys = getProviderKeys()
     return (
       serviceKeys.find(
-        k => k.service === 'dns_name' && k.key === keyInfo.key
+        k => k.service === 'dns_namecom' && k.key === keyInfo.key
       ) || keyInfo
     )
   })
@@ -51,7 +51,7 @@ export const getDomains = async (): Promise<Provider> => {
   if (request.domains) domains = [...request.domains]
 
   return {
-    id: 'dns_name',
+    id: 'dns_namecom',
     service: SERVICE,
     name: NAME,
     keys,
