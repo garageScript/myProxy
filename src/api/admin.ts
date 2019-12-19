@@ -45,6 +45,7 @@ app.post('/sslCerts', async (req, res) => {
     setData('availableDomains', domains)
     return res.json(serviceResponse)
   } catch (err) {
+    console.error('POST /sslCerts err:', err)
     serviceResponse.success = false
     serviceResponse.message = `Error: ${JSON.stringify(err)}`
     return res.json(serviceResponse)
