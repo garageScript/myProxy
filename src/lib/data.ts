@@ -7,7 +7,7 @@ const data: DB = {
   serviceKeys: [],
   mappings: [],
   availableDomains: [],
-  accessToken: []
+  accessTokens: []
 }
 
 let domainToMapping: MappingById = {}
@@ -26,7 +26,7 @@ try {
   data.serviceKeys = fileData.serviceKeys || []
   data.mappings = fileData.mappings || []
   data.availableDomains = fileData.availableDomains || []
-  data.accessToken = fileData.accessToken || []
+  data.accessTokens = fileData.accessTokens || []
 
   domainToMapping = createDomainCache(data.mappings)
   idToMapping = createIdCache(data.mappings)
@@ -37,7 +37,7 @@ try {
   )
 }
 
-const getData = <T extends keyof DB>(table: T): DB[T] => {
+const getData = <T extends keyof DB>(table: T): DB[T] | undefined => {
   return data[table]
 }
 
@@ -55,22 +55,22 @@ const setData = <T extends keyof DB>(table: T, records: DB[T]): void => {
 }
 
 const getProviderKeys = (): ServiceKey[] => {
-  const initialData = getData('serviceKeys') as ServiceKey[] | undefined
+  const initialData = getData('serviceKeys')
   return initialData || []
 }
 
 const getMappings = (): Mapping[] => {
-  const initialData = getData('mappings') as Mapping[] | undefined
+  const initialData = getData('mappings')
   return initialData || []
 }
 
 const getAvailableDomains = (): Domain[] => {
-  const initialData = getData('availableDomains') as Domain[] | undefined
+  const initialData = getData('availableDomains')
   return initialData || []
 }
 
 const getAccessTokens = (): AccessToken[] => {
-  const initialData = getData('accessToken') as AccessToken[] | undefined
+  const initialData = getData('accessTokens')
   return initialData || []
 }
 

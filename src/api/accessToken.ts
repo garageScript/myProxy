@@ -24,7 +24,7 @@ accessTokensRouter.post('/', (req, res) => {
     id: `${uuidv4()}`
   }
   allAccessTokens.push(tokensObject)
-  setData('accessToken', allAccessTokens)
+  setData('accessTokens', allAccessTokens)
   res.json(tokensObject)
 })
 
@@ -48,7 +48,7 @@ accessTokensRouter.delete('/:id', (req, res) => {
       return true
     }
   })
-  setData('accessToken', tokens)
+  setData('accessTokens', tokens)
 })
 
 export default accessTokensRouter
