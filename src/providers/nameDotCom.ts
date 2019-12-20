@@ -66,6 +66,7 @@ export const setRecord = async (
   const url = `${SERVICE}/v4/domains/${domain}/records`
   const data = [
     {
+      host: '*',
       domainName: domain,
       type: 'A',
       answer: ipaddress,
