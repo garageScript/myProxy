@@ -33,25 +33,17 @@ const setupAuth = password => {
 // This will be changed into setupAuth at a PR later
 const setupAccessToken = (req, res, next): void => {
   const { adminPass } = req.cookies
-  const { access = '', authorization = '' } = req.headers
-  req.user = {
-    isAdmin: false,
-    isUser: false
-  }
-  if (adminPass === hashPass(pass)) {
-    req.user.isAdmin = true
-    req.user.isUser = true
+  const { authorization = '' } = req.headers
+  if (
+    adminPass === hashPass(pass) ||
+    isCorrectCredentials(authorization, pass)
+  ) {
+    req.user = { isAdmin: true, isUser: true }
     return next()
   }
-  if (authorization || access) {
-    const correctPw = isCorrectCredentials(authorization, pass)
-    const correctToken = isValidAccessToken(access)
-    if (!correctPw && !correctToken) return res.status(401).send('Unauthorized')
-    if (correctPw) {
-      req.user.isAdmin = true
-    }
-    if (correctToken) {
-      req.user.isUser = true
+  if (isValidAccessToken(authorization)) {
+    {
+      req.user = { isUser: true }
     }
     return next()
   }

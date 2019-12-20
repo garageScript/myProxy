@@ -46,7 +46,7 @@ describe('/api', () => {
       const token = await createTokenResponse.json()
       const fetchResponse = await fetch(`${apiUrl}/api/mappings`, {
         headers: {
-          access: token.id
+          authorization: token.id
         }
       })
       expect(fetchResponse.status).toEqual(200)
@@ -69,7 +69,7 @@ describe('/api', () => {
       const token = await createTokenResponse.json()
       const fetchResponse = await fetch(`${apiUrl}/api/admin/providerKeys`, {
         headers: {
-          access: token.id
+          authorization: token.id
         }
       })
       expect(fetchResponse.status).toEqual(401)
