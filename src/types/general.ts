@@ -1,3 +1,4 @@
+import { Request } from 'express'
 type Mapping = {
   domain: string
   subDomain: string
@@ -6,6 +7,13 @@ type Mapping = {
   id: string
   gitLink: string
   fullDomain: string
+}
+
+interface AuthenticatedRequest extends Request {
+  user?: {
+    isAdmin: boolean
+    isUser: boolean
+  }
 }
 
 type MappingById = {
@@ -64,5 +72,6 @@ export {
   ProviderService,
   ProxyMapping,
   AccessToken,
-  AccessTokenById
+  AccessTokenById,
+  AuthenticatedRequest
 }

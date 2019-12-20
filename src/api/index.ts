@@ -1,12 +1,23 @@
-import express from 'express'
+import express, { Response, NextFunction } from 'express'
 import adminRouter from './admin'
 import logsRouter from './logs'
 import mappingRouter from './mapping'
 import sshKeyRouter from './sshKeys'
 import accessTokensRouter from './accessToken'
 import { getAvailableDomains } from '../lib/data'
+import { AuthenticatedRequest } from '../types/general'
 
 const apiRouter = express.Router()
+
+apiRouter.use(
+  (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+    if (!req.user || (!req.user.isUser && !req.user.isAdmin)) {
+      res.status(401).send('Unauthorized')
+      return
+    }
+    return next()
+  }
+)
 
 apiRouter.use('/admin', adminRouter.app)
 apiRouter.use('/logs', logsRouter)
