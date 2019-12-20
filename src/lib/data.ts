@@ -1,22 +1,32 @@
 import fs from 'fs'
-import { createDomainCache, createIdCache } from '../helpers/cache'
+import { createDomainCache, mapById } from '../helpers/cache'
 import { DB, ServiceKey } from '../types/admin'
-import { Mapping, MappingById, Domain, AccessToken } from '../types/general'
+import {
+  Mapping,
+  MappingById,
+  Domain,
+  AccessToken,
+  AccessTokenById
+} from '../types/general'
 
 const data: DB = {
   serviceKeys: [],
   mappings: [],
   availableDomains: [],
-  accessToken: []
+  accessTokens: []
 }
 
 let domainToMapping: MappingById = {}
 let idToMapping: MappingById = {}
+let idToAccessToken: AccessTokenById = {}
 
 const updateCache = (table: keyof DB): void => {
   if (table === 'mappings') {
     domainToMapping = createDomainCache(data.mappings)
-    idToMapping = createIdCache(data.mappings)
+    idToMapping = mapById(data.mappings)
+  }
+  if (table === 'accessTokens') {
+    idToAccessToken = mapById(data.accessTokens)
   }
 }
 
@@ -26,10 +36,11 @@ try {
   data.serviceKeys = fileData.serviceKeys || []
   data.mappings = fileData.mappings || []
   data.availableDomains = fileData.availableDomains || []
-  data.accessToken = fileData.accessToken || []
+  data.accessTokens = fileData.accessTokens || []
 
   domainToMapping = createDomainCache(data.mappings)
-  idToMapping = createIdCache(data.mappings)
+  idToMapping = mapById(data.mappings)
+  idToAccessToken = mapById(data.accessTokens)
 } catch (err) {
   console.log(
     'File does not exist, but do not worry. File will be created on first save',
@@ -37,7 +48,7 @@ try {
   )
 }
 
-const getData = <T extends keyof DB>(table: T): DB[T] => {
+const getData = <T extends keyof DB>(table: T): DB[T] | undefined => {
   return data[table]
 }
 
@@ -55,22 +66,22 @@ const setData = <T extends keyof DB>(table: T, records: DB[T]): void => {
 }
 
 const getProviderKeys = (): ServiceKey[] => {
-  const initialData = getData('serviceKeys') as ServiceKey[] | undefined
+  const initialData = getData('serviceKeys')
   return initialData || []
 }
 
 const getMappings = (): Mapping[] => {
-  const initialData = getData('mappings') as Mapping[] | undefined
+  const initialData = getData('mappings')
   return initialData || []
 }
 
 const getAvailableDomains = (): Domain[] => {
-  const initialData = getData('availableDomains') as Domain[] | undefined
+  const initialData = getData('availableDomains')
   return initialData || []
 }
 
 const getAccessTokens = (): AccessToken[] => {
-  const initialData = getData('accessToken') as AccessToken[] | undefined
+  const initialData = getData('accessTokens')
   return initialData || []
 }
 
@@ -80,6 +91,10 @@ const getMappingByDomain = (domain: string): Mapping => {
 
 const getMappingById = (id: string): Mapping | undefined => {
   return idToMapping[id]
+}
+
+const getTokenById = (id: string): AccessToken | undefined => {
+  return idToAccessToken[id]
 }
 
 const deleteDomain = (domain: string): void => {
@@ -96,5 +111,6 @@ export {
   getAccessTokens,
   getMappingByDomain,
   getMappingById,
+  getTokenById,
   deleteDomain
 }
