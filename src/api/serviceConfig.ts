@@ -5,7 +5,7 @@ const serviceConfig: unknown = {
   },
   dns_namecom: {
     name: 'Name.com',
-    keys: ['NAME_Key', 'NAME_Secret']
+    keys: ['Namecom_Username', 'Namecom_Token']
   }
 }
 

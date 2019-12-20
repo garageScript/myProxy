@@ -14,8 +14,8 @@ const SERVICE = isProduction
 
 const getKeys = (): ServiceKey[] => {
   const keysDefault: { key: string }[] = [
-    { key: 'NAME_Key' },
-    { key: 'NAME_Secret' }
+    { key: 'Namecom_Username' },
+    { key: 'Namecom_Token' }
   ]
   const keys = keysDefault.map(keyInfo => {
     const serviceKeys = getProviderKeys()
@@ -38,7 +38,7 @@ export const getDomains = async (): Promise<Provider> => {
   const options = {
     headers: {
       Authorization: `Basic ${Buffer.from(
-        `${findKey('NAME_Key')}:${findKey('NAME_Secret')}`
+        `${findKey('Namecom_Username')}:${findKey('Namecom_Token')}`
       ).toString('base64')}`
     }
   }
@@ -76,7 +76,7 @@ export const setRecord = async (
     method: 'POST',
     headers: {
       Authorization: `Basic ${Buffer.from(
-        `${findKey('NAME_Key')}:${findKey('NAME_Secret')}`
+        `${findKey('Namecom_Username')}:${findKey('Namecom_Token')}`
       ).toString('base64')}`
     },
     body: JSON.stringify(data)
