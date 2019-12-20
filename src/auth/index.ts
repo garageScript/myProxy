@@ -40,6 +40,7 @@ const setupAccessToken = (req, res, next): void => {
   }
   if (adminPass === hashPass(pass)) {
     req.user.isAdmin = true
+    req.user.isUser = true
     return next()
   }
   if (authorization || access) {
