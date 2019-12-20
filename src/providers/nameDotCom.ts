@@ -64,15 +64,14 @@ export const setRecord = async (
   ipaddress: string
 ): Promise<ServiceResponse> => {
   const url = `${SERVICE}/v4/domains/${domain}/records`
-  const data = [
-    {
-      host: '*',
-      domainName: domain,
-      type: 'A',
-      answer: ipaddress,
-      ttl: 300
-    }
-  ]
+  const data = {
+    host: '*',
+    domainName: domain,
+    type: 'A',
+    answer: ipaddress,
+    ttl: 300
+  }
+
   const options = {
     method: 'POST',
     headers: {
