@@ -2,7 +2,34 @@
 
 <div class="container" style="margin-top:50px">
   <div class='headContainer' style=" justify-content: space between;">
+    
+   <div class="flexContainer" style="display: flex;">
     <h1>AccessTokens</h1>
+
+    <div class="navBar" style="margin-left: 513px">
+      <a 
+        class="btn-outline-success btn"
+        style="margin-right: auto;"
+        href="/sshKeys"
+        >
+        Managge SSH KEYS
+      </a>
+      <a 
+        class="btn-outline-primary btn"
+        style="margin-right: auto;"
+        href="/"
+        >
+        My Proxy
+      </a>
+      <a 
+        class="btn-outline-primary btn"
+        style="margin-right: auto;"
+        href="/sshKeys"
+        >
+        Admin
+      </a>
+    </div>
+   </div>
 
     <div class="input-group mr-3 mb-2">
       <div class="input-group-prepend">
@@ -16,7 +43,7 @@
     <a 
       class="btn-outline-success btn createToken"
       style="margin-right: 100px;"
-      href="/api/accessTokens"
+      href="/admin/accessTokens"
       >
       SUBMIT
     </a>
