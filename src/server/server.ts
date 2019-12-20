@@ -55,16 +55,17 @@ const startAppServer = (
     app.use(express.urlencoded({ extended: true }))
     app.use(cookieParser())
     app.use(express.static(path.join(__dirname, '../public')))
-    app.use('/admin', setupAuth, adminRouter)
-    app.use('/api', setupAuth, apiRouter)
+    app.use(setupAuth)
+    app.use('/admin', adminRouter)
+    app.use('/api', apiRouter)
     app.set('view engine', 'ejs')
     app.set('views', path.join(__dirname, '../../views'))
 
-    app.get('/', setupAuth, validUIAccess, (_, res) =>
+    app.get('/', validUIAccess, (_, res) => {
       getAvailableDomains().length > 0
         ? res.render('client')
         : res.redirect('/admin')
-    )
+    })
     app.get('/login', (req, res) => res.render('login', { error: '' }))
 
     app.post('/login', (req, res) => {
@@ -76,7 +77,7 @@ const startAppServer = (
       return res.render('login', { error: 'Wrong Admin Password' })
     })
 
-    app.get('/sshKeys', setupAuth, validUIAccess, (req, res) => {
+    app.get('/sshKeys', validUIAccess, (req, res) => {
       res.render('sshKeys')
     })
 
