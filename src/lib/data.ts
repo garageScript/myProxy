@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { createDomainCache, createIdCache, mapById } from '../helpers/cache'
+import { createDomainCache, mapById } from '../helpers/cache'
 import { DB, ServiceKey } from '../types/admin'
 import {
   Mapping,
@@ -23,7 +23,7 @@ let idToAccessToken: AccessTokenById = {}
 const updateCache = (table: keyof DB): void => {
   if (table === 'mappings') {
     domainToMapping = createDomainCache(data.mappings)
-    idToMapping = createIdCache(data.mappings)
+    idToMapping = mapById(data.mappings)
   }
   if (table === 'accessTokens') {
     idToAccessToken = mapById(data.accessTokens)
@@ -39,7 +39,8 @@ try {
   data.accessTokens = fileData.accessTokens || []
 
   domainToMapping = createDomainCache(data.mappings)
-  idToMapping = createIdCache(data.mappings)
+  idToMapping = mapById(data.mappings)
+  idToAccessToken = mapById(data.accessTokens)
 } catch (err) {
   console.log(
     'File does not exist, but do not worry. File will be created on first save',
