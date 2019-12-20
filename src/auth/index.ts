@@ -8,10 +8,7 @@ const isCorrectCredentials = (password: string, correct: string): boolean => {
   return userPassword === adminPassword
 }
 
-const isCorrectAccessToken = (token: string): boolean => {
-  if (getTokenById(token)) return true
-  return false
-}
+const isValidAccesToken = (token: string): boolean => !!getTokenById(token)
 
 const setPass = (password: string): void => {
   pass = password
@@ -47,7 +44,7 @@ const setupAccessToken = (req, res, next): void => {
   }
   if (authorization || access) {
     const correctPw = isCorrectCredentials(authorization, pass)
-    const correctToken = isCorrectAccessToken(access)
+    const correctToken = isValidAccesToken(access)
     if (!correctPw && !correctToken) return res.status(401).send('Unauthorized')
     if (correctPw) {
       req.user.isAdmin = true
