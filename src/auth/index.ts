@@ -21,12 +21,12 @@ const setupAuth = (req, res, next): void => {
     adminPass === hashPass(pass) ||
     isCorrectCredentials(authorization, pass)
   ) {
-    req.user = { isAdmin: true, isUser: true }
+    req.user = { isAdmin: true, isPseudoAdmin: true }
     return next()
   }
   if (isValidAccessToken(authorization)) {
     {
-      req.user = { isUser: true }
+      req.user = { isPseudoAdmin: true }
     }
     return next()
   }
