@@ -11,7 +11,7 @@ type DB = {
   serviceKeys: ServiceKey[]
   mappings: Mapping[]
   availableDomains: Domain[]
-  accessToken: AccessToken[]
+  accessTokens: AccessToken[]
 }
 
 export { ServiceKey, DB }

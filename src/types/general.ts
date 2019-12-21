@@ -1,3 +1,4 @@
+import { Request } from 'express'
 type Mapping = {
   domain: string
   subDomain: string
@@ -8,8 +9,19 @@ type Mapping = {
   fullDomain: string
 }
 
+interface AuthenticatedRequest extends Request {
+  user?: {
+    isAdmin: boolean
+    isPseudoAdmin: boolean
+  }
+}
+
 type MappingById = {
   [mappingId: string]: Mapping
+}
+
+type AccessTokenById = {
+  [id: string]: AccessToken
 }
 
 type Provider = {
@@ -46,8 +58,8 @@ type ProxyMapping = {
 }
 
 type AccessToken = {
-  name?: string
-  id?: string
+  name: string
+  id: string
 }
 
 export {
@@ -59,5 +71,7 @@ export {
   ServiceConfig,
   ProviderService,
   ProxyMapping,
-  AccessToken
+  AccessToken,
+  AccessTokenById,
+  AuthenticatedRequest
 }

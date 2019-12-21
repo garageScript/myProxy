@@ -8,9 +8,10 @@ import cookieParser from 'cookie-parser'
 
 import { adminRouter } from '../admin/index'
 import { apiRouter } from '../api/index'
+import { validUIAccess } from '../helpers/authentication'
 import { hashPass } from '../helpers/crypto'
 import { getAvailableDomains, getMappingByDomain } from '../lib/data'
-import { setupAuth, isCorrectCredentials } from '../auth'
+import { setPass, setupAuth, isCorrectCredentials } from '../auth'
 import { ProxyMapping } from '../types/general'
 import { SNICallback } from '../helpers/SNICallback'
 import { setAuthorizedKeys } from '../helpers/authorizedKeys'
@@ -33,6 +34,7 @@ const startAppServer = (
       console.error(red, errorMsg)
       return reject(errorMsg)
     }
+    setPass(adminPass)
 
     if (isProduction()) {
       fs.readFile('/home/myproxy/.ssh/authorized_keys', (error, data) => {
@@ -53,16 +55,17 @@ const startAppServer = (
     app.use(express.urlencoded({ extended: true }))
     app.use(cookieParser())
     app.use(express.static(path.join(__dirname, '../public')))
+    app.use(setupAuth)
     app.use('/admin', adminRouter)
-    app.use('/api', setupAuth(adminPass), apiRouter)
+    app.use('/api', apiRouter)
     app.set('view engine', 'ejs')
     app.set('views', path.join(__dirname, '../../views'))
 
-    app.get('/', setupAuth(adminPass), (_, res) =>
+    app.get('/', validUIAccess, (_, res) => {
       getAvailableDomains().length > 0
         ? res.render('client')
         : res.redirect('/admin')
-    )
+    })
     app.get('/login', (req, res) => res.render('login', { error: '' }))
 
     app.post('/login', (req, res) => {
@@ -74,7 +77,7 @@ const startAppServer = (
       return res.render('login', { error: 'Wrong Admin Password' })
     })
 
-    app.get('/sshKeys', (req, res) => {
+    app.get('/sshKeys', validUIAccess, (req, res) => {
       res.render('sshKeys')
     })
 

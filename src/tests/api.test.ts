@@ -16,15 +16,6 @@ describe('/api', () => {
     server.close()
   })
 
-  it('Should respond with 401 if pw does not match', async () => {
-    const response = await fetch(`${apiUrl}/api/admin/providerKeys`, {
-      headers: {
-        authorization: 'oaeuou aoueHello'
-      }
-    })
-    expect(response.status).toEqual(401)
-  })
-
   describe('/api/admin', () => {
     it('Should respond with 200 if pw matches', async () => {
       const response = await fetch(`${apiUrl}/api/admin/providerKeys`, {
@@ -33,6 +24,61 @@ describe('/api', () => {
         }
       })
       expect(response.status).toEqual(200)
+    })
+
+    it('Should respond with 401 if pw does not match', async () => {
+      const response = await fetch(`${apiUrl}/api/admin/providerKeys`, {
+        headers: {
+          authorization: 'oaeuou aoueHello'
+        }
+      })
+      expect(response.status).toEqual(401)
+    })
+    it('Mappings should respond with 200 if token matches', async () => {
+      const createTokenResponse = await fetch(`${apiUrl}/api/accessTokens`, {
+        method: 'POST',
+        headers: {
+          authorization: ADMIN,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name: 'PaulWalker' })
+      })
+      const token = await createTokenResponse.json()
+      const fetchResponse = await fetch(`${apiUrl}/api/mappings`, {
+        headers: {
+          authorization: token.id
+        }
+      })
+      expect(fetchResponse.status).toEqual(200)
+      await fetch(`${apiUrl}/api/accessTokens/${token.id}`, {
+        method: 'DELETE',
+        headers: {
+          authorization: ADMIN
+        }
+      })
+    })
+    it('Admin should respond with 401 with token ', async () => {
+      const createTokenResponse = await fetch(`${apiUrl}/api/accessTokens`, {
+        method: 'POST',
+        headers: {
+          authorization: ADMIN,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name: 'PaulWalker' })
+      })
+      const token = await createTokenResponse.json()
+      const fetchResponse = await fetch(`${apiUrl}/api/admin/providerKeys`, {
+        headers: {
+          authorization: token.id
+        }
+      })
+      expect(fetchResponse.status).toEqual(401)
+      await fetch(`${apiUrl}/api/accessTokens/${token.id}`, {
+        method: 'DELETE',
+        headers: {
+          authorization: ADMIN
+        }
+      })
     })
   })
 

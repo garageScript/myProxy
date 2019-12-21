@@ -1,10 +1,20 @@
 /* eslint @typescript-eslint/camelcase: 0 */
-import express from 'express'
+import express, { Response, NextFunction } from 'express'
 import uuidv4 from 'uuid/v4'
-import { AccessToken } from '../types/general'
+import { AccessToken, AuthenticatedRequest } from '../types/general'
 import { setData, getAccessTokens } from '../lib/data'
 
 const accessTokensRouter = express.Router()
+
+accessTokensRouter.use(
+  (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+    if (!req.user.isAdmin) {
+      res.status(401).send('Unauthorized')
+      return
+    }
+    return next()
+  }
+)
 
 accessTokensRouter.post('/', (req, res) => {
   if (req.body.name.length < 2) {
@@ -24,7 +34,7 @@ accessTokensRouter.post('/', (req, res) => {
     id: `${uuidv4()}`
   }
   allAccessTokens.push(tokensObject)
-  setData('accessToken', allAccessTokens)
+  setData('accessTokens', allAccessTokens)
   res.json(tokensObject)
 })
 
@@ -48,7 +58,7 @@ accessTokensRouter.delete('/:id', (req, res) => {
       return true
     }
   })
-  setData('accessToken', tokens)
+  setData('accessTokens', tokens)
 })
 
 export default accessTokensRouter

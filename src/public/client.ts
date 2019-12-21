@@ -41,14 +41,16 @@ class MappingItem {
     const mappingElement = document.createElement('li')
     let iconClass
     let iconColor
-    // LogClass is used to hide the button to download logs when
-    // pm2 is not managing the apps. Since pm2 is not managing the apps,
-    // the logs will not be located at the same location
+    // The variables below are to hide log related icons when pm2 is not
+    // being used to monitor the apps. These apps will not have status since
+    // they are not managed by pm2.
+    let settingClass
     let logClass
     if (data.status === 'online') {
       iconClass = 'fa fa-circle mr-1 mt-1'
       iconColor = 'rgba(50,255,50,0.5)'
       logClass = 'fa fa-file-text-o ml-1 mt-1'
+      settingClass = 'ml-1 fa fa-cog'
     } else if (data.status === 'not started') {
       iconClass = ''
       iconColor = 'transparent'
@@ -56,6 +58,7 @@ class MappingItem {
       iconClass = 'fa fa-circle mr-1 mt-1'
       iconColor = 'rgba(255, 50, 50, 0.5)'
       logClass = 'fa fa-file-text-o ml-1 mt-1'
+      settingClass = 'ml-1 fa fa-cog'
     }
     mappingElement.classList.add(
       'list-group-item',
@@ -64,38 +67,59 @@ class MappingItem {
     )
     domainList.appendChild(mappingElement)
     mappingElement.innerHTML = `
-      <div style='width: 100%'>
-        <div style='display: flex'>
+      <div style="width: 100%">
+        <div style="display: flex">
           <i class="${iconClass}" style="font-size: 15px; color: ${iconColor}">
           </i>
-          <a class="font-weight-bold"
-            href="https://${data.fullDomain}">
+          <a class="font-weight-bold" href="https://${data.fullDomain}">
             ${data.fullDomain}
           </a>
           <small class="form-text text-muted ml-1">
             PORT: ${data.port}
           </small>
-          <a class="${logClass}"
+          <a
+            class="${logClass}"
             style="font-size: 15px; color: rgba(255,50,50,0.5)"
-            href="/api/logs/err/${data.fullDomain}">
+            href="/api/logs/err/${data.fullDomain}"
+          >
           </a>
-          <a class="${logClass}"
-           style="font-size: 15px; color: rgba(40,167,70,0.5)"
-           href="/api/logs/out/${data.fullDomain}">
+          <a
+            class="${logClass}"
+            style="font-size: 15px; color: rgba(40,167,70,0.5)"
+            href="/api/logs/out/${data.fullDomain}"
+          >
           </a>
+          <div class="dropright">
+            <a href="#" role="button" data-toggle="dropdown" class="btn-link">
+              <span class="${settingClass}" style="font-size: 15px"> </span>
+            </a>
+            <div class="dropdown-menu">
+              <button
+                type="button"
+                class="btn btn-link deleteLogButton"
+                style="color: rgba(255,50,50,1)"
+              >
+                Clear Logs
+              </button>
+            </div>
+          </div>
         </div>
         <small class="form-text text-muted" style="display: inline-block;">
           ${data.gitLink}
         </small>
       </div>
-      <a href="/api/mappings/download/?fullDomain=${data.fullDomain}"
-	      target="_blank" class="btn btn-sm btn-outline-success mr-3">
-	      Download<i class="fa fa-download"></i>
+      <a
+        href="/api/mappings/download/?fullDomain=${data.fullDomain}"
+        target="_blank"
+        class="btn btn-sm btn-outline-success mr-3"
+      >
+        Download<i class="fa fa-download"></i>
       </a>
       <button
         class="btn btn-sm btn-outline-danger mr-3 deleteButton"
-        type="button">
-          Delete
+        type="button"
+      >
+        Delete
       </button>
     `
 
@@ -108,6 +132,18 @@ class MappingItem {
           headers: {
             'Content-Type': 'application/json'
           }
+        }).then(() => {
+          window.location.reload()
+        })
+      }
+    }
+    const clearLogButton = helper.getElement('.deleteLogButton', mappingElement)
+    clearLogButton.onclick = (): void => {
+      if (
+        confirm(`Are you sure you want to clear ${data.fullDomain}'s logs?`)
+      ) {
+        fetch(`/api/logs/${data.fullDomain}`, {
+          method: 'DELETE'
         }).then(() => {
           window.location.reload()
         })
