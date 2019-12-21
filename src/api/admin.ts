@@ -1,8 +1,8 @@
-import express from 'express'
+import express, { Response, NextFunction } from 'express'
 import uuid4 from 'uuid/v4'
 
 import { ServiceKey } from '../types/admin'
-import { Domain, ServiceResponse } from '../types/general'
+import { Domain, ServiceResponse, AuthenticatedRequest } from '../types/general'
 import { getAvailableDomains, setData, getProviderKeys } from '../lib/data'
 import { createSslCerts, setCnameRecords } from '../helpers/domainSetup'
 import providers from '../providers'
@@ -10,6 +10,16 @@ import environment from '../helpers/environment'
 
 const { isProduction } = environment
 const app = express.Router()
+
+app.use(
+  (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+    if (!req.user.isAdmin) {
+      res.status(401).send('Unauthorized')
+      return
+    }
+    return next()
+  }
+)
 
 app.post('/sslCerts', async (req, res) => {
   const { service, selectedDomain } = req.body
