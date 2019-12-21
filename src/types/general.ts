@@ -12,7 +12,7 @@ type Mapping = {
 interface AuthenticatedRequest extends Request {
   user?: {
     isAdmin: boolean
-    isUser: boolean
+    isPseudoAdmin: boolean
   }
 }
 
