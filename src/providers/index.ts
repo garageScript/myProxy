@@ -1,5 +1,6 @@
 import { ServiceConfig } from '../types/general'
+import { GoDaddy } from '../constants/providers'
 
 export default {
-  dns_gd: require('./goDaddy')
+  [GoDaddy.DNS_API]: require('./goDaddy')
 } as ServiceConfig

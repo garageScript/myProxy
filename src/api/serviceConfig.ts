@@ -1,7 +1,9 @@
+import { GoDaddy } from '../constants/providers'
+
 const serviceConfig: unknown = {
-  dns_gd: {
+  [GoDaddy.DNS_API]: {
     name: 'Godaddy',
-    keys: ['GD_Key', 'GD_Secret']
+    keys: [GoDaddy.PRIMARY_KEY, GoDaddy.SECONDARY_KEY]
   }
 }
 

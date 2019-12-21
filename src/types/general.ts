@@ -62,6 +62,14 @@ type AccessToken = {
   id: string
 }
 
+type ProviderInfo = {
+  NAME: string
+  DNS_API: string
+  PRIMARY_KEY: string
+  SECONDARY_KEY: string
+  SERVICE: string
+}
+
 export {
   Mapping,
   MappingById,
@@ -73,5 +81,6 @@ export {
   ProxyMapping,
   AccessToken,
   AccessTokenById,
-  AuthenticatedRequest
+  AuthenticatedRequest,
+  ProviderInfo
 }

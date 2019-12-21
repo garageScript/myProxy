@@ -2,20 +2,20 @@ import { sendRequest } from '../helpers/httpRequest'
 import { getProviderKeys } from '../lib/data'
 import { Provider, ServiceResponse } from '../types/general'
 import { ServiceKey } from '../types/admin'
+import { GoDaddy } from '../constants/providers'
 import fetch from 'node-fetch'
 
-const NAME = 'Godaddy'
-const SERVICE = 'https://api.godaddy.com'
+const { NAME, DNS_API, PRIMARY_KEY, SECONDARY_KEY, SERVICE } = GoDaddy
 
 const getKeys = (): ServiceKey[] => {
   const keysDefault: { key: string }[] = [
-    { key: 'GD_Key' },
-    { key: 'GD_Secret' }
+    { key: PRIMARY_KEY },
+    { key: SECONDARY_KEY }
   ]
   const keys = keysDefault.map(keyInfo => {
     const serviceKeys = getProviderKeys()
     return (
-      serviceKeys.find(k => k.service === 'dns_gd' && k.key === keyInfo.key) ||
+      serviceKeys.find(k => k.service === DNS_API && k.key === keyInfo.key) ||
       keyInfo
     )
   })
@@ -31,7 +31,9 @@ export const getDomains = async (): Promise<Provider> => {
   const url = `${SERVICE}/v1/domains?statuses=ACTIVE`
   const options = {
     headers: {
-      Authorization: `sso-key ${findKey('GD_Key')}:${findKey('GD_Secret')}`,
+      Authorization: `sso-key ${findKey(PRIMARY_KEY)}:${findKey(
+        SECONDARY_KEY
+      )}`,
       'Content-Type': 'application/json'
     }
   }
@@ -39,7 +41,7 @@ export const getDomains = async (): Promise<Provider> => {
   domains = await sendRequest<Array<unknown>>(url, options)
 
   return {
-    id: 'dns_gd',
+    id: DNS_API,
     service: SERVICE,
     name: NAME,
     keys,
@@ -61,7 +63,9 @@ export const setRecord = async (
   const options = {
     method: 'PUT',
     headers: {
-      Authorization: `sso-key ${findKey('GD_Key')}:${findKey('GD_Secret')}`,
+      Authorization: `sso-key ${findKey(PRIMARY_KEY)}:${findKey(
+        SECONDARY_KEY
+      )}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
@@ -76,7 +80,9 @@ export const setRecord = async (
   const cnameOptions = {
     method: 'PUT',
     headers: {
-      Authorization: `sso-key ${findKey('GD_Key')}:${findKey('GD_Secret')}`,
+      Authorization: `sso-key ${findKey(PRIMARY_KEY)}:${findKey(
+        SECONDARY_KEY
+      )}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(cnameData)

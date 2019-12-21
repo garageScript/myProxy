@@ -168,11 +168,17 @@ app.patch('/providerKeys/:id', (req, res) => {
 })
 
 app.get('/providers', async (_, res) => {
-  const data = await Promise.all([providers.dns_gd.getDomains()])
+  const requests = Object.keys(providers).map(dns =>
+    providers[dns].getDomains()
+  )
+
+  const data = await Promise.all(requests)
+
   const filteredData = data.map(domainElement => {
     if (domainElement.domains.code) domainElement.domains = []
     return domainElement
   })
+
   return res.json(filteredData) // Data send to view providers ?
 })
 
