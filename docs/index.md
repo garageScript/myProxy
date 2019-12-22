@@ -26,6 +26,8 @@ To use `MyProxy`, you need 2 things:
 ## Installation
 1. Connect to your server: `ssh root@your-server-ip-address`
 
+2. If using AWS, change to root user `sudo su root` and change to home folder `cd ~`
+
 2. Clone the app: `git clone https://github.com/garageScript/myProxy.git`
 
 3. Goto myProxy folder: `cd myProxy`

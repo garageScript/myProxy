@@ -17,6 +17,13 @@ Connect to your server:
 ssh root@my_server_ip
 ```
 
+If using AWS change to root user and change directory to root folder
+
+```bash
+sudo su root
+cd ~
+```
+
 Clone the app:
 
  ```bash
