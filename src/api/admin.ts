@@ -34,7 +34,6 @@ app.post('/sslCerts', async (req, res) => {
         console.error('sslCertResponse', error)
         serviceResponse.success = false
         serviceResponse.message = 'createSslCerts error'
-        return serviceResponse
       }
     )
 
@@ -43,19 +42,20 @@ app.post('/sslCerts', async (req, res) => {
         console.error('cnameResponse', error)
         serviceResponse.success = false
         serviceResponse.message = 'setCnameRecords error'
-        return serviceResponse
       }
     )
-  }
 
-  const domains = getAvailableDomains()
-  const domain: Domain = {
-    domain: selectedDomain,
-    expiration: '<ssl expiration date will go here>',
-    provider: service
+    if (serviceResponse.success) {
+      const domains = getAvailableDomains()
+      const domain: Domain = {
+        domain: selectedDomain,
+        expiration: '<ssl expiration date will go here>',
+        provider: service
+      }
+      domains.push(domain)
+      setData('availableDomains', domains)
+    }
   }
-  domains.push(domain)
-  setData('availableDomains', domains)
 
   return res.json(serviceResponse)
 })
