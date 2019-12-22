@@ -28,37 +28,36 @@ app.post('/sslCerts', async (req, res) => {
     message: 'SSL Certs and domain name records successfully created'
   }
 
-  try {
-    if (isProduction()) {
-      const sslCertResponse = await createSslCerts(
-        serviceResponse,
-        service,
-        selectedDomain
-      )
-      if (!sslCertResponse.success) return res.json(sslCertResponse)
+  if (isProduction()) {
+    await createSslCerts(serviceResponse, service, selectedDomain).catch(
+      error => {
+        console.error('sslCertResponse', error)
+        serviceResponse.success = false
+        serviceResponse.message = 'createSslCerts error'
+      }
+    )
 
-      const cnameResponse = await setCnameRecords(
-        service,
-        selectedDomain,
-        serviceResponse
-      )
-      if (!cnameResponse.success) return res.json(cnameResponse)
-    }
+    await setCnameRecords(service, selectedDomain, serviceResponse).catch(
+      error => {
+        console.error('cnameResponse', error)
+        serviceResponse.success = false
+        serviceResponse.message = 'setCnameRecords error'
+      }
+    )
 
-    const domains = getAvailableDomains()
-    const domain: Domain = {
-      domain: selectedDomain,
-      expiration: '<ssl expiration date will go here>',
-      provider: service
+    if (serviceResponse.success) {
+      const domains = getAvailableDomains()
+      const domain: Domain = {
+        domain: selectedDomain,
+        expiration: '<ssl expiration date will go here>',
+        provider: service
+      }
+      domains.push(domain)
+      setData('availableDomains', domains)
     }
-    domains.push(domain)
-    setData('availableDomains', domains)
-    return res.json(serviceResponse)
-  } catch (err) {
-    serviceResponse.success = false
-    serviceResponse.message = `Error: ${JSON.stringify(err)}`
-    return res.json(serviceResponse)
   }
+
+  return res.json(serviceResponse)
 })
 
 app.patch('/sslCerts/:selectedDomain', async (req, res) => {
