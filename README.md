@@ -24,10 +24,27 @@ Sign up to GoDaddy and buy a domain:
 
 ## Installation
 
+**AWS Users Only** Update VM's firewall configuration match table below during security group setup on AWS EC2 instance. 
+
+| Type | Protocol | Port Range |   Source  |
+|:---:|:--------:|:----------: | :------:  |
+| HTTP |  TCP     | 80         | 0.0.0.0/0 |
+| HTTPS|  TCP     | 443        | 0.0.0.0/0 |
+| SSH  |  TCP     | 22         | 0.0.0.0/0 |
+| Custom TCP Rule | TCP | 3000 | 0.0.0.0/0 |
+| Custom TCP Rule | TCP | 9418 | 0.0.0.0/0 |
+
 Connect to your server:
 
 ```bash
 ssh root@my_server_ip
+```
+
+For AWS users, change to root user:
+
+```bash
+sudo su root
+cd ~
 ```
 
 Clone the app:
