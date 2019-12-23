@@ -49,7 +49,7 @@ type ProviderService = {
 }
 
 type ServiceConfig = {
-  dns_gd: ProviderService
+  dns_provider: ProviderService
 }
 
 type ProxyMapping = {
@@ -63,11 +63,11 @@ type AccessToken = {
 }
 
 type ProviderInfo = {
-  NAME: string
-  DNS_API: string
-  PRIMARY_KEY: string
-  SECONDARY_KEY: string
-  SERVICE: string
+  name: string
+  dns: string
+  keys: string[]
+  service: string
+  path: string
 }
 
 export {

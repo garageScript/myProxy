@@ -5,7 +5,7 @@ import { ServiceKey } from '../types/admin'
 import { Domain, ServiceResponse, AuthenticatedRequest } from '../types/general'
 import { getAvailableDomains, setData, getProviderKeys } from '../lib/data'
 import { createSslCerts, setCnameRecords } from '../helpers/domainSetup'
-import providers from '../providers'
+import providers, { providerList } from '../providers'
 import environment from '../helpers/environment'
 
 const { isProduction } = environment
@@ -167,12 +167,10 @@ app.patch('/providerKeys/:id', (req, res) => {
 })
 
 app.get('/providers', async (_, res) => {
-  const requests = Object.keys(providers).map(dns =>
-    providers[dns].getDomains()
+  const requests = providerList.map(provider =>
+    providers[provider.dns].getDomains()
   )
-
   const data = await Promise.all(requests)
-
   const filteredData = data.map(domainElement => {
     if (domainElement.domains.code) domainElement.domains = []
     return domainElement
