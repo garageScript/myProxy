@@ -25,7 +25,7 @@ To use `MyProxy`, you need 2 things:
 # Installation and Usage 
 ## Installation
 
-**AWS Users Only** need to configute the VM's firewall per table below
+**AWS Users Only** need to configute the VM's firewall per table below during security group setup on AWS EC2 instance.
 
 | Type | Protocol | Port Range |   Source  |
 |:---:|:--------:|:----------: | :------:  |

@@ -11,7 +11,7 @@ MyProxy is an application that proxies requests to other servers
 
 ## Installation
 
-**AWS Users Only** Update VM's firewall configuration match table below.
+**AWS Users Only** Update VM's firewall configuration match table below during security group setup on AWS EC2 instance. 
 
 | Type | Protocol | Port Range |   Source  |
 |:---:|:--------:|:----------: | :------:  |
