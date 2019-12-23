@@ -24,7 +24,20 @@ To use `MyProxy`, you need 2 things:
 
 # Installation and Usage 
 ## Installation
+
+**AWS Users Only** need to configute the VM's firewall per table below during security group setup on AWS EC2 instance.
+
+| Type | Protocol | Port Range |   Source  |
+|:---:|:--------:|:----------: | :------:  |
+| HTTP |  TCP     | 80         | 0.0.0.0/0 |
+| HTTPS|  TCP     | 443        | 0.0.0.0/0 |
+| SSH  |  TCP     | 22         | 0.0.0.0/0 |
+| Custom TCP Rule | TCP | 3000 | 0.0.0.0/0 |
+| Custom TCP Rule | TCP | 9418 | 0.0.0.0/0 |
+
 1. Connect to your server: `ssh root@your-server-ip-address`
+
+2. **AWS Users Only**  Change to root user `sudo su root` and change to home folder `cd ~`
 
 2. Clone the app: `git clone https://github.com/garageScript/myProxy.git`
 
