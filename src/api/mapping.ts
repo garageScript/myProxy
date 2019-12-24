@@ -26,8 +26,8 @@ const { WORKPATH, isProduction } = environment
 
 mappingRouter.post('/', async (req, res) => {
   const domainKeys = getMappings()
-  if (parseInt(req.body.port) < 3001) {
-    return res.status(400).json({ message: 'Port cannot be smaller than 3001' })
+  if (parseInt(req.body.port) < 3000) {
+    return res.status(400).json({ message: 'Port cannot be smaller than 3000' })
   }
   const fullDomain = req.body.subDomain
     ? `${req.body.subDomain}.${req.body.domain}`
