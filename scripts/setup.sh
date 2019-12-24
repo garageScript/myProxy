@@ -19,9 +19,9 @@ if [ ! -d "/home/myproxy" ] ; then
   mkdir /home/myproxy/.ssh
   mkdir /home/myproxy/.scripts
   cp ~/.ssh/authorized_keys /home/myproxy/.ssh/authorized_keys
-  cp /scripts/post-receive /home/myproxy/.scripts/post-receive
-  cp /scripts/pre-receive /home/myproxy/.scripts/pre-receive
-  cp /scripts/gitignore /home/myproxy/.scripts/.gitignore
+  cp ./scripts/post-receive /home/myproxy/.scripts/post-receive
+  cp ./scripts/pre-receive /home/myproxy/.scripts/pre-receive
+  cp ./scripts/gitignore /home/myproxy/.scripts/.gitignore
   chown myproxy:myproxy -R /home/myproxy/
 fi
 npm run build
