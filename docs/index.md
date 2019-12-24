@@ -23,9 +23,9 @@ To use `MyProxy`, you need 2 things:
 2. A server's IP address that you have root access to. You can use your home server or get one from [AWS EC2](https://aws.amazon.com/ec2/?hp=tile&so-exp=below), [DigitalOcean](https://www.digitalocean.com/), [GoogleCloud](https://cloud.google.com/), etc.
 
 # Installation and Usage 
-## Installation
 
-**AWS Users Only** need to configute the VM's firewall per table below during security group setup on AWS EC2 instance.
+## AWS Setup
+Configure the VM's firewall per table below during security group setup on AWS EC2 instance.
 
 | Type | Protocol | Port Range |   Source  |
 |:---:|:--------:|:----------: | :------:  |
@@ -34,6 +34,18 @@ To use `MyProxy`, you need 2 things:
 | SSH  |  TCP     | 22         | 0.0.0.0/0 |
 | Custom TCP Rule | TCP | 3000 | 0.0.0.0/0 |
 | Custom TCP Rule | TCP | 9418 | 0.0.0.0/0 |
+
+## Google Cloud Setup
+
+ - Target: `specify target tags`
+ - Target Tags: `myproxy`
+ - Source Filter: `IP ranges`
+ - Source IP: `0.0.0.0/0`
+ - Specify Protocol and Ports: `tcp: 3000`
+
+Update Google VMs to specify `myproxy http-server https-server` in network tags
+
+## Installation
 
 1. Connect to your server: `ssh root@your-server-ip-address`
 
