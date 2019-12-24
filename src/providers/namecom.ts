@@ -1,59 +1,47 @@
 import fetch from 'node-fetch'
 import { sendRequest } from '../helpers/httpRequest'
-import environment from '../helpers/environment'
 import { getProviderKeys } from '../lib/data'
 import { Provider, ServiceResponse } from '../types/general'
 import { ServiceKey } from '../types/admin'
 import { RequestForName } from '../types/general'
+import { providerList } from './'
 
-const { isProduction } = environment
-const NAME = 'Name.com'
-const SERVICE = isProduction
-  ? 'https://api.name.com'
-  : 'https://api.dev.name.com'
+const provider = providerList.find(provider => provider.name === 'Name.com')
+const { name, dns, keys, service } = provider
 
 const getKeys = (): ServiceKey[] => {
-  const keysDefault: { key: string }[] = [
-    { key: 'Namecom_Username' },
-    { key: 'Namecom_Token' }
-  ]
-  const keys = keysDefault.map(keyInfo => {
+  const providerKeys = keys.map(key => {
     const serviceKeys = getProviderKeys()
-    return (
-      serviceKeys.find(
-        k => k.service === 'dns_namecom' && k.key === keyInfo.key
-      ) || keyInfo
-    )
+    return serviceKeys.find(k => k.service === dns && k.key === key) || key
   })
-  return keys as ServiceKey[]
+  return providerKeys as ServiceKey[]
 }
 const findKey = (key: string): string => {
   return (getKeys().find(k => k.key === key) || { value: '' }).value
+}
+const headers = {
+  Authorization: `Basic ${Buffer.from(
+    `${findKey(keys[0])}:${findKey(keys[1])}`
+  ).toString('base64')}`
 }
 
 export const getDomains = async (): Promise<Provider> => {
   const keys = getKeys()
   let domains = []
-  const url = `${SERVICE}/v4/domains`
-  const options = {
-    headers: {
-      Authorization: `Basic ${Buffer.from(
-        `${findKey('Namecom_Username')}:${findKey('Namecom_Token')}`
-      ).toString('base64')}`
+  const url = `${service}/v4/domains`
+  const request = await sendRequest<RequestForName>(url, { headers }).catch(
+    err => {
+      console.error(`getDomains Error: ${err}`)
+      return { domains: [] }
     }
-  }
-
-  const request = await sendRequest<RequestForName>(url, options).catch(err => {
-    console.error(`getDomains Error: ${err}`)
-    return { domains: [] }
-  })
+  )
 
   if (request.domains) domains = [...request.domains]
 
   return {
-    id: 'dns_namecom',
-    service: SERVICE,
-    name: NAME,
+    id: dns,
+    service,
+    name,
     keys,
     domains: domains.map(el => ({ ...el, domain: el.domainName }))
   }
@@ -63,7 +51,7 @@ export const setRecord = async (
   domain: string,
   ipaddress: string
 ): Promise<ServiceResponse> => {
-  const url = `${SERVICE}/v4/domains/${domain}/records`
+  const url = `${service}/v4/domains/${domain}/records`
   const data = {
     host: '*',
     domainName: domain,
@@ -74,11 +62,7 @@ export const setRecord = async (
 
   const options = {
     method: 'POST',
-    headers: {
-      Authorization: `Basic ${Buffer.from(
-        `${findKey('Namecom_Username')}:${findKey('Namecom_Token')}`
-      ).toString('base64')}`
-    },
+    headers,
     body: JSON.stringify(data)
   }
 
