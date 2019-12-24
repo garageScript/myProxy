@@ -113,7 +113,7 @@ class ProviderKeyElement {
           </span>
         </div>
         <input
-          type="text"
+          type="password"
           class="form-control keyInput"
           aria-label="Default"
           aria-describedby="inputGroup-sizing-default"

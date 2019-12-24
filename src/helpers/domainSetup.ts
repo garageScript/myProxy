@@ -1,18 +1,18 @@
-import serviceConfig from '../api/serviceConfig'
-import { getProviderKeys } from '../lib/data'
-import { ServiceResponse, ProviderService } from '../types/general'
-import providers from '../providers'
 import cp from 'child_process'
 import util from 'util'
-const exec = util.promisify(cp.exec)
 
+import { getProviderKeys } from '../lib/data'
+import { ServiceResponse, ProviderService } from '../types/general'
+import provider, { providerList } from '../providers'
+
+const exec = util.promisify(cp.exec)
 const createSslCerts = async (
   serviceResponse,
   service,
   selectedDomain
 ): Promise<ServiceResponse> => {
   const serviceKeys = getProviderKeys().filter(d => d.service === service)
-  const { keys } = serviceConfig[service]
+  const { keys } = providerList.find(provider => provider.dns === service)
   const envVars = keys.reduce((acc: string, key: string) => {
     const { value } = serviceKeys.find(d => d.key === key) || { value: '' }
     return acc + `${key}=${value} `
@@ -39,7 +39,7 @@ const setCnameRecords = async (
   serviceResponse
 ): Promise<ServiceResponse> => {
   const { stdout: ipaddress } = await exec('curl ifconfig.me')
-  const providerService = providers[service] as ProviderService
+  const providerService = provider[service] as ProviderService
   if (!providerService) {
     serviceResponse.success = false
     serviceResponse.message = 'Provider not found'
