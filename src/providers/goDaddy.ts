@@ -9,9 +9,13 @@ const provider = providerList.find(provider => provider.name === 'GoDaddy')
 const { name, dns, keys, service } = provider
 
 const getKeys = (): ServiceKey[] => {
-  const providerKeys = keys.map(key => {
+  const keysDefault: { key: string }[] = [{ key: keys[0] }, { key: keys[1] }]
+  const providerKeys = keysDefault.map(keyInfo => {
     const serviceKeys = getProviderKeys()
-    return serviceKeys.find(k => k.service === dns && k.key === key) || key
+    return (
+      serviceKeys.find(k => k.service === dns && k.key === keyInfo.key) ||
+      keyInfo
+    )
   })
   return providerKeys as ServiceKey[]
 }
