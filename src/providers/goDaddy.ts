@@ -19,22 +19,24 @@ const getKeys = (): ServiceKey[] => {
 const findKey = (key: string): string => {
   return (getKeys().find(k => k.key === key) || { value: '' }).value
 }
-const headers = {
-  Authorization: `sso-key ${findKey(keys[0])}:${findKey(keys[1])}`,
-  'Content-Type': 'application/json'
-}
 
 export const getDomains = async (): Promise<Provider> => {
-  const keys = getKeys()
+  const providerKeys = getKeys()
   let domains = []
   const url = `${service}/v1/domains?statuses=ACTIVE`
-  domains = await sendRequest<Array<unknown>>(url, { headers })
+  const options = {
+    headers: {
+      Authorization: `sso-key ${findKey(keys[0])}:${findKey(keys[1])}`,
+      'Content-Type': 'application/json'
+    }
+  }
+  domains = await sendRequest<Array<unknown>>(url, options)
 
   return {
     id: dns,
     service,
     name,
-    keys,
+    keys: providerKeys,
     domains
   }
 }
@@ -52,7 +54,10 @@ export const setRecord = async (
   ]
   const options = {
     method: 'PUT',
-    headers,
+    headers: {
+      Authorization: `sso-key ${findKey(keys[0])}:${findKey(keys[1])}`,
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(data)
   }
   const cnameUrl = `${service}/v1/domains/${domain}/records/CNAME/*`
@@ -64,7 +69,10 @@ export const setRecord = async (
   ]
   const cnameOptions = {
     method: 'PUT',
-    headers,
+    headers: {
+      Authorization: `sso-key ${findKey(keys[0])}:${findKey(keys[1])}`,
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(cnameData)
   }
   const response: ServiceResponse = {
