@@ -1,56 +1,116 @@
 import fs from 'fs'
+import { createDomainCache, mapById } from '../helpers/cache'
 import { DB, ServiceKey } from '../types/admin'
-import { Mapping, Domain } from '../types/general'
+import {
+  Mapping,
+  MappingById,
+  Domain,
+  AccessToken,
+  AccessTokenById
+} from '../types/general'
 
 const data: DB = {
   serviceKeys: [],
   mappings: [],
-  availableDomains: []
+  availableDomains: [],
+  accessTokens: []
 }
 
-fs.readFile('./data.db', (err, file) => {
-  if (err) {
-    return console.log(
-      'File does not exist, but do not worry. File will be created on first save',
-      err
-    )
+let domainToMapping: MappingById = {}
+let idToMapping: MappingById = {}
+let idToAccessToken: AccessTokenById = {}
+
+const updateCache = (table: keyof DB): void => {
+  if (table === 'mappings') {
+    domainToMapping = createDomainCache(data.mappings)
+    idToMapping = mapById(data.mappings)
   }
+  if (table === 'accessTokens') {
+    idToAccessToken = mapById(data.accessTokens)
+  }
+}
+
+try {
+  const file = fs.readFileSync('./data.db')
   const fileData: DB = JSON.parse(file.toString() || '{}')
   data.serviceKeys = fileData.serviceKeys || []
   data.mappings = fileData.mappings || []
   data.availableDomains = fileData.availableDomains || []
-})
+  data.accessTokens = fileData.accessTokens || []
 
-// Typescript disable, because this is meant as a helper function to be used with N number of input types
-const getData = (table: string): unknown => {
+  domainToMapping = createDomainCache(data.mappings)
+  idToMapping = mapById(data.mappings)
+  idToAccessToken = mapById(data.accessTokens)
+} catch (err) {
+  console.log(
+    'File does not exist, but do not worry. File will be created on first save',
+    err
+  )
+}
+
+const getData = <T extends keyof DB>(table: T): DB[T] | undefined => {
   return data[table]
 }
 
-// Typescript disable, because this is meant as a helper function to be used with N number of input types
-const setData = (table: string, records: unknown): void => {
+const setData = <T extends keyof DB>(table: T, records: DB[T]): void => {
   data[table] = records
-  const fileData: string = JSON.stringify(data)
+  updateCache(table)
+
+  const fileData = `${JSON.stringify(data, null, 2)}`
+
   fs.writeFile('./data.db', fileData, err => {
     if (err) {
       return console.log('writing to DB failed', err)
     }
-    console.log('successfully wrote to DB')
   })
 }
 
 const getProviderKeys = (): ServiceKey[] => {
-  const initialData = getData('serviceKeys') as ServiceKey[] | undefined
+  const initialData = getData('serviceKeys')
   return initialData || []
 }
 
 const getMappings = (): Mapping[] => {
-  const initialData = getData('mappings') as Mapping[] | undefined
+  const initialData = getData('mappings')
   return initialData || []
 }
 
 const getAvailableDomains = (): Domain[] => {
-  const initialData = getData('availableDomains') as Domain[] | undefined
+  const initialData = getData('availableDomains')
   return initialData || []
 }
 
-export { getData, setData, getProviderKeys, getMappings, getAvailableDomains }
+const getAccessTokens = (): AccessToken[] => {
+  const initialData = getData('accessTokens')
+  return initialData || []
+}
+
+const getMappingByDomain = (domain: string): Mapping => {
+  return domainToMapping[domain]
+}
+
+const getMappingById = (id: string): Mapping | undefined => {
+  return idToMapping[id]
+}
+
+const getTokenById = (id: string): AccessToken | undefined => {
+  return idToAccessToken[id]
+}
+
+const deleteDomain = (domain: string): void => {
+  delete domainToMapping[domain]
+  setData('mappings', Object.values(domainToMapping))
+}
+
+export {
+  getData,
+  setData,
+  getProviderKeys,
+  getMappings,
+  getAvailableDomains,
+  getAccessTokens,
+  getMappingByDomain,
+  getMappingById,
+  getTokenById,
+  deleteDomain
+}

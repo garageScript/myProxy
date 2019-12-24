@@ -1,4 +1,6 @@
 import { hashPass } from '../helpers/crypto'
+import { getTokenById } from '../lib/data'
+let pass = ''
 
 const isCorrectCredentials = (password: string, correct: string): boolean => {
   const adminPassword = hashPass(password)
@@ -6,19 +8,29 @@ const isCorrectCredentials = (password: string, correct: string): boolean => {
   return userPassword === adminPassword
 }
 
-const setupAuth = password => {
-  return (req, res, next): undefined => {
-    const { adminPass } = req.cookies
-    const { authorization = '' } = req.headers
+const isValidAccessToken = (token: string): boolean => !!getTokenById(token)
 
-    if (authorization) {
-      const isCorrect = isCorrectCredentials(authorization as string, password)
-      if (!adminPass && !isCorrect) res.status(401).send('Unauthorized')
-      next()
-    }
-    if (!adminPass) return res.render('login', { error: '' })
-    next()
-  }
+const setPass = (password: string): void => {
+  pass = password
 }
 
-export { setupAuth, isCorrectCredentials }
+const setupAuth = (req, res, next): void => {
+  const { adminPass } = req.cookies
+  const { authorization = '' } = req.headers
+  if (
+    adminPass === hashPass(pass) ||
+    isCorrectCredentials(authorization, pass)
+  ) {
+    req.user = { isAdmin: true, isPseudoAdmin: true }
+    return next()
+  }
+  if (isValidAccessToken(authorization)) {
+    {
+      req.user = { isPseudoAdmin: true }
+    }
+    return next()
+  }
+  return next()
+}
+
+export { setupAuth, setPass, isCorrectCredentials }

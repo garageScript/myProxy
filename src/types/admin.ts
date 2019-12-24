@@ -1,4 +1,4 @@
-import { Mapping, Domain } from './general'
+import { Mapping, Domain, AccessToken } from './general'
 
 type ServiceKey = {
   id?: string
@@ -11,6 +11,7 @@ type DB = {
   serviceKeys: ServiceKey[]
   mappings: Mapping[]
   availableDomains: Domain[]
+  accessTokens: AccessToken[]
 }
 
 export { ServiceKey, DB }

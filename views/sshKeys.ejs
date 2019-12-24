@@ -16,8 +16,15 @@
         style="margin-left:auto"
         href="/admin"
         >
-        ADMIN PAGE
+        Admin
        </a>
+      <a
+        class="btn-outline-dark btn"
+        style="margin-left: auto"
+        href="/admin/accessTokens"
+        > 
+        Access Tokens
+      </a>
       </div>
    </div>
   <div class="d-flex justify-content-between">
@@ -28,11 +35,12 @@
         </span>
       </div>
       <input
-        class="form-control port"
+        class="form-control"
         type="text"
         id="title"
         aria-label="Title"
         aria-describedby="inputGroup-sizing-default"
+        disabled
       />
     </div>
     <div class="input-group mr-3 mb-2">
@@ -43,14 +51,14 @@
       </div>
       <input
         type="text"
-        class="form-control ipAddress"
+        class="form-control"
         id="sshKey"
       />
     </div>
     <button
       type="submit"
       id="newSshKey"
-      class="btn btn-outline-primary mb-2 create"
+      class="btn btn-outline-primary mb-2"
     >
       Create
     </button>
@@ -64,5 +72,7 @@
   <hr />
   </div>
 </div>
+
+<script src="/keys.js"></script>
 
 <%- include('layout/footer.ejs') %>

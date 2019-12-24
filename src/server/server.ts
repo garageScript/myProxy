@@ -1,5 +1,6 @@
 import 'dotenv/config'
 import express from 'express'
+import fs from 'fs'
 import https from 'https'
 import httpProxy from 'http-proxy'
 import path from 'path'
@@ -7,12 +8,18 @@ import cookieParser from 'cookie-parser'
 
 import { adminRouter } from '../admin/index'
 import { apiRouter } from '../api/index'
+import { validUIAccess } from '../helpers/authentication'
 import { hashPass } from '../helpers/crypto'
-import { getAvailableDomains, getMappings } from '../lib/data'
-import { setupAuth, isCorrectCredentials } from '../auth'
+import { getAvailableDomains, getMappingByDomain } from '../lib/data'
+import { setPass, setupAuth, isCorrectCredentials } from '../auth'
 import { ProxyMapping } from '../types/general'
 import { SNICallback } from '../helpers/SNICallback'
+import { setAuthorizedKeys } from '../helpers/authorizedKeys'
+import environment from '../helpers/environment'
 
+const { isProduction } = environment
+
+// The steps below are covered by the setup script. This is not necessssary.
 const cyan = '\x1b[36m\u001b[1m%s\x1b[0m'
 const red = '\x1b[31m\u001b[1m%s\x1b[0m'
 const errorMsg =
@@ -27,22 +34,38 @@ const startAppServer = (
       console.error(red, errorMsg)
       return reject(errorMsg)
     }
+    setPass(adminPass)
+
+    if (isProduction()) {
+      fs.readFile('/home/myproxy/.ssh/authorized_keys', (error, data) => {
+        if (error) {
+          console.log(error)
+        }
+        setAuthorizedKeys(
+          data
+            .toString()
+            .split('\n')
+            .filter(e => e !== '')
+        )
+      })
+    }
 
     const app = express()
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
     app.use(cookieParser())
     app.use(express.static(path.join(__dirname, '../public')))
+    app.use(setupAuth)
     app.use('/admin', adminRouter)
-    app.use('/api', setupAuth(adminPass), apiRouter)
+    app.use('/api', apiRouter)
     app.set('view engine', 'ejs')
     app.set('views', path.join(__dirname, '../../views'))
 
-    app.get('/', setupAuth(adminPass), (_, res) =>
+    app.get('/', validUIAccess, (_, res) => {
       getAvailableDomains().length > 0
         ? res.render('client')
         : res.redirect('/admin')
-    )
+    })
     app.get('/login', (req, res) => res.render('login', { error: '' }))
 
     app.post('/login', (req, res) => {
@@ -54,7 +77,7 @@ const startAppServer = (
       return res.render('login', { error: 'Wrong Admin Password' })
     })
 
-    app.get('/sshKeys', (req, res) => {
+    app.get('/sshKeys', validUIAccess, (req, res) => {
       res.render('sshKeys')
     })
 
@@ -71,11 +94,8 @@ const startProxyServer = (): void => {
 
   const server = https.createServer({ SNICallback }, (req, res) => {
     try {
-      const mappings = getMappings()
       const { ip, port }: ProxyMapping =
-        mappings.find(({ subDomain, domain }) => {
-          return `${subDomain}.${domain}` === req.headers.host
-        }) || {}
+        getMappingByDomain(req.headers.host) || {}
       if (!port || !ip) return res.end('Not Found')
       proxy.web(req, res, { target: `http://${ip}:${port}` }, err => {
         console.error('Error communicating with server', err)
@@ -86,8 +106,13 @@ const startProxyServer = (): void => {
       return res.end(`Error: failed to create proxy ${req.headers.host}`)
     }
   })
-  server.listen(443)
 
+  server.on('upgrade', function(req, socket) {
+    const { ip, port }: ProxyMapping =
+      getMappingByDomain(req.headers.host) || {}
+    if (port) return proxy.ws(req, socket, { target: `http://${ip}:${port}` })
+  })
+  server.listen(443)
   const httpApp = express()
   httpApp.get('/*', (req, res) => {
     const paramCheck = req.headers.host.split('?')[1]

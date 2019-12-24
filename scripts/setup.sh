@@ -17,17 +17,12 @@ fi
 if [ ! -d "/home/myproxy" ] ; then
   sudo useradd -m -c "myproxy" myproxy -s /bin/bash -p $(echo $ADMIN | openssl passwd -1 -stdin) -d "/home/myproxy"
   mkdir /home/myproxy/.ssh
+  mkdir /home/myproxy/.scripts
   cp ~/.ssh/authorized_keys /home/myproxy/.ssh/authorized_keys
-  chown myproxy:myproxy -R /home/myproxy/.ssh
-  sudo -u myproxy bash <<EOF
-    cd /home/myproxy 
-    git clone https://github.com/garageScript/myproxy/
-    mkdir .scripts
-    cp myproxy/scripts/post-receive .scripts/post-receive
-    cp myproxy/scripts/pre-receive .scripts/pre-receive
-    rm -rf myproxy/ |\
-    bash
-EOF
+  cp ./scripts/post-receive /home/myproxy/.scripts/post-receive
+  cp ./scripts/pre-receive /home/myproxy/.scripts/pre-receive
+  cp ./scripts/gitignore /home/myproxy/.scripts/.gitignore
+  chown myproxy:myproxy -R /home/myproxy/
 fi
 npm run build
 if [ ! -f "./data.db" ] ; then

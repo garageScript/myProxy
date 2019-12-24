@@ -7,6 +7,12 @@ type Mapping = {
   id: string
   gitLink: string
   fullDomain: string
+  status?: string
+}
+
+type Status = {
+  fullDomain: string
+  status: string
 }
 
 const create: HTMLElement = helper.getElement('.create')
@@ -33,6 +39,27 @@ class DomainOption {
 class MappingItem {
   constructor(data: Mapping) {
     const mappingElement = document.createElement('li')
+    let iconClass
+    let iconColor
+    // The variables below are to hide log related icons when pm2 is not
+    // being used to monitor the apps. These apps will not have status since
+    // they are not managed by pm2.
+    let settingClass
+    let logClass
+    if (data.status === 'online') {
+      iconClass = 'fa fa-circle mr-1 mt-1'
+      iconColor = 'rgba(50,255,50,0.5)'
+      logClass = 'fa fa-file-text-o ml-1 mt-1'
+      settingClass = 'ml-1 fa fa-cog'
+    } else if (data.status === 'not started') {
+      iconClass = ''
+      iconColor = 'transparent'
+    } else {
+      iconClass = 'fa fa-circle mr-1 mt-1'
+      iconColor = 'rgba(255, 50, 50, 0.5)'
+      logClass = 'fa fa-file-text-o ml-1 mt-1'
+      settingClass = 'ml-1 fa fa-cog'
+    }
     mappingElement.classList.add(
       'list-group-item',
       'd-flex',
@@ -40,38 +67,66 @@ class MappingItem {
     )
     domainList.appendChild(mappingElement)
     mappingElement.innerHTML = `
-      <div style='width: 100%'>
-        <div style='display: flex'>
-          <a class="font-weight-bold"
-            href="https://${data.subDomain}.${data.domain}">
-            ${data.subDomain}.${data.domain}
+      <div style="width: 100%">
+        <div style="display: flex">
+          <i class="${iconClass}" style="font-size: 15px; color: ${iconColor}">
+          </i>
+          <a class="font-weight-bold" href="https://${data.fullDomain}">
+            ${data.fullDomain}
           </a>
           <small class="form-text text-muted ml-1">
             PORT: ${data.port}
           </small>
+          <a
+            class="${logClass}"
+            style="font-size: 15px; color: rgba(255,50,50,0.5)"
+            href="/api/logs/err/${data.fullDomain}"
+          >
+          </a>
+          <a
+            class="${logClass}"
+            style="font-size: 15px; color: rgba(40,167,70,0.5)"
+            href="/api/logs/out/${data.fullDomain}"
+          >
+          </a>
+          <div class="dropright">
+            <a href="#" role="button" data-toggle="dropdown" class="btn-link">
+              <span class="${settingClass}" style="font-size: 15px"> </span>
+            </a>
+            <div class="dropdown-menu">
+              <button
+                type="button"
+                class="btn btn-link deleteLogButton"
+                style="color: rgba(255,50,50,1)"
+              >
+                Clear Logs
+              </button>
+            </div>
+          </div>
         </div>
         <small class="form-text text-muted" style="display: inline-block;">
           ${data.gitLink}
         </small>
       </div>
-      <a href="/api/mappings/download/?fullDomain=${data.fullDomain}" 
-	      target="_blank" class="btn btn-sm btn-outline-success mr-3">
-	      Download<i class="fa fa-download"></i>
+      <a
+        href="/api/mappings/download/?fullDomain=${data.fullDomain}"
+        target="_blank"
+        class="btn btn-sm btn-outline-success mr-3"
+      >
+        Download<i class="fa fa-download"></i>
       </a>
       <button
         class="btn btn-sm btn-outline-danger mr-3 deleteButton"
-        type="button">
-          Delete
-      </button>
-      <button class="btn btn-sm btn-outline-primary edit" type="button">
-        Edit
+        type="button"
+      >
+        Delete
       </button>
     `
 
     const delButton = helper.getElement('.deleteButton', mappingElement)
     delButton.onclick = (): void => {
       if (confirm('Are you sure want to delete this domain?')) {
-        fetch(`/api/mappings/delete/${data.id}`, {
+        fetch(`/api/mappings/${data.id}`, {
           method: 'DELETE',
           body: JSON.stringify({ data }),
           headers: {
@@ -82,84 +137,13 @@ class MappingItem {
         })
       }
     }
-    const editButton = helper.getElement('.edit', mappingElement)
-    editButton.onclick = (): void => {
-      mappingElement.innerHTML = `
-        <div class="col d-flex">
-          <div class="col">
-            <div class="input-group m-1">
-              <div class="input-group-prepend">
-                <span class="input-group-text">Subdomain</span>
-              </div>
-              <input type="text" class="form-control subDomainName" placeholder=${data.subDomain} disabled>
-            </div>
-            <div class="input-group m-1">
-              <div class="input-group-prepend">
-                <span class="input-group-text">Domain</span>
-              </div>
-              <input type="text" class="form-control domainName" placeholder=${data.domain} disabled>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="input-group m-1">
-              <div class="input-group-prepend">
-                <span class="input-group-text">Port Number</span>
-              </div>
-              <input type="text" class="form-control port" placeholder=${data.port}>
-            </div>
-            <div class="input-group m-1">
-              <div class="input-group-prepend">
-                <span class="input-group-text">IP Adress</span>
-              </div>
-              <input type="text" class="form-control ip" placeholder=${data.ip}>
-            </div>
-          </div>
-          </div>
-          <div class="btn-group-vertical">
-            <button class="btn btn-outline-primary save">Save</button>
-            <button class="btn btn-outline-danger cancel">Cancel</button>
-          </div>
-        `
-
-      const cancel = helper.getElement('.cancel', mappingElement)
-      cancel.onclick = (): void => {
-        window.location.reload()
-      }
-
-      const save = helper.getElement('.save', mappingElement)
-      save.onclick = (): void => {
-        const domainName = helper.getElement(
-          '.domain',
-          mappingElement
-        ) as HTMLInputElement
-        const subDomainName = helper.getElement(
-          '.subDomainName',
-          mappingElement
-        ) as HTMLInputElement
-        const port = helper.getElement(
-          '.port',
-          mappingElement
-        ) as HTMLInputElement
-        const ip = helper.getElement('.ip', mappingElement) as HTMLInputElement
-
-        const domainNameValue = domainName.value
-        const subDomainNameValue = subDomainName.value
-        const portValue = port.value
-        const ipValue = ip.value
-        const id = data.id
-        fetch(`/api/mappings/edit/${data.id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({
-            domain: domainNameValue,
-            subDomain: subDomainNameValue,
-            port: portValue,
-            ip: ipValue,
-            id: id
-          }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
+    const clearLogButton = helper.getElement('.deleteLogButton', mappingElement)
+    clearLogButton.onclick = (): void => {
+      if (
+        confirm(`Are you sure you want to clear ${data.fullDomain}'s logs?`)
+      ) {
+        fetch(`/api/logs/${data.fullDomain}`, {
+          method: 'DELETE'
         }).then(() => {
           window.location.reload()
         })
@@ -170,19 +154,12 @@ class MappingItem {
 
 fetch('/api/mappings')
   .then(r => r.json())
-  .then((data: Mapping[]) => {
+  .then(mappings => {
     domainList.innerHTML = ''
-    data.reverse()
-    data
+    mappings
+      .reverse()
       .filter(
-        e =>
-          e.subDomain &&
-          e.domain &&
-          e.port &&
-          e.id &&
-          e.ip &&
-          e.gitLink &&
-          e.fullDomain
+        e => e.domain && e.port && e.id && e.gitLink && e.fullDomain && e.status
       )
       .forEach(e => {
         new MappingItem(e)
@@ -210,8 +187,11 @@ create.onclick = (): void => {
       'Content-Type': 'application/json'
     }
   }).then(res => {
-    if (res.status === 400)
-      return alert('Port Value cannot be smaller than 3001')
+    if (res.status === 400) {
+      return res.json().then(response => {
+        alert(response.message)
+      })
+    }
     window.location.reload()
   })
   port.value = ''
