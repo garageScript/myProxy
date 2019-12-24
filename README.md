@@ -9,9 +9,9 @@ MyProxy is an application that proxies requests to other servers
 
 # Installation and Usage 
 
-## Installation
+## AWS Setup
 
-**AWS Users Only** Update VM's firewall configuration match table below during security group setup on AWS EC2 instance. 
+Update VM's firewall configuration match table below during security group setup on AWS EC2 instance. 
 
 | Type | Protocol | Port Range |   Source  |
 |:---:|:--------:|:----------: | :------:  |
@@ -20,6 +20,20 @@ MyProxy is an application that proxies requests to other servers
 | SSH  |  TCP     | 22         | 0.0.0.0/0 |
 | Custom TCP Rule | TCP | 3000 | 0.0.0.0/0 |
 | Custom TCP Rule | TCP | 9418 | 0.0.0.0/0 |
+
+## Google Cloud Setup
+
+**Google Cloud User Only** 
+ - Target: `specify target tags`
+ - Target Tags: `myproxy`
+ - Source Filter: `IP ranges`
+ - Source IP: `0.0.0.0/0`
+ - Specify Protocol and Ports: `tcp: 3000`
+
+Update Google VMs to specify `myproxy http-server https-server` in network tags
+
+
+## Installation
 
 Connect to your server:
 
