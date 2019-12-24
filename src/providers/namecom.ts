@@ -53,7 +53,14 @@ export const setRecord = async (
   ipaddress: string
 ): Promise<ServiceResponse> => {
   const url = `${service}/v4/domains/${domain}/records`
-  const data = {
+  const rootHost = {
+    host: '',
+    domainName: domain,
+    type: 'A',
+    answer: ipaddress,
+    ttl: 300
+  }
+  const subdomainHost = {
     host: '*',
     domainName: domain,
     type: 'A',
@@ -67,8 +74,17 @@ export const setRecord = async (
       Authorization: `Basic ${Buffer.from(
         `${findKey(keys[0])}:${findKey(keys[1])}`
       ).toString('base64')}`
-    },
-    body: JSON.stringify(data)
+    }
+  }
+
+  const rootHostOptions = {
+    ...options,
+    body: JSON.stringify(rootHost)
+  }
+
+  const subdomainHostOptions = {
+    ...options,
+    body: JSON.stringify(subdomainHost)
   }
 
   const response: ServiceResponse = {
@@ -76,7 +92,10 @@ export const setRecord = async (
     message: 'Successfully set CNAME records for wildcard domain'
   }
 
-  await fetch(url, options).catch(error => {
+  await Promise.all([
+    fetch(url, rootHostOptions),
+    fetch(url, subdomainHostOptions)
+  ]).catch(error => {
     console.error('Error setting CNAME records', error)
     response.success = false
     response.message = 'Error setting CNAME records'
