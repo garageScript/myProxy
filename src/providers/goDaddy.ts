@@ -10,12 +10,9 @@ const { name, dns, keys, service } = provider
 
 const getKeys = (): ServiceKey[] => {
   const keysDefault: { key: string }[] = [{ key: keys[0] }, { key: keys[1] }]
-  const providerKeys = keysDefault.map(keyInfo => {
+  const providerKeys = keysDefault.map(key => {
     const serviceKeys = getProviderKeys()
-    return (
-      serviceKeys.find(k => k.service === dns && k.key === keyInfo.key) ||
-      keyInfo
-    )
+    return serviceKeys.find(k => k.service === dns && k.key === key.key) || key
   })
   return providerKeys as ServiceKey[]
 }
