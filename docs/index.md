@@ -63,30 +63,22 @@ Update Google VMs to specify `myproxy http-server https-server` in network tags
 ## Installation
 
 1. Connect to your server: `ssh root@your-server-ip-address`
-
-2. **AWS Users Only**  Change to root user `sudo su root` and change to home folder `cd ~`
-
+  * **AWS Users Only**  Change to root user `sudo su root` and change to home folder `cd ~`
 2. Clone the app: `git clone https://github.com/garageScript/myProxy.git`
-
 3. Go to the MyProxy folder: `cd myProxy`
-
-4. Run the setup script `./scripts/setup.sh`
-    This will installed require dependencies.
-    * Installs `nodeJS` and `npm` if system does not have them.
-    * Enables firewall port `3000` (for the admin page UI), `80` and `443`.
-    * Installs application dependencies
-    * For a complete list of things the script runs, [look here](https://github.com/garageScript/myProxy/blob/master/scripts/setup.sh)
-
+4. Run the setup script `./scripts/setup.sh` 
+  * Installs `nodeJS` and `npm` if system does not have them.
+  * Enables firewall port `3000` (for the admin page UI), `80` and `443`.
+  * Installs application dependencies
+  * For a complete list of commands the script runs, [look here](https://github.com/garageScript/myProxy/blob/master/scripts/setup.sh)
 5. Run the App: `ADMIN=YOUR_ADMIN_PASSWORD npm run server` 
-> You can also run the app under your own defined port by setting a `PORT` environment variable
-
+  * You can also run the app under your own defined port by setting a `PORT` environment variable
 6. Exit from server `exit`
 
 ## Usage
+
 1. Go to your server url: `http://your-server-ip-address:3000`. You will be prompted to enter your admin password and your domain provider's API Key and Secret, [find out how here](https://github.com/Neilpang/acme.sh/wiki/dnsapi)
-
 2. All your domain names in that provider will show up. Click the **setup** button next to the domain you wish to setup (could take up to 5 minutes)
-
 3. After your domain is setup, you will be able to generate as many subdomain repositories as you want! To do that:
     1. Go to your server URL:  `http://your-server-ip-address:3000`
     2. Create a subdomain. IP and port are optional. You should see a git link that was created for you.
@@ -123,14 +115,33 @@ app.listen(process.env.PORT || 8123);
 Users can use Access Tokens to manage their domain mappings from a 3rd party server.
 [See available endpoints](https://github.com/garageScript/myProxy/wiki/API)
 
-# Development
+# Development & Contribution
 The following steps will guide you through how to setup your development environment to send pull requests or build your own custom features.
 
-## Prerequisites
 You need to install node and typescript
 
-# Contribution
-The following will show you how to contribute
+1. Fork and clone the repository.
+2. Install dependencies: `npm install` or `yarn`
+3. Run the app: `yarn start` or `npm run start`
+  * You can also run the app under your own defined port by setting a `PORT` environment variable
+
+## Adding a new provider
+If your company sells domain names and you want your service to be supported on MyProxy, make sure you integrate with [acme.sh][DNS_API_integration] first.
+
+[Sample integration](https://github.com/garageScript/myProxy/pull/355) for Name.com that you can follow along.
+
+1. All implemented providers are listed in [`src/providers/index.ts`](https://github.com/garageScript/myProxy/blob/master/src/providers/index.ts). Add your service to `providerList`, following the your [`acme.sh`](DNS_API_integration) integration's naming convention.  
+  * `path` should be the location of the file you create in the next step.
+2. Create a file that exports the following functions: `getDomains` and `setRecord`. 
+3. Depending on your API in the previous step, you may need to create types. Types should be added to [`src/types/general.ts`](https://github.com/garageScript/myProxy/blob/master/src/types/general.ts)
+
+You are done! Get a beer 🍺
 
 ## Before sending a Pull Request:
 1. Run `npm run autofix`: make sure there are no errors / warnings
+
+# License
+
+MyProxy is [MIT licensed](https://github.com/garageScript/myProxy/blob/master/LICENSE)
+
+[DNS_API_integration]: https://github.com/Neilpang/acme.sh#8-automatic-dns-api-integration
