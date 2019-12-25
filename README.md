@@ -1,17 +1,40 @@
 # [MyProxy](https://garagescript.github.io/myProxy/) &middot; [![CircleCI](https://circleci.com/gh/garageScript/myProxy.svg?style=svg)](https://circleci.com/gh/garageScript/myproxy)
-MyProxy is an application that proxies requests to other servers
+MyProxy is an application that helps you quickly and easily:
+* Helps you connect to your Domain provider
+* Set up A and CNAME records for your selected domains
+* Create and serve SSL certificates for your selected domains
+* Run an unlimited number of applications on your subdomains
 
-# Prerequisites
+Watch the following videos to understand how MyProxy works:
 
-- [x] To run **myProxy** first of all you'll need a server with **Git** installed
+[Using MyProxy to deploy apps](https://www.youtube.com/watch?v=Tjx0BtpZmPc)
 
-- [x] A valid Domain name `Eg: mydomain.com` (Currently supported providers: GoDaddy)
+[Setting up MyProxy on your server](https://www.youtube.com/watch?v=q3uSyMfaRP4)
 
-# Installation and Usage
+## Why?
+Setting up a server is hard - especially setting up DNS records, managing certificates, and deployment. So we setup to build a simple and easy-to-use app that helps us build applications quickly.
 
-## AWS Setup
+We are new to software engineering so if you find areas where this app could be improved, please let us know by [creating an issue](https://github.com/garageScript/myproxy/issues). We are excited to learn!
 
-Update VM's firewall configuration match table below during security group setup on AWS EC2 instance.
+Also, we are currently seeking jobs. If your team needs software engineers, please reach out:
+* [Alberto Lopez](https://www.linkedin.com/in/albertolopez-siliconvalley/) - Available immediately
+* [David De Wulf](https://dewulfdavid.com) - Open to new opportunities
+* [Rahul Kalra](https://www.linkedin.com/in/voterknow) - Available immediately
+* [Sahil Kalra](https://www.linkedin.com/in/s1kalra/) - UC San Diego senior, graduating June 2020
+* [Herman Wong](https://www.linkedin.com/in/hw335/) - Open to new opportunities
+
+## Prerequisites
+To use `MyProxy`, you need 2 things:
+1. A domain name. MyProxy uses [acme.sh](https://github.com/Neilpang/acme.sh/wiki/dnsapi), so you would have to buy the domains from any of the [DNS APIs listed there](https://github.com/Neilpang/acme.sh/wiki/dnsapi) (includes all of the major providers like namecheap, goDaddy, etc.)
+2. A server's IP address that you have root access to. You can use your home server or get one from [AWS EC2](https://aws.amazon.com/ec2/?hp=tile&so-exp=below), [DigitalOcean](https://www.digitalocean.com/), [GoogleCloud](https://cloud.google.com/), etc.
+
+# Installation and Usage 
+
+## Server setup
+We tested MyProxy on the AWS and Google Cloud platforms. If you use them, please follow the configurations and setup below to make sure MyProxy works well for you. 
+
+### AWS Setup
+You will need to configure the VM's firewall per table below during security group setup on AWS EC2 instance.
 
 | Type | Protocol | Port Range |   Source  |
 |:---:|:--------:|:----------: | :------:  |
@@ -21,9 +44,8 @@ Update VM's firewall configuration match table below during security group setup
 | Custom TCP Rule | TCP | 3000 | 0.0.0.0/0 |
 | Custom TCP Rule | TCP | 9418 | 0.0.0.0/0 |
 
-## Google Cloud Setup
+### Google Cloud Setup
 
-**Google Cloud User Only**
  - Target: `specify target tags`
  - Target Tags: `myproxy`
  - Source Filter: `IP ranges`
@@ -32,74 +54,32 @@ Update VM's firewall configuration match table below during security group setup
 
 Update Google VMs to specify `myproxy http-server https-server` in network tags
 
-
 ## Installation
 
-Connect to your server:
-
-```bash
-ssh root@my_server_ip
-```
-
-For AWS users, change to root user:
-
-```bash
-sudo su root
-cd ~
-```
-
-Clone the app:
-
- ```bash
- git clone https://github.com/garageScript/myProxy.git
- ```
-
-Go to myProxy folder:
-
-```bash
-cd myProxy/
-```
-
-Set it up:
-
-```bash
-./scripts/setup.sh
-```
-
-> Will install [acme.sh](https://github.com/Neilpang/acme.sh) and all dependencies
-
-Run the app:
-
-```bash
-ADMIN=my_admin_password npm run server
-```
-
-> You can also run the app under your own defined port by setting a `PORT` environment variable
-> All environment variable can be setup into your `.env`
-
-Exit the server:
-
-```bash
-exit
-```
+1. Connect to your server: `ssh root@your-server-ip-address`
+  * **AWS Users Only**  Change to root user `sudo su root` and change to home folder `cd ~`
+2. Clone the app: `git clone https://github.com/garageScript/myProxy.git`
+3. Go to the MyProxy folder: `cd myProxy`
+4. Run the setup script `./scripts/setup.sh` 
+  * Installs `nodeJS` and `npm` if system does not have them.
+  * Enables firewall port `3000` (for the admin page UI), `80` and `443`.
+  * Installs application dependencies
+  * For a complete list of commands the script runs, [look here](https://github.com/garageScript/myProxy/blob/master/scripts/setup.sh)
+5. Run the App: `ADMIN=YOUR_ADMIN_PASSWORD npm run server` 
+  * You can also run the app under your own defined port by setting a `PORT` environment variable
+6. Exit from server `exit`
 
 ## Usage
 
-Go to server URL:
-```
-http://your-server-ip-address:3000
-```
+1. Go to your server url: `http://your-server-ip-address:3000`. You will be prompted to enter your admin password and your domain provider's API Key and Secret, [find out how here](https://github.com/Neilpang/acme.sh/wiki/dnsapi)
+2. All your domain names in that provider will show up. Click the **setup** button next to the domain you wish to setup (could take up to 5 minutes)
+3. After your domain is setup, you will be able to generate as many subdomain repositories as you want! To do that:
+    1. Go to your server URL:  `http://your-server-ip-address:3000`
+    2. Create a subdomain. IP and port are optional. You should see a git link that was created for you.
+    3. `git clone` the app, then build the app locally. Find out how in the **Building Your Local App section** below. 
+    4. When you are done, `git push origin master` and watch your app run in production!
 
-You will be prompted to enter your admin password and your domain provider's API Key and Secret, [find out how here](https://github.com/Neilpang/acme.sh/wiki/dnsapi)
-
-After your domain is setup, you will be able to generate as many subdomain repository as you want! To do that:
-1. Go to your server url:  `http://your-server-ip-address:3000`
-2. Create a subdomain. Ip and port are optional. You should see a git link that was created for you.
-3. `git clone` the app, then build the app locally. Find out how in the Building Your Local App section below.
-4. When you are done, `git push origin master` and watch your app run in production!
-
-
-## Building-Your-Local-App
+## Building-Your-Local-App 
 1. In the terminal, run `git clone <your fullDomain repo>` to clone your app folder.
 2. Enter your repo `cd <your fullDomain folder>`
 3. Run `npm init -y`
@@ -119,164 +99,43 @@ app.get('/', (req, res) => {
 app.listen(process.env.PORT || 8123);
 ```
 
-7. Update scripts section of package.JSON with `"start:myproxy": "node app.js"`
+7. Update scripts section of `package.json` with `"start:myproxy": "node app.js"`
 8. Run `git add .`
 9. Run `git commit -m "Initial Commit"`
 10. Run `git push origin master`
 
-# Contribution
+# API Reference
 
+Users can use Access Tokens to manage their domain mappings from a 3rd party server.
+[See available endpoints](https://github.com/garageScript/myProxy/wiki/API)
+
+# Development & Contribution
 The following steps will guide you through how to setup your development environment to send pull requests or build your own custom features.
 
-## Running the app
+You need to install node and typescript
 
-1. You need to install node and typescript
-
-2. First install dependencies: `npm install` or `yarn`
-
+1. Fork and clone the repository.
+2. Install dependencies: `npm install` or `yarn`
 3. Run the app: `yarn start` or `npm run start`
+  * You can also run the app under your own defined port by setting a `PORT` environment variable
 
-> You can also run the app under your own defined port by setting a `PORT` environment variable
+## Adding a new provider
+If your company sells domain names and you want your service to be supported on MyProxy, make sure you integrate with [acme.sh][DNS_API_integration] first.
 
-## How to add a new provider
+[Sample integration](https://github.com/garageScript/myProxy/pull/355) for Name.com that you can follow along.
 
-Within this section we will guide you step by step on how to add a new provider that is supported by [acme.sh][DNS_API_integration].
+1. All implemented providers are listed in [`src/providers/index.ts`](https://github.com/garageScript/myProxy/blob/master/src/providers/index.ts). Add your service to `providerList`, following the your [`acme.sh`](DNS_API_integration) integration's naming convention.  
+  * `path` should be the location of the file you create in the next step.
+2. Create a file that exports the following functions: `getDomains` and `setRecord`. 
+3. Depending on your API in the previous step, you may need to create types. Types should be added to [`src/types/general.ts`](https://github.com/garageScript/myProxy/blob/master/src/types/general.ts)
 
-For this exemple we will add the provider [**Name.com**][name.com]
+You are done! Get a beer 🍺
 
-### Looking at acme.sh documention
-
-Take a look at the documentation [28. Use Name.com API][Use_Name.com]
-
-  1. Create your API token here: https://www.name.com/account/settings/api
-
-  2. They give us all **keys** and **dns_name** that we will use:
-
-  ```bash
-  export Namecom_Username="testuser"
-  export Namecom_Token="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-
-  acme.sh --issue --dns dns_namecom -d example.com -d www.example.com
-  ```
-
->Don't worry if you don't understand this bunch on code will we go through later on it
-
-### Let's implement name.com on myProxy
-
-You will find all implemented providers into `src/providers/index.ts`
-
-You will find `providerList`, has you can see it's an array of object with each provider supported. (Ok right now we only have Go Daddy 🙂)
-
->To add a new provider please follow acme.sh naming convention
-
-```js
-export const providerList = [
-  {
-    name: 'GoDaddy', // Provider name
-    dns: 'dns_gd', // dns_provider
-    keys: ['GD_Key', 'GD_Secret'], // [PROVIDER_Key, ...etc]
-    service: 'https://api.godaddy.com', // Provider API
-    path: './goDaddy' // Relative path of the provider file in "./src"
-  }
-] as ProviderInfo[]
-```
-
-Let's code a bit and add name.com
-
-1. You will find `dns_provider` name in this line:
-
-`acme.sh --issue --dns dns_namecom -d example.com -d www.example.com`
-
-2. You will find `keys` here:
-
-```bash
-  export Namecom_Username="testuser"
-  export Namecom_Token="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-```
-
-```js
-export const providerList = [
-  {
-    name: 'GoDaddy', // Provider name
-    dns: 'dns_gd', // dns_name for the provider
-    keys: ['GD_Key', 'GD_Secret'], // Keys [PROVIDER_Key, ...etc]
-    service: 'https://api.godaddy.com', // Provider API
-    path: './goDaddy' // Relative path of the provider file in "./src"
-  },
-    },
-+  {
-+    name: 'Name.com',
-+    dns: 'dns_namecom',
-+    keys: ['Namecom_Username', 'Namecom_Token'],
-+    service: 'https://api.name.com',
-+    path: './namecom'
-+  }
-] as ProviderInfo[]
-```
-
-### Create the Typescript file
-
-Now we will add the `namecom.ts` within `src/providers/namecom.ts`
-
-Please you can rely on existing providers the logic will be the same.
-Quick eplanation of the code.
-
-Import your provider from `providerList`
-
-```js
-const provider = providerList.find(provider => provider.name === 'Name.com')
-const { name, dns, keys, service } = provider
-```
-
-Will find and setup the provider keys `Namecom_Username` and `Namecom_Token`
-
-```js
-const getKeys = () => {...} ServiceKey[]
-```
-
-This method is **mandatory** and will return your domains
-
-```js
-export const getDomains = () => {...} Promise<Provider>
-```
-
-This method is **mandatory** and will setup your hostname record
-> You have to setup two records the root domain and the wildstar for all your subdomains
-
-```js
-export const setRecord = async(args) => {...} Promise<ServiceResponse>
-```
-
-### Add the provider Type for Typscript
-
-Your are almost done 🎉
-
-Within `src/types/general.ts` add the type object than return the provider request in `getDomains`
-
-```ts
-type NamecomDomain = {
-  domainName: string
-  locked: boolean
-  autorenewEnabled: boolean
-  expireDate: string
-  createDate: string
-}
-
-type RequestForName = {
-  domains: NamecomDomain[] | []
-}
-```
-
-Your done! get a beer 🍺
-
-## Before sending a Pull Request
-
+## Before sending a Pull Request:
 1. Run `npm run autofix`: make sure there are no errors / warnings
 
-## License
+# License
 
-myProxy is [MIT licensed](https://github.com/garageScript/myProxy/blob/master/LICENSE)
+MyProxy is [MIT licensed](https://github.com/garageScript/myProxy/blob/master/LICENSE)
 
 [DNS_API_integration]: https://github.com/Neilpang/acme.sh#8-automatic-dns-api-integration
-[name.com]: https://www.name.com/
-[Use_Name.com]: https://github.com/Neilpang/acme.sh/wiki/dnsapi#28-use-namecom-api
