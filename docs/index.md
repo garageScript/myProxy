@@ -118,6 +118,11 @@ app.listen(process.env.PORT || 8123);
 9. Run `git commit -m "Initial Commit"`
 10. Run `git push origin master`
 
+# API Reference
+
+Users can use Access Tokens to manage their domain mappings from a 3rd party server.
+[See available endpoints](https://github.com/garageScript/myProxy/wiki/API)
+
 # Development
 The following steps will guide you through how to setup your development environment to send pull requests or build your own custom features.
 
