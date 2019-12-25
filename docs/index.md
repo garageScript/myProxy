@@ -1,16 +1,28 @@
 # MyProxy &middot; [![CircleCI](https://circleci.com/gh/garageScript/myProxy.svg?style=svg)](https://circleci.com/gh/garageScript/myproxy)
-MyProxy is an application that:
+MyProxy is an application that helps you quickly and easily:
 * Helps you connect to your Domain provider
-* Setup A and CNAME records for your selected domain
+* Set up A and CNAME records for your selected domains
 * Create and serve SSL certificates for your selected domains
-* Run an unlimited number of applications on your subdomains.
+* Run an unlimited number of applications on your subdomains
+
+To understand what MyProxy does for you, the video below walks you through how to create and deploy a new application as well as an existing application:
+
+<div class="videoWrapper" >
+     <iframe src="https://www.youtube.com/embed/Tjx0BtpZmPc?rel=0" frameborder="0" allowfullscreen></iframe>
+</div>
+
+If you want to install MyProxy into your own server, setup instructions are simple. Install MyProxy into your server and then connect the your domain name.
+
+<div class="videoWrapper" >
+     <iframe src="https://www.youtube.com/embed/q3uSyMfaRP4?rel=0" frameborder="0" allowfullscreen></iframe>
+</div>
 
 ## Why?
-Setting up a server is hard, especially setting up DNS records, managing certificates, and deployment. So we setup to build a simple and usable app that helps us build applications quickly.
+Setting up a server is hard - especially setting up DNS records, managing certificates, and deployment. So we setup to build a simple and easy-to-use app that helps us build applications quickly.
 
 We are new to software engineering so if you find areas where this app could be improved, please let us know by [creating an issue](https://github.com/garageScript/myproxy/issues). We are excited to learn!
 
-Also, we are currently looking for a job. If your team needs software engineers, please hire us:
+Also, we are currently seeking jobs. If your team needs software engineers, please reach out:
 * [Alberto Lopez](https://www.linkedin.com/in/albertolopez-siliconvalley/) - Available immediately
 * [David De Wulf](https://dewulfdavid.com) - Open to new opportunities
 * [Rahul Kalra](https://www.linkedin.com/in/voterknow) - Available immediately
@@ -24,8 +36,11 @@ To use `MyProxy`, you need 2 things:
 
 # Installation and Usage 
 
-## AWS Setup
-Configure the VM's firewall per table below during security group setup on AWS EC2 instance.
+## Server setup
+We tested MyProxy on the AWS and Google Cloud platforms. If you use them, please follow the configurations and setup below to make sure MyProxy works well for you. 
+
+### AWS Setup
+You will need to configure the VM's firewall per table below during security group setup on AWS EC2 instance.
 
 | Type | Protocol | Port Range |   Source  |
 |:---:|:--------:|:----------: | :------:  |
@@ -35,7 +50,7 @@ Configure the VM's firewall per table below during security group setup on AWS E
 | Custom TCP Rule | TCP | 3000 | 0.0.0.0/0 |
 | Custom TCP Rule | TCP | 9418 | 0.0.0.0/0 |
 
-## Google Cloud Setup
+### Google Cloud Setup
 
  - Target: `specify target tags`
  - Target Tags: `myproxy`
@@ -53,14 +68,14 @@ Update Google VMs to specify `myproxy http-server https-server` in network tags
 
 2. Clone the app: `git clone https://github.com/garageScript/myProxy.git`
 
-3. Goto myProxy folder: `cd myProxy`
+3. Go to the MyProxy folder: `cd myProxy`
 
-4. Run Setup Script `./scripts/setup.sh`
+4. Run the setup script `./scripts/setup.sh`
     This will installed require dependencies.
-    * Installs `nodeJS` and `npm` if system does not have it.
-    * Enable firewall port `3000` (for the admin page UI), `80` and `443`.
+    * Installs `nodeJS` and `npm` if system does not have them.
+    * Enables firewall port `3000` (for the admin page UI), `80` and `443`.
     * Installs application dependencies
-    * For a list of things the script runs, [look here](https://github.com/garageScript/myProxy/blob/master/scripts/setup.sh)
+    * For a complete list of things the script runs, [look here](https://github.com/garageScript/myProxy/blob/master/scripts/setup.sh)
 
 5. Run the App: `ADMIN=YOUR_ADMIN_PASSWORD npm run server` 
 > You can also run the app under your own defined port by setting a `PORT` environment variable
@@ -70,12 +85,12 @@ Update Google VMs to specify `myproxy http-server https-server` in network tags
 ## Usage
 1. Go to your server url: `http://your-server-ip-address:3000`. You will be prompted to enter your admin password and your domain provider's API Key and Secret, [find out how here](https://github.com/Neilpang/acme.sh/wiki/dnsapi)
 
-2. All your domain names in that provider will show up. Click the `setup` button next to the domain you wish to setup (could take up to 4 minutes)
+2. All your domain names in that provider will show up. Click the **setup** button next to the domain you wish to setup (could take up to 5 minutes)
 
-3. After your domain is setup, you will be able to generate as many subdomain repository as you want! To do that:
-    1. Go to your server url:  `http://your-server-ip-address:3000`
+3. After your domain is setup, you will be able to generate as many subdomain repositories as you want! To do that:
+    1. Go to your server URL:  `http://your-server-ip-address:3000`
     2. Create a subdomain. IP and port are optional. You should see a git link that was created for you.
-    3. `git clone` the app, then build the app locally. Find out how in the Building Your Local App section below. 
+    3. `git clone` the app, then build the app locally. Find out how in the **Building Your Local App section** below. 
     4. When you are done, `git push origin master` and watch your app run in production!
 
 ## Building-Your-Local-App 
@@ -98,7 +113,7 @@ app.get('/', (req, res) => {
 app.listen(process.env.PORT || 8123);
 ```
 
-7. Update scripts section of Package.JSON with `"start:myproxy": "node app.js"`
+7. Update scripts section of `package.json` with `"start:myproxy": "node app.js"`
 8. Run `git add .`
 9. Run `git commit -m "Initial Commit"`
 10. Run `git push origin master`
