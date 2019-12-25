@@ -252,7 +252,7 @@ This method is **mandatory** and will setup your hostname record
 export const setRecord = async(args) => {...} Promise<ServiceResponse>
 ```
 
-### Add the provider Type for Typscript
+### Add the provider Type for Typescript
 
 Your are almost done 🎉
 

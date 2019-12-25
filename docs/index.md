@@ -120,7 +120,7 @@ app.listen(process.env.PORT || 8123);
 
 # API Reference
 
-Users can use Access Tokens to manage their domain mappings from a 3rd part server.
+Users can use Access Tokens to manage their domain mappings from a 3rd party server.
 [See available endpoints](https://github.com/garageScript/myProxy/wiki/API)
 
 # Development
