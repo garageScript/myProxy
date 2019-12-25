@@ -57,6 +57,18 @@ type ProxyMapping = {
   port?: string
 }
 
+type DomainForName = {
+  domainName: string
+  locked: boolean
+  autorenewEnabled: boolean
+  expireDate: string
+  createDate: string
+}
+
+type RequestForName = {
+  domains: DomainForName[] | []
+}
+
 type AccessToken = {
   name: string
   id: string
@@ -79,6 +91,8 @@ export {
   ServiceConfig,
   ProviderService,
   ProxyMapping,
+  DomainForName,
+  RequestForName,
   AccessToken,
   AccessTokenById,
   AuthenticatedRequest,
