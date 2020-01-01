@@ -57,6 +57,18 @@ type ProxyMapping = {
   port?: string
 }
 
+type NamecomDomain = {
+  domainName: string
+  locked: boolean
+  autorenewEnabled: boolean
+  expireDate: string
+  createDate: string
+}
+
+type RequestForName = {
+  domains: NamecomDomain[] | []
+}
+
 type AccessToken = {
   name: string
   id: string
@@ -79,6 +91,8 @@ export {
   ServiceConfig,
   ProviderService,
   ProxyMapping,
+  NamecomDomain,
+  RequestForName,
   AccessToken,
   AccessTokenById,
   AuthenticatedRequest,

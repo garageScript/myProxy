@@ -22,6 +22,13 @@ export const providerList = [
     keys: ['GD_Key', 'GD_Secret'],
     service: 'https://api.godaddy.com',
     path: './goDaddy'
+  },
+  {
+    name: 'Name.com',
+    dns: 'dns_namecom',
+    keys: ['Namecom_Username', 'Namecom_Token'],
+    service: 'https://api.name.com',
+    path: './namecom'
   }
 ] as ProviderInfo[]
 
