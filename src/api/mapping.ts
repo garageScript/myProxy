@@ -30,8 +30,8 @@ mappingRouter.post('/', async (req, res) => {
     return res.status(400).json({ message: 'Port cannot be smaller than 3001' })
   }
   const fullDomain = req.body.subDomain
-    ? `${req.body.subDomain}.${req.body.domain}`
-    : `${req.body.domain}`
+    ? `${req.body.subDomain}.${req.body.domain}`.toLowerCase()
+    : `${req.body.domain}`.toLowerCase()
   const existingSubDomain = getMappingByDomain(fullDomain)
   if (existingSubDomain)
     return res.status(400).json({
@@ -55,8 +55,8 @@ mappingRouter.post('/', async (req, res) => {
 
   const respond = (): void => {
     const mappingObject: Mapping = {
-      domain: req.body.domain,
-      subDomain: req.body.subDomain,
+      domain: req.body.domain.toLowerCase(),
+      subDomain: req.body.subDomain.toLowerCase(),
       port: req.body.port || `${portCounter}`,
       ip: req.body.ip || '127.0.0.1',
       id: uuid4(),
