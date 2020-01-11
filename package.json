@@ -18,7 +18,8 @@
     "lint": "npm run prettier:check && npm run eslint:check",
     "autofix": "npm run prettier:write && npm run eslint:fix",
     "server": "./scripts/setup.sh; pm2 startOrRestart ./scripts/prod.config.js --env production --update-env",
-    "server:stop": "pm2 stop myProxy-prod"
+    "server:stop": "pm2 stop myProxy-prod",
+    "migrate": "node ./dataMigration.js"
   },
   "repository": {
     "type": "git",

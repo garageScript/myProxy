@@ -17,8 +17,8 @@ describe('/api', () => {
     server.close()
   })
 
-  it('checks mappings for newly added mapping', async () => {
-    const subDomain = `testing${uuidv4()}`
+  it('checks mappings for newly added mapping and it converts domain and subdomain to lowercase', async () => {
+    const subDomain = `Testing${uuidv4()}`
     const domain = 'Rahul'
     const port = '5678'
     const postResponse = await mappingAdapter('/', 'POST', {
@@ -28,9 +28,11 @@ describe('/api', () => {
     })
     const postMapping = await postResponse.json()
     expect(postMapping.port).toEqual(port)
-    expect(postMapping.subDomain).toEqual(subDomain)
-    expect(postMapping.domain).toEqual(domain)
-    expect(postMapping.fullDomain).toEqual(`${subDomain}.${domain}`)
+    expect(postMapping.subDomain).toEqual(subDomain.toLowerCase())
+    expect(postMapping.domain).toEqual(domain.toLowerCase())
+    expect(postMapping.fullDomain).toEqual(
+      `${subDomain}.${domain}`.toLowerCase()
+    )
     const deleteResponse = await mappingAdapter(`/${postMapping.id}`, 'DELETE')
     expect(deleteResponse.status).toEqual(200)
     const getMapping = await mappingAdapter(`/${postMapping.id}`, 'GET')
@@ -135,8 +137,8 @@ describe('/api', () => {
       subDomain
     })
 
-    const firstFullDomain = `${subDomain}.${domain}`
-    const secondFullDomain = `${subDomain}.${secondDomain}`
+    const firstFullDomain = `${subDomain}.${domain}`.toLowerCase()
+    const secondFullDomain = `${subDomain}.${secondDomain}`.toLowerCase()
     const match1 = getMappingByDomain(firstFullDomain)
     const match2 = getMappingByDomain(secondFullDomain)
 
