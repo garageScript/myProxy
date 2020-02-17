@@ -19,7 +19,7 @@ import environment from '../helpers/environment'
 
 const { isProduction } = environment
 
-// The steps below are covered by the setup script. This is not necessssary.
+// The steps below are covered by the setup script. This is not necessary.
 const cyan = '\x1b[36m\u001b[1m%s\x1b[0m'
 const red = '\x1b[31m\u001b[1m%s\x1b[0m'
 const errorMsg =
@@ -89,7 +89,7 @@ const startAppServer = (
 }
 
 const startProxyServer = (): void => {
-  const proxy = httpProxy.createProxyServer({})
+  const proxy = httpProxy.createProxyServer({ xfwd: true })
   proxy.on('error', err => console.error('Proxy error', err))
 
   const server = https.createServer({ SNICallback }, (req, res) => {
@@ -97,10 +97,21 @@ const startProxyServer = (): void => {
       const { ip, port }: ProxyMapping =
         getMappingByDomain(req.headers.host) || {}
       if (!port || !ip) return res.end('Not Found')
-      proxy.web(req, res, { target: `http://${ip}:${port}` }, err => {
-        console.error('Error communicating with server', err)
-        res.end(`Error communicating with server that runs ${req.headers.host}`)
-      })
+      proxy.web(
+        req,
+        res,
+        {
+          target: `http://${ip}:${port}`,
+          xfwd: true,
+          preserveHeaderKeyCase: true
+        },
+        err => {
+          console.error('Error communicating with server', err)
+          res.end(
+            `Error communicating with server that runs ${req.headers.host}`
+          )
+        }
+      )
     } catch (err) {
       console.error('Error: proxy failed', err)
       return res.end(`Error: failed to create proxy ${req.headers.host}`)
