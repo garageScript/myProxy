@@ -1,6 +1,9 @@
 # [MyProxy](https://garagescript.github.io/myProxy/) &middot; [![CircleCI](https://circleci.com/gh/garageScript/myProxy.svg?style=svg)](https://circleci.com/gh/garageScript/myproxy)
-MyProxy is an application that helps you quickly and easily:
-* Helps you connect to your Domain provider
+MyProxy is an alternative to Nginx that allows automatic domain provider integration, ssl support for all domains, dynamic port proxy
+and automatic git deployment. 
+
+MyProxy helps you quickly and easily:
+* Connect to your Domain provider
 * Set up A and CNAME records for your selected domains
 * Create and serve SSL certificates for your selected domains
 * Run an unlimited number of applications on your subdomains
