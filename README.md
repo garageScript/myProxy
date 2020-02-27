@@ -14,6 +14,9 @@ Watch the following videos to understand how MyProxy works:
 
 [Setting up MyProxy on your server](https://www.youtube.com/watch?v=q3uSyMfaRP4)
 
+## Try it out?
+Try it out on one of our open source partners providing a heroku alternative: https://freedomains.dev/
+
 ## Why?
 Setting up a server is hard - especially setting up DNS records, managing certificates, and deployment. So we setup to build a simple and easy-to-use app that helps us build applications quickly.
 
