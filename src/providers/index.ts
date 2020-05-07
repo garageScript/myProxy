@@ -33,7 +33,7 @@ export const providerList = [
   {
     name: 'Namecheap.com',
     dns: 'dns_namecheap',
-    keys: ['Namecheap_Username', 'Namecheap_API'],
+    keys: ['NAMECHEAP_USERNAME', 'NAMECHEAP_API_KEY'],
     path: './namecheap'
   }
 ] as ProviderInfo[]

@@ -26,20 +26,22 @@ export const getDomains = async (): Promise<Provider> => {
   const providerKeys = getKeys()
   const domains = []
 
-  const ifconfigRes = await fetch('https://ifconfig.me/ip')
+  if (findKey(keys[0]) && findKey(keys[1])) {
+    const ifconfigRes = await fetch('https://ifconfig.me/ip')
 
-  namecheapApi.config.set('ApiUser', findKey(keys[0]))
-  namecheapApi.config.set('ApiKey', findKey(keys[1]))
-  namecheapApi.config.set('ClientIp', await ifconfigRes.text())
+    namecheapApi.config.set('ApiUser', findKey(keys[0]))
+    namecheapApi.config.set('ApiKey', findKey(keys[1]))
+    namecheapApi.config.set('ClientIp', await ifconfigRes.text())
 
-  const { response } = await namecheapApi.apiCall(
-    'namecheap.domains.getList',
-    {}
-  )
+    const { response } = await namecheapApi.apiCall(
+      'namecheap.domains.getList',
+      {}
+    )
 
-  response[0].DomainGetListResult[0].Domain.forEach(domain => {
-    domains.push({ domain: domain['$'].Name })
-  })
+    response[0].DomainGetListResult[0].Domain.forEach(domain => {
+      domains.push({ domain: domain['$'].Name })
+    })
+  }
 
   return {
     id: dns,

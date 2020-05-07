@@ -13,10 +13,16 @@ const createSslCerts = async (
 ): Promise<ServiceResponse> => {
   const serviceKeys = getProviderKeys().filter(d => d.service === service)
   const { keys } = providerList.find(provider => provider.dns === service)
-  const envVars = keys.reduce((acc: string, key: string) => {
+  let envVars = keys.reduce((acc: string, key: string) => {
     const { value } = serviceKeys.find(d => d.key === key) || { value: '' }
     return acc + `${key}=${value} `
   }, '')
+
+  const { stdout: ipaddress } = await exec('curl ifconfig.me')
+  if (service === 'dns_namecheap') {
+    envVars += `NAMECHEAP_SOURCEIP=${ipaddress}`
+  }
+
   const acme = `./acme.sh/acme.sh --issue --dns ${service}`
   const cert1 = `${acme} -d ${selectedDomain} --force`
   const cert2 = `${acme} -d *.${selectedDomain} --force`

@@ -22,6 +22,8 @@ const findKey = (key: string): string => {
 
 export const getDomains = async (): Promise<Provider> => {
   const providerKeys = getKeys()
+
+  console.log(findKey(keys[1]))
   let domains = []
   const url = `${service}/v1/domains?statuses=ACTIVE`
   const options = {
