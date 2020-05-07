@@ -29,6 +29,12 @@ export const providerList = [
     keys: ['Namecom_Username', 'Namecom_Token'],
     service: 'https://api.name.com',
     path: './namecom'
+  },
+  {
+    name: 'Namecheap.com',
+    dns: 'dns_namecheap',
+    keys: ['Namecheap_Username', 'Namecheap_API'],
+    path: './namecheap'
   }
 ] as ProviderInfo[]
 

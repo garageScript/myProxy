@@ -139,6 +139,7 @@ class ProviderKeyElement {
         providerKeyElement
       ) as HTMLInputElement
       const method = isNew ? 'POST' : 'PATCH'
+      // return console.log('click', providerKey, method)
       fetch(`/api/admin/providerKeys/${providerKey.id || ''}`, {
         method,
         body: JSON.stringify({
