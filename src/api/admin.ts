@@ -167,7 +167,6 @@ app.patch('/providerKeys/:id', (req, res) => {
 })
 
 app.get('/providers', async (_, res) => {
-  console.log(providers)
   const requests = providerList.map(provider =>
     providers[provider.dns].getDomains()
   )
