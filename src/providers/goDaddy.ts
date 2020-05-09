@@ -1,32 +1,24 @@
 import { sendRequest } from '../helpers/httpRequest'
-import { getProviderKeys } from '../lib/data'
 import { Provider, ServiceResponse } from '../types/general'
-import { ServiceKey } from '../types/admin'
 import fetch from 'node-fetch'
 import { providerList } from './'
+import { getKeys, findKey } from './helpers'
 
 const provider = providerList.find(provider => provider.name === 'GoDaddy')
+
 const { name, dns, keys, service } = provider
 
-const getKeys = (): ServiceKey[] => {
-  const keysDefault: { key: string }[] = [{ key: keys[0] }, { key: keys[1] }]
-  const providerKeys = keysDefault.map(key => {
-    const serviceKeys = getProviderKeys()
-    return serviceKeys.find(k => k.service === dns && k.key === key.key) || key
-  })
-  return providerKeys as ServiceKey[]
-}
-const findKey = (key: string): string => {
-  return (getKeys().find(k => k.key === key) || { value: '' }).value
-}
-
 export const getDomains = async (): Promise<Provider> => {
-  const providerKeys = getKeys()
+  const providerKeys = getKeys(provider)
+
   let domains = []
   const url = `${service}/v1/domains?statuses=ACTIVE`
   const options = {
     headers: {
-      Authorization: `sso-key ${findKey(keys[0])}:${findKey(keys[1])}`,
+      Authorization: `sso-key ${findKey(provider, keys[0])}:${findKey(
+        provider,
+        keys[1]
+      )}`,
       'Content-Type': 'application/json'
     }
   }
@@ -55,7 +47,10 @@ export const setRecord = async (
   const options = {
     method: 'PUT',
     headers: {
-      Authorization: `sso-key ${findKey(keys[0])}:${findKey(keys[1])}`,
+      Authorization: `sso-key ${findKey(provider, keys[0])}:${findKey(
+        provider,
+        keys[1]
+      )}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
@@ -70,7 +65,10 @@ export const setRecord = async (
   const cnameOptions = {
     method: 'PUT',
     headers: {
-      Authorization: `sso-key ${findKey(keys[0])}:${findKey(keys[1])}`,
+      Authorization: `sso-key ${findKey(provider, keys[0])}:${findKey(
+        provider,
+        keys[1]
+      )}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(cnameData)

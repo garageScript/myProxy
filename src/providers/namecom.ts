@@ -1,33 +1,21 @@
 import fetch from 'node-fetch'
 import { sendRequest } from '../helpers/httpRequest'
-import { getProviderKeys } from '../lib/data'
 import { Provider, ServiceResponse } from '../types/general'
-import { ServiceKey } from '../types/admin'
 import { RequestForName } from '../types/general'
 import { providerList } from './'
+import { getKeys, findKey } from './helpers'
 
 const provider = providerList.find(provider => provider.name === 'Name.com')
+
 const { name, dns, keys, service } = provider
 
-const getKeys = (): ServiceKey[] => {
-  const keysDefault: { key: string }[] = [{ key: keys[0] }, { key: keys[1] }]
-  const providerKeys = keysDefault.map(key => {
-    const serviceKeys = getProviderKeys()
-    return serviceKeys.find(k => k.service === dns && k.key === key.key) || key
-  })
-  return providerKeys as ServiceKey[]
-}
-const findKey = (key: string): string => {
-  return (getKeys().find(k => k.key === key) || { value: '' }).value
-}
-
 export const getDomains = async (): Promise<Provider> => {
-  const providerKeys = getKeys()
+  const providerKeys = getKeys(provider)
   let domains = []
   const options = {
     headers: {
       Authorization: `Basic ${Buffer.from(
-        `${findKey(keys[0])}:${findKey(keys[1])}`
+        `${findKey(provider, keys[0])}:${findKey(provider, keys[1])}`
       ).toString('base64')}`
     }
   }
@@ -72,7 +60,7 @@ export const setRecord = async (
     method: 'POST',
     headers: {
       Authorization: `Basic ${Buffer.from(
-        `${findKey(keys[0])}:${findKey(keys[1])}`
+        `${findKey(provider, keys[0])}:${findKey(provider, keys[1])}`
       ).toString('base64')}`
     }
   }
