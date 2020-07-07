@@ -4,7 +4,8 @@ module.exports = {
       name: 'myProxy-prod',
       script: './build/app.js',
       instances: 1,
-      autorestart: true,
+      autorestart: false,
+      cron_restart: '0 0 1 * *',
       watch: false,
       max_memory_restart: '1G',
       env_production: {
