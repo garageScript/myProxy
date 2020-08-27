@@ -61,7 +61,7 @@ mappingRouter.post('/', async (req, res) => {
       port: req.body.port || `${portCounter}`,
       ip: req.body.ip || '127.0.0.1',
       id: uuid4(),
-      gitLink: `myproxy@${req.body.domain}:${WORKPATH}/${fullDomain}`,
+      gitLink: `git@${req.body.domain}:${WORKPATH}/${fullDomain}`,
       fullDomain
     }
     domainKeys.push(mappingObject)

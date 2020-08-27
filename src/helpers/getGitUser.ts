@@ -3,7 +3,7 @@ import cp from 'child_process'
 const exec = util.promisify(cp.exec)
 
 const getGitUserId = async (): Promise<number> => {
-  const gitId = await exec('id -u myproxy')
+  const gitId = await exec('id -u git')
   return parseInt(gitId.stdout, 10)
 }
 
