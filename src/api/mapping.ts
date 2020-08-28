@@ -129,6 +129,7 @@ mappingRouter.delete('/:id', async (req, res) => {
   deleteDomain(deletedDomain.fullDomain)
   if (!isProduction()) return res.json(deletedDomain)
   const gitUserId = await getGitUserId()
+  const gitGroupId = await getGitGroupId()
   exec(
     `
       cd ${WORKPATH}
@@ -138,7 +139,7 @@ mappingRouter.delete('/:id', async (req, res) => {
       fi
       rm -rf ${deletedDomain.fullDomain}
     `,
-    { uid: gitUserId }
+    { uid: gitUserId, gid: gitGroupId }
   ).then(() => {
     res.json(deletedDomain)
   })
