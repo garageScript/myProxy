@@ -15,14 +15,27 @@ if [ ! -d "./acme.sh" ] ; then
   cd ../
 fi
 if [ ! -d "/home/myproxy" ] ; then
+  # Add users
   sudo useradd -m -c "myproxy" myproxy -s /bin/bash -p $(echo $ADMIN | openssl passwd -1 -stdin) -d "/home/myproxy"
+  sudo useradd -m -G myproxy -s $(which git-shell) -p $(echo $ADMIN | openssl passwd -1 -stdin) git
+  # Add sudoers rule for git user to run pm2 as myproxy, without password
+  echo "git ALL = (myproxy) NOPASSWD: /usr/bin/pm2" > /etc/sudoers.d/git
+  # Create folders
   mkdir /home/myproxy/.ssh
+  mkdir /home/git/.ssh
   mkdir /home/myproxy/.scripts
+  # Copy ssh keys and scripts
   cp ~/.ssh/authorized_keys /home/myproxy/.ssh/authorized_keys
+  cp ~/.ssh/authorized_keys /home/git/.ssh/authorized_keys
   cp ./scripts/post-receive /home/myproxy/.scripts/post-receive
   cp ./scripts/pre-receive /home/myproxy/.scripts/pre-receive
   cp ./scripts/gitignore /home/myproxy/.scripts/.gitignore
+  # fix file permissions
   chown myproxy:myproxy -R /home/myproxy/
+  chown git:git -R /home/git/
+  chmod 2775 -R /home/myproxy/
+  # Prepend ssh options for authorized keys
+  sed -i '/^ssh-rsa/s/^/no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty /' /home/git/.ssh/authorized_keys
 fi
 npm run build
 if [ ! -f "./data.db" ] ; then
