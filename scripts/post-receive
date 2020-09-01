@@ -6,4 +6,4 @@ git clean -f
 git checkout master
 git branch -D prod
 npm install
-pm2 startOrRestart deploy.config.js --env production --update-env
+sudo -u myproxy pm2 startOrRestart deploy.config.js --env production --update-env

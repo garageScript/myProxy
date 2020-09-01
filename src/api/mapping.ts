@@ -12,7 +12,7 @@ import {
 } from '../lib/data'
 import { Mapping } from '../types/general'
 import prodConfigure from '../../scripts/prod.config.js'
-import { getGitUserId } from '../helpers/getGitUser'
+import { getGitUserId, getGitGroupId } from '../helpers/getGitUser'
 import environment from '../helpers/environment'
 const mappingRouter = express.Router()
 const exec = util.promisify(cp.exec)
@@ -61,7 +61,7 @@ mappingRouter.post('/', async (req, res) => {
       port: req.body.port || `${portCounter}`,
       ip: req.body.ip || '127.0.0.1',
       id: uuid4(),
-      gitLink: `myproxy@${req.body.domain}:${WORKPATH}/${fullDomain}`,
+      gitLink: `git@${req.body.domain}:${WORKPATH}/${fullDomain}`,
       fullDomain
     }
     domainKeys.push(mappingObject)
@@ -72,9 +72,14 @@ mappingRouter.post('/', async (req, res) => {
   if (!isProduction()) {
     return respond()
   }
+
+  // get user and group id to execute the commands with the correct permissions
   const gitUserId = await getGitUserId()
+  const gitGroupId = await getGitGroupId()
+
   exec(
     `
+      umask 002
       cd ${WORKPATH}
       mkdir ${fullDomain}
       git init ${fullDomain}
@@ -88,7 +93,7 @@ mappingRouter.post('/', async (req, res) => {
       git add .
       git commit -m "Initial Commit"
       `,
-    { uid: gitUserId }
+    { uid: gitUserId, gid: gitGroupId }
   )
     .then(() => {
       respond()
@@ -126,7 +131,11 @@ mappingRouter.delete('/:id', async (req, res) => {
   const deletedDomain = getMappingById(req.params.id)
   deleteDomain(deletedDomain.fullDomain)
   if (!isProduction()) return res.json(deletedDomain)
+
+  // get user and group id to execute the commands with the correct permissions
   const gitUserId = await getGitUserId()
+  const gitGroupId = await getGitGroupId()
+
   exec(
     `
       cd ${WORKPATH}
@@ -136,7 +145,7 @@ mappingRouter.delete('/:id', async (req, res) => {
       fi
       rm -rf ${deletedDomain.fullDomain}
     `,
-    { uid: gitUserId }
+    { uid: gitUserId, gid: gitGroupId }
   ).then(() => {
     res.json(deletedDomain)
   })

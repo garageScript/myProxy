@@ -2,16 +2,18 @@ import fs from 'fs'
 import environment from '../helpers/environment'
 
 const { isProduction } = environment
+const sshOptions =
+  'no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty'
 let authorizedKeys: Array<string> = []
 
 const updateSSHKey = (): void => {
   if (isProduction()) {
-    const file = fs.createWriteStream('/home/myproxy/.ssh/authorized_keys')
+    const file = fs.createWriteStream('/home/git/.ssh/authorized_keys')
     file.on('error', err => {
       console.log(err)
     })
     authorizedKeys.forEach(v => {
-      file.write(`${v}\n`)
+      file.write(`${sshOptions} ${v}\n`)
     })
     file.end()
   }
