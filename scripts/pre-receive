@@ -1,3 +1,15 @@
 #!/bin/sh
 SAFE_GITENV="env -u GIT_QUARANTINE_PATH"
+
+existing_branch="$($SAFE_GITENV git branch --list prod)"
+
+if [[ -n ${existing_branch} ]];then
+  $SAFE_GITENV git checkout master
+  $SAFE_GITENV git clean -f 
+  $SAFE_GITENV git reset --hard 
+  $SAFE_GITENV git branch -D prod
+  $SAFE_GITENV git checkout -b prod
+
+else
 $SAFE_GITENV git checkout -b prod
+fi
