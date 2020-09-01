@@ -151,15 +151,6 @@ mappingRouter.delete('/:id', async (req, res) => {
   })
 })
 
-mappingRouter.get('/download', (req, res) => {
-  const filePath = `${WORKPATH}/${req.query.fullDomain}/deploy.config.js`
-  res.setHeader('Content-disposition', 'attachment; filename=deploy.config.js')
-  res.setHeader('Content-type', 'application/javascript')
-  res.download(filePath, err => {
-    console.log('Failed to download file', err)
-  })
-})
-
 mappingRouter.get('/:id', (req, res) => {
   const foundDomain = getMappingById(req.params.id)
   res.json(foundDomain || {})
