@@ -1,0 +1,3 @@
+#!/bin/sh
+printf '%s\n' "Hi! You've successfully authenticated, but myProxy does not provide interactive shell access."
+exit 128

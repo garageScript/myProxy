@@ -32,6 +32,10 @@ if [ ! -d "/home/myproxy" ] ; then
   cp ./scripts/gitignore /home/myproxy/.scripts/.gitignore
   # Disable SSH MOTD message for git user
   touch /home/git/.hushlogin
+  # Add git-shell message
+  mkdir /home/git/git-shell-commands
+  cp ./scripts/no-interactive-login /home/git/git-shell-commands/no-interactive-login
+  chmod +x /home/git/git-shell-commands/no-interactive-login
   # fix file permissions
   chown myproxy:myproxy -R /home/myproxy/
   chown git:git -R /home/git/
