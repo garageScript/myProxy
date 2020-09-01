@@ -77,6 +77,10 @@ mappingRouter.post('/', async (req, res) => {
   const gitUserId = await getGitUserId()
   const gitGroupId = await getGitGroupId()
 
+  /*
+   * When receive.denyNonFastForwards and receive.denyDeletes is set to true
+   * the user cannot use `git push <origin> <branch> --force`
+   */
   exec(
     `
       umask 002
@@ -89,6 +93,8 @@ mappingRouter.post('/', async (req, res) => {
       cd ${fullDomain}
       git config user.email "root@ipaddress"
       git config user.name "user"
+      git config receive.denyNonFastForwards true
+      git config receive.denyDeletes true
       echo 'module.exports = ${JSON.stringify(prodConfig)}' > deploy.config.js
       git add .
       git commit -m "Initial Commit"
