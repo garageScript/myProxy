@@ -30,6 +30,8 @@ if [ ! -d "/home/myproxy" ] ; then
   cp ./scripts/post-receive /home/myproxy/.scripts/post-receive
   cp ./scripts/pre-receive /home/myproxy/.scripts/pre-receive
   cp ./scripts/gitignore /home/myproxy/.scripts/.gitignore
+  # Disable SSH MOTD message for git user
+  touch /home/git/.hushlogin
   # fix file permissions
   chown myproxy:myproxy -R /home/myproxy/
   chown git:git -R /home/git/
