@@ -84,13 +84,13 @@ class MappingItem {
           <a
             class="${logClass}"
             style="font-size: 15px; color: rgba(255,50,50,0.5)"
-            href="/api/logs/err/${data.fullDomain}"
+            href="/api/logs/stderr/${data.fullDomain}"
           >
           </a>
           <a
             class="${logClass}"
             style="font-size: 15px; color: rgba(40,167,70,0.5)"
-            href="/api/logs/out/${data.fullDomain}"
+            href="/api/logs/stdout/${data.fullDomain}"
           >
           </a>
           <div class="dropright">
