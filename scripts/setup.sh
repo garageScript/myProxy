@@ -18,8 +18,11 @@ if [ ! -d "/home/myproxy" ] ; then
   # Add users
   sudo useradd -m -c "myproxy" myproxy -s /bin/bash -p $(echo $ADMIN | openssl passwd -1 -stdin) -d "/home/myproxy"
   sudo useradd -m -G myproxy -s $(which git-shell) -p $(echo $ADMIN | openssl passwd -1 -stdin) git
-  # Add sudoers rule for git user to run pm2 as myproxy, without password
-  echo "git ALL = (myproxy) NOPASSWD: /usr/bin/pm2" > /etc/sudoers.d/git
+  # Add myproxy and git to the docker group so they can run the commands
+  sudo groupadd docker
+  sudo usermod -aG docker myproxy
+  sudo usermod -aG docker git
+  newgrp docker
   # Create folders
   mkdir /home/myproxy/.ssh
   mkdir /home/git/.ssh
