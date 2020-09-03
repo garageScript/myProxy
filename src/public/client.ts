@@ -93,20 +93,6 @@ class MappingItem {
             href="/api/logs/stdout/${data.fullDomain}"
           >
           </a>
-          <div class="dropright">
-            <a href="#" role="button" data-toggle="dropdown" class="btn-link">
-              <span class="${settingClass}" style="font-size: 15px"> </span>
-            </a>
-            <div class="dropdown-menu">
-              <button
-                type="button"
-                class="btn btn-link deleteLogButton"
-                style="color: rgba(255,50,50,1)"
-              >
-                Clear Logs
-              </button>
-            </div>
-          </div>
         </div>
         <small class="form-text text-muted" style="display: inline-block;">
           ${data.gitLink}
@@ -165,18 +151,6 @@ class MappingItem {
           headers: {
             'Content-Type': 'application/json'
           }
-        }).then(() => {
-          window.location.reload()
-        })
-      }
-    }
-    const clearLogButton = helper.getElement('.deleteLogButton', mappingElement)
-    clearLogButton.onclick = (): void => {
-      if (
-        confirm(`Are you sure you want to clear ${data.fullDomain}'s logs?`)
-      ) {
-        fetch(`/api/logs/${data.fullDomain}`, {
-          method: 'DELETE'
         }).then(() => {
           window.location.reload()
         })
