@@ -108,13 +108,6 @@ class MappingItem {
           ${data.gitLink}
         </small>
       </div>
-      <a
-        href="/api/mappings/download/?fullDomain=${data.fullDomain}"
-        target="_blank"
-        class="btn btn-sm btn-outline-success mr-3"
-      >
-        Download<i class="fa fa-download"></i>
-      </a>
       <button
         class="btn btn-sm btn-outline-danger mr-3 deleteButton"
         type="button"
