@@ -83,7 +83,7 @@ const stopContainer = async (id: string): Promise<unknown> => {
 
 const removeContainer = async (id: string): Promise<unknown> => {
   const container = docker.getContainer(id)
-  return container.remove()
+  return container.remove({ v: true, force: true })
 }
 
 export {
