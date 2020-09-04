@@ -44,30 +44,21 @@ if ! user_exists myproxy; then
   echo "Creating user: myproxy"
   sudo useradd -m -c "myproxy" myproxy -s /bin/bash -p $(echo $ADMIN | openssl passwd -1 -stdin) -d "/home/myproxy"
   sudo usermod -aG docker myproxy
+  mkdir -p /home/myproxy/.ssh
+  mkdir -p /home/myproxy/.scripts
 fi
 
 if ! user_exists git; then
   echo "Creating user: git"
   sudo useradd -m -G myproxy -s $(which git-shell) -p $(echo $ADMIN | openssl passwd -1 -stdin) git
   sudo usermod -aG docker git
+  mkdir -p /home/git/.ssh
   # Disable SSH MOTD message for git user
   touch /home/git/.hushlogin
   # Add git-shell message
-  mkdir /home/git/git-shell-commands
+  mkdir -p /home/git/git-shell-commands
   cp ./scripts/no-interactive-login /home/git/git-shell-commands/no-interactive-login
   chmod +x /home/git/git-shell-commands/no-interactive-login
-fi
-
-if [ ! -d "/home/myproxy/.ssh" ]; then 
-  mkdir /home/myproxy/.ssh
-fi
-
-if [ ! -d "/home/myproxy/.scripts" ]; then 
-  mkdir /home/myproxy/.scripts
-fi
-
-if [ ! -d "/home/git/.ssh" ]; then 
-  mkdir /home/git/.ssh
 fi
 
 if [ -f "~/.ssh/authorized_keys" ]; then
