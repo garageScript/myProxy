@@ -78,6 +78,9 @@ cp ./scripts/gitignore /home/myproxy/.scripts/.gitignore
 # fix file permissions
 chown myproxy:myproxy -R /home/myproxy/
 chown git:git -R /home/git/
+# set the group permissions for /home/myproxy
+# 2 = set the setgid bit for the files so group permissions are inherited
+# 775 = set read+write permissions for the user and group
 chmod 2775 -R /home/myproxy/
 
 npm run build
