@@ -96,4 +96,11 @@ if [ ! -f "./data.db" ] ; then
 fi
 
 # pull node docker image
-docker pull node:alpine
+if docker ps > /dev/null 2>&1; then
+  docker pull node:alpine
+else
+  echo "WARNING: Couldn't run docker commands"
+  echo "WARNING: Make sure your user has the right permissions"
+  echo "WARNING: Go to this link to setup docker to run without root"
+  echo "WARNING: https://docs.docker.com/engine/install/linux-postinstall/"
+fi
