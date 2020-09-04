@@ -94,3 +94,6 @@ npm run build
 if [ ! -f "./data.db" ] ; then
   touch data.db
 fi
+
+# pull node docker image
+docker pull node:alpine
