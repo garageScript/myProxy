@@ -54,7 +54,7 @@ mappingRouter.post('/', async (req, res) => {
   const scriptPath = '.scripts'
 
   // Create a new container and get the id
-  const id = isProduction ? await createContainer(fullDomain, port) : uuid4()
+  const id = isProduction() ? await createContainer(fullDomain, port) : uuid4()
 
   const respond = (): void => {
     const mappingObject: Mapping = {
