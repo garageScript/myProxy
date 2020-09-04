@@ -48,13 +48,11 @@ class MappingItem {
     // The variables below are to hide log related icons when pm2 is not
     // being used to monitor the apps. These apps will not have status since
     // they are not managed by pm2.
-    let settingClass
     let logClass
     if (data.status === 'running') {
       iconClass = 'fa fa-circle mr-1 mt-1'
       iconColor = 'rgba(50,255,50,0.5)'
       logClass = 'fa fa-file-text-o ml-1 mt-1'
-      settingClass = 'ml-1 fa fa-cog'
     } else if (data.status === 'not started') {
       iconClass = ''
       iconColor = 'transparent'
@@ -62,7 +60,6 @@ class MappingItem {
       iconClass = 'fa fa-circle mr-1 mt-1'
       iconColor = 'rgba(255, 50, 50, 0.5)'
       logClass = 'fa fa-file-text-o ml-1 mt-1'
-      settingClass = 'ml-1 fa fa-cog'
     }
     mappingElement.classList.add(
       'list-group-item',

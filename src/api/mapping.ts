@@ -30,7 +30,7 @@ const getNextPort = (map, start = 3002): number => {
   return getNextPort(map, start)
 }
 
-const { PORT, WORKPATH, isProduction } = environment
+const { WORKPATH, isProduction } = environment
 
 mappingRouter.post('/', async (req, res) => {
   const domainKeys = getMappings()
