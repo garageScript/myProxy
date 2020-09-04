@@ -75,6 +75,9 @@ if [ -f "~/.ssh/authorized_keys" ]; then
   cp ~/.ssh/authorized_keys /home/git/.ssh/authorized_keys
   # Prepend ssh options for authorized keys
   sed -i '/^ssh-rsa/s/^/no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty /' /home/git/.ssh/authorized_keys
+else
+  touch /home/myproxy/.ssh/authorized_keys
+  touch /home/git/.ssh/authorized_keys
 fi
 
 cp ./scripts/post-receive /home/myproxy/.scripts/post-receive
