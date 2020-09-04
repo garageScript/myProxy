@@ -93,7 +93,6 @@ mappingRouter.post('/', async (req, res) => {
       git config user.name "user"
       git add .
       git commit -m "Initial Commit"
-      echo "curl --silent --request GET --url http://localhost:${PORT}/api/mappings/${id}/start" >> ${fullDomain}/.git/hooks/post-receive
       `,
     { uid: gitUserId, gid: gitGroupId }
   )
