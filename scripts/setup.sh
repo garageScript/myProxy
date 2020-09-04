@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Check if docker is installed and stop the script if it's not
+if ! command docker &> /dev/null; then
+  echo "myProxy requires Docker to run"
+  echo "Docker installation instructions: https://docs.docker.com/engine/install/"
+  exit
+fi
+
 if ! command node -v &>/dev/null; then
   sudo apt-get install curl
   curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
