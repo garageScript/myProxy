@@ -136,7 +136,7 @@ mappingRouter.delete('/:id', async (req, res) => {
   removeContainer(deletedDomain.fullDomain)
     .then(() => {
       // delete the domain folder
-      fs.unlink(path.resolve(WORKPATH, deletedDomain.fullDomain), err => {
+      fs.rmdir(path.resolve(WORKPATH, deletedDomain.fullDomain), err => {
         if (err) {
           return res.status(500).json({ message: err.message })
         }
