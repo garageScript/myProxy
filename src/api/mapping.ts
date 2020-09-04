@@ -3,8 +3,6 @@ import express from 'express'
 import uuid4 from 'uuid/v4'
 import util from 'util'
 import cp from 'child_process'
-import fs from 'fs'
-import path from 'path'
 import {
   setData,
   getMappings,
@@ -136,10 +134,10 @@ mappingRouter.delete('/:id', async (req, res) => {
   removeContainer(deletedDomain.fullDomain)
     .then(() => {
       // delete the domain folder
-      fs.rmdir(path.resolve(WORKPATH, deletedDomain.fullDomain), err => {
-        if (err) {
-          return res.status(500).json({ message: err.message })
-        }
+      exec(`
+        cd ${WORKPATH}
+        rm -rf ${deletedDomain.fullDomain}
+      `).then(() => {
         res.json(deletedDomain)
       })
     })
