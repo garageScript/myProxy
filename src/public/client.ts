@@ -15,6 +15,10 @@ type Status = {
   status: string
 }
 
+type ContainerResponse = {
+  message?: string
+}
+
 const create: HTMLElement = helper.getElement('.create')
 const hostSelector: HTMLElement = helper.getElement('#hostSelector')
 const domainList: HTMLElement = helper.getElement('.domainList')
@@ -44,13 +48,11 @@ class MappingItem {
     // The variables below are to hide log related icons when pm2 is not
     // being used to monitor the apps. These apps will not have status since
     // they are not managed by pm2.
-    let settingClass
     let logClass
-    if (data.status === 'online') {
+    if (data.status === 'running') {
       iconClass = 'fa fa-circle mr-1 mt-1'
       iconColor = 'rgba(50,255,50,0.5)'
       logClass = 'fa fa-file-text-o ml-1 mt-1'
-      settingClass = 'ml-1 fa fa-cog'
     } else if (data.status === 'not started') {
       iconClass = ''
       iconColor = 'transparent'
@@ -58,7 +60,6 @@ class MappingItem {
       iconClass = 'fa fa-circle mr-1 mt-1'
       iconColor = 'rgba(255, 50, 50, 0.5)'
       logClass = 'fa fa-file-text-o ml-1 mt-1'
-      settingClass = 'ml-1 fa fa-cog'
     }
     mappingElement.classList.add(
       'list-group-item',
@@ -80,34 +81,32 @@ class MappingItem {
           <a
             class="${logClass}"
             style="font-size: 15px; color: rgba(255,50,50,0.5)"
-            href="/api/logs/err/${data.fullDomain}"
+            href="/api/logs/stderr/${data.fullDomain}"
           >
           </a>
           <a
             class="${logClass}"
             style="font-size: 15px; color: rgba(40,167,70,0.5)"
-            href="/api/logs/out/${data.fullDomain}"
+            href="/api/logs/stdout/${data.fullDomain}"
           >
           </a>
-          <div class="dropright">
-            <a href="#" role="button" data-toggle="dropdown" class="btn-link">
-              <span class="${settingClass}" style="font-size: 15px"> </span>
-            </a>
-            <div class="dropdown-menu">
-              <button
-                type="button"
-                class="btn btn-link deleteLogButton"
-                style="color: rgba(255,50,50,1)"
-              >
-                Clear Logs
-              </button>
-            </div>
-          </div>
         </div>
         <small class="form-text text-muted" style="display: inline-block;">
           ${data.gitLink}
         </small>
       </div>
+      <button
+        class="btn btn-sm btn-outline-success mr-3 startButton"
+        type="button"
+      >
+        Start/Restart
+      </button>
+      <button
+        class="btn btn-sm btn-outline-warning mr-3 stopButton"
+        type="button"
+      >
+        Stop
+      </button>
       <button
         class="btn btn-sm btn-outline-danger mr-3 deleteButton"
         type="button"
@@ -116,6 +115,30 @@ class MappingItem {
       </button>
     `
 
+    const startButton = helper.getElement('.startButton', mappingElement)
+    startButton.onclick = (): void => {
+      if (confirm('Are you sure want to start/restart this domain?')) {
+        fetch(`/api/mappings/${data.id}/start`)
+          .then(response => (response.status !== 204 ? response.json() : {}))
+          .then((body: ContainerResponse) =>
+            body.message
+              ? alert(`ERROR: ${body.message}`)
+              : window.location.reload()
+          )
+      }
+    }
+    const stopButton = helper.getElement('.stopButton', mappingElement)
+    stopButton.onclick = (): void => {
+      if (confirm('Are you sure want to stop this domain?')) {
+        fetch(`/api/mappings/${data.id}/stop`)
+          .then(response => (response.status !== 204 ? response.json() : {}))
+          .then((body: ContainerResponse) =>
+            body.message
+              ? alert(`ERROR: ${body.message}`)
+              : window.location.reload()
+          )
+      }
+    }
     const delButton = helper.getElement('.deleteButton', mappingElement)
     delButton.onclick = (): void => {
       if (confirm('Are you sure want to delete this domain?')) {
@@ -125,18 +148,6 @@ class MappingItem {
           headers: {
             'Content-Type': 'application/json'
           }
-        }).then(() => {
-          window.location.reload()
-        })
-      }
-    }
-    const clearLogButton = helper.getElement('.deleteLogButton', mappingElement)
-    clearLogButton.onclick = (): void => {
-      if (
-        confirm(`Are you sure you want to clear ${data.fullDomain}'s logs?`)
-      ) {
-        fetch(`/api/logs/${data.fullDomain}`, {
-          method: 'DELETE'
         }).then(() => {
           window.location.reload()
         })

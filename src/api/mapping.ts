@@ -11,9 +11,15 @@ import {
   deleteDomain
 } from '../lib/data'
 import { Mapping } from '../types/general'
-import prodConfigure from '../../scripts/prod.config.js'
 import { getGitUserId, getGitGroupId } from '../helpers/getGitUser'
 import environment from '../helpers/environment'
+import {
+  getContainersList,
+  createContainer,
+  startContainer,
+  stopContainer,
+  removeContainer
+} from '../helpers/docker'
 const mappingRouter = express.Router()
 const exec = util.promisify(cp.exec)
 const getNextPort = (map, start = 3002): number => {
@@ -42,25 +48,19 @@ mappingRouter.post('/', async (req, res) => {
     return acc
   }, {})
   const portCounter = getNextPort(map)
-  const prodConfigApp = [...prodConfigure.apps][0]
-  prodConfigApp.name = fullDomain
-  prodConfigApp.env_production.PORT = parseInt(req.body.port || portCounter, 10)
-  prodConfigApp.script = `npm run start:myproxy << /home/myproxy/.pm2/logs/${fullDomain}-out.log`
-  prodConfigApp.error_file = `/home/myproxy/.pm2/logs/${fullDomain}-err.log`
-  prodConfigApp.merge_logs = true
-  delete prodConfigApp.env_production.ADMIN
-  const prodConfig = {
-    apps: prodConfigApp
-  }
+  const port = parseInt(req.body.port || portCounter, 10)
   const scriptPath = '.scripts'
+
+  // Create a new container and get the id
+  const id = isProduction() ? await createContainer(fullDomain, port) : uuid4()
 
   const respond = (): void => {
     const mappingObject: Mapping = {
       domain: req.body.domain.toLowerCase(),
       subDomain: req.body.subDomain.toLowerCase(),
-      port: req.body.port || `${portCounter}`,
+      port: port.toString(),
       ip: req.body.ip || '127.0.0.1',
-      id: uuid4(),
+      id,
       gitLink: `git@${req.body.domain}:${WORKPATH}/${fullDomain}`,
       fullDomain
     }
@@ -89,7 +89,6 @@ mappingRouter.post('/', async (req, res) => {
       cd ${fullDomain}
       git config user.email "root@ipaddress"
       git config user.name "user"
-      echo 'module.exports = ${JSON.stringify(prodConfig)}' > deploy.config.js
       git add .
       git commit -m "Initial Commit"
       `,
@@ -103,16 +102,15 @@ mappingRouter.post('/', async (req, res) => {
 
 mappingRouter.get('/', async (req, res) => {
   const domains = getMappings()
+
   if (!isProduction())
     return res.json(domains.map(el => ({ ...el, status: 'not started' })))
-  const data = await exec('su - myproxy -c "pm2 jlist"')
 
-  const outArr = data.stdout.split('\n')
-
-  const statusData = JSON.parse(outArr[outArr.length - 1]).reduce(
+  const data = await getContainersList()
+  const statusData = data.reduce(
     (statusObj, el) => ({
       ...statusObj,
-      [el.name]: el.pm2_env.status
+      [el.Names[0].replace('/', '')]: el.State
     }),
     {}
   )
@@ -132,28 +130,37 @@ mappingRouter.delete('/:id', async (req, res) => {
   deleteDomain(deletedDomain.fullDomain)
   if (!isProduction()) return res.json(deletedDomain)
 
-  // get user and group id to execute the commands with the correct permissions
-  const gitUserId = await getGitUserId()
-  const gitGroupId = await getGitGroupId()
-
-  exec(
-    `
-      cd ${WORKPATH}
-      export PM2_HOME=/home/myproxy/.pm2
-      if command ls ${deletedDomain.fullDomain} | grep "package.json" &>/dev/null; then
-      pm2 delete ${deletedDomain.fullDomain}
-      fi
-      rm -rf ${deletedDomain.fullDomain}
-    `,
-    { uid: gitUserId, gid: gitGroupId }
-  ).then(() => {
-    res.json(deletedDomain)
-  })
+  // stop and remove container
+  removeContainer(deletedDomain.fullDomain)
+    .then(() => {
+      // delete the domain folder
+      exec(`
+        cd ${WORKPATH}
+        rm -rf ${deletedDomain.fullDomain}
+      `).then(() => {
+        res.json(deletedDomain)
+      })
+    })
+    .catch(err => res.status(err.statusCode).json(err.json))
 })
 
 mappingRouter.get('/:id', (req, res) => {
   const foundDomain = getMappingById(req.params.id)
   res.json(foundDomain || {})
+})
+
+mappingRouter.get('/:id/start', (req, res) => {
+  const { id } = req.params
+  startContainer(id)
+    .then(() => res.sendStatus(204))
+    .catch(err => res.status(err.statusCode).json(err.json))
+})
+
+mappingRouter.get('/:id/stop', (req, res) => {
+  const { id } = req.params
+  stopContainer(id)
+    .then(() => res.sendStatus(204))
+    .catch(err => res.status(err.statusCode).json(err.json))
 })
 
 export default mappingRouter
