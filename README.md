@@ -30,9 +30,10 @@ Also, we are currently seeking jobs. If your team needs software engineers, plea
 * [Herman Wong](https://www.linkedin.com/in/hw335/) - Open to new opportunities
 
 ## Prerequisites
-To use `MyProxy`, you need 2 things:
+To use `MyProxy`, you need 3 things:
 1. A domain name. MyProxy uses [acme.sh](https://github.com/Neilpang/acme.sh/wiki/dnsapi), so you would have to buy the domains from any of the [DNS APIs listed there](https://github.com/Neilpang/acme.sh/wiki/dnsapi) (includes all of the major providers like namecheap, goDaddy, etc.)
 2. A server's IP address that you have root access to. You can use your home server or get one from [AWS EC2](https://aws.amazon.com/ec2/?hp=tile&so-exp=below), [DigitalOcean](https://www.digitalocean.com/), [GoogleCloud](https://cloud.google.com/), etc.
+3. Docker needs to be installed on the server. MyProxy uses Docker to run deployed apps inside containers.
 
 # Installation and Usage 
 
@@ -64,16 +65,17 @@ Update Google VMs to specify `myproxy http-server https-server` in network tags
 
 1. Connect to your server: `ssh root@your-server-ip-address`
   * **AWS Users Only**  Change to root user `sudo su root` and change to home folder `cd ~`
-2. Clone the app: `git clone https://github.com/garageScript/myProxy.git`
-3. Go to the MyProxy folder: `cd myProxy`
-4. Run the setup script `./scripts/setup.sh` 
+2. Install Docker on your server, follow the instructions for your OS at the [Docker docs](https://docs.docker.com/engine/install/).
+3. Clone the app: `git clone https://github.com/garageScript/myProxy.git`
+4. Go to the MyProxy folder: `cd myProxy`
+5. Run the setup script `./scripts/setup.sh` 
   * Installs `nodeJS` and `npm` if system does not have them.
   * Enables firewall port `3000` (for the admin page UI), `80` and `443`.
   * Installs application dependencies
   * For a complete list of commands the script runs, [look here](https://github.com/garageScript/myProxy/blob/master/scripts/setup.sh)
-5. Run the App: `ADMIN=YOUR_ADMIN_PASSWORD npm run server` 
+6. Run the App: `ADMIN=YOUR_ADMIN_PASSWORD npm run server` 
   * You can also run the app under your own defined port by setting a `PORT` environment variable
-6. Exit from server `exit`
+7. Exit from server `exit`
 
 ## Usage
 
@@ -105,7 +107,7 @@ app.get('/', (req, res) => {
 app.listen(process.env.PORT || 8123);
 ```
 
-7. Update scripts section of `package.json` with `"start:myproxy": "node app.js"`
+7. Update the `main` field in `package.json` with the filename of your app entry point: `"main": "app.js"`
 8. Run `git add .`
 9. Run `git commit -m "Initial Commit"`
 10. Run `git push origin master`
