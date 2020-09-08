@@ -95,6 +95,13 @@ class MappingItem {
           ${data.gitLink}
         </small>
       </div>
+      <a
+        href="/manage/${data.fullDomain}"
+        class="btn btn-sm btn-outline-primary mr-3 manageButton"
+        role="button"
+      >
+        Manage
+      </a>
       <button
         class="btn btn-sm btn-outline-success mr-3 startButton"
         type="button"
