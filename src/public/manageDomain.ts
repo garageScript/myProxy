@@ -85,6 +85,7 @@ class EnvironmentItem {
     if (this.name && this.value) {
       nameInputElement.value = this.name
       valueInputElement.value = this.value
+      this.isValid = true
     } else {
       nameInputElement.classList.add('is-invalid')
     }
