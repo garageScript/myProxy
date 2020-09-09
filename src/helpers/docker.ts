@@ -5,14 +5,6 @@ import environment from '../helpers/environment'
 
 const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
-type DockerError = {
-  reason: string
-  statusCode: number
-  json: {
-    message: string
-  }
-}
-
 const getContainersList = async (): Promise<Docker.ContainerInfo[]> => {
   const containers = await docker.listContainers({ all: true })
   return containers
@@ -107,6 +99,5 @@ export {
   startContainer,
   stopContainer,
   removeContainer,
-  inspectContainer,
-  DockerError
+  inspectContainer
 }

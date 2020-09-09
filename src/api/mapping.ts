@@ -20,9 +20,9 @@ import {
   startContainer,
   stopContainer,
   removeContainer,
-  inspectContainer,
-  DockerError
+  inspectContainer
 } from '../helpers/docker'
+import { DockerError } from '../types/docker'
 const mappingRouter = express.Router()
 const exec = util.promisify(cp.exec)
 const getNextPort = (map, start = 3002): number => {
