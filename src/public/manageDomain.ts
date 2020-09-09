@@ -8,6 +8,9 @@ class EnvironmentItem {
   value: string
   isValid = false
 
+  private readonly IS_INVALID = 'is-invalid'
+  private readonly LETTER_NUMBER_REGEX = /^[A-Z0-9_]+$/g
+
   constructor(name?: string, value?: string) {
     this.name = name
     this.value = value
@@ -61,14 +64,14 @@ class EnvironmentItem {
     nameInputElement.addEventListener('input', () => {
       // validate the input for valid variable name with regex
       // valid: letters, numbers and underscore
-      const name = nameInputElement.value.toUpperCase()
-      if (name.match(/^[A-Z0-9_]+$/g)) {
-        this.name = nameInputElement.value.toUpperCase()
+      const upperCaseValue = nameInputElement.value.toUpperCase()
+      if (upperCaseValue.match(this.LETTER_NUMBER_REGEX)) {
+        this.name = upperCaseValue
         this.isValid = true
-        nameInputElement.classList.remove('is-invalid')
+        nameInputElement.classList.remove(this.IS_INVALID)
       } else {
         this.isValid = false
-        nameInputElement.classList.add('is-invalid')
+        nameInputElement.classList.add(this.IS_INVALID)
       }
     })
     valueInputElement.addEventListener(
