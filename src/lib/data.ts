@@ -102,6 +102,11 @@ const deleteDomain = (domain: string): void => {
   setData('mappings', Object.values(domainToMapping))
 }
 
+const updateDomain = (domain: string, updatedMapping: Mapping): void => {
+  domainToMapping[domain] = updatedMapping
+  setData('mappings', Object.values(domainToMapping))
+}
+
 export {
   getData,
   setData,
@@ -112,5 +117,6 @@ export {
   getMappingByDomain,
   getMappingById,
   getTokenById,
-  deleteDomain
+  deleteDomain,
+  updateDomain
 }

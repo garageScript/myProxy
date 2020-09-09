@@ -81,6 +81,10 @@ const startAppServer = (
       res.render('sshKeys')
     })
 
+    app.get('/manage/:domain', validUIAccess, (req, res) => {
+      res.render('manageDomain')
+    })
+
     const server = app.listen(port, () => {
       console.log(cyan, `myProxy is running on port ${port}!`)
       resolve(server)
