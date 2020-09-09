@@ -97,32 +97,32 @@ class MappingItem {
       </div>
       <a
         href="/manage/${data.fullDomain}"
-        class="btn btn-sm btn-outline-primary mr-3 manageButton"
+        class="btn btn-sm btn-outline-primary mr-3 manage-button"
         role="button"
       >
         Manage
       </a>
       <button
-        class="btn btn-sm btn-outline-success mr-3 startButton"
+        class="btn btn-sm btn-outline-success mr-3 start-button"
         type="button"
       >
         Start/Restart
       </button>
       <button
-        class="btn btn-sm btn-outline-warning mr-3 stopButton"
+        class="btn btn-sm btn-outline-warning mr-3 stop-button"
         type="button"
       >
         Stop
       </button>
       <button
-        class="btn btn-sm btn-outline-danger mr-3 deleteButton"
+        class="btn btn-sm btn-outline-danger mr-3 delete-button"
         type="button"
       >
         Delete
       </button>
     `
 
-    const startButton = helper.getElement('.startButton', mappingElement)
+    const startButton = helper.getElement('.start-button', mappingElement)
     startButton.onclick = (): void => {
       if (confirm('Are you sure want to start/restart this domain?')) {
         fetch(`/api/mappings/${data.id}/start`)
@@ -134,7 +134,7 @@ class MappingItem {
           )
       }
     }
-    const stopButton = helper.getElement('.stopButton', mappingElement)
+    const stopButton = helper.getElement('.stop-button', mappingElement)
     stopButton.onclick = (): void => {
       if (confirm('Are you sure want to stop this domain?')) {
         fetch(`/api/mappings/${data.id}/stop`)
@@ -146,7 +146,7 @@ class MappingItem {
           )
       }
     }
-    const delButton = helper.getElement('.deleteButton', mappingElement)
+    const delButton = helper.getElement('.delete-button', mappingElement)
     delButton.onclick = (): void => {
       if (confirm('Are you sure want to delete this domain?')) {
         fetch(`/api/mappings/${data.id}`, {
