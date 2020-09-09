@@ -8,90 +8,110 @@ class EnvironmentItem {
   value: string
   isValid = false
 
+  private nameInputElement: HTMLInputElement
+  private valueInputElement: HTMLInputElement
+
   private readonly IS_INVALID = 'is-invalid'
   private readonly LETTER_NUMBER_REGEX = /^[A-Z0-9_]+$/g
+  private readonly ELEMENT_HTML = `
+    <div class="input-group">
+      <input 
+        type="text"
+        aria-label="Name"
+        class="form-control text-uppercase text-monospace input-name"
+        placeholder="NAME"
+      >
+      <div class="input-group-prepend input-group-append">
+        <span class="input-group-text">=</span>
+      </div>
+      <input
+        type="text"
+        aria-label="Value"
+        class="form-control text-monospace input-value"
+        placeholder="Value"
+      >
+      <div class="input-group-append">
+        <button
+          class="btn btn-outline-danger button-remove"
+          type="button"
+        >
+          Remove
+        </button>
+      </div>
+      <div class="invalid-feedback">
+        Name must contain only letters, number, or underscore.
+      </div>
+    </div>
+  `
 
   constructor(name?: string, value?: string) {
     this.name = name
     this.value = value
+    this.createElement()
+  }
+
+  /**
+   * Create the list element and add the event listeners for inputs and button
+   */
+  private createElement(): void {
     const environmentElement = document.createElement('li')
+    environmentElement.innerHTML = this.ELEMENT_HTML
     environmentElement.classList.add(
       'list-group-item',
       'd-flex',
       'align-items-center'
     )
+    this.setInputValues()
     envList.appendChild(environmentElement)
-    environmentElement.innerHTML = `
-      <div class="input-group">
-        <input 
-          type="text"
-          aria-label="Name"
-          class="form-control text-uppercase text-monospace"
-          placeholder="NAME"
-          id="name"
-        >
-        <div class="input-group-prepend input-group-append">
-          <span class="input-group-text">=</span>
-        </div>
-        <input
-          type="text"
-          aria-label="Value"
-          class="form-control text-monospace"
-          placeholder="Value"
-          id="value"
-        >
-        <div class="input-group-append">
-          <button
-            class="btn btn-outline-danger"
-            type="button"
-            id="removeVariable"
-          >
-            Remove
-          </button>
-        </div>
-        <div class="invalid-feedback">
-          The variable name must contain only letters, number, and/or the underscore character.
-        </div>
-      </div>
-    `
-
-    const nameInputElement = environmentElement.querySelector(
-      '#name'
-    ) as HTMLInputElement
-    const valueInputElement = environmentElement.querySelector(
-      '#value'
-    ) as HTMLInputElement
-    nameInputElement.addEventListener('input', () => {
-      // validate the input for valid variable name with regex
-      // valid: letters, numbers and underscore
-      const upperCaseValue = nameInputElement.value.toUpperCase()
-      if (upperCaseValue.match(this.LETTER_NUMBER_REGEX)) {
-        this.name = upperCaseValue
-        this.isValid = true
-        nameInputElement.classList.remove(this.IS_INVALID)
-      } else {
-        this.isValid = false
-        nameInputElement.classList.add(this.IS_INVALID)
-      }
-    })
-    valueInputElement.addEventListener(
+    this.nameInputElement = environmentElement.querySelector('.input-name')
+    this.valueInputElement = environmentElement.querySelector('.input-value')
+    this.nameInputElement.addEventListener('input', () =>
+      this.validateAndSetName(this.nameInputElement.value.toUpperCase())
+    )
+    this.valueInputElement.addEventListener(
       'input',
-      () => (this.value = valueInputElement.value)
+      () => (this.value = this.valueInputElement.value)
     )
     environmentElement
-      .querySelector('#removeVariable')
-      .addEventListener('click', () => {
-        environmentElement.remove()
-        environmentVariables.splice(environmentVariables.indexOf(this), 1)
-      })
+      .querySelector('.button-remove')
+      .addEventListener('click', () => this.removeElement(environmentElement))
+  }
 
+  /**
+   * Sets the input values if they exist. Called on element creation.
+   */
+  private setInputValues(): void {
     if (this.name && this.value) {
-      nameInputElement.value = this.name
-      valueInputElement.value = this.value
+      this.nameInputElement.value = this.name
+      this.valueInputElement.value = this.value
       this.isValid = true
     } else {
-      nameInputElement.classList.add('is-invalid')
+      this.nameInputElement.classList.add('is-invalid')
     }
+  }
+
+  /**
+   * Validates the variable name with regex and sets the field if it's valid
+   * @param upperCaseValue input value converted to upper case.
+   */
+  private validateAndSetName(upperCaseValue: string): void {
+    if (upperCaseValue.match(this.LETTER_NUMBER_REGEX)) {
+      this.name = upperCaseValue
+      this.isValid = true
+      this.nameInputElement.classList.remove(this.IS_INVALID)
+    } else {
+      this.isValid = false
+      this.nameInputElement.classList.add(this.IS_INVALID)
+    }
+  }
+
+  /**
+   * Removes the list item element from the DOM and the items list.
+   * @param element list item element
+   */
+  private removeElement(element: HTMLLIElement): void {
+    element.remove()
+    environmentVariables.splice(environmentVariables.indexOf(this), 1)
   }
 }
 
