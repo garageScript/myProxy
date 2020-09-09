@@ -18,7 +18,7 @@ class EnvironmentItem {
       <input 
         type="text"
         aria-label="Name"
-        class="form-control text-uppercase text-monospace input-name"
+        class="form-control text-uppercase text-monospace name-input"
         placeholder="NAME"
       >
       <div class="input-group-prepend input-group-append">
@@ -27,12 +27,12 @@ class EnvironmentItem {
       <input
         type="text"
         aria-label="Value"
-        class="form-control text-monospace input-value"
+        class="form-control text-monospace value-input ${this.IS_INVALID}"
         placeholder="Value"
       >
       <div class="input-group-append">
         <button
-          class="btn btn-outline-danger button-remove"
+          class="btn btn-outline-danger remove-button"
           type="button"
         >
           Remove
@@ -48,6 +48,9 @@ class EnvironmentItem {
     this.name = name
     this.value = value
     this.createElement()
+    if (name && value) {
+      this.setInputValues()
+    }
   }
 
   /**
@@ -61,10 +64,9 @@ class EnvironmentItem {
       'd-flex',
       'align-items-center'
     )
-    this.setInputValues()
     envList.appendChild(environmentElement)
-    this.nameInputElement = environmentElement.querySelector('.input-name')
-    this.valueInputElement = environmentElement.querySelector('.input-value')
+    this.nameInputElement = environmentElement.querySelector('.name-input')
+    this.valueInputElement = environmentElement.querySelector('.value-input')
     this.nameInputElement.addEventListener('input', () =>
       this.validateAndSetName(this.nameInputElement.value.toUpperCase())
     )
@@ -73,21 +75,18 @@ class EnvironmentItem {
       () => (this.value = this.valueInputElement.value)
     )
     environmentElement
-      .querySelector('.button-remove')
+      .querySelector('.remove-button')
       .addEventListener('click', () => this.removeElement(environmentElement))
   }
 
   /**
-   * Sets the input values if they exist. Called on element creation.
+   * Sets the input values if they exist. Called on object constructor.
    */
   private setInputValues(): void {
-    if (this.name && this.value) {
-      this.nameInputElement.value = this.name
-      this.valueInputElement.value = this.value
-      this.isValid = true
-    } else {
-      this.nameInputElement.classList.add('is-invalid')
-    }
+    this.nameInputElement.value = this.name
+    this.valueInputElement.value = this.value
+    this.isValid = true
+    this.nameInputElement.classList.remove(this.IS_INVALID)
   }
 
   /**
