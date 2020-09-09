@@ -140,11 +140,11 @@ document.getElementById('submitEnvButton').onclick = (): void => {
     // convert to the request body format
     // { variables: { NAME: value, ... }}
     const body = environmentVariables.reduce((acc, { name, value }) => {
-      if (name && value) {
-        acc[name] = value
-      }
+      acc[name] = value
       return acc
     }, {})
+    // send the PUT request
+    // show alert with error if request is not successful
     fetch(`/api/mappings/${fullDomain}/environment`, {
       method: 'PUT',
       headers: {
@@ -152,7 +152,7 @@ document.getElementById('submitEnvButton').onclick = (): void => {
       },
       body: JSON.stringify({ variables: body })
     })
-      .then(response => (response.status !== 201 ? response.json() : {}))
+      .then(response => (response.ok ? {} : response.json()))
       .then((body: ContainerResponse) =>
         body.message
           ? alert(`ERROR: ${body.message}`)
