@@ -166,21 +166,21 @@ mappingRouter.get('/:id/stop', (req, res) => {
     .catch((err: DockerError) => res.status(err.statusCode).json(err.json))
 })
 
-mappingRouter.get('/:id/environment', (req, res) => {
-  const { id } = req.params
-  inspectContainer(id)
+mappingRouter.get('/:fullDomain/environment', (req, res) => {
+  const { fullDomain } = req.params
+  inspectContainer(fullDomain)
     .then(info => {
       const envVars = info.Config.Env
-      const defaultEnvs = [
+      const defaultEnvs = new Set([
         'NODE_ENV',
         'PORT',
         'PATH',
         'NODE_VERSION',
         'YARN_VERSION'
-      ]
+      ])
       const nonDefaultEnvs = envVars.reduce((acc, envVar) => {
         const [name, value] = envVar.split('=')
-        if (!defaultEnvs.includes(name)) {
+        if (!defaultEnvs.has(name)) {
           acc[name] = value
         }
         return acc
