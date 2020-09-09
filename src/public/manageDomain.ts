@@ -6,10 +6,12 @@ document.getElementById('full-domain').innerText = fullDomain
 class EnvironmentItem {
   name: string
   value: string
-  isValid = false
+  isValid: boolean
 
+  private listItemElement: HTMLLIElement
   private nameInputElement: HTMLInputElement
   private valueInputElement: HTMLInputElement
+  private removeButtonElement: HTMLButtonElement
 
   private readonly IS_INVALID = 'is-invalid'
   private readonly LETTER_NUMBER_REGEX = /^[A-Z0-9_]+$/g
@@ -18,7 +20,7 @@ class EnvironmentItem {
       <input 
         type="text"
         aria-label="Name"
-        class="form-control text-uppercase text-monospace name-input ${this.IS_INVALID}"
+        class="form-control text-uppercase text-monospace name-input"
         placeholder="NAME"
       >
       <div class="input-group-prepend input-group-append">
@@ -48,60 +50,74 @@ class EnvironmentItem {
     this.name = name
     this.value = value
     this.createElement()
+    this.setupEventListeners()
     if (name && value) {
-      this.setInputValues()
+      this.nameInputElement.value = this.name
+      this.valueInputElement.value = this.value
+      this.setValid(true)
+    } else {
+      this.setValid(false)
     }
     this.nameInputElement.focus()
   }
 
   /**
-   * Create the list element and add the event listeners for inputs and button
+   * Sets the valid status for the object and updates the input DOM element.
+   * @param isValid
+   */
+  private setValid(isValid: boolean): void {
+    if (isValid === this.isValid) return
+    this.isValid = isValid
+    if (isValid) this.nameInputElement.classList.remove(this.IS_INVALID)
+    else this.nameInputElement.classList.add(this.IS_INVALID)
+  }
+
+  /**
+   * Create the list element and append to the DOM
    */
   private createElement(): void {
-    const environmentElement = document.createElement('li')
-    environmentElement.innerHTML = this.ELEMENT_HTML
-    environmentElement.classList.add(
+    this.listItemElement = document.createElement('li')
+    this.listItemElement.innerHTML = this.ELEMENT_HTML
+    this.listItemElement.classList.add(
       'list-group-item',
       'd-flex',
       'align-items-center'
     )
-    envList.appendChild(environmentElement)
-    this.nameInputElement = environmentElement.querySelector('.name-input')
-    this.valueInputElement = environmentElement.querySelector('.value-input')
+    envList.appendChild(this.listItemElement)
+    this.nameInputElement = this.listItemElement.querySelector('.name-input')
+    this.valueInputElement = this.listItemElement.querySelector('.value-input')
+    this.removeButtonElement = this.listItemElement.querySelector(
+      '.remove-button'
+    )
+  }
+
+  /**
+   * Setup the event listeners for inputs and button
+   */
+  private setupEventListeners(): void {
     this.nameInputElement.addEventListener('input', () =>
-      this.validateAndSetName(this.nameInputElement.value.toUpperCase())
+      this.validateAndSetName(this.nameInputElement.value)
     )
     this.valueInputElement.addEventListener(
       'input',
       () => (this.value = this.valueInputElement.value)
     )
-    environmentElement
-      .querySelector('.remove-button')
-      .addEventListener('click', () => this.removeElement(environmentElement))
-  }
-
-  /**
-   * Sets the input values if they exist. Called on object constructor.
-   */
-  private setInputValues(): void {
-    this.nameInputElement.value = this.name
-    this.valueInputElement.value = this.value
-    this.isValid = true
-    this.nameInputElement.classList.remove(this.IS_INVALID)
+    this.removeButtonElement.addEventListener('click', () =>
+      this.removeElement()
+    )
   }
 
   /**
    * Validates the variable name with regex and sets the field if it's valid
-   * @param upperCaseValue input value converted to upper case.
+   * @param value input value
    */
-  private validateAndSetName(upperCaseValue: string): void {
+  private validateAndSetName(value: string): void {
+    const upperCaseValue = value.toUpperCase()
     if (upperCaseValue.match(this.LETTER_NUMBER_REGEX)) {
       this.name = upperCaseValue
-      this.isValid = true
-      this.nameInputElement.classList.remove(this.IS_INVALID)
+      this.setValid(true)
     } else {
-      this.isValid = false
-      this.nameInputElement.classList.add(this.IS_INVALID)
+      this.setValid(false)
     }
   }
 
@@ -109,8 +125,8 @@ class EnvironmentItem {
    * Removes the list item element from the DOM and the items list.
    * @param element list item element
    */
-  private removeElement(element: HTMLLIElement): void {
-    element.remove()
+  private removeElement(): void {
+    this.listItemElement.remove()
     environmentVariables.splice(environmentVariables.indexOf(this), 1)
   }
 }
