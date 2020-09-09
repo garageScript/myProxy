@@ -18,7 +18,7 @@ class EnvironmentItem {
       <input 
         type="text"
         aria-label="Name"
-        class="form-control text-uppercase text-monospace name-input"
+        class="form-control text-uppercase text-monospace name-input ${this.IS_INVALID}"
         placeholder="NAME"
       >
       <div class="input-group-prepend input-group-append">
@@ -27,7 +27,7 @@ class EnvironmentItem {
       <input
         type="text"
         aria-label="Value"
-        class="form-control text-monospace value-input ${this.IS_INVALID}"
+        class="form-control text-monospace value-input"
         placeholder="Value"
       >
       <div class="input-group-append">
