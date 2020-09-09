@@ -51,6 +51,7 @@ class EnvironmentItem {
     if (name && value) {
       this.setInputValues()
     }
+    this.nameInputElement.focus()
   }
 
   /**
