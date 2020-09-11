@@ -107,7 +107,7 @@ app.get('/', (req, res) => {
 app.listen(process.env.PORT || 8123);
 ```
 
-7. Update the `main` field in `package.json` with the filename of your app entry point: `"main": "app.js"`
+7. Update the `scripts` section in `package.json` with your app entry point command, under `start`: `"start": "node app.js"`
 8. Run `git add .`
 9. Run `git commit -m "Initial Commit"`
 10. Run `git push origin master`
