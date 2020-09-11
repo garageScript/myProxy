@@ -66,7 +66,7 @@ const createContainer = async (
           ]
         }
       },
-      Cmd: ['node', '.']
+      Cmd: ['npm', 'run', 'start']
     })
     .then(container => container.id)
     .catch(err => err)
