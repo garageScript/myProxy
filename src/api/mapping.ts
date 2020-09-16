@@ -8,7 +8,8 @@ import {
   getMappings,
   getMappingByDomain,
   getMappingById,
-  deleteDomain
+  deleteDomain,
+  updateDomain
 } from '../lib/data'
 import { Mapping } from '../types/general'
 import { getGitUserId, getGitGroupId } from '../helpers/getGitUser'
@@ -18,8 +19,10 @@ import {
   createContainer,
   startContainer,
   stopContainer,
-  removeContainer
+  removeContainer,
+  inspectContainer
 } from '../helpers/docker'
+import { DockerError } from '../types/docker'
 const mappingRouter = express.Router()
 const exec = util.promisify(cp.exec)
 const getNextPort = (map, start = 3002): number => {
@@ -153,14 +156,62 @@ mappingRouter.get('/:id/start', (req, res) => {
   const { id } = req.params
   startContainer(id)
     .then(() => res.sendStatus(204))
-    .catch(err => res.status(err.statusCode).json(err.json))
+    .catch((err: DockerError) => res.status(err.statusCode).json(err.json))
 })
 
 mappingRouter.get('/:id/stop', (req, res) => {
   const { id } = req.params
   stopContainer(id)
     .then(() => res.sendStatus(204))
-    .catch(err => res.status(err.statusCode).json(err.json))
+    .catch((err: DockerError) => res.status(err.statusCode).json(err.json))
+})
+
+mappingRouter.get('/:fullDomain/environment', (req, res) => {
+  const { fullDomain } = req.params
+  inspectContainer(fullDomain)
+    .then(info => {
+      const envVars = info.Config.Env
+      const defaultEnvs = new Set([
+        'NODE_ENV',
+        'PORT',
+        'PATH',
+        'NODE_VERSION',
+        'YARN_VERSION'
+      ])
+      const nonDefaultEnvs = envVars.reduce((acc, envVar) => {
+        const [name, value] = envVar.split('=')
+        if (!defaultEnvs.has(name)) {
+          acc[name] = value
+        }
+        return acc
+      }, {})
+      res.json({ variables: nonDefaultEnvs })
+    })
+    .catch((err: DockerError) => res.status(err.statusCode).json(err.json))
+})
+
+mappingRouter.put('/:fullDomain/environment', (req, res) => {
+  const { fullDomain } = req.params
+  const { variables } = req.body
+  if (Object.entries(variables).some(([name, value]) => !name || !value)) {
+    return res.status(400).json({ message: 'Fields must not be blank.' })
+  }
+  // convert to the format Docker expects: NAME=VALUE
+  const envVars = Object.entries(variables).map(
+    ([name, value]) => `${name}=${value}`
+  )
+  const mapping = getMappingByDomain(fullDomain)
+  removeContainer(fullDomain)
+    .then(() => createContainer(fullDomain, Number(mapping.port), envVars))
+    .then(id => {
+      // since docker generates a new ID for the container
+      // the domain record needs to be updated
+      mapping.id = id
+      updateDomain(fullDomain, mapping)
+      return startContainer(id)
+    })
+    .then(() => res.sendStatus(201))
+    .catch((err: DockerError) => res.status(err.statusCode).json(err.json))
 })
 
 export default mappingRouter

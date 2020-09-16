@@ -29,7 +29,8 @@ const getContainerLogs = async (
 
 const createContainer = async (
   fullDomain: string,
-  port: number
+  port: number,
+  environmentVariables: string[] = []
 ): Promise<string> => {
   const workPath = path.resolve(environment.WORKPATH, fullDomain)
   return docker
@@ -42,7 +43,7 @@ const createContainer = async (
       },
       Tty: false,
       WorkingDir: '/home/node/app',
-      Env: ['NODE_ENV=production', 'PORT=3000'],
+      Env: ['NODE_ENV=production', 'PORT=3000', ...environmentVariables],
       HostConfig: {
         Binds: [`${workPath}:/home/node/app`],
         RestartPolicy: {
@@ -65,7 +66,7 @@ const createContainer = async (
           ]
         }
       },
-      Cmd: ['node', '.']
+      Cmd: ['npm', 'run', 'start']
     })
     .then(container => container.id)
     .catch(err => err)
@@ -86,11 +87,17 @@ const removeContainer = async (id: string): Promise<unknown> => {
   return container.remove({ v: true, force: true })
 }
 
+const inspectContainer = (id: string): Promise<Docker.ContainerInspectInfo> => {
+  const container = docker.getContainer(id)
+  return container.inspect()
+}
+
 export {
   getContainersList,
   getContainerLogs,
   createContainer,
   startContainer,
   stopContainer,
-  removeContainer
+  removeContainer,
+  inspectContainer
 }
