@@ -1,6 +1,6 @@
 # [MyProxy](https://garagescript.github.io/myProxy/) &middot; [![CircleCI](https://circleci.com/gh/garageScript/myProxy.svg?style=svg)](https://circleci.com/gh/garageScript/myproxy)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 MyProxy is an alternative to Nginx that allows automatic domain provider integration, ssl support for all domains, dynamic port proxy
 and automatic git deployment. 
@@ -170,6 +170,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/bryanjenningz"><img src="https://avatars2.githubusercontent.com/u/7637655?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Bryan Jennings</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=bryanjenningz" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/joshgreenwell"><img src="https://avatars0.githubusercontent.com/u/31043400?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Josh Greenwell</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=joshgreenwell" title="Code">💻</a></td>
   </tr>
 </table>
 
