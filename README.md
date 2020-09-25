@@ -1,6 +1,6 @@
 # [MyProxy](https://garagescript.github.io/myProxy/) &middot; [![CircleCI](https://circleci.com/gh/garageScript/myProxy.svg?style=svg)](https://circleci.com/gh/garageScript/myproxy)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 MyProxy is an alternative to Nginx that allows automatic domain provider integration, ssl support for all domains, dynamic port proxy
 and automatic git deployment. 
@@ -173,6 +173,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/joshgreenwell"><img src="https://avatars0.githubusercontent.com/u/31043400?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Josh Greenwell</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=joshgreenwell" title="Code">💻</a></td>
     <td align="center"><a href="https://coltonehrman.github.io/react-portfolio/"><img src="https://avatars1.githubusercontent.com/u/12456288?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Colton Ehrman</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=coltonehrman" title="Code">💻</a> <a href="https://github.com/garageScript/myProxy/pulls?q=is%3Apr+reviewed-by%3Acoltonehrman" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://www.linkedin.com/in/guilherme-gwadera/"><img src="https://avatars2.githubusercontent.com/u/16023489?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Guilherme Gwadera</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=ggwadera" title="Code">💻</a> <a href="#maintenance-ggwadera" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://github.com/Cijin"><img src="https://avatars0.githubusercontent.com/u/1990966?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Cijin Cherian</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=Cijin" title="Documentation">📖</a></td>
   </tr>
 </table>
 
