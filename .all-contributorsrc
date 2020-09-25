@@ -16,7 +16,13 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/686933?v=4",
       "profile": "https://www.c0d3.com/",
       "contributions": [
-        "code"
+        "code",
+        "doc",
+        "ideas",
+        "infra",
+        "mentoring",
+        "projectManagement",
+        "review"
       ]
     },
     {
