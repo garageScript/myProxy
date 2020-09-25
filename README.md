@@ -172,7 +172,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/bryanjenningz"><img src="https://avatars2.githubusercontent.com/u/7637655?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Bryan Jennings</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=bryanjenningz" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/joshgreenwell"><img src="https://avatars0.githubusercontent.com/u/31043400?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Josh Greenwell</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=joshgreenwell" title="Code">💻</a></td>
     <td align="center"><a href="https://coltonehrman.github.io/react-portfolio/"><img src="https://avatars1.githubusercontent.com/u/12456288?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Colton Ehrman</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=coltonehrman" title="Code">💻</a></td>
-    <td align="center"><a href="https://www.linkedin.com/in/guilherme-gwadera/"><img src="https://avatars2.githubusercontent.com/u/16023489?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Guilherme Gwadera</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=ggwadera" title="Code">💻</a></td>
+    <td align="center"><a href="https://www.linkedin.com/in/guilherme-gwadera/"><img src="https://avatars2.githubusercontent.com/u/16023489?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Guilherme Gwadera</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=ggwadera" title="Code">💻</a> <a href="#maintenance-ggwadera" title="Maintenance">🚧</a></td>
   </tr>
 </table>
 
