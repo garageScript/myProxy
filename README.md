@@ -1,4 +1,7 @@
 # [MyProxy](https://garagescript.github.io/myProxy/) &middot; [![CircleCI](https://circleci.com/gh/garageScript/myProxy.svg?style=svg)](https://circleci.com/gh/garageScript/myproxy)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 MyProxy is an alternative to Nginx that allows automatic domain provider integration, ssl support for all domains, dynamic port proxy
 and automatic git deployment. 
 
@@ -147,3 +150,23 @@ You are done! Get a beer 🍺
 MyProxy is [MIT licensed](https://github.com/garageScript/myProxy/blob/master/LICENSE)
 
 [DNS_API_integration]: https://github.com/Neilpang/acme.sh#8-automatic-dns-api-integration
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://www.c0d3.com/"><img src="https://avatars2.githubusercontent.com/u/686933?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Song Zheng</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=songz" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
