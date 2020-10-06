@@ -1,4 +1,7 @@
 # [MyProxy](https://garagescript.github.io/myProxy/) &middot; [![CircleCI](https://circleci.com/gh/garageScript/myProxy.svg?style=svg)](https://circleci.com/gh/garageScript/myproxy)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 MyProxy is an alternative to Nginx that allows automatic domain provider integration, ssl support for all domains, dynamic port proxy
 and automatic git deployment. 
 
@@ -147,3 +150,36 @@ You are done! Get a beer 🍺
 MyProxy is [MIT licensed](https://github.com/garageScript/myProxy/blob/master/LICENSE)
 
 [DNS_API_integration]: https://github.com/Neilpang/acme.sh#8-automatic-dns-api-integration
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://www.c0d3.com/"><img src="https://avatars2.githubusercontent.com/u/686933?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Song Zheng</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=songz" title="Code">💻</a> <a href="https://github.com/garageScript/myProxy/commits?author=songz" title="Documentation">📖</a> <a href="#ideas-songz" title="Ideas, Planning, & Feedback">🤔</a> <a href="#infra-songz" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#mentoring-songz" title="Mentoring">🧑‍🏫</a> <a href="#projectManagement-songz" title="Project Management">📆</a> <a href="https://github.com/garageScript/myProxy/pulls?q=is%3Apr+reviewed-by%3Asongz" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://www.devwong.com/"><img src="https://avatars1.githubusercontent.com/u/7990856?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Herman Wong</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=hwong0305" title="Code">💻</a> <a href="https://github.com/garageScript/myProxy/pulls?q=is%3Apr+reviewed-by%3Ahwong0305" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/rkalra247"><img src="https://avatars1.githubusercontent.com/u/27792256?v=4?s=100" width="100px;" alt=""/><br /><sub><b>rkalra247</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=rkalra247" title="Code">💻</a></td>
+    <td align="center"><a href="https://dewulfdavid.com/"><img src="https://avatars3.githubusercontent.com/u/25457563?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David De Wulf</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=Wolfy64" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/SahilKalra98"><img src="https://avatars1.githubusercontent.com/u/23374591?v=4?s=100" width="100px;" alt=""/><br /><sub><b>SahilKalra98</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=SahilKalra98" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/albertoelopez"><img src="https://avatars2.githubusercontent.com/u/40315201?v=4?s=100" width="100px;" alt=""/><br /><sub><b>albertoelopez</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=albertoelopez" title="Code">💻</a></td>
+    <td align="center"><a href="https://c0d3.com/"><img src="https://avatars3.githubusercontent.com/u/29881336?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Alberto Lopez</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=allopez7" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/bryanjenningz"><img src="https://avatars2.githubusercontent.com/u/7637655?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Bryan Jennings</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=bryanjenningz" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/joshgreenwell"><img src="https://avatars0.githubusercontent.com/u/31043400?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Josh Greenwell</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=joshgreenwell" title="Code">💻</a></td>
+    <td align="center"><a href="https://coltonehrman.github.io/react-portfolio/"><img src="https://avatars1.githubusercontent.com/u/12456288?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Colton Ehrman</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=coltonehrman" title="Code">💻</a> <a href="https://github.com/garageScript/myProxy/pulls?q=is%3Apr+reviewed-by%3Acoltonehrman" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://www.linkedin.com/in/guilherme-gwadera/"><img src="https://avatars2.githubusercontent.com/u/16023489?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Guilherme Gwadera</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=ggwadera" title="Code">💻</a> <a href="#maintenance-ggwadera" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://github.com/Cijin"><img src="https://avatars0.githubusercontent.com/u/1990966?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Cijin Cherian</b></sub></a><br /><a href="https://github.com/garageScript/myProxy/commits?author=Cijin" title="Documentation">📖</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

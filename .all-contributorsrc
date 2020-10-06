@@ -1,0 +1,132 @@
+{
+  "projectName": "myProxy",
+  "projectOwner": "garageScript",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "songz",
+      "name": "Song Zheng",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/686933?v=4",
+      "profile": "https://www.c0d3.com/",
+      "contributions": [
+        "code",
+        "doc",
+        "ideas",
+        "infra",
+        "mentoring",
+        "projectManagement",
+        "review"
+      ]
+    },
+    {
+      "login": "hwong0305",
+      "name": "Herman Wong",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7990856?v=4",
+      "profile": "https://www.devwong.com/",
+      "contributions": [
+        "code",
+        "review"
+      ]
+    },
+    {
+      "login": "rkalra247",
+      "name": "rkalra247",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/27792256?v=4",
+      "profile": "https://github.com/rkalra247",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Wolfy64",
+      "name": "David De Wulf",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/25457563?v=4",
+      "profile": "https://dewulfdavid.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "SahilKalra98",
+      "name": "SahilKalra98",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/23374591?v=4",
+      "profile": "https://github.com/SahilKalra98",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "albertoelopez",
+      "name": "albertoelopez",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/40315201?v=4",
+      "profile": "https://github.com/albertoelopez",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "allopez7",
+      "name": "Alberto Lopez",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/29881336?v=4",
+      "profile": "https://c0d3.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "bryanjenningz",
+      "name": "Bryan Jennings",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/7637655?v=4",
+      "profile": "https://github.com/bryanjenningz",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "joshgreenwell",
+      "name": "Josh Greenwell",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/31043400?v=4",
+      "profile": "https://github.com/joshgreenwell",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "coltonehrman",
+      "name": "Colton Ehrman",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/12456288?v=4",
+      "profile": "https://coltonehrman.github.io/react-portfolio/",
+      "contributions": [
+        "code",
+        "review"
+      ]
+    },
+    {
+      "login": "ggwadera",
+      "name": "Guilherme Gwadera",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/16023489?v=4",
+      "profile": "https://www.linkedin.com/in/guilherme-gwadera/",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "Cijin",
+      "name": "Cijin Cherian",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1990966?v=4",
+      "profile": "https://github.com/Cijin",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
