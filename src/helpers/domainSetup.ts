@@ -23,7 +23,7 @@ const createSslCerts = async (
     envVars += `NAMECHEAP_SOURCEIP=${ipaddress}`
   }
 
-  const acme = `./acme.sh/acme.sh --issue --dns ${service}`
+  const acme = `./acme.sh/acme.sh --issue --dns ${service} --server letsencrypt`
   const cert1 = `${acme} -d ${selectedDomain} --force`
   const cert2 = `${acme} -d *.${selectedDomain} --force`
   const cert1Response = await exec(`${envVars} ${cert1}`)
