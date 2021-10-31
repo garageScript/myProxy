@@ -91,7 +91,7 @@ fi
 
 # pull node docker image
 if docker ps > /dev/null 2>&1; then
-  docker pull node:alpine
+  docker pull devwong0305/myproxy-node:latest
 else
   echo "WARNING: Couldn't run docker commands"
   echo "WARNING: Make sure your user has the right permissions"

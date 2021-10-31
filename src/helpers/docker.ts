@@ -35,7 +35,7 @@ const createContainer = async (
   const workPath = path.resolve(environment.WORKPATH, fullDomain)
   return docker
     .createContainer({
-      Image: 'node:alpine',
+      Image: 'devwong0305/myproxy-node:latest', // Image should be copied to GarageScript account later so its more official
       name: fullDomain,
       User: 'node',
       ExposedPorts: {
