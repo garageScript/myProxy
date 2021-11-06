@@ -89,9 +89,10 @@ if [ ! -f "./data.db" ] ; then
   touch data.db
 fi
 
-# pull node docker image
+# build docker iamge
 if docker ps > /dev/null 2>&1; then
   docker pull node:alpine
+  docker build -t myproxy-node ./scripts
 else
   echo "WARNING: Couldn't run docker commands"
   echo "WARNING: Make sure your user has the right permissions"

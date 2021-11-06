@@ -35,7 +35,7 @@ const createContainer = async (
   const workPath = path.resolve(environment.WORKPATH, fullDomain)
   return docker
     .createContainer({
-      Image: 'node:alpine',
+      Image: 'myproxy-node:latest',
       name: fullDomain,
       User: 'node',
       ExposedPorts: {
