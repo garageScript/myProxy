@@ -37,7 +37,7 @@ const startAppServer = (
     setPass(adminPass)
 
     if (isProduction()) {
-      fs.readFile('/home/myproxy/.ssh/authorized_keys', (error, data) => {
+      fs.readFile('/home/git/.ssh/authorized_keys', (error, data) => {
         if (error) {
           console.log(error)
         }
